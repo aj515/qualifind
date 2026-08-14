@@ -932,6 +932,23 @@ function toggleSavedOnlyFilter(isSavedOnly) {
   renderOpportunitiesList();
 }
 
+function toggleFilterDrawer(forceState) {
+  const panel = document.getElementById("filter-drawer-panel");
+  const btn = document.getElementById("btn-toggle-filters");
+  if (!panel) return;
+
+  const isHidden = panel.classList.contains("hidden");
+  const shouldShow = forceState !== undefined ? forceState : isHidden;
+
+  if (shouldShow) {
+    panel.classList.remove("hidden");
+    if (btn) btn.classList.add("bg-primary-container", "text-on-primary-container", "border-primary");
+  } else {
+    panel.classList.add("hidden");
+    if (btn) btn.classList.remove("bg-primary-container", "text-on-primary-container", "border-primary");
+  }
+}
+
 // Render Dedicated Saved Applications View Page
 function renderSavedApplicationsView() {
   const container = document.getElementById("saved-applications-list");
@@ -1722,6 +1739,7 @@ window.handleDocumentSelect = handleDocumentSelect;
 window.removeMatcherDocument = removeMatcherDocument;
 window.toggleBookmark = toggleBookmark;
 window.toggleSavedOnlyFilter = toggleSavedOnlyFilter;
+window.toggleFilterDrawer = toggleFilterDrawer;
 window.renderSavedApplicationsView = renderSavedApplicationsView;
 window.resetFilters = resetFilters;
 window.saveProfile = saveProfile;
