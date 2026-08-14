@@ -658,29 +658,60 @@ function renderMatcher() {
   });
 }
 
+const MATCHER_LOADING_STEPS = [
+  "Reading your research interests...",
+  "Scanning DOST, CHED & foundation registry...",
+  "Comparing against your GWA & profile...",
+  "Ranking matches..."
+];
+
 function handleFindMatches() {
   const textarea = document.getElementById("ai-prompt-input");
   const promptText = textarea ? textarea.value.trim() : "";
-  
+
   if (!promptText) {
     showToast("Please enter a research topic or select a prompt chip.", "warning");
     return;
   }
 
   const matchBtn = document.getElementById("btn-find-matches");
-  if (matchBtn) {
-    matchBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[20px]">sync</span> Analyzing with QualiFind AI...`;
-    matchBtn.disabled = true;
-  }
+  const statusEl = document.getElementById("matcher-loading-status");
+
+  if (matchBtn) matchBtn.disabled = true;
+  if (textarea) textarea.disabled = true;
+  if (statusEl) statusEl.classList.remove("hidden");
+
+  let step = 0;
+  const setStep = () => {
+    if (matchBtn) {
+      matchBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[20px]">sync</span> Analyzing...`;
+    }
+    if (statusEl) {
+      statusEl.textContent = MATCHER_LOADING_STEPS[step];
+    }
+    step++;
+  };
+  setStep();
+  const stepInterval = setInterval(() => {
+    if (step < MATCHER_LOADING_STEPS.length) {
+      setStep();
+    } else {
+      clearInterval(stepInterval);
+    }
+  }, 380);
 
   setTimeout(() => {
+    clearInterval(stepInterval);
+
     if (matchBtn) {
       matchBtn.innerHTML = `<span class="material-symbols-outlined text-[20px] fill">auto_awesome</span> Find Matches`;
       matchBtn.disabled = false;
     }
+    if (textarea) textarea.disabled = false;
+    if (statusEl) statusEl.classList.add("hidden");
 
     const scored = calculateMatchForPrompt(promptText);
-    
+
     AppState.opportunities.forEach(opp => {
       const match = scored.find(s => s.id === opp.id);
       if (match) {
@@ -689,17 +720,17 @@ function handleFindMatches() {
     });
 
     AppState.opportunities.sort((a, b) => b.matchScore - a.matchScore);
-    
+
     AppState.activeFilters.searchQuery = "";
     const filterInput = document.getElementById("search-opportunities-input");
     if (filterInput) filterInput.value = "";
-    
+
     AppState.activeFilters.matchQuality = ["high", "good", "low"];
     document.querySelectorAll(".filter-match-checkbox").forEach(cb => cb.checked = true);
 
     navigateTo("opportunities");
     showToast(`QualiFind AI Match Complete: Ranked ${scored.length} Philippine programs!`);
-  }, 700);
+  }, 1600);
 }
 
 // Render Opportunities Catalog View
@@ -755,7 +786,7 @@ function renderOpportunitiesList() {
     const isSaved = AppState.savedOpportunities.includes(opp.id);
     const scoreColor = opp.matchScore >= 80 ? "text-success" : (opp.matchScore >= 60 ? "text-warning" : "text-on-surface-variant");
     const strokeClass = opp.matchScore >= 80 ? "text-success" : (opp.matchScore >= 60 ? "text-warning" : "text-outline");
-    const borderHighlight = opp.matchScore >= 80 ? "border-success/30" : "border-outline-variant/30";
+    const borderHighlight = !opp.eligible ? "border-error/30" : (opp.matchScore >= 80 ? "border-success/30" : "border-outline-variant/30");
 
     return `
       <div class="opportunity-card bg-surface-container-lowest rounded-2xl p-lg shadow-sm hover:shadow-md border ${borderHighlight} flex flex-col h-full relative overflow-hidden group cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
@@ -797,8 +828,8 @@ function renderOpportunitiesList() {
             </div>
             <div>
               <p class="font-label-md text-label-md text-on-surface leading-none mb-1 font-semibold">${opp.matchScore >= 80 ? 'Excellent Match' : 'Good Match'}</p>
-              <p class="font-label-sm text-label-sm ${opp.eligible ? 'text-success' : 'text-warning'} flex items-center gap-1 font-medium">
-                <span class="material-symbols-outlined text-[14px]">${opp.eligible ? 'check_circle' : 'warning'}</span>
+              <p class="font-label-sm text-label-sm ${opp.eligible ? 'text-success' : 'text-error'} flex items-center gap-1 font-medium">
+                <span class="material-symbols-outlined text-[14px]">${opp.eligible ? 'check_circle' : 'cancel'}</span>
                 ${opp.eligibilityNotes}
               </p>
             </div>
@@ -827,10 +858,35 @@ function resetFilters() {
   renderOpportunitiesList();
 }
 
+// Computes a live GWA comparison between the current user and a program, recalculated on every render
+function computeGwaReason(opp) {
+  const gwa = AppState.currentUser.gpa;
+  const meets = gwa <= opp.minGpa;
+  return {
+    meets,
+    title: meets ? "Academic GWA Standing" : "GWA Above Requirement",
+    text: meets
+      ? `Your current GWA of ${gwa.toFixed(2)} meets the ${opp.provider} requirement of ${opp.minGpa.toFixed(2)} or better (lower is stronger on the PH scale).`
+      : `Your current GWA of ${gwa.toFixed(2)} does not meet the required ${opp.minGpa.toFixed(2)} for this program. You may still apply, but expect this to weaken your standing.`
+  };
+}
+
 // Render Eligibility Detail View
 function renderEligibilityDetails(oppId) {
-  const opp = AppState.opportunities.find(o => o.id === oppId) || AppState.opportunities[0];
-  if (!opp) return;
+  const opp = AppState.opportunities.find(o => o.id === oppId);
+  const notFoundEl = document.getElementById("eligibility-not-found");
+  const contentEl = document.getElementById("eligibility-content");
+
+  if (!opp) {
+    if (notFoundEl) notFoundEl.classList.remove("hidden");
+    if (contentEl) contentEl.classList.add("hidden");
+    return;
+  }
+  if (notFoundEl) notFoundEl.classList.add("hidden");
+  if (contentEl) contentEl.classList.remove("hidden");
+
+  const gwaReason = computeGwaReason(opp);
+  const liveEligible = opp.status !== "Expired" && gwaReason.meets;
 
   document.getElementById("eligibility-title").textContent = opp.title;
   document.getElementById("eligibility-provider").textContent = opp.provider;
@@ -838,31 +894,50 @@ function renderEligibilityDetails(oppId) {
   document.getElementById("eligibility-score").textContent = `${opp.matchScore}%`;
   document.getElementById("eligibility-funding").textContent = opp.funding;
   document.getElementById("eligibility-deadline").textContent = opp.deadlineFormatted;
-  
+
   const statusBadge = document.getElementById("eligibility-status-badge");
+  const statusIcon = document.getElementById("eligibility-status-icon");
   if (statusBadge) {
-    statusBadge.textContent = opp.eligible ? "Status: Confirmed Eligible (GWA Verified)" : "Status: Action Required";
+    statusBadge.textContent = liveEligible
+      ? "Status: Eligible (GWA Verified Live)"
+      : (opp.status === "Expired" ? "Status: Deadline Passed" : "Status: GWA Does Not Meet Cutoff");
+  }
+  if (statusIcon) {
+    statusIcon.textContent = liveEligible ? "check_circle" : "error";
+    statusIcon.className = `material-symbols-outlined text-3xl ${liveEligible ? 'text-secondary-container' : 'text-warning'}`;
+    statusIcon.style.fontVariationSettings = "'FILL' 1";
   }
 
-  // Why Strong Match Points
+  // Why Strong Match Points — GWA comparison is computed live; everything else is supporting program context
   const reasonsContainer = document.getElementById("eligibility-reasons-grid");
   if (reasonsContainer) {
-    const reasons = opp.whyStrongMatch || [
-      `Your current GWA (${AppState.currentUser.gpa}) meets or exceeds the required threshold of ${opp.minGpa}.`,
-      `Your background in ${AppState.currentUser.department} aligns with national priority research agenda.`
+    const reasons = [
+      { title: gwaReason.title, text: gwaReason.text, ok: gwaReason.meets }
     ];
 
-    reasonsContainer.innerHTML = reasons.map((reason, idx) => `
+    if (opp.status === "Expired") {
+      reasons.push({
+        title: "Application Deadline Passed",
+        text: `This program's deadline (${opp.deadlineFormatted}) has already passed. It's shown for reference only.`,
+        ok: false
+      });
+    }
+
+    (opp.whyStrongMatch || [])
+      .filter(r => !/\bGWA\b/i.test(r))
+      .forEach(r => reasons.push({ title: "Program Alignment", text: r, ok: true }));
+
+    reasonsContainer.innerHTML = reasons.map(r => `
       <div class="bg-surface-container-lowest p-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
-        <div class="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-xl -mr-8 -mt-8 group-hover:bg-primary/20 transition-colors"></div>
+        <div class="absolute top-0 right-0 w-24 h-24 ${r.ok ? 'bg-primary/10 group-hover:bg-primary/20' : 'bg-warning/10 group-hover:bg-warning/20'} rounded-full blur-xl -mr-8 -mt-8 transition-colors"></div>
         <div class="flex items-center gap-md mb-md relative z-10">
-          <div class="w-10 h-10 rounded-full ${idx === 0 ? 'bg-success/10 text-success' : 'bg-primary-container text-on-primary-container'} flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined">${idx === 0 ? 'school' : 'science'}</span>
+          <div class="w-10 h-10 rounded-full ${r.ok ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'} flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined">${r.ok ? 'check_circle' : 'warning'}</span>
           </div>
-          <h3 class="text-headline-sm font-headline-sm text-on-surface font-bold">${idx === 0 ? 'Academic GWA Standing' : 'National R&D Alignment'}</h3>
+          <h3 class="text-headline-sm font-headline-sm text-on-surface font-bold">${r.title}</h3>
         </div>
         <p class="text-body-md font-body-md text-on-surface-variant relative z-10 leading-relaxed font-medium">
-          ${reason}
+          ${r.text}
         </p>
       </div>
     `).join("");
@@ -919,15 +994,25 @@ function renderEligibilityDetails(oppId) {
 
 // Render Action Plan Screen
 function renderActionPlan(oppId) {
-  const opp = AppState.opportunities.find(o => o.id === oppId) || AppState.opportunities[0];
-  if (!opp) return;
+  const opp = AppState.opportunities.find(o => o.id === oppId);
+  if (!opp) {
+    showToast("That program isn't in the registry anymore.", "warning");
+    navigateTo("opportunities");
+    return;
+  }
 
   const titleEl = document.getElementById("action-plan-target-title");
   if (titleEl) titleEl.textContent = opp.title;
 
+  const gwa = AppState.currentUser.gpa;
+  const pendingReqs = (opp.requirements || []).filter(r => r.status !== "satisfied");
+
   const planDescEl = document.getElementById("action-plan-recommendation-text");
   if (planDescEl) {
-    planDescEl.textContent = `Based on your profile match score of ${opp.matchScore}% and UP GWA of 1.35, completing your DOST National Science Consortium recommendation letters and NHRDA thesis concept note will rank your application in the top 3% of national applicants.`;
+    const nextStep = pendingReqs[0]
+      ? pendingReqs[0].title.toLowerCase()
+      : "final document review";
+    planDescEl.textContent = `Based on your ${opp.matchScore}% match score and GWA of ${gwa.toFixed(2)}, the highest-leverage next step is ${nextStep}. ${pendingReqs.length} of ${opp.requirements.length} requirements still need action.`;
   }
 }
 
@@ -955,9 +1040,12 @@ function renderProfile() {
         <button type="button" onclick="removeSkill(${idx})" class="hover:text-error text-[16px] leading-none font-bold">&times;</button>
       </span>
     `).join("") + `
-      <button type="button" onclick="promptAddSkill()" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-dashed border-primary text-primary font-label-md text-label-md hover:bg-primary/5 font-semibold">
-        <span class="material-symbols-outlined text-[16px]">add</span> Add Skill
-      </button>
+      <span class="inline-flex items-center gap-1 rounded-full border border-dashed border-primary/50 focus-within:border-primary transition-colors">
+        <input type="text" id="new-skill-input" placeholder="Add a skill..." onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill();}" class="bg-transparent px-3 py-1.5 text-label-md font-label-md text-on-surface placeholder:text-outline focus:outline-none w-32"/>
+        <button type="button" onclick="addSkill()" class="pr-3 text-primary hover:text-primary-container">
+          <span class="material-symbols-outlined text-[18px]">add_circle</span>
+        </button>
+      </span>
     `;
   }
 }
@@ -988,12 +1076,15 @@ function removeSkill(idx) {
   renderProfile();
 }
 
-function promptAddSkill() {
-  const newSkill = prompt("Enter a research, bioinformatics, or engineering skill:");
-  if (newSkill && newSkill.trim()) {
-    AppState.currentUser.skills.push(newSkill.trim());
+function addSkill() {
+  const input = document.getElementById("new-skill-input");
+  const newSkill = input ? input.value.trim() : "";
+  if (newSkill) {
+    AppState.currentUser.skills.push(newSkill);
     saveState();
     renderProfile();
+    const refocused = document.getElementById("new-skill-input");
+    if (refocused) refocused.focus();
   }
 }
 
@@ -1460,7 +1551,7 @@ window.toggleBookmark = toggleBookmark;
 window.resetFilters = resetFilters;
 window.saveProfile = saveProfile;
 window.removeSkill = removeSkill;
-window.promptAddSkill = promptAddSkill;
+window.addSkill = addSkill;
 window.openAddProgramModal = openAddProgramModal;
 window.openEditProgramModal = openEditProgramModal;
 window.closeProgramModal = closeProgramModal;
