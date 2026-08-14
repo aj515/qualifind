@@ -1611,6 +1611,16 @@ function setRole(roleName) {
     saveState();
     updateRoleUI();
     
+    if (roleName === "admin") {
+      showToast("Switched to Admin Portal (Desktop Web Optimized)");
+      navigateTo("admin-dashboard");
+    } else {
+      showToast("Switched to Student Portal (Mobile & Web Supported)");
+      navigateTo("dashboard");
+    }
+  }
+}
+
 // Login Page Handlers
 function selectLoginRole(role) {
   const roleInput = document.getElementById("login-selected-role");
@@ -1660,11 +1670,6 @@ function quickLoginAs(roleName) {
 function renderLogin() {
   const role = AppState.currentUser.role || "student";
   selectLoginRole(role);
-}
-      showToast("Switched to Student Portal (Mobile & Web Supported)");
-      navigateTo("dashboard");
-    }
-  }
 }
 
 function toggleRole() {
