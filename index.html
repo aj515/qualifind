@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>QualiFind | AI-Powered Opportunity Matcher Philippines</title>
+  <meta name="description" content="QualiFind - AI-Powered Academic & Research Opportunity Matching Platform in the Philippine Higher Education Setting."/>
+
+  <!-- Google Fonts: Inter & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#eeefff",
+            "primary-fixed": "#dbe1ff",
+            "primary-fixed-dim": "#b4c5ff",
+            "secondary": "#006c49",
+            "secondary-container": "#6cf8bb",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#00714d",
+            "tertiary": "#784b00",
+            "tertiary-container": "#996100",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#ffeedd",
+            "surface": "#f8f9ff",
+            "surface-dim": "#cbdbf5",
+            "surface-bright": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "surface-container-high": "#dce9ff",
+            "surface-container-highest": "#d3e4fe",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#434655",
+            "outline": "#737686",
+            "outline-variant": "#c3c6d7",
+            "background": "#f8f9ff",
+            "on-background": "#0b1c30",
+            "success": "#10b981",
+            "warning": "#f59e0b",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6"
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Inter', 'sans-serif'],
+            headline: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="bg-surface font-sans text-on-surface antialiased">
+
+  <!-- Desktop Sidebar Navigation (Strictly Isolated by Role) -->
+  <aside class="hidden lg:flex fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex-col border-r border-outline-variant/30">
+    <div class="h-16 flex items-center px-6 mb-2">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="handleBrandClick()">
+        <div class="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-md shadow-primary/20">
+          <span class="material-symbols-outlined text-on-primary text-[22px]">verified</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-xl text-primary tracking-tight leading-none">QualiFind</span>
+          <span id="sidebar-app-subtitle" class="text-[10px] font-semibold text-outline uppercase tracking-wider mt-0.5">Student Portal</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active User Card in Sidebar -->
+    <div class="mx-4 mb-4 p-3 bg-surface-container-low rounded-xl border border-outline-variant/30 flex items-center justify-between">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div id="sidebar-user-avatar" class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-xs shrink-0">
+          MS
+        </div>
+        <div class="min-w-0">
+          <p id="sidebar-user-name" class="text-xs font-bold text-on-surface truncate">Maria Clara Santos</p>
+          <span id="sidebar-user-badge" class="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+            Student &bull; Web &amp; Mobile
+          </span>
+        </div>
+      </div>
+      <button onclick="openUserSwitchModal()" class="text-outline hover:text-primary p-1" title="Switch User Role">
+        <span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+      </button>
+    </div>
+
+    <!-- Nav Links: STRICT ROLE SEPARATION -->
+    <nav class="flex-1 px-4 flex flex-col gap-1">
+      
+      <!-- STUDENT NAV GROUP (Visible ONLY to Student / Opportunity Seeker) -->
+      <div id="student-nav-group" class="flex flex-col gap-1">
+        <div class="px-3 py-1 mb-1">
+          <span class="text-[10px] font-bold uppercase text-outline tracking-wider">Opportunity Seeker</span>
+        </div>
+        
+        <a href="#dashboard" data-nav-view="dashboard" onclick="navigateTo('dashboard'); return false;" class="flex items-center px-4 py-3 rounded-xl transition-all group bg-primary-container text-on-primary-container font-semibold shadow-sm">
+          <span class="material-symbols-outlined mr-3 text-[22px]">dashboard</span>
+          <span class="text-sm font-medium">Student Dashboard</span>
+        </a>
+
+        <a href="#matcher" data-nav-view="matcher" onclick="navigateTo('matcher'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
+          <span class="material-symbols-outlined mr-3 text-[22px]">auto_awesome</span>
+          <span class="text-sm font-medium">QualiFind Matcher</span>
+        </a>
+
+        <a href="#opportunities" data-nav-view="opportunities" onclick="navigateTo('opportunities'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
+          <span class="material-symbols-outlined mr-3 text-[22px]">search_insights</span>
+          <span class="text-sm font-medium">PH Grants &amp; Fellowships</span>
+        </a>
+
+        <a href="#profile" data-nav-view="profile" onclick="navigateTo('profile'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
+          <span class="material-symbols-outlined mr-3 text-[22px]">person</span>
+          <span class="text-sm font-medium">Academic Profile</span>
+        </a>
+      </div>
+
+      <!-- ADMIN NAV GROUP (Visible ONLY to Administrator - Web Workstation Only) -->
+      <div id="admin-nav-group" class="flex flex-col gap-1 hidden">
+        <div class="px-3 py-1 mb-1 flex items-center justify-between">
+          <span class="text-[10px] font-bold uppercase text-secondary tracking-wider">DOST / CHED Admin</span>
+          <span class="text-[9px] bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded font-bold">DESKTOP</span>
+        </div>
+
+        <a href="#admin-dashboard" data-nav-view="admin-dashboard" onclick="navigateTo('admin-dashboard'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
+          <span class="material-symbols-outlined mr-3 text-[22px]">analytics</span>
+          <span class="text-sm font-medium">Registry Analytics</span>
+        </a>
+
+        <a href="#admin-programs" data-nav-view="admin-programs" onclick="navigateTo('admin-programs'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
+          <span class="material-symbols-outlined mr-3 text-[22px]">inventory_2</span>
+          <span class="text-sm font-medium">Manage PH Programs</span>
+        </a>
+
+        <a href="#admin-profile" data-nav-view="admin-profile" onclick="navigateTo('admin-profile'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
+          <span class="material-symbols-outlined mr-3 text-[22px]">badge</span>
+          <span class="text-sm font-medium">Liaison Office Profile</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Bottom Role Switcher Button -->
+    <div class="p-4 border-t border-outline-variant/30 bg-surface-container-low/40 flex flex-col gap-2">
+      <button onclick="openUserSwitchModal()" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary text-xs font-semibold transition-all">
+        <span class="material-symbols-outlined text-[18px]">switch_account</span>
+        Switch User Account
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Container -->
+  <div class="lg:pl-72 flex flex-col min-h-screen">
+    <!-- Top Header -->
+    <header class="fixed top-0 left-0 lg:left-72 right-0 h-16 glass-header z-40 border-b border-outline-variant/30 flex items-center justify-between px-4 lg:px-8">
+      <!-- Search Bar -->
+      <div class="flex-1 max-w-xl">
+        <div class="relative flex items-center">
+          <span class="material-symbols-outlined absolute left-3.5 text-outline text-[20px]">search</span>
+          <input id="global-search-input" class="w-full bg-surface-container-low/90 py-2 pl-10 pr-4 rounded-full border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all shadow-sm placeholder:text-outline/70" placeholder="Search DOST, CHED, ERDT, PGC, or grants... (Press Enter)" type="text"/>
+        </div>
+      </div>
+
+      <!-- Header Actions & User Switcher Trigger -->
+      <div class="flex items-center gap-3 ml-4">
+        
+        <!-- User Switcher Header Pill -->
+        <button onclick="openUserSwitchModal()" class="flex items-center gap-2 px-3 py-1.5 bg-surface-container hover:bg-surface-container-high rounded-full border border-outline-variant/40 transition-colors shadow-sm text-left">
+          <div id="header-user-avatar" class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-[10px] font-bold">
+            MS
+          </div>
+          <div class="hidden sm:block">
+            <span id="header-user-name" class="text-xs font-bold text-on-surface block leading-tight">Maria Clara Santos</span>
+            <span id="header-user-role" class="text-[10px] text-on-surface-variant block leading-tight">Student &bull; Mobile &amp; Web</span>
+          </div>
+          <span class="material-symbols-outlined text-[16px] text-outline">expand_more</span>
+        </button>
+
+        <button class="w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Notifications">
+          <span class="material-symbols-outlined text-[20px]">notifications</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="relative pt-16 flex-1 bg-surface px-4 lg:px-8 py-8 pb-24 lg:pb-12">
+      
+      <!-- ================= VIEW 1: STUDENT DASHBOARD (STUDENT ONLY - MOBILE & WEB) ================= -->
+      <section id="view-dashboard" class="view-section active">
+        <div class="flex flex-col w-full gap-8">
+          
+          <!-- Welcome Hero Banner & Strength Widget -->
+          <div class="grid grid-cols-12 gap-6 w-full mt-2">
+            <!-- Left Banner -->
+            <div class="col-span-12 xl:col-span-8 flex flex-col justify-center bg-surface-container-low rounded-2xl p-6 lg:p-8 shadow-sm relative overflow-hidden group border border-outline-variant/30">
+              <div class="absolute right-0 top-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 transition-transform duration-700 group-hover:scale-110"></div>
+              <div class="relative z-10 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+                <div class="max-w-xl">
+                  <div class="flex items-center gap-2 mb-3">
+                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5">
+                      <span class="material-symbols-outlined text-[16px]">waving_hand</span> Mabuhay, Maria!
+                    </span>
+                    <span id="dash-current-date" class="text-on-surface-variant text-xs font-medium">Aug 14, 2026</span>
+                  </div>
+                  <h1 class="text-3xl lg:text-4xl font-extrabold text-on-surface tracking-tight leading-tight mb-2">
+                    Find the best Philippine <span class="text-primary italic">grants &amp; fellowships</span>
+                  </h1>
+                  <p class="text-base text-on-surface-variant max-w-md">
+                    QualiFind AI matched 4 national priority R&amp;D grants (DOST-ASTHRDP, ERDT, PGC, ASTI) aligned with your UP Diliman research.
+                  </p>
+                  <div class="mt-5 flex flex-wrap gap-3">
+                    <button onclick="navigateTo('matcher')" class="bg-primary hover:bg-primary-container text-on-primary px-5 py-2.5 rounded-full font-medium text-sm flex items-center gap-2 transition-all shadow-sm">
+                      <span class="material-symbols-outlined text-[18px]">auto_awesome</span> Start QualiFind Match
+                    </button>
+                    <button onclick="navigateTo('opportunities')" class="bg-surface text-on-surface hover:bg-surface-container-high px-5 py-2.5 rounded-full font-medium text-sm transition-all border border-outline-variant/40">
+                      Explore PH Registry
+                    </button>
+                  </div>
+                </div>
+                <div class="hidden md:flex w-28 h-28 flex-shrink-0 relative items-center justify-center bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl shadow-inner">
+                  <span class="material-symbols-outlined text-primary text-5xl">psychology</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Strength Card -->
+            <div class="col-span-12 xl:col-span-4 flex flex-col">
+              <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm flex flex-col h-full relative overflow-hidden border border-outline-variant/30">
+                <div class="flex justify-between items-start mb-4 relative z-10">
+                  <div>
+                    <h3 class="text-lg font-bold text-on-surface">QualiFind Match Strength</h3>
+                    <p class="text-xs text-on-surface-variant">Calibrated for Philippine DOST/CHED criteria</p>
+                  </div>
+                  <button onclick="navigateTo('profile')" class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[20px]">edit</span>
+                  </button>
+                </div>
+
+                <div class="flex items-center gap-4 mb-4 relative z-10">
+                  <div class="relative w-16 h-16 rounded-full bg-surface-container flex items-center justify-center shadow-inner shrink-0">
+                    <svg class="w-full h-full radial-progress" viewBox="0 0 36 36">
+                      <path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="4"></path>
+                      <path id="dash-profile-strength-circle" class="text-primary progress-ring-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="88, 100" stroke-linecap="round" stroke-width="4"></path>
+                    </svg>
+                    <span id="dash-profile-strength-num" class="absolute text-sm font-bold text-primary">88%</span>
+                  </div>
+                  <div>
+                    <p class="text-xs font-semibold text-success mb-0.5">Top Tier GWA (1.35)</p>
+                    <p class="text-sm font-semibold text-on-surface">Upload thesis concept note to unlock DOST-SEI grants.</p>
+                  </div>
+                </div>
+
+                <div class="mt-auto relative z-10 flex flex-wrap gap-1.5">
+                  <span class="bg-surface-container text-on-surface text-xs font-medium px-2.5 py-1 rounded-md flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px] text-primary">biotech</span> PGC Genomics
+                  </span>
+                  <span class="bg-surface-container text-on-surface text-xs font-medium px-2.5 py-1 rounded-md flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px] text-secondary">terminal</span> COARE HPC
+                  </span>
+                  <span class="bg-surface-container text-on-surface text-xs font-medium px-2.5 py-1 rounded-md flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px] text-tertiary">school</span> UP Diliman
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Metrics Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 relative overflow-hidden group">
+              <div class="flex justify-between items-start mb-3">
+                <div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center shadow-inner">
+                  <span class="material-symbols-outlined text-[20px]">search</span>
+                </div>
+                <span class="bg-success/10 text-success text-xs font-semibold px-2 py-0.5 rounded-md flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[13px]">trending_up</span> +15%
+                </span>
+              </div>
+              <h4 class="text-xs font-medium text-on-surface-variant mb-1">Available PH Opportunities</h4>
+              <span id="dash-stat-found" class="text-2xl font-bold text-on-surface">8</span>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 relative overflow-hidden group">
+              <div class="flex justify-between items-start mb-3">
+                <div class="w-10 h-10 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center shadow-inner">
+                  <span class="material-symbols-outlined text-[20px]">verified</span>
+                </div>
+                <span class="bg-success/10 text-success text-xs font-semibold px-2 py-0.5 rounded-md flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[13px]">trending_up</span> Top Tier
+                </span>
+              </div>
+              <h4 class="text-xs font-medium text-on-surface-variant mb-1">Strong Matches (&gt;80%)</h4>
+              <div class="flex items-baseline gap-1.5">
+                <span id="dash-stat-strong" class="text-2xl font-bold text-on-surface">5</span>
+                <span class="text-xs text-on-surface-variant">/ <span id="dash-stat-total">8</span> Total</span>
+              </div>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 relative overflow-hidden group">
+              <div class="flex justify-between items-start mb-3">
+                <div class="w-10 h-10 rounded-xl bg-tertiary-container text-on-tertiary-container flex items-center justify-center shadow-inner">
+                  <span class="material-symbols-outlined text-[20px]">bolt</span>
+                </div>
+              </div>
+              <h4 class="text-xs font-medium text-on-surface-variant mb-1">Potential Fits (60-80%)</h4>
+              <span id="dash-stat-potential" class="text-2xl font-bold text-on-surface">2</span>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 relative overflow-hidden group">
+              <div class="flex justify-between items-start mb-3">
+                <div class="w-10 h-10 rounded-xl bg-surface-variant text-on-surface-variant flex items-center justify-center shadow-inner">
+                  <span class="material-symbols-outlined text-[20px]">bookmark</span>
+                </div>
+              </div>
+              <h4 class="text-xs font-medium text-on-surface-variant mb-1">Saved Applications</h4>
+              <span id="dash-stat-saved" class="text-2xl font-bold text-on-surface">3</span>
+            </div>
+          </div>
+
+          <!-- Recommended For You Section -->
+          <div class="w-full bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-outline-variant/30 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h2 class="text-xl font-bold text-on-surface flex items-center gap-2">
+                  Top Recommended Philippine Programs
+                  <span class="bg-primary-container text-on-primary-container text-xs font-semibold px-2.5 py-0.5 rounded-full">AI Calibrated</span>
+                </h2>
+                <p class="text-sm text-on-surface-variant mt-0.5">Matched with your UP Diliman Bioinformatics &amp; AI track records.</p>
+              </div>
+              <button onclick="navigateTo('opportunities')" class="bg-primary text-on-primary font-medium text-sm px-4 py-2 rounded-xl shadow-sm hover:bg-primary-container transition-all flex items-center gap-1.5 font-semibold">
+                View All Programs <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </button>
+            </div>
+            
+            <div id="dash-recommended-list" class="flex flex-col">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= VIEW 2: AI MATCHER (STUDENT ONLY) ================= -->
+      <section id="view-matcher" class="view-section">
+        <div class="flex flex-col w-full items-center justify-center min-h-[calc(100vh-14rem)] py-6">
+          <div class="w-full max-w-3xl flex flex-col items-center text-center space-y-6">
+            
+            <div class="space-y-2">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider">
+                <span class="material-symbols-outlined text-[16px]">neurology</span> QualiFind AI Matching Engine
+              </div>
+              <h1 class="text-3xl lg:text-4xl font-extrabold text-on-surface tracking-tight">Describe your ideal Philippine opportunity</h1>
+              <p class="text-base text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+                Describe your research interests, university, degree progress, and target stipend in natural language. QualiFind matches you across DOST-SEI, CHED, SUC consortiums, and Philippine foundation grants.
+              </p>
+            </div>
+
+            <!-- AI Prompt Input Box -->
+            <div class="w-full relative group text-left">
+              <div class="absolute -inset-1 bg-gradient-to-r from-primary/30 via-secondary/30 to-primary/30 rounded-2xl blur opacity-30 group-focus-within:opacity-80 transition duration-500"></div>
+              <div class="relative w-full bg-surface-container-lowest rounded-2xl shadow-xl overflow-hidden flex flex-col transition-all duration-300 ring-1 ring-outline-variant focus-within:ring-2 focus-within:ring-primary/50">
+                <textarea id="ai-prompt-input" class="w-full h-44 bg-transparent p-5 text-base text-on-surface placeholder:text-outline-variant resize-none focus:outline-none transition-colors" placeholder="E.g., I'm a second-year graduate student in computational biology at UP Diliman looking for DOST-SEI or PGC grants for genomic epidemiology and supercomputing. I have a 1.35 GWA and experience with Python and PyTorch..."></textarea>
+                
+                <div class="bg-surface-container-low px-5 py-3.5 flex items-center justify-between border-t border-outline-variant/30">
+                  <div class="flex items-center gap-2 text-outline">
+                    <span class="material-symbols-outlined text-[20px]">mic</span>
+                    <span class="text-xs uppercase tracking-wider font-semibold">Natural Language Query</span>
+                  </div>
+                  <button id="btn-find-matches" onclick="handleFindMatches()" class="bg-primary hover:bg-primary-container text-on-primary font-semibold text-sm px-6 py-2.5 rounded-full flex items-center gap-2 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    <span class="material-symbols-outlined text-[20px] fill">auto_awesome</span>
+                    Find Matches
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Starting Points Chips -->
+            <div class="w-full flex flex-col items-center space-y-3 pt-2">
+              <span class="text-xs font-semibold uppercase text-outline tracking-wider">Philippine Starting Points</span>
+              <div id="matcher-chips" class="flex flex-wrap justify-center gap-2">
+                <button data-prompt="Looking for DOST-SEI ASTHRDP or ERDT graduate scholarships with monthly stipends around ₱35,000 in AI, genomics, and computing." class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface-variant font-medium text-xs px-3.5 py-2 rounded-full transition-all border border-outline-variant/30 shadow-sm">
+                  DOST-SEI ASTHRDP &amp; ERDT Scholarships
+                </button>
+                <button data-prompt="Seeking Philippine Genome Center and DOST-ASTI research fellowships with supercomputer COARE access." class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface-variant font-medium text-xs px-3.5 py-2 rounded-full transition-all border border-outline-variant/30 shadow-sm">
+                  PGC &amp; DOST-ASTI AI Supercomputing Grants
+                </button>
+                <button data-prompt="Find Gokongwei Brothers Foundation and Ayala Foundation STEM leadership grants in the Philippines." class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface-variant font-medium text-xs px-3.5 py-2 rounded-full transition-all border border-outline-variant/30 shadow-sm">
+                  GBF &amp; Ayala Foundation STEM Fellowships
+                </button>
+                <button data-prompt="Looking for CHED and SUC graduate faculty development grants in science and engineering." class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface-variant font-medium text-xs px-3.5 py-2 rounded-full transition-all border border-outline-variant/30 shadow-sm">
+                  CHED SUC Faculty &amp; Graduate Grants
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 3: OPPORTUNITIES CATALOG (STUDENT ONLY) ================= -->
+      <section id="view-opportunities" class="view-section">
+        <div class="flex flex-col w-full pb-8">
+          <!-- Page Header -->
+          <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <h1 class="text-3xl font-extrabold text-on-surface tracking-tight mb-1">Philippine Grants &amp; Scholarships</h1>
+              <p class="text-base text-on-surface-variant max-w-2xl">Discover and evaluate opportunities ranked by QualiFind match score against your academic profile.</p>
+            </div>
+            <div class="flex gap-3">
+              <button onclick="navigateTo('matcher')" class="h-11 px-5 rounded-full bg-primary flex items-center justify-center text-on-primary font-medium text-sm transition-all hover:bg-primary-container shadow-sm font-semibold">
+                <span class="material-symbols-outlined mr-2 text-[20px]">auto_awesome</span>
+                QualiFind AI Search
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Grid (Filters Left + Cards Right) -->
+          <div class="grid grid-cols-12 gap-6 items-start">
+            <!-- Filter Sidebar -->
+            <div class="col-span-12 lg:col-span-3 lg:sticky lg:top-24 flex flex-col gap-6">
+              <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-5">
+                
+                <!-- Quick Search within catalog -->
+                <div>
+                  <h3 class="text-xs font-bold text-on-surface uppercase tracking-wider mb-2.5">Filter Keyword</h3>
+                  <input id="search-opportunities-input" type="text" placeholder="Filter DOST, CHED, PGC..." class="w-full bg-surface-container-low px-3 py-2 text-sm rounded-lg border border-outline-variant/40 focus:outline-none focus:ring-1 focus:ring-primary"/>
+                </div>
+
+                <div class="h-px w-full bg-outline-variant/20"></div>
+
+                <!-- Program Type Filter -->
+                <div>
+                  <h3 class="text-xs font-bold text-on-surface uppercase tracking-wider mb-3">Program Type</h3>
+                  <div class="flex flex-col gap-2.5">
+                    <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-on-surface">
+                      <input type="checkbox" value="Fellowship" checked class="filter-type-checkbox rounded text-primary focus:ring-primary w-4 h-4"/>
+                      <span>Graduate Fellowship</span>
+                    </label>
+                    <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-on-surface">
+                      <input type="checkbox" value="Research Grant" checked class="filter-type-checkbox rounded text-primary focus:ring-primary w-4 h-4"/>
+                      <span>Research &amp; Thesis Grant</span>
+                    </label>
+                    <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-on-surface">
+                      <input type="checkbox" value="Scholarship" checked class="filter-type-checkbox rounded text-primary focus:ring-primary w-4 h-4"/>
+                      <span>CHED / Foundation Scholarship</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="h-px w-full bg-outline-variant/20"></div>
+
+                <!-- Match Quality Filter -->
+                <div>
+                  <h3 class="text-xs font-bold text-on-surface uppercase tracking-wider mb-3">Match Quality</h3>
+                  <div class="flex flex-col gap-2.5">
+                    <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-on-surface">
+                      <input type="checkbox" value="high" checked class="filter-match-checkbox rounded text-primary focus:ring-primary w-4 h-4"/>
+                      <span class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-success"></span> High Match (&gt;80%)
+                      </span>
+                    </label>
+                    <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-on-surface">
+                      <input type="checkbox" value="good" checked class="filter-match-checkbox rounded text-primary focus:ring-primary w-4 h-4"/>
+                      <span class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-warning"></span> Good Match (60-80%)
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="h-px w-full bg-outline-variant/20"></div>
+
+                <button onclick="resetFilters()" class="text-xs font-semibold text-primary hover:underline py-1">
+                  Clear All Filters
+                </button>
+              </div>
+
+              <!-- Refine Profile Promo Box -->
+              <div onclick="navigateTo('profile')" class="bg-primary rounded-2xl p-5 shadow-md text-on-primary relative overflow-hidden group cursor-pointer transition-transform hover:-translate-y-0.5">
+                <div class="absolute -right-6 -top-6 w-28 h-28 bg-on-primary/10 rounded-full blur-xl group-hover:bg-on-primary/20 transition-colors"></div>
+                <div class="relative z-10">
+                  <div class="w-9 h-9 rounded-full bg-on-primary/20 flex items-center justify-center mb-3">
+                    <span class="material-symbols-outlined text-on-primary text-[20px]">neurology</span>
+                  </div>
+                  <h4 class="font-bold text-base mb-1">Update GWA &amp; Research Track</h4>
+                  <p class="text-xs text-on-primary/80 mb-3">Keep your Philippine Transcript (TOR) and concept notes updated for higher match rankings.</p>
+                  <div class="flex items-center text-xs font-bold uppercase tracking-wider text-on-primary">
+                    Update Profile <span class="material-symbols-outlined text-[16px] ml-1">arrow_forward</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Opportunity Cards Container -->
+            <div class="col-span-12 lg:col-span-9 flex flex-col gap-5">
+              <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="text-sm font-semibold text-on-surface">
+                    <span id="opp-count-badge" class="text-primary font-bold">8</span> programs matched in the Philippines
+                  </span>
+                  <div class="h-4 w-px bg-outline-variant/40"></div>
+                  <span class="text-xs text-on-surface-variant font-medium">Ranked by QualiFind AI Score</span>
+                </div>
+              </div>
+
+              <div id="opportunities-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 4: ELIGIBILITY CHECK (STUDENT ONLY) ================= -->
+      <section id="view-eligibility" class="view-section">
+        <div class="flex flex-col w-full gap-6">
+          <div class="flex items-center gap-2 text-sm text-on-surface-variant cursor-pointer hover:text-primary transition-colors font-medium" onclick="navigateTo('opportunities')">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Philippine Opportunities
+          </div>
+
+          <div class="grid grid-cols-12 gap-6 items-start">
+            <!-- Left 8 Columns: Detail Hero & Breakdown -->
+            <div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+              
+              <!-- Hero Card -->
+              <div class="relative overflow-hidden bg-primary text-on-primary rounded-2xl shadow-xl flex flex-col p-6 lg:p-8">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-primary-container rounded-full blur-3xl opacity-40 -mr-24 -mt-24 pointer-events-none"></div>
+                <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                  <div>
+                    <div class="flex items-center gap-2 mb-3">
+                      <span class="material-symbols-outlined text-3xl text-secondary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                      <span id="eligibility-status-badge" class="text-xs font-semibold uppercase tracking-widest text-primary-fixed-dim">Status: Confirmed Eligible (GWA Verified)</span>
+                    </div>
+                    <h1 id="eligibility-title" class="text-2xl lg:text-3xl font-extrabold mb-2 leading-snug">DOST-SEI ASTHRDP Graduate Research Scholarship</h1>
+                    <p id="eligibility-provider" class="text-sm text-primary-fixed font-medium mb-3">Department of Science and Technology - SEI</p>
+                    <p id="eligibility-summary" class="text-sm text-primary-fixed/90 max-w-2xl leading-relaxed">
+                      Based on your UP Diliman academic standing (1.35 GWA), research publications, and NSC enrollment, you satisfy all baseline requirements.
+                    </p>
+                  </div>
+
+                  <div class="shrink-0 flex flex-col items-center justify-center p-5 bg-surface/10 backdrop-blur-md rounded-2xl border border-on-primary/10">
+                    <span id="eligibility-score" class="text-4xl font-extrabold text-secondary-container">95%</span>
+                    <span class="text-[11px] font-semibold text-on-primary/80 uppercase tracking-wider mt-1">QualiFind Match</span>
+                  </div>
+                </div>
+
+                <div class="relative z-10 mt-6 pt-6 border-t border-on-primary/15 flex flex-wrap gap-3">
+                  <button onclick="navigateTo('action-plan')" class="bg-surface text-primary px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-surface-container-low transition-all shadow-md flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[18px]">checklist</span> Generate Action Plan
+                  </button>
+                  <button id="eligibility-bookmark-btn" class="px-5 py-2.5 rounded-xl text-sm font-medium bg-on-primary/10 hover:bg-on-primary/20 transition-all border border-on-primary/20 flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[18px]">bookmark</span> Save for Later
+                  </button>
+                </div>
+              </div>
+
+              <!-- Why You're a Strong Match Section -->
+              <div class="flex flex-col gap-4">
+                <h2 class="text-xl font-bold text-on-surface flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary">auto_awesome</span>
+                  Why You're a Strong Match in the Philippines
+                </h2>
+                <div id="eligibility-reasons-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <!-- Dynamically Rendered -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 4 Columns: Requirements Checklist & Meta -->
+            <div class="col-span-12 lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-24">
+              
+              <!-- Quick Info Card -->
+              <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-4">
+                <h3 class="text-base font-bold text-on-surface flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary">info</span> Program Overview
+                </h3>
+                <div class="grid grid-cols-2 gap-4 pt-2 border-t border-outline-variant/20">
+                  <div>
+                    <span class="text-xs text-outline uppercase font-semibold">Grant / Stipend</span>
+                    <p id="eligibility-funding" class="text-sm font-bold text-on-surface mt-0.5">₱480,000 / yr + Tuition</p>
+                  </div>
+                  <div>
+                    <span class="text-xs text-outline uppercase font-semibold">Deadline</span>
+                    <p id="eligibility-deadline" class="text-sm font-bold text-on-surface mt-0.5">Oct 15, 2024</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Requirements Checklist Card -->
+              <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
+                <div class="bg-surface-container-low px-5 py-4 border-b border-outline-variant/30">
+                  <h3 class="text-base font-bold text-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">task_alt</span>
+                    PH Checklist &amp; Clearances
+                  </h3>
+                  <p class="text-xs text-on-surface-variant mt-0.5">DOST/CHED documentation requirements.</p>
+                </div>
+                <div id="eligibility-checklist-items" class="p-5 flex flex-col gap-4">
+                  <!-- Dynamically Rendered -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 5: ACTION PLAN (STUDENT ONLY) ================= -->
+      <section id="view-action-plan" class="view-section">
+        <div class="flex flex-col w-full max-w-4xl mx-auto gap-6">
+          <div class="flex items-center gap-2 text-sm text-on-surface-variant cursor-pointer hover:text-primary transition-colors font-medium" onclick="navigateTo('eligibility')">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Program
+          </div>
+
+          <div>
+            <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">Your Customized QualiFind Action Plan</h1>
+            <p class="text-base text-on-surface-variant mt-1">
+              Step-by-step roadmap to submit your application for <strong id="action-plan-target-title" class="text-primary">DOST-SEI ASTHRDP</strong>.
+            </p>
+          </div>
+
+          <!-- AI Recommendation Hero Card -->
+          <div class="relative w-full rounded-2xl bg-surface-container-highest p-6 shadow-sm overflow-hidden border border-outline-variant/30">
+            <div class="absolute -right-8 -top-8 w-36 h-36 bg-primary-container/20 rounded-full blur-2xl"></div>
+            <div class="relative z-10 flex flex-col gap-3">
+              <div class="flex items-center gap-2 text-primary font-semibold text-sm">
+                <span class="material-symbols-outlined text-primary fill">auto_awesome</span>
+                <span>QualiFind Strategic Recommendation</span>
+              </div>
+              <p id="action-plan-recommendation-text" class="text-sm text-on-surface leading-relaxed">
+                Based on your UP GWA of 1.35 and published machine learning preprints, your proposal has a high competitive index for national DOST-SEI funding. Focus on completing your NSC faculty endorsement letters and DOST NHRDA thesis concept note.
+              </p>
+            </div>
+          </div>
+
+          <!-- Numbered Action Cards -->
+          <div class="flex flex-col gap-4">
+            <h3 class="text-lg font-bold text-on-surface">Milestone Action Items</h3>
+            
+            <div class="space-y-3">
+              <div class="flex gap-4 p-5 rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/30 items-start">
+                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center shrink-0 text-base">
+                  01
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-base font-bold text-on-surface">Request Endorsement from 2 NSC Faculty Members</h4>
+                  <p class="text-sm text-on-surface-variant mt-1">Provide your CV and thesis concept note to Dr. Saloma and Dr. Montoya at UP Diliman / PGC.</p>
+                  <div class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-warning/10 text-warning text-xs font-semibold">
+                    <span class="material-symbols-outlined text-[14px]">schedule</span> Priority: High (Due in 14 days)
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex gap-4 p-5 rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/30 items-start">
+                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center shrink-0 text-base">
+                  02
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-base font-bold text-on-surface">Draft DOST Harmonized R&amp;D Concept Note</h4>
+                  <p class="text-sm text-on-surface-variant mt-1">Map your computational genomics research to Philippine priority health and pandemic preparedness agendas.</p>
+                  <div class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                    <span class="material-symbols-outlined text-[14px]">edit_note</span> In Progress (AI Assisted)
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex gap-4 p-5 rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/30 items-start">
+                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center shrink-0 text-base">
+                  03
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-base font-bold text-on-surface">Secure Official Transcript of Records (TOR) &amp; Clearances</h4>
+                  <p class="text-sm text-on-surface-variant mt-1">Obtain certified true copy of grades from the University Registrar and updated NBI / Barangay clearances.</p>
+                  <div class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 text-success text-xs font-semibold">
+                    <span class="material-symbols-outlined text-[14px]">check</span> Ready to Upload
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 flex justify-end gap-3">
+            <button onclick="navigateTo('opportunities')" class="px-5 py-2.5 rounded-full bg-surface-container text-on-surface font-medium text-sm hover:bg-surface-container-high font-semibold">
+              Browse More Programs
+            </button>
+            <button onclick="showToast('Action plan exported to your Google Calendar & UP Email!');" class="px-6 py-2.5 rounded-full bg-primary text-on-primary font-medium text-sm hover:bg-primary-container shadow-sm flex items-center gap-1.5 font-semibold">
+              <span class="material-symbols-outlined text-[18px]">calendar_add_on</span> Export to Calendar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 6: STUDENT PROFILE (STUDENT ONLY) ================= -->
+      <section id="view-profile" class="view-section">
+        <div class="flex flex-col w-full max-w-3xl mx-auto gap-6">
+          <div>
+            <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">QualiFind Academic Profile</h1>
+            <p class="text-base text-on-surface-variant mt-1">Manage your Philippine academic standing, GWA, institution, and R&amp;D preferences.</p>
+          </div>
+
+          <!-- Account Role Notice -->
+          <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary text-2xl">devices</span>
+              <div>
+                <p class="text-xs font-bold text-on-surface">Active Role: Student / Opportunity Seeker</p>
+                <p class="text-xs text-on-surface-variant">Available on Mobile Browsers &amp; Desktop Web</p>
+              </div>
+            </div>
+            <button type="button" onclick="openUserSwitchModal()" class="px-3.5 py-1.5 rounded-lg bg-surface text-primary border border-outline-variant/40 text-xs font-bold hover:bg-surface-container-high transition-colors">
+              Switch Account
+            </button>
+          </div>
+
+          <form onsubmit="saveProfile(event)" class="bg-surface-container-lowest rounded-2xl p-6 lg:p-8 shadow-sm border border-outline-variant/30 flex flex-col gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="profile-name-input">Full Name</label>
+                <input id="profile-name-input" type="text" class="w-full bg-surface px-4 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium"/>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="profile-email-input">Email Address</label>
+                <input id="profile-email-input" type="email" class="w-full bg-surface px-4 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium"/>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="profile-gpa-input">General Weighted Average (GWA)</label>
+                <input id="profile-gpa-input" type="number" step="0.01" min="1.0" max="5.0" class="w-full bg-surface px-4 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium" title="Philippine GWA (1.00 is highest honors)"/>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="profile-dept-input">Institution &amp; Department</label>
+                <input id="profile-dept-input" type="text" class="w-full bg-surface px-4 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium"/>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="profile-bio-input">Research Background &amp; Thesis Scopes</label>
+              <textarea id="profile-bio-input" rows="3" class="w-full bg-surface px-4 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium"></textarea>
+            </div>
+
+            <!-- Skills & Competencies -->
+            <div class="flex flex-col gap-2">
+              <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Key Skills &amp; Facilities Access</label>
+              <div id="profile-skills-list" class="flex flex-wrap gap-2 pt-1">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-outline-variant/30 flex justify-end">
+              <button type="submit" class="bg-primary hover:bg-primary-container text-on-primary font-semibold text-sm px-6 py-2.5 rounded-full transition-all shadow-sm">
+                Save QualiFind Profile
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 7: ADMIN REGISTRY ANALYTICS (ADMIN ONLY - WEB ONLY) ================= -->
+      <section id="view-admin-dashboard" class="view-section">
+        
+        <!-- Mobile Guard Notice (Displayed on small screens when Admin is active) -->
+        <div class="block lg:hidden bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-warning/30 text-center flex flex-col items-center justify-center my-4">
+          <div class="w-14 h-14 rounded-2xl bg-warning/10 text-warning flex items-center justify-center mb-3">
+            <span class="material-symbols-outlined text-3xl">desktop_windows</span>
+          </div>
+          <h2 class="text-xl font-bold text-on-surface mb-1.5">Admin Portal is Desktop Web-Only</h2>
+          <p class="text-sm text-on-surface-variant max-w-sm mb-5 leading-relaxed">
+            The QualiFind Registry Analytics and Program Management suite requires a desktop web workstation to manage Philippine grant databases.
+          </p>
+          <button onclick="setRole('student')" class="bg-primary text-on-primary font-bold text-xs px-5 py-3 rounded-full shadow-md hover:bg-primary-container transition-all flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">school</span> Switch to Student Portal (Mobile Friendly)
+          </button>
+        </div>
+
+        <!-- Desktop Web Content -->
+        <div class="hidden lg:flex flex-col w-full gap-8">
+          
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">QualiFind Registry Analytics</h1>
+                <span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-bold text-[10px]">WEB WORKSTATION</span>
+              </div>
+              <p class="text-base text-on-surface-variant mt-0.5">National program registry, student evaluation volume, and DOST/CHED program updates.</p>
+            </div>
+            <button onclick="openAddProgramModal()" class="h-11 px-5 rounded-full bg-primary text-on-primary font-semibold text-sm hover:bg-primary-container transition-all flex items-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-[20px]">add</span> Add Philippine Program
+            </button>
+          </div>
+
+          <!-- Admin Metric Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-2">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Total Registry</span>
+                <div class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">inventory_2</span>
+                </div>
+              </div>
+              <span id="admin-stat-total" class="text-3xl font-extrabold text-on-surface">8</span>
+              <div class="flex items-center gap-1 text-success text-xs font-semibold">
+                <span class="material-symbols-outlined text-[14px]">arrow_upward</span> +15% active grants
+              </div>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-2">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Active Programs</span>
+                <div class="w-9 h-9 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                </div>
+              </div>
+              <span id="admin-stat-active" class="text-3xl font-extrabold text-on-surface">6</span>
+              <div class="flex items-center gap-1 text-success text-xs font-semibold">
+                <span class="material-symbols-outlined text-[14px]">check</span> Open for applications
+              </div>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-2">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">In Review / Draft</span>
+                <div class="w-9 h-9 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">pending_actions</span>
+                </div>
+              </div>
+              <span id="admin-stat-review" class="text-3xl font-extrabold text-on-surface">1</span>
+              <div class="flex items-center gap-1 text-warning text-xs font-semibold">
+                <span class="material-symbols-outlined text-[14px]">schedule</span> PCHRD Call for Proposals
+              </div>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-2">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Expired / Closed</span>
+                <div class="w-9 h-9 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">error</span>
+                </div>
+              </div>
+              <span id="admin-stat-expired" class="text-3xl font-extrabold text-on-surface">1</span>
+              <div class="flex items-center gap-1 text-error text-xs font-semibold">
+                <span class="material-symbols-outlined text-[14px]">archive</span> Archived calls
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity Chart & System Alerts -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Left: Activity Visualization -->
+            <div class="lg:col-span-8 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 flex flex-col gap-4">
+              <div class="flex justify-between items-center">
+                <div>
+                  <h3 class="text-lg font-bold text-on-surface">National Application &amp; Match Volume</h3>
+                  <p class="text-xs text-on-surface-variant">Monthly volume of QualiFind AI match queries vs verified Philippine student applications</p>
+                </div>
+              </div>
+
+              <!-- Interactive Chart SVG -->
+              <div class="relative w-full h-56 mt-2">
+                <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 220">
+                  <line class="text-outline-variant/20" stroke="currentColor" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="40" y2="40"></line>
+                  <line class="text-outline-variant/20" stroke="currentColor" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="90" y2="90"></line>
+                  <line class="text-outline-variant/20" stroke="currentColor" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="140" y2="140"></line>
+                  <line class="text-outline-variant/20" stroke="currentColor" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="190" y2="190"></line>
+                  
+                  <path class="text-primary/10" d="M0 220 L0 160 C120 140, 240 190, 360 110 C480 30, 600 140, 720 70 L800 90 L800 220 Z" fill="currentColor"></path>
+                  <path class="text-primary" d="M0 160 C120 140, 240 190, 360 110 C480 30, 600 140, 720 70 L800 90" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3"></path>
+                </svg>
+              </div>
+
+              <div class="flex items-center gap-6 pt-2 border-t border-outline-variant/20 text-xs text-on-surface-variant font-medium">
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-primary"></div> QualiFind Match Queries
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-secondary"></div> Applications Submitted to SUCs
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: System Alerts -->
+            <div class="lg:col-span-4 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 flex flex-col gap-4">
+              <h3 class="text-lg font-bold text-on-surface">DOST / CHED Alerts</h3>
+              <div class="flex flex-col gap-3">
+                <div class="p-3.5 rounded-xl bg-warning/10 border border-warning/20 flex gap-3 items-start">
+                  <span class="material-symbols-outlined text-warning text-[20px] shrink-0">schedule</span>
+                  <div>
+                    <h4 class="text-xs font-bold text-on-surface">DOST-SEI ASTHRDP Deadline Soon</h4>
+                    <p class="text-xs text-on-surface-variant mt-0.5">Application portal closes in 14 days for 1st Semester cycle.</p>
+                  </div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-primary/10 border border-primary/20 flex gap-3 items-start">
+                  <span class="material-symbols-outlined text-primary text-[20px] shrink-0">neurology</span>
+                  <div>
+                    <h4 class="text-xs font-bold text-on-surface">COARE Supercomputing Allocation</h4>
+                    <p class="text-xs text-on-surface-variant mt-0.5">DOST-ASTI AI research grant nodes refreshed.</p>
+                  </div>
+                </div>
+              </div>
+
+              <button onclick="navigateTo('admin-programs')" class="mt-auto w-full py-2.5 rounded-xl bg-surface-container-low text-primary font-semibold text-xs hover:bg-surface-container transition-colors">
+                Go to Program Registry &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Program Table Preview -->
+          <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
+            <div class="p-5 border-b border-outline-variant/30 flex justify-between items-center">
+              <div>
+                <h3 class="text-base font-bold text-on-surface">Recent Philippine Program Entries</h3>
+                <p class="text-xs text-on-surface-variant">Review recent government and consortium grant records.</p>
+              </div>
+              <button onclick="navigateTo('admin-programs')" class="text-xs font-semibold text-primary hover:underline">
+                View Full Registry
+              </button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-surface-container-low/50 text-xs font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant/20">
+                    <th class="py-3 px-6">Program Name</th>
+                    <th class="py-3 px-4">Department</th>
+                    <th class="py-3 px-4">Status</th>
+                    <th class="py-3 px-4">Deadline</th>
+                    <th class="py-3 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-recent-programs-tbody" class="text-sm divide-y divide-outline-variant/20">
+                  <!-- Dynamically Rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= VIEW 8: ADMIN PROGRAM MANAGEMENT (ADMIN ONLY - WEB ONLY) ================= -->
+      <section id="view-admin-programs" class="view-section">
+        
+        <!-- Mobile Guard Notice -->
+        <div class="block lg:hidden bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-warning/30 text-center flex flex-col items-center justify-center my-4">
+          <div class="w-14 h-14 rounded-2xl bg-warning/10 text-warning flex items-center justify-center mb-3">
+            <span class="material-symbols-outlined text-3xl">desktop_windows</span>
+          </div>
+          <h2 class="text-xl font-bold text-on-surface mb-1.5">Program Registry is Desktop Web-Only</h2>
+          <p class="text-sm text-on-surface-variant max-w-sm mb-5 leading-relaxed">
+            Data table administration and multi-criteria grant authoring are restricted to desktop web workstations.
+          </p>
+          <button onclick="setRole('student')" class="bg-primary text-on-primary font-bold text-xs px-5 py-3 rounded-full shadow-md hover:bg-primary-container transition-all flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">school</span> Switch to Student Portal (Mobile Friendly)
+          </button>
+        </div>
+
+        <!-- Desktop Web Content -->
+        <div class="hidden lg:flex flex-col w-full gap-6">
+          
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">Manage Philippine Programs</h1>
+                <span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-bold text-[10px]">WEB WORKSTATION</span>
+              </div>
+              <p class="text-base text-on-surface-variant mt-0.5">Administer and edit all DOST, CHED, SUC, and private foundation grants in the registry.</p>
+            </div>
+            <button onclick="openAddProgramModal()" class="h-11 px-6 rounded-full bg-primary text-on-primary font-semibold text-sm hover:bg-primary-container transition-all flex items-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-[20px]">add</span> Add Philippine Program
+            </button>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="relative w-full sm:w-96">
+              <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+              <input id="admin-search-input" type="text" placeholder="Search DOST, ERDT, CHED, PGC, or ID..." class="w-full pl-10 pr-4 py-2.5 bg-surface-container-lowest rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm shadow-sm"/>
+            </div>
+
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+              <span id="admin-programs-count" class="text-xs font-semibold text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full">
+                8 Philippine Programs
+              </span>
+            </div>
+          </div>
+
+          <!-- Full Table -->
+          <div class="w-full bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
+            <div class="overflow-x-auto w-full">
+              <table class="w-full text-left whitespace-nowrap">
+                <thead class="bg-surface-container-low border-b border-outline-variant/30 text-xs font-bold text-on-surface-variant uppercase tracking-wider">
+                  <tr>
+                    <th class="px-6 py-3.5 w-10"></th>
+                    <th class="px-6 py-3.5">Program Name</th>
+                    <th class="px-6 py-3.5">Agency / Provider</th>
+                    <th class="px-6 py-3.5">Type</th>
+                    <th class="px-6 py-3.5">Deadline</th>
+                    <th class="px-6 py-3.5">Status</th>
+                    <th class="px-6 py-3.5 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-programs-full-tbody" class="divide-y divide-outline-variant/20 text-sm">
+                  <!-- Dynamically Rendered -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= VIEW 9: ADMIN LIAISON PROFILE (ADMIN ONLY - WEB ONLY) ================= -->
+      <section id="view-admin-profile" class="view-section">
+        <div class="flex flex-col w-full max-w-3xl mx-auto gap-6">
+          <div>
+            <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">Research &amp; Fellowships Office Profile</h1>
+            <p class="text-base text-on-surface-variant mt-1">Administrator agency details, DOST/CHED accreditation parameters, and evaluation priorities.</p>
+          </div>
+
+          <div class="bg-surface-container-lowest rounded-2xl p-6 lg:p-8 shadow-sm border border-outline-variant/30 flex flex-col gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Administrator Name</label>
+                <input type="text" readonly value="Dr. Ernesto Ramos" class="w-full bg-surface-container-low px-4 py-2.5 rounded-xl border border-outline-variant/40 text-sm font-bold text-on-surface"/>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Official Agency Email</label>
+                <input type="email" readonly value="ernesto.ramos@up.edu.ph" class="w-full bg-surface-container-low px-4 py-2.5 rounded-xl border border-outline-variant/40 text-sm font-bold text-on-surface"/>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Office &amp; Designation</label>
+                <input type="text" readonly value="Director, Office of Research &amp; Fellowships" class="w-full bg-surface-container-low px-4 py-2.5 rounded-xl border border-outline-variant/40 text-sm font-bold text-on-surface"/>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">National Consortium Scope</label>
+                <input type="text" readonly value="DOST-SEI NSC &amp; CHED SUC Network" class="w-full bg-surface-container-low px-4 py-2.5 rounded-xl border border-outline-variant/40 text-sm font-bold text-on-surface"/>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-outline-variant/30 flex justify-between items-center">
+              <span class="text-xs text-on-surface-variant">Accredited by DOST National Science Consortium</span>
+              <button onclick="showToast('Office configuration saved.');" class="bg-primary text-on-primary font-semibold text-sm px-6 py-2.5 rounded-full transition-all shadow-sm">
+                Save Office Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar (ONLY Visible to Student / Opportunity Seekers on Mobile) -->
+  <nav id="student-mobile-nav" class="lg:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl border-t border-outline-variant/30">
+    <div class="flex justify-around items-center h-16 px-4">
+      <a href="#dashboard" onclick="navigateTo('dashboard'); return false;" class="flex flex-col items-center gap-1 text-primary">
+        <span class="material-symbols-outlined text-[22px]">dashboard</span>
+        <span class="text-[11px] font-medium">Home</span>
+      </a>
+      <a href="#matcher" onclick="navigateTo('matcher'); return false;" class="flex flex-col items-center gap-1 text-on-surface-variant">
+        <span class="material-symbols-outlined text-[22px]">auto_awesome</span>
+        <span class="text-[11px] font-medium">QualiFind</span>
+      </a>
+      <a href="#opportunities" onclick="navigateTo('opportunities'); return false;" class="flex flex-col items-center gap-1 text-on-surface-variant">
+        <span class="material-symbols-outlined text-[22px]">search</span>
+        <span class="text-[11px] font-medium">Grants</span>
+      </a>
+      <a href="#profile" onclick="navigateTo('profile'); return false;" class="flex flex-col items-center gap-1 text-on-surface-variant">
+        <span class="material-symbols-outlined text-[22px]">person</span>
+        <span class="text-[11px] font-medium">Profile</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ================= USER / ROLE SWITCHER MODAL ================= -->
+  <div id="user-switch-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/40 backdrop-blur-sm">
+    <div class="bg-surface-container-lowest rounded-2xl max-w-md w-full p-6 shadow-2xl border border-outline-variant/40">
+      <div class="flex justify-between items-center pb-3 border-b border-outline-variant/30 mb-4">
+        <div>
+          <h3 class="text-lg font-bold text-on-surface">Switch User Account</h3>
+          <p class="text-xs text-on-surface-variant">Completely isolated portals for Student and Administrator</p>
+        </div>
+        <button onclick="closeUserSwitchModal()" class="text-on-surface-variant hover:text-on-surface">
+          <span class="material-symbols-outlined text-[22px]">close</span>
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <!-- User 1: Student -->
+        <div onclick="setRole('student'); closeUserSwitchModal();" class="p-4 rounded-xl border-2 border-primary/30 hover:border-primary bg-primary/5 hover:bg-primary/10 cursor-pointer transition-all flex items-start gap-3.5 group">
+          <div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
+            MS
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Maria Clara Santos</h4>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-success/15 text-success">Student Portal</span>
+            </div>
+            <p class="text-xs text-on-surface-variant mt-0.5">Opportunity Seeker &bull; UP Diliman</p>
+            <div class="mt-2 flex items-center gap-1.5 text-[11px] font-semibold text-primary">
+              <span class="material-symbols-outlined text-[14px]">devices</span>
+              <span>Available on Both Mobile &amp; Desktop Web</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- User 2: Admin -->
+        <div onclick="setRole('admin'); closeUserSwitchModal();" class="p-4 rounded-xl border border-outline-variant/40 hover:border-secondary bg-surface-container-low hover:bg-surface-container cursor-pointer transition-all flex items-start gap-3.5 group">
+          <div class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
+            ER
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-bold text-on-surface group-hover:text-secondary transition-colors">Dr. Ernesto Ramos</h4>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container">Admin Portal</span>
+            </div>
+            <p class="text-xs text-on-surface-variant mt-0.5">Director &bull; DOST/CHED Research Liaison</p>
+            <div class="mt-2 flex items-center gap-1.5 text-[11px] font-semibold text-outline">
+              <span class="material-symbols-outlined text-[14px]">desktop_windows</span>
+              <span>Desktop Web Workstation Only</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PROGRAM ADD/EDIT MODAL ================= -->
+  <div id="program-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/40 backdrop-blur-sm">
+    <div class="bg-surface-container-lowest rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-outline-variant/40 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-4 border-b border-outline-variant/30 mb-4">
+        <h3 id="program-modal-title" class="text-xl font-bold text-on-surface">Add Philippine Program / Grant</h3>
+        <button onclick="closeProgramModal()" class="text-on-surface-variant hover:text-on-surface">
+          <span class="material-symbols-outlined text-[24px]">close</span>
+        </button>
+      </div>
+
+      <form id="program-form" onsubmit="handleSaveProgram(event)" class="flex flex-col gap-4">
+        <input type="hidden" id="prog-id-input"/>
+        
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-title-input">Program Title *</label>
+          <input id="prog-title-input" required type="text" placeholder="e.g. DOST-SEI ASTHRDP Graduate Fellowship" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"/>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-provider-input">Agency / Provider *</label>
+            <input id="prog-provider-input" required type="text" placeholder="e.g. DOST-SEI / CHED / UP System" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"/>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-type-input">Program Type</label>
+            <select id="prog-type-input" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm">
+              <option value="Fellowship">Fellowship</option>
+              <option value="Research Grant">Research Grant</option>
+              <option value="Scholarship">Scholarship</option>
+              <option value="Postdoc Position">Postdoc Position</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-dept-input">Discipline / Department</label>
+            <input id="prog-dept-input" required type="text" placeholder="e.g. Bioinformatics &amp; AI" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"/>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-funding-input">Stipend / Funding (₱)</label>
+            <input id="prog-funding-input" required type="text" placeholder="e.g. ₱480,000 / yr + Tuition" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"/>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-deadline-input">Application Deadline *</label>
+            <input id="prog-deadline-input" required type="date" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"/>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-status-input">Status</label>
+            <select id="prog-status-input" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm">
+              <option value="Active">Active</option>
+              <option value="In Review">In Review</option>
+              <option value="Draft">Draft</option>
+              <option value="Expired">Expired</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-desc-input">Program Summary &amp; Philippine Criteria</label>
+          <textarea id="prog-desc-input" rows="3" required placeholder="Describe GWA thresholds, Philippine residency, return service, and proposal guidelines..." class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"></textarea>
+        </div>
+
+        <div class="pt-4 border-t border-outline-variant/30 flex justify-end gap-3">
+          <button type="button" onclick="closeProgramModal()" class="px-5 py-2.5 rounded-full bg-surface-container text-on-surface font-medium text-sm hover:bg-surface-container-high font-semibold">
+            Cancel
+          </button>
+          <button type="submit" class="px-6 py-2.5 rounded-full bg-primary text-on-primary font-semibold text-sm hover:bg-primary-container shadow-sm">
+            Save Program
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-on-surface text-surface shadow-2xl border border-outline-variant/20 translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+    <span id="toast-icon" class="material-symbols-outlined text-success text-[20px]">check_circle</span>
+    <span id="toast-message" class="text-sm font-medium">Notification message</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
