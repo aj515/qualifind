@@ -338,6 +338,7 @@ const AppState = {
   },
   currentView: "dashboard",
   selectedOpportunityId: "DOST-ASTHRDP-2024",
+  matcherDocuments: [],
   opportunities: [...INITIAL_OPPORTUNITIES],
   savedOpportunities: ["DOST-ASTHRDP-2024", "DOST-ASTI-AI-2024", "PGC-COMPGEN-2024"],
   activeFilters: {
@@ -645,7 +646,7 @@ function renderDashboard() {
 function renderMatcher() {
   const chips = document.querySelectorAll("#matcher-chips button");
   const textarea = document.getElementById("ai-prompt-input");
-  
+
   chips.forEach(chip => {
     chip.onclick = () => {
       if (textarea) {
@@ -656,6 +657,55 @@ function renderMatcher() {
       }
     };
   });
+
+  renderMatcherDocChips();
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function handleDocumentSelect(event) {
+  const files = Array.from(event.target.files || []);
+  if (!files.length) return;
+
+  files.forEach(f => {
+    AppState.matcherDocuments.push({ name: f.name, sizeLabel: formatFileSize(f.size) });
+  });
+  event.target.value = "";
+
+  renderMatcherDocChips();
+  showToast(`Attached ${files.length} document${files.length > 1 ? "s" : ""} for context.`, "info");
+}
+
+function removeMatcherDocument(idx) {
+  AppState.matcherDocuments.splice(idx, 1);
+  renderMatcherDocChips();
+}
+
+function renderMatcherDocChips() {
+  const container = document.getElementById("matcher-doc-chips");
+  if (!container) return;
+
+  if (AppState.matcherDocuments.length === 0) {
+    container.classList.add("hidden");
+    container.classList.remove("flex");
+    container.innerHTML = "";
+    return;
+  }
+
+  container.classList.remove("hidden");
+  container.classList.add("flex");
+  container.innerHTML = AppState.matcherDocuments.map((doc, idx) => `
+    <span class="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full bg-primary-container/15 text-primary text-label-sm font-label-sm font-semibold">
+      <span class="material-symbols-outlined text-[16px]">description</span>
+      ${doc.name}
+      <span class="text-outline font-normal">(${doc.sizeLabel})</span>
+      <button type="button" onclick="removeMatcherDocument(${idx})" class="hover:text-error text-[16px] leading-none font-bold ml-1">&times;</button>
+    </span>
+  `).join("");
 }
 
 const MATCHER_LOADING_STEPS = [
@@ -1547,6 +1597,8 @@ function setupFilterListeners() {
 window.navigateTo = navigateTo;
 window.handleBrandClick = handleBrandClick;
 window.handleFindMatches = handleFindMatches;
+window.handleDocumentSelect = handleDocumentSelect;
+window.removeMatcherDocument = removeMatcherDocument;
 window.toggleBookmark = toggleBookmark;
 window.resetFilters = resetFilters;
 window.saveProfile = saveProfile;
