@@ -1452,8 +1452,29 @@ function setupFilterListeners() {
   }
 }
 
-// App Initialization
-document.addEventListener("DOMContentLoaded", () => {
+// Expose interactive methods globally for HTML event handlers in Vite ES Module mode
+window.navigateTo = navigateTo;
+window.handleBrandClick = handleBrandClick;
+window.handleFindMatches = handleFindMatches;
+window.toggleBookmark = toggleBookmark;
+window.resetFilters = resetFilters;
+window.saveProfile = saveProfile;
+window.removeSkill = removeSkill;
+window.promptAddSkill = promptAddSkill;
+window.openAddProgramModal = openAddProgramModal;
+window.openEditProgramModal = openEditProgramModal;
+window.closeProgramModal = closeProgramModal;
+window.handleSaveProgram = handleSaveProgram;
+window.duplicateProgram = duplicateProgram;
+window.deleteProgram = deleteProgram;
+window.toggleRole = toggleRole;
+window.setRole = setRole;
+window.openUserSwitchModal = openUserSwitchModal;
+window.closeUserSwitchModal = closeUserSwitchModal;
+window.showToast = showToast;
+
+// App Initialization (Supports direct load & DOMContentLoaded)
+function initApp() {
   loadSavedState();
   updateRoleUI();
 
@@ -1461,4 +1482,10 @@ document.addEventListener("DOMContentLoaded", () => {
   navigateTo(hash);
 
   setupFilterListeners();
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
