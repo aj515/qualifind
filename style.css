@@ -1,14 +1,88 @@
-/* Academic Nexus Custom CSS Styles */
+/* Academic Nexus Design Tokens — light palette (default) */
+:root {
+  --color-primary: 0 74 198;
+  --color-primary-container: 37 99 235;
+  --color-on-primary: 255 255 255;
+  --color-on-primary-container: 238 239 255;
+  --color-primary-fixed: 219 225 255;
+  --color-primary-fixed-dim: 180 197 255;
+  --color-secondary: 0 108 73;
+  --color-secondary-container: 108 248 187;
+  --color-on-secondary: 255 255 255;
+  --color-on-secondary-container: 0 113 77;
+  --color-tertiary: 120 75 0;
+  --color-tertiary-container: 153 97 0;
+  --color-on-tertiary: 255 255 255;
+  --color-on-tertiary-container: 255 238 221;
+  --color-surface: 248 249 255;
+  --color-surface-dim: 203 219 245;
+  --color-surface-bright: 248 249 255;
+  --color-surface-container-lowest: 255 255 255;
+  --color-surface-container-low: 239 244 255;
+  --color-surface-container: 229 238 255;
+  --color-surface-container-high: 220 233 255;
+  --color-surface-container-highest: 211 228 254;
+  --color-on-surface: 11 28 48;
+  --color-on-surface-variant: 67 70 85;
+  --color-outline: 115 118 134;
+  --color-outline-variant: 195 198 215;
+  --color-background: 248 249 255;
+  --color-on-background: 11 28 48;
+  --color-success: 16 185 129;
+  --color-warning: 245 158 11;
+  --color-error: 186 26 26;
+  --color-error-container: 255 218 214;
+  --glass-header-bg: 248 249 255;
+  --glass-modal-bg: 255 255 255;
+}
+
+/* Dark palette — toggled via .dark class on <html> */
+html.dark {
+  --color-primary: 169 198 255;
+  --color-primary-container: 39 74 134;
+  --color-on-primary: 10 44 99;
+  --color-on-primary-container: 217 226 255;
+  --color-secondary: 108 248 187;
+  --color-secondary-container: 0 82 47;
+  --color-on-secondary: 0 57 31;
+  --color-on-secondary-container: 137 255 207;
+  --color-tertiary: 255 184 77;
+  --color-tertiary-container: 92 58 0;
+  --color-on-tertiary: 66 43 0;
+  --color-on-tertiary-container: 255 221 176;
+  --color-surface: 15 21 32;
+  --color-surface-dim: 11 15 24;
+  --color-surface-bright: 51 58 72;
+  --color-surface-container-lowest: 10 14 23;
+  --color-surface-container-low: 22 29 43;
+  --color-surface-container: 27 35 49;
+  --color-surface-container-high: 38 48 63;
+  --color-surface-container-highest: 49 60 76;
+  --color-on-surface: 226 230 240;
+  --color-on-surface-variant: 183 188 208;
+  --color-outline: 139 144 166;
+  --color-outline-variant: 60 68 87;
+  --color-background: 15 21 32;
+  --color-on-background: 226 230 240;
+  --color-success: 52 211 153;
+  --color-warning: 251 191 36;
+  --color-error: 255 180 171;
+  --color-error-container: 147 0 10;
+  --glass-header-bg: 15 21 32;
+  --glass-modal-bg: 20 26 38;
+}
+
 @layer base {
   html, body {
     margin: 0;
     padding: 0;
     font-family: 'Inter', sans-serif;
-    background-color: #f8f9ff;
-    color: #0b1c30;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-on-background));
     scroll-behavior: smooth;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
-  
+
   body {
     overscroll-behavior: none;
   }
@@ -16,7 +90,7 @@
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
-  
+
   .pt-safe {
     padding-top: env(safe-area-inset-top, 0px);
   }
@@ -31,11 +105,11 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c3c6d7;
+  background: rgb(var(--color-outline-variant));
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #737686;
+  background: rgb(var(--color-outline));
 }
 
 /* Smooth view transitions */
@@ -54,13 +128,13 @@
 
 /* Glassmorphism & Tonal Surfaces */
 .glass-header {
-  background: rgba(248, 249, 255, 0.85);
+  background: rgb(var(--glass-header-bg) / 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
 .glass-modal {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgb(var(--glass-modal-bg) / 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
