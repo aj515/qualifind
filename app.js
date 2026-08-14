@@ -475,6 +475,28 @@ function renderCurrentView() {
   updateGlobalBadges();
 }
 
+// Dark Mode
+function initTheme() {
+  updateThemeToggleUI(document.documentElement.classList.contains("dark"));
+}
+
+function toggleDarkMode() {
+  const isDark = document.documentElement.classList.toggle("dark");
+  try {
+    localStorage.setItem("qualifind_theme", isDark ? "dark" : "light");
+  } catch (e) {
+    console.warn("LocalStorage theme save error:", e);
+  }
+  updateThemeToggleUI(isDark);
+}
+
+function updateThemeToggleUI(isDark) {
+  const icon = document.getElementById("theme-toggle-icon");
+  if (icon) icon.textContent = isDark ? "light_mode" : "dark_mode";
+  const btn = document.getElementById("theme-toggle-btn");
+  if (btn) btn.title = isDark ? "Switch to light mode" : "Switch to dark mode";
+}
+
 // Toast System
 function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
@@ -1716,9 +1738,11 @@ window.setRole = setRole;
 window.openUserSwitchModal = openUserSwitchModal;
 window.closeUserSwitchModal = closeUserSwitchModal;
 window.showToast = showToast;
+window.toggleDarkMode = toggleDarkMode;
 
 // App Initialization (Supports direct load & DOMContentLoaded)
 function initApp() {
+  initTheme();
   loadSavedState();
   updateRoleUI();
 

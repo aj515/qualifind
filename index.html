@@ -4,6 +4,18 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
   <title>QualiFind | AI-Powered Opportunity Matcher Philippines</title>
+
+  <!-- Applied before first paint to avoid a flash of the wrong theme -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("qualifind_theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var isDark = saved ? saved === "dark" : prefersDark;
+        if (isDark) document.documentElement.classList.add("dark");
+      } catch (e) {}
+    })();
+  </script>
   <meta name="description" content="QualiFind - AI-Powered Academic & Research Opportunity Matching Platform in the Philippine Higher Education Setting."/>
 
   <!-- Google Fonts: Inter & Material Symbols -->
@@ -20,38 +32,38 @@
       theme: {
         extend: {
           colors: {
-            "primary": "#004ac6",
-            "primary-container": "#2563eb",
-            "on-primary": "#ffffff",
-            "on-primary-container": "#eeefff",
-            "primary-fixed": "#dbe1ff",
-            "primary-fixed-dim": "#b4c5ff",
-            "secondary": "#006c49",
-            "secondary-container": "#6cf8bb",
-            "on-secondary": "#ffffff",
-            "on-secondary-container": "#00714d",
-            "tertiary": "#784b00",
-            "tertiary-container": "#996100",
-            "on-tertiary": "#ffffff",
-            "on-tertiary-container": "#ffeedd",
-            "surface": "#f8f9ff",
-            "surface-dim": "#cbdbf5",
-            "surface-bright": "#f8f9ff",
-            "surface-container-lowest": "#ffffff",
-            "surface-container-low": "#eff4ff",
-            "surface-container": "#e5eeff",
-            "surface-container-high": "#dce9ff",
-            "surface-container-highest": "#d3e4fe",
-            "on-surface": "#0b1c30",
-            "on-surface-variant": "#434655",
-            "outline": "#737686",
-            "outline-variant": "#c3c6d7",
-            "background": "#f8f9ff",
-            "on-background": "#0b1c30",
-            "success": "#10b981",
-            "warning": "#f59e0b",
-            "error": "#ba1a1a",
-            "error-container": "#ffdad6"
+            "primary": "rgb(var(--color-primary) / <alpha-value>)",
+            "primary-container": "rgb(var(--color-primary-container) / <alpha-value>)",
+            "on-primary": "rgb(var(--color-on-primary) / <alpha-value>)",
+            "on-primary-container": "rgb(var(--color-on-primary-container) / <alpha-value>)",
+            "primary-fixed": "rgb(var(--color-primary-fixed) / <alpha-value>)",
+            "primary-fixed-dim": "rgb(var(--color-primary-fixed-dim) / <alpha-value>)",
+            "secondary": "rgb(var(--color-secondary) / <alpha-value>)",
+            "secondary-container": "rgb(var(--color-secondary-container) / <alpha-value>)",
+            "on-secondary": "rgb(var(--color-on-secondary) / <alpha-value>)",
+            "on-secondary-container": "rgb(var(--color-on-secondary-container) / <alpha-value>)",
+            "tertiary": "rgb(var(--color-tertiary) / <alpha-value>)",
+            "tertiary-container": "rgb(var(--color-tertiary-container) / <alpha-value>)",
+            "on-tertiary": "rgb(var(--color-on-tertiary) / <alpha-value>)",
+            "on-tertiary-container": "rgb(var(--color-on-tertiary-container) / <alpha-value>)",
+            "surface": "rgb(var(--color-surface) / <alpha-value>)",
+            "surface-dim": "rgb(var(--color-surface-dim) / <alpha-value>)",
+            "surface-bright": "rgb(var(--color-surface-bright) / <alpha-value>)",
+            "surface-container-lowest": "rgb(var(--color-surface-container-lowest) / <alpha-value>)",
+            "surface-container-low": "rgb(var(--color-surface-container-low) / <alpha-value>)",
+            "surface-container": "rgb(var(--color-surface-container) / <alpha-value>)",
+            "surface-container-high": "rgb(var(--color-surface-container-high) / <alpha-value>)",
+            "surface-container-highest": "rgb(var(--color-surface-container-highest) / <alpha-value>)",
+            "on-surface": "rgb(var(--color-on-surface) / <alpha-value>)",
+            "on-surface-variant": "rgb(var(--color-on-surface-variant) / <alpha-value>)",
+            "outline": "rgb(var(--color-outline) / <alpha-value>)",
+            "outline-variant": "rgb(var(--color-outline-variant) / <alpha-value>)",
+            "background": "rgb(var(--color-background) / <alpha-value>)",
+            "on-background": "rgb(var(--color-on-background) / <alpha-value>)",
+            "success": "rgb(var(--color-success) / <alpha-value>)",
+            "warning": "rgb(var(--color-warning) / <alpha-value>)",
+            "error": "rgb(var(--color-error) / <alpha-value>)",
+            "error-container": "rgb(var(--color-error-container) / <alpha-value>)"
           },
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
@@ -214,6 +226,10 @@
         <button onclick="navigateTo('saved-applications')" class="relative w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Saved Applications">
           <span class="material-symbols-outlined text-[20px] text-primary">bookmark</span>
           <span id="header-saved-badge" class="absolute -top-1 -right-1 bg-primary text-on-primary text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">3</span>
+        </button>
+
+        <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Toggle dark mode">
+          <span id="theme-toggle-icon" class="material-symbols-outlined text-[20px]">dark_mode</span>
         </button>
 
         <button class="w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Notifications">
