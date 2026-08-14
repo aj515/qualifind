@@ -1,5 +1,5 @@
 // QualiFind - AI-Powered Student Assistance Navigator (Philippine Higher Education Setting)
-// Corporate Trust Design System Integration (Tailored Student & Admin Preferences)
+// Corporate Trust Design System Integration (Modern Enterprise SaaS Aesthetic)
 
 const INITIAL_OPPORTUNITIES = [
   {
@@ -365,20 +365,20 @@ const AppState = {
   currentUser: { ...USER_PROFILES.student },
   currentView: "dashboard",
   selectedOpportunityId: "CEBU-LGU-SCHOLARSHIP-2024",
-  selectedCategory: "All",
   matcherDocuments: [],
   matcherProfileTags: [],
   opportunities: [...INITIAL_OPPORTUNITIES],
   savedOpportunities: ["CEBU-LGU-SCHOLARSHIP-2024", "CIT-STUDENT-ASSISTANT-2024", "CHED-TULONG-DUNONG-2024"],
   activeFilters: {
-    types: ["Scholarship", "Educational Assistance", "Student Employment", "Training & Certification", "Student Loan"],
+    types: ["Scholarship", "Educational Assistance", "Student Employment", "Training & Certification"],
     matchQuality: ["high", "good"],
     searchQuery: "",
     savedOnly: false
   },
   adminFilter: {
     search: "",
-    status: "All"
+    status: "All",
+    type: "All"
   },
   editingProgramId: null
 };
@@ -552,33 +552,6 @@ function renderCurrentView() {
   updateGlobalBadges();
 }
 
-// Quick Category Filter Handler (Student Preference)
-function setCategoryFilter(category) {
-  AppState.selectedCategory = category;
-
-  if (category === "All") {
-    AppState.activeFilters.types = ["Scholarship", "Educational Assistance", "Student Employment", "Training & Certification", "Student Loan"];
-  } else {
-    AppState.activeFilters.types = [category];
-  }
-
-  // Update button pill active state
-  document.querySelectorAll(".category-pill").forEach(btn => {
-    const isThis = btn.textContent.includes(category) || (category === "All" && btn.textContent.includes("All"));
-    if (isThis) {
-      btn.className = "category-pill active px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-primary text-white shadow-button";
-    } else {
-      btn.className = "category-pill px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all bg-surface hover:bg-surface-subtle text-text-muted hover:text-text-main border border-border";
-    }
-  });
-
-  if (AppState.currentView === "dashboard") {
-    renderDashboard();
-  } else if (AppState.currentView === "opportunities") {
-    renderOpportunitiesList();
-  }
-}
-
 // Dark Mode Toggle
 function initTheme() {
   updateThemeToggleUI(document.documentElement.classList.contains("dark"));
@@ -749,15 +722,10 @@ function renderDashboard() {
   const recContainer = document.getElementById("dash-recommended-list");
   if (!recContainer) return;
 
-  let filtered = AppState.opportunities.filter(o => {
-    if (o.status !== "Active") return false;
-    if (AppState.selectedCategory !== "All" && o.type !== AppState.selectedCategory) return false;
-    return true;
-  });
-
-  const topMatches = filtered
+  const topMatches = AppState.opportunities
+    .filter(o => o.status === "Active")
     .sort((a, b) => b.matchScore - a.matchScore)
-    .slice(0, 4);
+    .slice(0, 3);
 
   recContainer.innerHTML = topMatches.map(opp => {
     const isSaved = AppState.savedOpportunities.includes(opp.id);
@@ -1196,7 +1164,7 @@ function renderSavedApplicationsView() {
 
 function resetFilters() {
   AppState.activeFilters = {
-    types: ["Scholarship", "Educational Assistance", "Student Employment", "Training & Certification", "Student Loan"],
+    types: ["Scholarship", "Educational Assistance", "Student Employment", "Training & Certification"],
     matchQuality: ["high", "good", "low"],
     searchQuery: "",
     savedOnly: false
@@ -1568,19 +1536,14 @@ function renderAdminDashboard() {
   }).join("");
 }
 
-// Render Admin Programs Full Management Screen (Admin Preference)
+// Render Admin Programs Full Management Screen
 function renderAdminPrograms() {
   const tbody = document.getElementById("admin-programs-full-tbody");
   if (!tbody) return;
 
   const searchQuery = (AppState.adminFilter.search || "").toLowerCase();
-  const statusFilter = AppState.adminFilter.status || "All";
 
   const filtered = AppState.opportunities.filter(opp => {
-    if (statusFilter !== "All" && opp.status !== statusFilter) {
-      return false;
-    }
-
     if (searchQuery) {
       const match = opp.title.toLowerCase().includes(searchQuery) ||
                     opp.provider.toLowerCase().includes(searchQuery) ||
@@ -1606,10 +1569,7 @@ function renderAdminPrograms() {
         <td class="px-6 py-3.5">
           <div class="w-3.5 h-3.5 rounded border border-border bg-surface"></div>
         </td>
-        <td class="px-6 py-3.5 font-bold text-xs text-text-main">
-          ${opp.title}
-          <span class="block text-[10px] text-text-muted font-normal">ID: ${opp.id}</span>
-        </td>
+        <td class="px-6 py-3.5 font-bold text-xs text-text-main">${opp.title}</td>
         <td class="px-6 py-3.5 text-xs text-text-muted">${opp.provider}</td>
         <td class="px-6 py-3.5 text-xs font-semibold text-text-main">${opp.type}</td>
         <td class="px-6 py-3.5 text-xs text-text-muted">${opp.deadlineFormatted}</td>
@@ -1630,38 +1590,6 @@ function renderAdminPrograms() {
       </tr>
     `;
   }).join("");
-}
-
-function handleAdminStatusFilter(status) {
-  AppState.adminFilter.status = status;
-  renderAdminPrograms();
-}
-
-// Export Registry CSV (Admin Preference Tool)
-function exportRegistryCSV() {
-  const headers = ["ID", "Title", "Agency_Provider", "Category", "Funding_Value", "Deadline", "Status", "Min_GPA"];
-  const rows = AppState.opportunities.map(o => [
-    `"${o.id}"`,
-    `"${o.title.replace(/"/g, '""')}"`,
-    `"${o.provider.replace(/"/g, '""')}"`,
-    `"${o.type}"`,
-    `"${o.funding}"`,
-    `"${o.deadlineFormatted}"`,
-    `"${o.status}"`,
-    `"${o.minGpa || 75.0}%"`
-  ]);
-
-  const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.setAttribute("href", url);
-  link.setAttribute("download", `QualiFind_PH_Grant_Registry_${new Date().toISOString().slice(0, 10)}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  showToast("Exported Philippine Grant Registry to CSV successfully!");
 }
 
 // Program Modal Functions
@@ -2021,9 +1949,6 @@ window.handleLoginFormSubmit = handleLoginFormSubmit;
 window.quickLoginAs = quickLoginAs;
 window.handleLogout = handleLogout;
 window.toggleMatcherTag = toggleMatcherTag;
-window.setCategoryFilter = setCategoryFilter;
-window.handleAdminStatusFilter = handleAdminStatusFilter;
-window.exportRegistryCSV = exportRegistryCSV;
 
 // App Initialization
 function initApp() {
