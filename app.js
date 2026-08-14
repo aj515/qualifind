@@ -398,12 +398,14 @@ function navigateTo(viewId, payload = null) {
   const currentRole = AppState.currentUser.role || "student";
 
   // Strict Role Guard
-  if (currentRole === "student" && ADMIN_VIEWS.includes(viewId)) {
-    showToast("Access Restricted: Admin privileges required.", "warning");
-    viewId = "dashboard";
-  } else if (currentRole === "admin" && STUDENT_VIEWS.includes(viewId)) {
-    showToast("Access Restricted: Switch to Student profile to view opportunity seeker views.", "warning");
-    viewId = "admin-dashboard";
+  if (viewId !== "login") {
+    if (currentRole === "student" && ADMIN_VIEWS.includes(viewId)) {
+      showToast("Access Restricted: Admin privileges required.", "warning");
+      viewId = "dashboard";
+    } else if (currentRole === "admin" && STUDENT_VIEWS.includes(viewId)) {
+      showToast("Access Restricted: Switch to Student profile to view opportunity seeker views.", "warning");
+      viewId = "admin-dashboard";
+    }
   }
 
   AppState.currentView = viewId;
@@ -444,6 +446,9 @@ function renderCurrentView() {
   switch (AppState.currentView) {
     case "dashboard":
       renderDashboard();
+      break;
+    case "login":
+      renderLogin();
       break;
     case "matcher":
       renderMatcher();
@@ -1594,10 +1599,56 @@ function setRole(roleName) {
     saveState();
     updateRoleUI();
     
-    if (roleName === "admin") {
-      showToast("Switched to Admin Portal (Desktop Web Optimized)");
-      navigateTo("admin-dashboard");
-    } else {
+// Login Page Handlers
+function selectLoginRole(role) {
+  const roleInput = document.getElementById("login-selected-role");
+  const studentBtn = document.getElementById("login-role-student-btn");
+  const adminBtn = document.getElementById("login-role-admin-btn");
+  const emailInput = document.getElementById("login-email-input");
+
+  if (roleInput) roleInput.value = role;
+
+  if (role === "student") {
+    if (studentBtn) studentBtn.className = "flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 bg-surface-container-lowest text-primary shadow-sm";
+    if (adminBtn) adminBtn.className = "flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 text-on-surface-variant hover:text-on-surface";
+    if (emailInput && !emailInput.value.includes("ernesto")) emailInput.value = "maria.santos@up.edu.ph";
+  } else {
+    if (adminBtn) adminBtn.className = "flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 bg-surface-container-lowest text-secondary shadow-sm";
+    if (studentBtn) studentBtn.className = "flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 text-on-surface-variant hover:text-on-surface";
+    if (emailInput && !emailInput.value.includes("maria")) emailInput.value = "ernesto.ramos@up.edu.ph";
+  }
+}
+
+function togglePasswordVisibility() {
+  const pwdInput = document.getElementById("login-password-input");
+  const toggleIcon = document.getElementById("password-toggle-icon");
+  if (!pwdInput) return;
+
+  if (pwdInput.type === "password") {
+    pwdInput.type = "text";
+    if (toggleIcon) toggleIcon.textContent = "visibility_off";
+  } else {
+    pwdInput.type = "password";
+    if (toggleIcon) toggleIcon.textContent = "visibility";
+  }
+}
+
+function handleLoginFormSubmit(event) {
+  if (event) event.preventDefault();
+  const selectedRole = document.getElementById("login-selected-role")?.value || "student";
+  quickLoginAs(selectedRole);
+}
+
+function quickLoginAs(roleName) {
+  setRole(roleName);
+  const profileName = USER_PROFILES[roleName]?.name || "User";
+  showToast(`Welcome back, ${profileName}!`);
+}
+
+function renderLogin() {
+  const role = AppState.currentUser.role || "student";
+  selectLoginRole(role);
+}
       showToast("Switched to Student Portal (Mobile & Web Supported)");
       navigateTo("dashboard");
     }
@@ -1737,6 +1788,11 @@ window.handleBrandClick = handleBrandClick;
 window.handleFindMatches = handleFindMatches;
 window.handleDocumentSelect = handleDocumentSelect;
 window.removeMatcherDocument = removeMatcherDocument;
+window.selectLoginRole = selectLoginRole;
+window.togglePasswordVisibility = togglePasswordVisibility;
+window.handleLoginFormSubmit = handleLoginFormSubmit;
+window.quickLoginAs = quickLoginAs;
+window.renderLogin = renderLogin;
 window.toggleBookmark = toggleBookmark;
 window.toggleSavedOnlyFilter = toggleSavedOnlyFilter;
 window.toggleFilterDrawer = toggleFilterDrawer;
