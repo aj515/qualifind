@@ -477,7 +477,53 @@ function renderCurrentView() {
     default:
       renderDashboard();
   }
+  updateLayoutForView(AppState.currentView);
   updateGlobalBadges();
+}
+
+function updateLayoutForView(viewId) {
+  const sidebar = document.getElementById("app-sidebar") || document.querySelector("aside");
+  const header = document.getElementById("app-header") || document.querySelector("header");
+  const mainWrapper = document.getElementById("main-layout-wrapper");
+  const mainEl = document.querySelector("main");
+
+  if (viewId === "login") {
+    if (sidebar) {
+      sidebar.style.display = "none";
+      sidebar.classList.remove("lg:flex");
+      sidebar.classList.add("hidden");
+    }
+    if (header) {
+      header.style.display = "none";
+      header.classList.add("hidden");
+    }
+    if (mainWrapper) {
+      mainWrapper.classList.remove("lg:pl-72");
+      mainWrapper.classList.add("lg:pl-0");
+    }
+    if (mainEl) {
+      mainEl.classList.remove("pt-20");
+      mainEl.classList.add("pt-0");
+    }
+  } else {
+    if (sidebar) {
+      sidebar.style.display = "";
+      sidebar.classList.remove("hidden");
+      sidebar.classList.add("lg:flex");
+    }
+    if (header) {
+      header.style.display = "";
+      header.classList.remove("hidden");
+    }
+    if (mainWrapper) {
+      mainWrapper.classList.add("lg:pl-72");
+      mainWrapper.classList.remove("lg:pl-0");
+    }
+    if (mainEl) {
+      mainEl.classList.add("pt-20");
+      mainEl.classList.remove("pt-0");
+    }
+  }
 }
 
 // Dark Mode

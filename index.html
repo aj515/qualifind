@@ -96,7 +96,7 @@
 <body class="bg-surface font-sans text-on-surface antialiased">
 
   <!-- Desktop Sidebar Navigation (Strictly Isolated by Role) -->
-  <aside class="hidden lg:flex fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex-col border-r border-outline-variant/30">
+  <aside id="app-sidebar" class="hidden lg:flex fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex-col border-r border-outline-variant/30">
     <div class="h-16 flex items-center px-6 mb-2">
       <div class="flex items-center gap-3 cursor-pointer" onclick="handleBrandClick()">
         <div class="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-md shadow-primary/20">
@@ -201,9 +201,9 @@
   </aside>
 
   <!-- Main Container -->
-  <div class="lg:pl-72 flex flex-col min-h-screen">
+  <div id="main-layout-wrapper" class="lg:pl-72 flex flex-col min-h-screen">
     <!-- Top Header -->
-    <header class="fixed top-0 left-0 lg:left-72 right-0 h-16 glass-header z-40 border-b border-outline-variant/30 flex items-center justify-between px-4 lg:px-8">
+    <header id="app-header" class="fixed top-0 left-0 lg:left-72 right-0 h-16 glass-header z-40 border-b border-outline-variant/30 flex items-center justify-between px-4 lg:px-8">
       <!-- Search Bar -->
       <div class="flex-1 max-w-xl">
         <div class="relative flex items-center">
@@ -252,7 +252,7 @@
       
       <!-- ================= VIEW: LOGIN PAGE (AUTHENTICATION PORTAL) ================= -->
       <section id="view-login" class="view-section">
-        <div class="min-h-[calc(100vh-8rem)] flex items-center justify-center py-6 px-2 sm:px-4">
+        <div class="min-h-screen flex items-center justify-center py-8 px-4">
           <div class="w-full max-w-5xl bg-surface-container-lowest rounded-3xl shadow-2xl border border-outline-variant/30 overflow-hidden grid grid-cols-1 lg:grid-cols-12 relative">
             
             <!-- Background Glow Effects -->
