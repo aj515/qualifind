@@ -345,7 +345,8 @@ const AppState = {
     types: ["Research Grant", "Fellowship", "Scholarship"],
     matchQuality: ["high", "good"],
     deadline: "Any Time",
-    searchQuery: ""
+    searchQuery: "",
+    savedOnly: false
   },
   adminFilter: {
     search: "",
@@ -381,7 +382,7 @@ function saveState() {
   }
 }
 
-const STUDENT_VIEWS = ["dashboard", "matcher", "opportunities", "eligibility", "action-plan", "profile"];
+const STUDENT_VIEWS = ["dashboard", "matcher", "opportunities", "saved-applications", "eligibility", "action-plan", "profile"];
 const ADMIN_VIEWS = ["admin-dashboard", "admin-programs", "admin-profile"];
 
 function handleBrandClick() {
@@ -408,6 +409,9 @@ function navigateTo(viewId, payload = null) {
   AppState.currentView = viewId;
   if (payload && payload.opportunityId) {
     AppState.selectedOpportunityId = payload.opportunityId;
+  }
+  if (payload && payload.filterSaved) {
+    AppState.activeFilters.savedOnly = true;
   }
 
   window.location.hash = viewId;
@@ -446,6 +450,9 @@ function renderCurrentView() {
       break;
     case "opportunities":
       renderOpportunitiesList();
+      break;
+    case "saved-applications":
+      renderSavedApplicationsView();
       break;
     case "eligibility":
       renderEligibilityDetails(AppState.selectedOpportunityId);
@@ -790,6 +797,10 @@ function renderOpportunitiesList() {
   if (!container) return;
 
   let filtered = AppState.opportunities.filter(opp => {
+    if (AppState.activeFilters.savedOnly && !AppState.savedOpportunities.includes(opp.id)) {
+      return false;
+    }
+
     if (AppState.activeFilters.types.length > 0 && !AppState.activeFilters.types.includes(opp.type)) {
       return false;
     }
@@ -894,17 +905,95 @@ function renderOpportunitiesList() {
   }).join("");
 }
 
+function toggleSavedOnlyFilter(isSavedOnly) {
+  AppState.activeFilters.savedOnly = isSavedOnly;
+  renderOpportunitiesList();
+}
+
+// Render Dedicated Saved Applications View Page
+function renderSavedApplicationsView() {
+  const container = document.getElementById("saved-applications-list");
+  if (!container) return;
+
+  const savedList = AppState.opportunities.filter(opp => AppState.savedOpportunities.includes(opp.id));
+
+  if (savedList.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-12 bg-surface-container-lowest rounded-2xl p-12 text-center flex flex-col items-center justify-center border border-outline-variant/30">
+        <div class="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4">
+          <span class="material-symbols-outlined text-4xl">bookmark_border</span>
+        </div>
+        <h3 class="text-xl font-bold text-on-surface mb-2">No Saved Applications Yet</h3>
+        <p class="text-sm text-on-surface-variant max-w-md mb-6">Explore Philippine grants, scholarships, and R&amp;D programs, and click the bookmark icon to save them here for easy access.</p>
+        <button onclick="navigateTo('opportunities')" class="bg-primary hover:bg-primary-container text-on-primary font-semibold text-sm px-6 py-2.5 rounded-full shadow-md transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">search_insights</span> Explore Opportunities
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = savedList.map(opp => {
+    const scoreColor = opp.matchScore >= 80 ? "text-success" : (opp.matchScore >= 60 ? "text-warning" : "text-on-surface-variant");
+    const borderHighlight = !opp.eligible ? "border-error/30" : (opp.matchScore >= 80 ? "border-success/30" : "border-outline-variant/30");
+
+    return `
+      <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm hover:shadow-md border ${borderHighlight} flex flex-col justify-between relative overflow-hidden group transition-all">
+        <div>
+          <div class="flex justify-between items-start mb-3">
+            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-semibold uppercase tracking-wider">
+              ${opp.type}
+            </span>
+            <button class="text-primary hover:text-error transition-colors p-1" title="Remove from saved" onclick="toggleBookmark('${opp.id}', event)">
+              <span class="material-symbols-outlined text-[22px] fill">bookmark</span>
+            </button>
+          </div>
+
+          <h3 class="text-lg font-bold text-on-surface mb-1 group-hover:text-primary transition-colors">
+            ${opp.title}
+          </h3>
+          <p class="text-xs font-medium text-on-surface-variant mb-4">${opp.provider}</p>
+
+          <div class="p-3 bg-surface-container-low rounded-xl flex items-center justify-between mb-4">
+            <div>
+              <span class="text-[10px] text-outline uppercase font-semibold block">Funding / Stipend</span>
+              <span class="text-xs font-bold text-on-surface">${opp.funding}</span>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-outline uppercase font-semibold block">Match Score</span>
+              <span class="text-sm font-extrabold ${scoreColor}">${opp.matchScore}%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-3 border-t border-outline-variant/20">
+          <button onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })" class="flex-1 bg-primary text-on-primary hover:bg-primary-container text-xs font-semibold py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">visibility</span> Review Match
+          </button>
+          <button onclick="navigateTo('action-plan', { opportunityId: '${opp.id}' })" class="flex-1 bg-surface-container text-on-surface hover:bg-surface-container-high text-xs font-semibold py-2.5 rounded-xl transition-all border border-outline-variant/30 flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">checklist</span> Action Plan
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
 function resetFilters() {
   AppState.activeFilters = {
     types: ["Research Grant", "Fellowship", "Scholarship", "Postdoc Position"],
     matchQuality: ["high", "good", "low"],
     deadline: "Any Time",
-    searchQuery: ""
+    searchQuery: "",
+    savedOnly: false
   };
   
   const searchInput = document.getElementById("search-opportunities-input");
   if (searchInput) searchInput.value = "";
   
+  const savedCb = document.getElementById("filter-saved-only-checkbox");
+  if (savedCb) savedCb.checked = false;
+
   renderOpportunitiesList();
 }
 
@@ -1536,8 +1625,18 @@ function updateRoleUI() {
 }
 
 function updateGlobalBadges() {
+  const count = AppState.savedOpportunities.length;
   const savedBadge = document.getElementById("nav-saved-count");
-  if (savedBadge) savedBadge.textContent = AppState.savedOpportunities.length;
+  if (savedBadge) savedBadge.textContent = count;
+
+  const headerSavedBadge = document.getElementById("header-saved-badge");
+  if (headerSavedBadge) headerSavedBadge.textContent = count;
+
+  const dashSavedStat = document.getElementById("dash-stat-saved");
+  if (dashSavedStat) dashSavedStat.textContent = count;
+
+  const savedCb = document.getElementById("filter-saved-only-checkbox");
+  if (savedCb) savedCb.checked = !!AppState.activeFilters.savedOnly;
 }
 
 // Global Filter Listeners
@@ -1600,6 +1699,8 @@ window.handleFindMatches = handleFindMatches;
 window.handleDocumentSelect = handleDocumentSelect;
 window.removeMatcherDocument = removeMatcherDocument;
 window.toggleBookmark = toggleBookmark;
+window.toggleSavedOnlyFilter = toggleSavedOnlyFilter;
+window.renderSavedApplicationsView = renderSavedApplicationsView;
 window.resetFilters = resetFilters;
 window.saveProfile = saveProfile;
 window.removeSkill = removeSkill;
