@@ -371,25 +371,33 @@
               <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider">
                 <span class="material-symbols-outlined text-[16px]">neurology</span> QualiFind AI Matching Engine
               </div>
-              <h1 class="text-3xl lg:text-4xl font-extrabold text-on-surface tracking-tight">Describe your ideal Philippine opportunity</h1>
+              <h1 class="text-3xl lg:text-4xl font-extrabold text-on-surface tracking-tight">Tell us about yourself</h1>
               <p class="text-base text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
-                Describe your research interests, university, degree progress, and target stipend in natural language. QualiFind matches you across DOST-SEI, CHED, SUC consortiums, and Philippine foundation grants.
+                Choose what applies to you, or describe your situation below. QualiFind matches you across DOST-SEI, CHED, SUC consortiums, and Philippine foundation grants.
               </p>
+            </div>
+
+            <!-- Quick Profile Suggestions (multi-select, additive — does not replace free text below) -->
+            <div class="w-full flex flex-col items-center space-y-3">
+              <span class="text-xs font-semibold uppercase text-outline tracking-wider">Tap what applies to you</span>
+              <div id="matcher-profile-chips" class="flex flex-wrap justify-center gap-2">
+                <!-- Dynamically rendered -->
+              </div>
             </div>
 
             <!-- AI Prompt Input Box -->
             <div class="w-full relative group text-left">
               <div class="absolute -inset-1 bg-gradient-to-r from-primary/30 via-secondary/30 to-primary/30 rounded-2xl blur opacity-30 group-focus-within:opacity-80 transition duration-500"></div>
               <div class="relative w-full bg-surface-container-lowest rounded-2xl shadow-xl overflow-hidden flex flex-col transition-all duration-300 ring-1 ring-outline-variant focus-within:ring-2 focus-within:ring-primary/50">
-                <textarea id="ai-prompt-input" class="w-full h-44 bg-transparent p-5 text-base text-on-surface placeholder:text-outline-variant resize-none focus:outline-none transition-colors" placeholder="E.g., I'm a second-year graduate student in computational biology at UP Diliman looking for DOST-SEI or PGC grants for genomic epidemiology and supercomputing. I have a 1.35 GWA and experience with Python and PyTorch..."></textarea>
+                <textarea id="ai-prompt-input" class="w-full h-44 bg-transparent p-5 text-base text-on-surface placeholder:text-outline-variant resize-none focus:outline-none transition-colors" placeholder="Anything else you'd like us to know? E.g., your university, year level, GWA, or field of interest..."></textarea>
 
                 <div id="matcher-doc-chips" class="hidden flex-wrap gap-2 px-5 pb-4"></div>
 
                 <input type="file" id="matcher-doc-input" class="hidden" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="handleDocumentSelect(event)"/>
                 <div class="bg-surface-container-low px-5 py-3.5 flex flex-wrap items-center justify-between gap-3 border-t border-outline-variant/30">
                   <div class="flex items-center gap-2 text-outline">
-                    <span class="material-symbols-outlined text-[20px]">mic</span>
-                    <span class="text-xs uppercase tracking-wider font-semibold">Natural Language Query</span>
+                    <span class="material-symbols-outlined text-[20px]">edit_note</span>
+                    <span class="text-xs uppercase tracking-wider font-semibold">Optional Details</span>
                   </div>
                   <div class="flex items-center gap-2 ml-auto">
                     <button type="button" onclick="document.getElementById('matcher-doc-input').click()" class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant font-semibold text-sm px-4 py-2.5 rounded-full flex items-center gap-2 transition-all border border-outline-variant/40" title="Attach a transcript, COE, or other supporting document">

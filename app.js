@@ -319,6 +319,24 @@ const INITIAL_OPPORTUNITIES = [
   }
 ];
 
+// Quick-suggestion profile tags for the AI Matcher screen. Multi-select; feed into the
+// same free-text prompt that calculateMatchForPrompt() already scores against, so no
+// change to the matching/eligibility logic itself.
+const MATCHER_PROFILE_TAGS = [
+  { id: "college-student", label: "College Student", icon: "school" },
+  { id: "high-school-student", label: "High School Student", icon: "menu_book" },
+  { id: "working-student", label: "Working Student", icon: "work_history" },
+  { id: "job-seeker", label: "Job Seeker", icon: "work" },
+  { id: "scholarship", label: "Looking for Scholarship", icon: "workspace_premium" },
+  { id: "financial-aid", label: "Looking for Financial Aid", icon: "payments" },
+  { id: "internship", label: "Looking for Internship", icon: "business_center" },
+  { id: "training", label: "Looking for Training", icon: "model_training" },
+  { id: "pwd", label: "Person with Disability", icon: "accessible" },
+  { id: "senior-citizen", label: "Senior Citizen", icon: "elderly" },
+  { id: "parent", label: "Parent", icon: "family_restroom" },
+  { id: "low-income", label: "Low-Income Household", icon: "home" }
+];
+
 // App State
 const AppState = {
   currentUser: {
@@ -339,6 +357,7 @@ const AppState = {
   currentView: "dashboard",
   selectedOpportunityId: "DOST-ASTHRDP-2024",
   matcherDocuments: [],
+  matcherProfileTags: [],
   opportunities: [...INITIAL_OPPORTUNITIES],
   savedOpportunities: ["DOST-ASTHRDP-2024", "DOST-ASTI-AI-2024", "PGC-COMPGEN-2024"],
   activeFilters: {
@@ -651,18 +670,9 @@ function renderDashboard() {
           <h3 class="text-headline-sm font-headline-sm text-on-surface mb-2 truncate group-hover:text-primary transition-colors">
             ${opp.title}
           </h3>
-          <p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mb-4 max-w-3xl">
+          <p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 max-w-3xl">
             ${opp.summary}
           </p>
-          <div class="flex items-center gap-md">
-            <div class="flex -space-x-2">
-              <div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-primary-container text-on-primary-container flex items-center justify-center text-label-sm font-bold">
-                ${opp.leadProf.split(" ")[1]?.charAt(0) || 'P'}
-              </div>
-              <div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-surface-variant flex items-center justify-center text-label-sm font-label-sm text-on-surface-variant font-semibold">+${opp.teamCount}</div>
-            </div>
-            <span class="text-body-sm font-body-sm text-on-surface-variant">Project Lead: ${opp.leadProf}</span>
-          </div>
         </div>
         <div class="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto gap-md lg:gap-4 mt-4 lg:mt-0" onclick="event.stopPropagation()">
           <div class="flex flex-col items-start lg:items-end">
@@ -700,6 +710,51 @@ function renderMatcher() {
   });
 
   renderMatcherDocChips();
+  renderMatcherProfileChips();
+}
+
+// Toggle a quick-suggestion profile chip (multi-select; click again to deselect)
+function toggleMatcherProfileTag(tagId) {
+  const idx = AppState.matcherProfileTags.indexOf(tagId);
+  if (idx > -1) {
+    AppState.matcherProfileTags.splice(idx, 1);
+  } else {
+    AppState.matcherProfileTags.push(tagId);
+  }
+  renderMatcherProfileChips();
+}
+
+function renderMatcherProfileChips() {
+  const container = document.getElementById("matcher-profile-chips");
+  if (!container) return;
+
+  container.innerHTML = MATCHER_PROFILE_TAGS.map(tag => {
+    const selected = AppState.matcherProfileTags.includes(tag.id);
+    return `
+      <button type="button" onclick="toggleMatcherProfileTag('${tag.id}')" aria-pressed="${selected}" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold border transition-all ${selected ? 'bg-primary text-on-primary border-primary shadow-sm' : 'bg-surface-container-high text-on-surface-variant border-outline-variant/30 hover:bg-primary-container/20 hover:text-on-surface'}">
+        <span class="material-symbols-outlined text-[16px] ${selected ? 'fill' : ''}">${tag.icon}</span>
+        ${tag.label}
+        ${selected ? '<span class="material-symbols-outlined text-[14px] -mr-1">close</span>' : ''}
+      </button>
+    `;
+  }).join("");
+}
+
+// Combines selected quick-suggestion chips with the free-text box into a single prompt,
+// e.g. "Selected profile: College Student, Looking for Scholarship. Additional description: ..."
+// This combined string is what gets passed into calculateMatchForPrompt() below — the
+// existing matching logic is unchanged, it just receives a richer prompt.
+function buildMatcherPrompt() {
+  const textarea = document.getElementById("ai-prompt-input");
+  const freeText = textarea ? textarea.value.trim() : "";
+  const selectedLabels = MATCHER_PROFILE_TAGS
+    .filter(tag => AppState.matcherProfileTags.includes(tag.id))
+    .map(tag => tag.label);
+
+  const parts = [];
+  if (selectedLabels.length) parts.push(`Selected profile: ${selectedLabels.join(", ")}.`);
+  if (freeText) parts.push(`Additional description: ${freeText}`);
+  return parts.join(" ");
 }
 
 function formatFileSize(bytes) {
@@ -758,12 +813,15 @@ const MATCHER_LOADING_STEPS = [
 
 function handleFindMatches() {
   const textarea = document.getElementById("ai-prompt-input");
-  const promptText = textarea ? textarea.value.trim() : "";
+  const hasFreeText = textarea && textarea.value.trim().length > 0;
+  const hasTags = AppState.matcherProfileTags.length > 0;
 
-  if (!promptText) {
-    showToast("Please enter a research topic or select a prompt chip.", "warning");
+  if (!hasFreeText && !hasTags) {
+    showToast("Select what applies to you, or describe your situation.", "warning");
     return;
   }
+
+  const promptText = buildMatcherPrompt();
 
   const matchBtn = document.getElementById("btn-find-matches");
   const statusEl = document.getElementById("matcher-loading-status");
@@ -1749,6 +1807,7 @@ window.handleBrandClick = handleBrandClick;
 window.handleFindMatches = handleFindMatches;
 window.handleDocumentSelect = handleDocumentSelect;
 window.removeMatcherDocument = removeMatcherDocument;
+window.toggleMatcherProfileTag = toggleMatcherProfileTag;
 window.toggleBookmark = toggleBookmark;
 window.toggleSavedOnlyFilter = toggleSavedOnlyFilter;
 window.toggleFilterDrawer = toggleFilterDrawer;
