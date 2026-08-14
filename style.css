@@ -1,373 +1,90 @@
-/* QualiFind - Playful Geometric Design System */
+/* ==========================================================================
+   QualiFind - Corporate Trust Design System
+   Modern Enterprise SaaS Aesthetic (Indigo + Violet Dual-Tone Gradient)
+   ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
 
 :root {
-  /* Playful Geometric Light Palette */
-  --color-paper: 255 253 245;          /* #FFFDF5 Warm Cream Paper */
-  --color-ink: 30 41 59;               /* #1E293B Slate 800 */
-  --color-ink-muted: 100 116 139;      /* #64748B Slate 500 */
-  --color-border-subtle: 226 232 240;  /* #E2E8F0 Slate 200 */
-  --color-card: 255 255 255;           /* #FFFFFF Pure White */
-  --color-card-subtle: 248 250 252;    /* #F8FAFC */
+  /* Canvas & Surface Tokens (Slate 50 / Pure White) */
+  --color-bg: 248 250 252;          /* #F8FAFC - Slate 50 */
+  --color-surface: 255 255 255;      /* #FFFFFF - White */
+  --color-surface-subtle: 241 245 249; /* #F1F5F9 - Slate 100 */
+  --color-surface-raised: 255 255 255; /* #FFFFFF */
+  
+  /* Primary & Secondary Dual-Tone Palette (Indigo & Violet) */
+  --color-primary: 79 70 229;        /* #4F46E5 - Indigo 600 */
+  --color-primary-hover: 67 56 202;  /* #4338CA - Indigo 700 */
+  --color-primary-light: 238 242 255; /* #EEF2FF - Indigo 50 */
+  --color-secondary: 124 58 237;     /* #7C3AED - Violet 600 */
+  --color-secondary-hover: 109 40 217; /* #6D28D9 - Violet 700 */
+  --color-secondary-light: 245 243 255; /* #F5F3FF - Violet 50 */
 
-  /* Vibrant Accents */
-  --color-accent-violet: 139 92 246;   /* #8B5CF6 Vivid Violet (Primary) */
-  --color-accent-pink: 244 114 182;    /* #F472B6 Hot Pink (Playful Pop) */
-  --color-accent-amber: 251 191 36;    /* #FBBF24 Amber / Sunshine (Optimism) */
-  --color-accent-mint: 52 211 153;     /* #34D399 Emerald / Mint (Freshness) */
-  --color-accent-cyan: 56 189 248;     /* #38BDF8 Sky Cyan */
+  /* Text Tokens */
+  --color-text-main: 15 23 42;       /* #0F172A - Slate 900 */
+  --color-text-muted: 100 116 139;   /* #64748B - Slate 500 */
+  --color-text-subtle: 148 163 184;  /* #94A3B8 - Slate 400 */
 
-  /* Semantic */
-  --color-success: 52 211 153;
-  --color-warning: 251 191 36;
-  --color-error: 244 63 94;            /* #F43F5E Rose Red */
+  /* Border Tokens */
+  --color-border: 226 232 240;       /* #E2E8F0 - Slate 200 */
+  --color-border-subtle: 241 245 249;/* #F1F5F9 - Slate 100 */
 
-  /* Hard Shadow Color */
-  --shadow-ink: #1E293B;
-  --shadow-pink: #F472B6;
-  --shadow-amber: #FBBF24;
-  --shadow-mint: #34D399;
-  --shadow-violet: #8B5CF6;
+  /* Semantic Feedback Tokens */
+  --color-success: 16 185 129;       /* #10B981 - Emerald 500 */
+  --color-success-light: 236 253 245;/* #ECFDF5 - Emerald 50 */
+  --color-warning: 245 158 11;       /* #F59E0B - Amber 500 */
+  --color-warning-light: 254 243 199;/* #FEF3C7 - Amber 50 */
+  --color-error: 239 68 68;          /* #EF4444 - Rose 500 */
+  --color-error-light: 254 242 242;  /* #FEF2F2 - Rose 50 */
+
+  /* Colored Shadows (Indigo-Tinted Depth) */
+  --shadow-colored-sm: 0 2px 8px -1px rgba(79, 70, 229, 0.08);
+  --shadow-colored: 0 4px 20px -2px rgba(79, 70, 229, 0.10);
+  --shadow-colored-hover: 0 12px 28px -5px rgba(79, 70, 229, 0.18), 0 6px 12px -3px rgba(79, 70, 229, 0.08);
+  --shadow-button: 0 4px 14px 0 rgba(79, 70, 229, 0.30);
+  --shadow-glow: 0 0 24px 0 rgba(79, 70, 229, 0.40);
 }
 
-html.dark {
-  /* Playful Geometric Dark Palette (High Contrast Midnight) */
-  --color-paper: 15 23 42;             /* #0F172A Midnight Slate */
-  --color-ink: 248 250 252;            /* #F8FAFC Crisp White */
-  --color-ink-muted: 148 163 184;      /* #94A3B8 Slate 400 */
-  --color-border-subtle: 51 65 85;     /* #334155 Slate 700 */
-  --color-card: 30 41 59;              /* #1E293B Slate 800 */
-  --color-card-subtle: 23 32 51;
+/* Dark Mode Token Overrides */
+.dark {
+  --color-bg: 11 15 25;              /* #0B0F19 - Deep Midnight Slate */
+  --color-surface: 17 24 39;          /* #111827 - Slate 900 */
+  --color-surface-subtle: 31 41 55;  /* #1F2937 - Slate 800 */
+  --color-surface-raised: 24 33 51;  /* #182133 */
+  
+  --color-primary: 99 102 241;       /* #6366F1 - Indigo 500 */
+  --color-primary-hover: 129 140 248;/* #818CF8 - Indigo 400 */
+  --color-primary-light: 30 27 75;   /* #1E1B4B */
+  --color-secondary: 139 92 246;     /* #8B5CF6 - Violet 500 */
+  --color-secondary-hover: 167 139 250; /* #A78BFA */
+  --color-secondary-light: 46 16 101; /* #2E1065 */
 
-  /* Vibrant Accents (Retain Pop) */
-  --color-accent-violet: 167 139 250;  /* #A78BFA */
-  --color-accent-pink: 244 114 182;
-  --color-accent-amber: 251 191 36;
-  --color-accent-mint: 52 211 153;
-  --color-accent-cyan: 56 189 248;
+  --color-text-main: 248 250 252;     /* #F8FAFC */
+  --color-text-muted: 148 163 184;   /* #94A3B8 - Slate 400 */
+  --color-text-subtle: 100 116 139;  /* #64748B */
 
-  --shadow-ink: #000000;
-  --shadow-pink: #BE185D;
-  --shadow-amber: #B45309;
-  --shadow-mint: #047857;
-  --shadow-violet: #6D28D9;
+  --color-border: 30 41 59;          /* #1E293B - Slate 800 */
+  --color-border-subtle: 24 33 47;
+
+  --shadow-colored-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.4);
+  --shadow-colored: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  --shadow-colored-hover: 0 12px 28px -5px rgba(99, 102, 241, 0.25);
+  --shadow-button: 0 4px 14px 0 rgba(99, 102, 241, 0.40);
+  --shadow-glow: 0 0 24px 0 rgba(99, 102, 241, 0.50);
 }
 
-@layer base {
-  html, body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    background-color: rgb(var(--color-paper));
-    color: rgb(var(--color-ink));
-    scroll-behavior: smooth;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-
-  h1, h2, h3, h4, h5, h6, .font-heading {
-    font-family: 'Outfit', system-ui, sans-serif;
-    letter-spacing: -0.02em;
-  }
-
-  body {
-    overscroll-behavior: none;
-  }
+/* Base Document Styles */
+body {
+  background-color: rgb(var(--color-bg));
+  color: rgb(var(--color-text-main));
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.01em;
+  min-height: 100vh;
 }
 
-/* Dot Grid Background Texture */
-.bg-dot-grid {
-  background-image: radial-gradient(rgba(30, 41, 59, 0.12) 1.5px, transparent 1.5px);
-  background-size: 24px 24px;
-}
-
-html.dark .bg-dot-grid {
-  background-image: radial-gradient(rgba(248, 250, 252, 0.08) 1.5px, transparent 1.5px);
-  background-size: 24px 24px;
-}
-
-/* =========================================================================
-   PLAYFUL GEOMETRIC HARD SHADOWS ("THE POP SHADOW")
-   ========================================================================= */
-.shadow-pop-sm {
-  box-shadow: 2px 2px 0px 0px var(--shadow-ink);
-}
-
-.shadow-pop {
-  box-shadow: 4px 4px 0px 0px var(--shadow-ink);
-}
-
-.shadow-pop-lg {
-  box-shadow: 8px 8px 0px 0px var(--shadow-ink);
-}
-
-.shadow-pop-pink {
-  box-shadow: 4px 4px 0px 0px var(--shadow-pink);
-}
-
-.shadow-pop-pink-lg {
-  box-shadow: 6px 6px 0px 0px var(--shadow-pink);
-}
-
-.shadow-pop-amber {
-  box-shadow: 4px 4px 0px 0px var(--shadow-amber);
-}
-
-.shadow-pop-mint {
-  box-shadow: 4px 4px 0px 0px var(--shadow-mint);
-}
-
-.shadow-pop-violet {
-  box-shadow: 4px 4px 0px 0px var(--shadow-violet);
-}
-
-/* =========================================================================
-   BUTTONS: THE CANDY BUTTONS (TACTILE & BOUNCY)
-   ========================================================================= */
-.btn-candy {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background-color: rgb(var(--color-accent-violet));
-  color: #FFFFFF;
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
-  font-size: 0.9375rem;
-  padding: 0.625rem 1.375rem;
-  border-radius: 9999px;
-  border: 2px solid var(--shadow-ink);
-  box-shadow: 4px 4px 0px 0px var(--shadow-ink);
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  cursor: pointer;
-  user-select: none;
-  text-decoration: none;
-}
-
-.btn-candy:hover:not(:disabled) {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px 0px var(--shadow-ink);
-}
-
-.btn-candy:active:not(:disabled) {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px 0px var(--shadow-ink);
-}
-
-.btn-candy-pink {
-  background-color: rgb(var(--color-accent-pink));
-  color: #FFFFFF;
-}
-
-.btn-candy-amber {
-  background-color: rgb(var(--color-accent-amber));
-  color: #1E293B;
-}
-
-.btn-candy-mint {
-  background-color: rgb(var(--color-accent-mint));
-  color: #1E293B;
-}
-
-.btn-candy-secondary {
-  background-color: rgb(var(--color-card));
-  color: rgb(var(--color-ink));
-  border: 2px solid var(--shadow-ink);
-  box-shadow: 4px 4px 0px 0px var(--shadow-ink);
-}
-
-.btn-candy-secondary:hover:not(:disabled) {
-  background-color: rgb(var(--color-accent-amber));
-  color: #1E293B;
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px 0px var(--shadow-ink);
-}
-
-.btn-candy-sm {
-  padding: 0.375rem 0.875rem;
-  font-size: 0.8125rem;
-  box-shadow: 3px 3px 0px 0px var(--shadow-ink);
-}
-
-.btn-candy-sm:hover:not(:disabled) {
-  box-shadow: 4px 4px 0px 0px var(--shadow-ink);
-}
-
-/* =========================================================================
-   CARDS: THE STICKER CARD
-   ========================================================================= */
-.card-sticker {
-  background-color: rgb(var(--color-card));
-  border: 2px solid var(--shadow-ink);
-  border-radius: 1.25rem;
-  box-shadow: 6px 6px 0px 0px var(--shadow-ink);
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-}
-
-.card-sticker:hover {
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 8px 8px 0px 0px var(--shadow-ink);
-}
-
-.card-sticker-pink:hover {
-  box-shadow: 8px 8px 0px 0px var(--shadow-pink);
-}
-
-.card-sticker-amber:hover {
-  box-shadow: 8px 8px 0px 0px var(--shadow-amber);
-}
-
-.card-sticker-mint:hover {
-  box-shadow: 8px 8px 0px 0px var(--shadow-mint);
-}
-
-/* =========================================================================
-   INPUTS: PLAYFUL HIGH-CONTRAST FORM CONTROLS
-   ========================================================================= */
-.input-playful {
-  background-color: rgb(var(--color-card));
-  color: rgb(var(--color-ink));
-  border: 2px solid rgb(var(--color-ink) / 0.35);
-  border-radius: 0.875rem;
-  padding: 0.625rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  outline: none;
-}
-
-.input-playful:focus {
-  border-color: rgb(var(--color-accent-violet));
-  box-shadow: 4px 4px 0px 0px rgb(var(--color-accent-violet));
-  transform: translate(-1px, -1px);
-}
-
-/* =========================================================================
-   BADGES & STICKERS
-   ========================================================================= */
-.badge-sticker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  border: 1.5px solid var(--shadow-ink);
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
-  font-size: 0.6875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  box-shadow: 2px 2px 0px 0px var(--shadow-ink);
-}
-
-.badge-violet {
-  background-color: #EDE9FE;
-  color: #6D28D9;
-}
-
-html.dark .badge-violet {
-  background-color: #4C1D95;
-  color: #EDE9FE;
-}
-
-.badge-pink {
-  background-color: #FCE7F3;
-  color: #BE185D;
-}
-
-html.dark .badge-pink {
-  background-color: #831843;
-  color: #FCE7F3;
-}
-
-.badge-amber {
-  background-color: #FEF3C7;
-  color: #B45309;
-}
-
-html.dark .badge-amber {
-  background-color: #78350F;
-  color: #FEF3C7;
-}
-
-.badge-mint {
-  background-color: #D1FAE5;
-  color: #047857;
-}
-
-html.dark .badge-mint {
-  background-color: #064E3B;
-  color: #D1FAE5;
-}
-
-/* =========================================================================
-   VIEW TRANSITIONS & UTILITIES
-   ========================================================================= */
-.view-section {
-  display: none;
-  opacity: 0;
-  transform: translateY(8px) scale(0.995);
-  transition: opacity 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.view-section.active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgb(var(--color-ink) / 0.25);
-  border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--color-accent-violet));
-}
-
-/* Radial Progress Ring SVG */
-.radial-progress {
-  transform: rotate(-90deg);
-}
-
-.progress-ring-circle {
-  transition: stroke-dashoffset 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Wiggle Keyframe Animation for Icons */
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(8deg); }
-  75% { transform: rotate(-8deg); }
-}
-
-.group:hover .animate-wiggle {
-  animation: wiggle 0.4s ease-in-out;
-}
-
-/* Float Animation for Hero Stickers */
-@keyframes float-slow {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(2deg); }
-}
-
-.animate-float {
-  animation: float-slow 4s ease-in-out infinite;
-}
-
-/* Material symbols adjustments */
+/* Material Symbols Standard Setup */
 .material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
   vertical-align: middle;
   line-height: 1;
 }
@@ -376,7 +93,204 @@ html.dark .badge-mint {
   font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
 }
 
-/* Toast styling */
-#toast {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+/* ==========================================================================
+   Corporate Trust Core Component Library
+   ========================================================================== */
+
+/* 1. Primary & Secondary Corporate Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(135deg, rgb(var(--color-primary)) 0%, rgb(var(--color-secondary)) 100%);
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0.75rem; /* rounded-xl (12px) */
+  box-shadow: var(--shadow-button);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px 0 rgba(79, 70, 229, 0.35);
+  filter: brightness(1.05);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary-sm {
+  padding: 0.4rem 0.875rem;
+  font-size: 0.75rem;
+  border-radius: 0.625rem;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background-color: rgb(var(--color-surface));
+  color: rgb(var(--color-text-main));
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(var(--color-border));
+  box-shadow: var(--shadow-colored-sm);
+  transition: all 0.2s ease-out;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: rgb(var(--color-surface-subtle));
+  border-color: rgb(var(--color-text-subtle));
+  color: rgb(var(--color-primary));
+  transform: translateY(-1px);
+}
+
+/* 2. Elevated Corporate Cards */
+.card-elevated {
+  background-color: rgb(var(--color-surface));
+  border: 1px solid rgb(var(--color-border));
+  border-radius: 1rem; /* 16px */
+  box-shadow: var(--shadow-colored);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.card-elevated:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-colored-hover);
+  border-color: rgba(79, 70, 229, 0.25);
+}
+
+/* 3. Gradient Headlines & Accent Text */
+.text-gradient {
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 70%, #9333EA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .text-gradient {
+  background: linear-gradient(135deg, #818CF8 0%, #A78BFA 70%, #C084FC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 4. Badges (Corporate Trust Style) */
+.badge-trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.badge-indigo {
+  background-color: rgb(var(--color-primary-light));
+  color: rgb(var(--color-primary));
+  border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.badge-violet {
+  background-color: rgb(var(--color-secondary-light));
+  color: rgb(var(--color-secondary));
+  border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.badge-emerald {
+  background-color: rgb(var(--color-success-light));
+  color: rgb(var(--color-success));
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.badge-amber {
+  background-color: rgb(var(--color-warning-light));
+  color: rgb(var(--color-warning));
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.badge-rose {
+  background-color: rgb(var(--color-error-light));
+  color: rgb(var(--color-error));
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* 5. Inputs (Corporate Trust Style) */
+.input-corporate {
+  background-color: rgb(var(--color-surface));
+  color: rgb(var(--color-text-main));
+  border: 1px solid rgb(var(--color-border));
+  border-radius: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.input-corporate:focus {
+  border-color: rgb(var(--color-primary));
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* 6. Atmospheric Gradient Blur Orbs */
+.orb-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(64px);
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.orb-primary {
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.35) 0%, rgba(124, 58, 237, 0) 70%);
+}
+
+.orb-violet {
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.30) 0%, rgba(79, 70, 229, 0) 70%);
+}
+
+/* 7. Subtle Isometric Depth & 3D Perspective */
+.perspective-container {
+  perspective: 2000px;
+}
+
+.isometric-card {
+  transform: rotateX(4deg) rotateY(-8deg);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.isometric-card:hover {
+  transform: rotateX(0deg) rotateY(0deg) translateY(-4px);
+}
+
+/* SPA View Section Transitions */
+.view-section {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.view-section.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Progress Ring */
+.progress-ring-circle {
+  transition: stroke-dasharray 0.8s ease-in-out;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
 }
