@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
-  <title>QualiFind | AI-Powered Opportunity Matcher Philippines</title>
+  <title>QualiFind | AI-Powered Student Assistance Navigator Philippines</title>
 
-  <!-- Applied before first paint to avoid a flash of the wrong theme -->
+  <!-- Theme check before first paint -->
   <script>
     (function () {
       try {
@@ -16,13 +16,12 @@
       } catch (e) {}
     })();
   </script>
-  <meta name="description" content="QualiFind - AI-Powered Academic & Research Opportunity Matching Platform in the Philippine Higher Education Setting."/>
+  <meta name="description" content="QualiFind - AI-Powered Student Assistance Navigator in the Philippine Higher Education Setting."/>
 
-  <!-- Google Fonts: Inter & Material Symbols -->
+  <!-- Google Fonts: Outfit (Headings) & Plus Jakarta Sans (Body) & Material Symbols -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0&display=swap" rel="stylesheet"/>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -32,59 +31,36 @@
       theme: {
         extend: {
           colors: {
-            "primary": "rgb(var(--color-primary) / <alpha-value>)",
-            "primary-container": "rgb(var(--color-primary-container) / <alpha-value>)",
-            "on-primary": "rgb(var(--color-on-primary) / <alpha-value>)",
-            "on-primary-container": "rgb(var(--color-on-primary-container) / <alpha-value>)",
-            "primary-fixed": "rgb(var(--color-primary-fixed) / <alpha-value>)",
-            "primary-fixed-dim": "rgb(var(--color-primary-fixed-dim) / <alpha-value>)",
-            "secondary": "rgb(var(--color-secondary) / <alpha-value>)",
-            "secondary-container": "rgb(var(--color-secondary-container) / <alpha-value>)",
-            "on-secondary": "rgb(var(--color-on-secondary) / <alpha-value>)",
-            "on-secondary-container": "rgb(var(--color-on-secondary-container) / <alpha-value>)",
-            "tertiary": "rgb(var(--color-tertiary) / <alpha-value>)",
-            "tertiary-container": "rgb(var(--color-tertiary-container) / <alpha-value>)",
-            "on-tertiary": "rgb(var(--color-on-tertiary) / <alpha-value>)",
-            "on-tertiary-container": "rgb(var(--color-on-tertiary-container) / <alpha-value>)",
-            "surface": "rgb(var(--color-surface) / <alpha-value>)",
-            "surface-dim": "rgb(var(--color-surface-dim) / <alpha-value>)",
-            "surface-bright": "rgb(var(--color-surface-bright) / <alpha-value>)",
-            "surface-container-lowest": "rgb(var(--color-surface-container-lowest) / <alpha-value>)",
-            "surface-container-low": "rgb(var(--color-surface-container-low) / <alpha-value>)",
-            "surface-container": "rgb(var(--color-surface-container) / <alpha-value>)",
-            "surface-container-high": "rgb(var(--color-surface-container-high) / <alpha-value>)",
-            "surface-container-highest": "rgb(var(--color-surface-container-highest) / <alpha-value>)",
-            "on-surface": "rgb(var(--color-on-surface) / <alpha-value>)",
-            "on-surface-variant": "rgb(var(--color-on-surface-variant) / <alpha-value>)",
-            "outline": "rgb(var(--color-outline) / <alpha-value>)",
-            "outline-variant": "rgb(var(--color-outline-variant) / <alpha-value>)",
-            "background": "rgb(var(--color-background) / <alpha-value>)",
-            "on-background": "rgb(var(--color-on-background) / <alpha-value>)",
-            "success": "rgb(var(--color-success) / <alpha-value>)",
-            "warning": "rgb(var(--color-warning) / <alpha-value>)",
-            "error": "rgb(var(--color-error) / <alpha-value>)",
-            "error-container": "rgb(var(--color-error-container) / <alpha-value>)"
+            paper: "rgb(var(--color-paper) / <alpha-value>)",
+            ink: "rgb(var(--color-ink) / <alpha-value>)",
+            "ink-muted": "rgb(var(--color-ink-muted) / <alpha-value>)",
+            card: "rgb(var(--color-card) / <alpha-value>)",
+            "card-subtle": "rgb(var(--color-card-subtle) / <alpha-value>)",
+            "border-subtle": "rgb(var(--color-border-subtle) / <alpha-value>)",
+            
+            // Playful Geometric Palette
+            "accent-violet": "rgb(var(--color-accent-violet) / <alpha-value>)",
+            "accent-pink": "rgb(var(--color-accent-pink) / <alpha-value>)",
+            "accent-amber": "rgb(var(--color-accent-amber) / <alpha-value>)",
+            "accent-mint": "rgb(var(--color-accent-mint) / <alpha-value>)",
+            "accent-cyan": "rgb(var(--color-accent-cyan) / <alpha-value>)",
+            
+            success: "rgb(var(--color-success) / <alpha-value>)",
+            warning: "rgb(var(--color-warning) / <alpha-value>)",
+            error: "rgb(var(--color-error) / <alpha-value>)",
           },
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            display: ['Inter', 'sans-serif'],
-            headline: ['Inter', 'sans-serif']
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            heading: ['Outfit', 'system-ui', 'sans-serif'],
           },
-          spacing: {
-            "xs": "0.5rem",
-            "sm": "0.75rem",
-            "md": "1rem",
-            "lg": "1.5rem",
-            "xl": "2rem",
-            "2xl": "3rem"
-          },
-          fontSize: {
-            "headline-md": ["1.75rem", { lineHeight: "2.25rem", fontWeight: "800" }],
-            "headline-sm": ["1.375rem", { lineHeight: "1.875rem", fontWeight: "700" }],
-            "body-md": ["0.9375rem", { lineHeight: "1.5rem", fontWeight: "400" }],
-            "body-sm": ["0.8125rem", { lineHeight: "1.25rem", fontWeight: "400" }],
-            "label-md": ["0.8125rem", { lineHeight: "1.125rem", fontWeight: "600" }],
-            "label-sm": ["0.6875rem", { lineHeight: "1rem", fontWeight: "600" }]
+          boxShadow: {
+            'pop-sm': '2px 2px 0px 0px var(--shadow-ink)',
+            'pop': '4px 4px 0px 0px var(--shadow-ink)',
+            'pop-lg': '8px 8px 0px 0px var(--shadow-ink)',
+            'pop-pink': '4px 4px 0px 0px var(--shadow-pink)',
+            'pop-amber': '4px 4px 0px 0px var(--shadow-amber)',
+            'pop-mint': '4px 4px 0px 0px var(--shadow-mint)',
+            'pop-violet': '4px 4px 0px 0px var(--shadow-violet)',
           }
         }
       }
@@ -93,105 +69,105 @@
 
   <link rel="stylesheet" href="style.css"/>
 </head>
-<body class="bg-surface font-sans text-on-surface antialiased">
+<body class="bg-paper font-sans text-ink antialiased bg-dot-grid min-h-screen">
 
-  <!-- Desktop Sidebar Navigation (Strictly Isolated by Role) -->
-  <aside class="hidden lg:flex fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex-col border-r border-outline-variant/30">
-    <div class="h-16 flex items-center px-6 mb-2">
-      <div class="flex items-center gap-3 cursor-pointer" onclick="handleBrandClick()">
-        <div class="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-md shadow-primary/20">
-          <span class="material-symbols-outlined text-on-primary text-[22px]">verified</span>
+  <!-- Desktop Sidebar Navigation (Playful Geometric Sticker Style) -->
+  <aside class="hidden lg:flex fixed left-0 top-0 h-full w-72 bg-card z-50 flex-col border-r-2 border-ink">
+    <div class="h-20 flex items-center px-6 border-b-2 border-ink">
+      <div class="flex items-center gap-3 cursor-pointer group" onclick="handleBrandClick()">
+        <div class="w-11 h-11 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center group-hover:rotate-6 transition-transform">
+          <span class="material-symbols-outlined text-white text-[24px]">verified</span>
         </div>
         <div class="flex flex-col">
-          <span class="font-bold text-xl text-primary tracking-tight leading-none">QualiFind</span>
-          <span id="sidebar-app-subtitle" class="text-[10px] font-semibold text-outline uppercase tracking-wider mt-0.5">Student Portal</span>
+          <span class="font-heading font-extrabold text-2xl text-ink tracking-tight leading-none">QualiFind</span>
+          <span id="sidebar-app-subtitle" class="text-[10px] font-extrabold font-heading text-accent-violet uppercase tracking-wider mt-1">Student Portal</span>
         </div>
       </div>
     </div>
 
     <!-- Active User Card in Sidebar -->
-    <div class="mx-4 mb-4 p-3 bg-surface-container-low rounded-xl border border-outline-variant/30 flex items-center justify-between">
-      <div class="flex items-center gap-2.5 min-w-0">
-        <div id="sidebar-user-avatar" class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-xs shrink-0">
+    <div class="mx-4 my-4 p-3.5 bg-paper rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-between">
+      <div class="flex items-center gap-3 min-w-0">
+        <div id="sidebar-user-avatar" class="w-10 h-10 rounded-full bg-accent-violet text-white border-2 border-ink flex items-center justify-center font-heading font-extrabold text-sm shrink-0 shadow-pop-sm">
           MS
         </div>
         <div class="min-w-0">
-          <p id="sidebar-user-name" class="text-xs font-bold text-on-surface truncate">Maria Clara Santos</p>
-          <span id="sidebar-user-badge" class="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-            Student &bull; Web &amp; Mobile
+          <p id="sidebar-user-name" class="text-sm font-extrabold font-heading text-ink truncate">Maria Clara Santos</p>
+          <span id="sidebar-user-badge" class="badge-sticker badge-violet text-[10px] py-0.5 px-2">
+            Student • Cebu
           </span>
         </div>
       </div>
-      <button onclick="openUserSwitchModal()" class="text-outline hover:text-primary p-1" title="Switch User Role">
+      <button onclick="openUserSwitchModal()" class="w-8 h-8 rounded-full bg-card hover:bg-accent-amber border-2 border-ink flex items-center justify-center text-ink transition-colors shadow-pop-sm" title="Switch User Role">
         <span class="material-symbols-outlined text-[18px]">swap_horiz</span>
       </button>
     </div>
 
     <!-- Nav Links: STRICT ROLE SEPARATION -->
-    <nav class="flex-1 px-4 flex flex-col gap-1">
+    <nav class="flex-1 px-4 flex flex-col gap-2 overflow-y-auto py-2">
       
       <!-- STUDENT NAV GROUP (Visible ONLY to Student / Opportunity Seeker) -->
-      <div id="student-nav-group" class="flex flex-col gap-1">
-        <div class="px-3 py-1 mb-1">
-          <span class="text-[10px] font-bold uppercase text-outline tracking-wider">Opportunity Seeker</span>
+      <div id="student-nav-group" class="flex flex-col gap-2">
+        <div class="px-3 py-1">
+          <span class="text-[11px] font-extrabold font-heading uppercase text-ink-muted tracking-wider">Student Navigator</span>
         </div>
         
-        <a href="#dashboard" data-nav-view="dashboard" onclick="navigateTo('dashboard'); return false;" class="flex items-center px-4 py-3 rounded-xl transition-all group bg-primary-container text-on-primary-container font-semibold shadow-sm">
+        <a href="#dashboard" data-nav-view="dashboard" onclick="navigateTo('dashboard'); return false;" class="flex items-center px-4 py-3 rounded-2xl transition-all group border-2 border-ink font-heading font-bold text-sm bg-accent-violet text-white shadow-pop">
           <span class="material-symbols-outlined mr-3 text-[22px]">dashboard</span>
-          <span class="text-sm font-medium">Student Dashboard</span>
+          <span>Student Dashboard</span>
         </a>
 
-        <a href="#matcher" data-nav-view="matcher" onclick="navigateTo('matcher'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
-          <span class="material-symbols-outlined mr-3 text-[22px]">auto_awesome</span>
-          <span class="text-sm font-medium">QualiFind Matcher</span>
+        <a href="#matcher" data-nav-view="matcher" onclick="navigateTo('matcher'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-violet">auto_awesome</span>
+          <span>AI Profile Matcher</span>
         </a>
 
-        <a href="#opportunities" data-nav-view="opportunities" onclick="navigateTo('opportunities'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
-          <span class="material-symbols-outlined mr-3 text-[22px]">search_insights</span>
-          <span class="text-sm font-medium">PH Grants &amp; Fellowships</span>
+        <a href="#opportunities" data-nav-view="opportunities" onclick="navigateTo('opportunities'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-pink">search_insights</span>
+          <span>Assistance Programs</span>
         </a>
 
-        <a href="#saved-applications" data-nav-view="saved-applications" onclick="navigateTo('saved-applications'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
-          <span class="material-symbols-outlined mr-3 text-[22px]">bookmark</span>
-          <span class="text-sm font-medium">Saved Applications</span>
-          <span id="nav-saved-count" class="ml-auto bg-primary/10 text-primary text-xs px-2.5 py-0.5 rounded-full font-bold">3</span>
+        <a href="#saved-applications" data-nav-view="saved-applications" onclick="navigateTo('saved-applications'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-amber">bookmark</span>
+          <span>Saved Drafts</span>
+          <span id="nav-saved-count" class="ml-auto bg-accent-pink text-white text-xs px-2.5 py-0.5 rounded-full font-heading font-extrabold border border-ink shadow-pop-sm">3</span>
         </a>
 
-        <a href="#profile" data-nav-view="profile" onclick="navigateTo('profile'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
-          <span class="material-symbols-outlined mr-3 text-[22px]">person</span>
-          <span class="text-sm font-medium">Academic Profile</span>
+        <a href="#profile" data-nav-view="profile" onclick="navigateTo('profile'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-mint">person</span>
+          <span>Student Profile</span>
         </a>
       </div>
 
       <!-- ADMIN NAV GROUP (Visible ONLY to Administrator - Web Workstation Only) -->
-      <div id="admin-nav-group" class="flex flex-col gap-1 hidden">
-        <div class="px-3 py-1 mb-1 flex items-center justify-between">
-          <span class="text-[10px] font-bold uppercase text-secondary tracking-wider">DOST / CHED Admin</span>
-          <span class="text-[9px] bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded font-bold">DESKTOP</span>
+      <div id="admin-nav-group" class="flex flex-col gap-2 hidden">
+        <div class="px-3 py-1 flex items-center justify-between">
+          <span class="text-[11px] font-extrabold font-heading uppercase text-accent-pink tracking-wider">DOST / CHED Admin</span>
+          <span class="text-[9px] bg-accent-amber text-ink px-2 py-0.5 rounded-full font-heading font-extrabold border border-ink">DESKTOP</span>
         </div>
 
-        <a href="#admin-dashboard" data-nav-view="admin-dashboard" onclick="navigateTo('admin-dashboard'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
-          <span class="material-symbols-outlined mr-3 text-[22px]">analytics</span>
-          <span class="text-sm font-medium">Registry Analytics</span>
+        <a href="#admin-dashboard" data-nav-view="admin-dashboard" onclick="navigateTo('admin-dashboard'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-violet">analytics</span>
+          <span>Registry Analytics</span>
         </a>
 
-        <a href="#admin-programs" data-nav-view="admin-programs" onclick="navigateTo('admin-programs'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
-          <span class="material-symbols-outlined mr-3 text-[22px]">inventory_2</span>
-          <span class="text-sm font-medium">Manage PH Programs</span>
+        <a href="#admin-programs" data-nav-view="admin-programs" onclick="navigateTo('admin-programs'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-pink">inventory_2</span>
+          <span>Manage PH Programs</span>
         </a>
 
-        <a href="#admin-profile" data-nav-view="admin-profile" onclick="navigateTo('admin-profile'); return false;" class="flex items-center px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all">
-          <span class="material-symbols-outlined mr-3 text-[22px]">badge</span>
-          <span class="text-sm font-medium">Liaison Office Profile</span>
+        <a href="#admin-profile" data-nav-view="admin-profile" onclick="navigateTo('admin-profile'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-mint">badge</span>
+          <span>Liaison Office</span>
         </a>
       </div>
     </nav>
 
     <!-- Bottom Role Switcher Button -->
-    <div class="p-4 border-t border-outline-variant/30 bg-surface-container-low/40 flex flex-col gap-2">
-      <button onclick="openUserSwitchModal()" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary text-xs font-semibold transition-all">
+    <div class="p-4 border-t-2 border-ink bg-paper flex flex-col gap-2">
+      <button onclick="openUserSwitchModal()" class="btn-candy btn-candy-secondary w-full py-2.5 text-xs">
         <span class="material-symbols-outlined text-[18px]">switch_account</span>
-        Switch User Account
+        Switch Role / Profile
       </button>
     </div>
   </aside>
@@ -199,12 +175,12 @@
   <!-- Main Container -->
   <div class="lg:pl-72 flex flex-col min-h-screen">
     <!-- Top Header -->
-    <header class="fixed top-0 left-0 lg:left-72 right-0 h-16 glass-header z-40 border-b border-outline-variant/30 flex items-center justify-between px-4 lg:px-8">
+    <header class="fixed top-0 left-0 lg:left-72 right-0 h-20 bg-paper/95 backdrop-blur-md z-40 border-b-2 border-ink flex items-center justify-between px-4 lg:px-8">
       <!-- Search Bar -->
       <div class="flex-1 max-w-xl">
         <div class="relative flex items-center">
-          <span class="material-symbols-outlined absolute left-3.5 text-outline text-[20px]">search</span>
-          <input id="global-search-input" class="w-full bg-surface-container-low/90 py-2 pl-10 pr-4 rounded-full border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all shadow-sm placeholder:text-outline/70" placeholder="Search DOST, CHED, ERDT, PGC, or grants... (Press Enter)" type="text"/>
+          <span class="material-symbols-outlined absolute left-4 text-ink-muted text-[20px]">search</span>
+          <input id="global-search-input" class="w-full input-playful pl-11 pr-4 py-2.5 shadow-pop-sm" placeholder="Search scholarships, grants, loans, assistantships... (Press Enter)" type="text"/>
         </div>
       </div>
 
@@ -212,149 +188,209 @@
       <div class="flex items-center gap-3 ml-4">
         
         <!-- User Switcher Header Pill -->
-        <button onclick="openUserSwitchModal()" class="flex items-center gap-2 px-3 py-1.5 bg-surface-container hover:bg-surface-container-high rounded-full border border-outline-variant/40 transition-colors shadow-sm text-left">
-          <div id="header-user-avatar" class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-[10px] font-bold">
+        <button onclick="openUserSwitchModal()" class="flex items-center gap-2.5 px-3.5 py-1.5 bg-card hover:bg-card-subtle rounded-full border-2 border-ink transition-colors shadow-pop-sm text-left">
+          <div id="header-user-avatar" class="w-7 h-7 rounded-full bg-accent-violet text-white border border-ink flex items-center justify-center text-[10px] font-heading font-extrabold">
             MS
           </div>
           <div class="hidden sm:block">
-            <span id="header-user-name" class="text-xs font-bold text-on-surface block leading-tight">Maria Clara Santos</span>
-            <span id="header-user-role" class="text-[10px] text-on-surface-variant block leading-tight">Student &bull; Mobile &amp; Web</span>
+            <span id="header-user-name" class="text-xs font-heading font-extrabold text-ink block leading-tight">Maria Clara Santos</span>
+            <span id="header-user-role" class="text-[10px] text-ink-muted block leading-tight font-medium">Student • Mobile &amp; Web</span>
           </div>
-          <span class="material-symbols-outlined text-[16px] text-outline">expand_more</span>
+          <span class="material-symbols-outlined text-[16px] text-ink">expand_more</span>
         </button>
 
-        <button onclick="navigateTo('saved-applications')" class="relative w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Saved Applications">
-          <span class="material-symbols-outlined text-[20px] text-primary">bookmark</span>
-          <span id="header-saved-badge" class="absolute -top-1 -right-1 bg-primary text-on-primary text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">3</span>
+        <button onclick="navigateTo('saved-applications')" class="relative w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all" title="Saved Applications">
+          <span class="material-symbols-outlined text-[20px] text-ink">bookmark</span>
+          <span id="header-saved-badge" class="absolute -top-1.5 -right-1.5 bg-accent-pink text-white text-[10px] font-heading font-extrabold w-5 h-5 rounded-full flex items-center justify-center border border-ink shadow-pop-sm">3</span>
         </button>
 
-        <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Toggle dark mode">
-          <span id="theme-toggle-icon" class="material-symbols-outlined text-[20px]">dark_mode</span>
-        </button>
-
-        <button class="w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Notifications">
-          <span class="material-symbols-outlined text-[20px]">notifications</span>
+        <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all" title="Toggle dark mode">
+          <span id="theme-toggle-icon" class="material-symbols-outlined text-[20px] text-ink">dark_mode</span>
         </button>
       </div>
     </header>
 
     <!-- Main Content Area -->
-    <main class="relative flex-1 bg-surface px-4 lg:px-8 pt-20 pb-24 lg:pb-12">
+    <main class="relative pt-20 flex-1 px-4 lg:px-8 py-8 pb-24 lg:pb-12 max-w-7xl w-full mx-auto">
       
-      <!-- ================= VIEW 1: STUDENT DASHBOARD (STUDENT ONLY - MOBILE & WEB) ================= -->
+      <!-- ================= VIEW 1: STUDENT DASHBOARD (STUDENT ONLY) ================= -->
       <section id="view-dashboard" class="view-section active">
         <div class="flex flex-col w-full gap-8">
           
-          <!-- Welcome Hero Banner -->
+          <!-- Welcome Hero Banner with Memphis Decorative Elements -->
           <div class="grid grid-cols-12 gap-6 w-full mt-2">
-            <!-- Banner -->
-            <div class="col-span-12 flex flex-col justify-center bg-surface-container-low rounded-2xl p-6 lg:p-8 shadow-sm relative overflow-hidden group border border-outline-variant/30">
-              <div class="absolute right-0 top-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 transition-transform duration-700 group-hover:scale-110"></div>
+            <!-- Left Banner -->
+            <div class="col-span-12 xl:col-span-8 flex flex-col justify-center bg-card rounded-3xl p-6 lg:p-8 relative overflow-hidden border-2 border-ink shadow-pop-lg">
+              <!-- Decorative background circle -->
+              <div class="absolute -right-12 -top-12 w-64 h-64 bg-accent-amber rounded-full opacity-30 pointer-events-none"></div>
+              <div class="absolute right-32 bottom-2 w-16 h-16 bg-accent-pink rounded-2xl rotate-12 opacity-25 pointer-events-none"></div>
+              
               <div class="relative z-10 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
                 <div class="max-w-xl">
                   <div class="flex items-center gap-2 mb-3">
-                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5">
-                      <span class="material-symbols-outlined text-[16px]">waving_hand</span> Mabuhay, Maria!
+                    <span class="badge-sticker badge-amber">
+                      <span class="material-symbols-outlined text-[15px]">waving_hand</span> Mabuhay, Maria!
                     </span>
-                    <span id="dash-current-date" class="text-on-surface-variant text-xs font-medium">Aug 14, 2026</span>
+                    <span id="dash-current-date" class="text-ink-muted text-xs font-bold font-heading">Aug 14, 2026</span>
                   </div>
-                  <h1 class="text-3xl lg:text-4xl font-extrabold text-on-surface tracking-tight leading-tight mb-2">
-                    Find the best Philippine <span class="text-primary italic">grants &amp; fellowships</span>
+                  <h1 class="text-3xl lg:text-4xl font-extrabold font-heading text-ink tracking-tight leading-tight mb-2">
+                    Find student assistance that <span class="text-accent-violet underline decoration-accent-pink decoration-wavy">actually fits you</span>
                   </h1>
-                  <p class="text-base text-on-surface-variant max-w-md">
-                    QualiFind AI matched 4 national priority R&amp;D grants (DOST-ASTHRDP, ERDT, PGC, ASTI) aligned with your UP Diliman research.
+                  <p class="text-sm md:text-base text-ink-muted max-w-md font-medium leading-relaxed">
+                    AI evaluates your profile across scholarships, educational grants, LGU assistance, campus jobs, and student loans.
                   </p>
-                  <div class="mt-5 flex flex-wrap gap-3">
-                    <button onclick="navigateTo('matcher')" class="bg-primary hover:bg-primary-container text-on-primary px-5 py-2.5 rounded-full font-medium text-sm flex items-center gap-2 transition-all shadow-sm">
-                      <span class="material-symbols-outlined text-[18px]">auto_awesome</span> Start QualiFind Match
+                  <div class="mt-6 flex flex-wrap gap-3">
+                    <button onclick="navigateTo('matcher')" class="btn-candy">
+                      <span class="material-symbols-outlined text-[20px]">auto_awesome</span> Start AI Matcher
                     </button>
-                    <button onclick="navigateTo('opportunities')" class="bg-surface text-on-surface hover:bg-surface-container-high px-5 py-2.5 rounded-full font-medium text-sm transition-all border border-outline-variant/40">
-                      Explore PH Registry
+                    <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-secondary">
+                      Browse All Programs
                     </button>
                   </div>
                 </div>
-                <div id="dash-next-deadline-card" class="w-full md:w-64 shrink-0 flex flex-col gap-1.5 bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/30 shadow-sm">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
-                    <span class="material-symbols-outlined text-[14px]">schedule</span> Closing Soonest
+
+                <!-- Closing Soonest Callout Card -->
+                <div id="dash-next-deadline-card" class="w-full md:w-56 shrink-0 flex flex-col gap-2 bg-paper rounded-2xl p-4 border-2 border-ink shadow-pop-sm hover:scale-105 transition-transform cursor-pointer">
+                  <span class="badge-sticker badge-pink text-[9px] w-fit">
+                    <span class="material-symbols-outlined text-[13px]">schedule</span> Closing Soonest
                   </span>
-                  <p id="dash-next-deadline-title" class="text-sm font-bold text-on-surface leading-snug line-clamp-2">—</p>
-                  <p id="dash-next-deadline-days" class="text-2xl font-extrabold text-primary">—</p>
+                  <p id="dash-next-deadline-title" class="text-xs font-extrabold font-heading text-ink line-clamp-2 leading-tight">Cebu City College Scholarship</p>
+                  <div class="flex items-center justify-between mt-1 pt-2 border-t border-ink/20">
+                    <span class="text-[10px] font-heading font-bold text-ink-muted uppercase">Time Left:</span>
+                    <span id="dash-next-deadline-days" class="text-xs font-extrabold font-heading text-accent-pink">45 days left</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Strength Card -->
+            <div class="col-span-12 xl:col-span-4 flex flex-col">
+              <div class="card-sticker p-6 flex flex-col h-full relative overflow-hidden bg-card">
+                <div class="flex justify-between items-start mb-4 relative z-10">
+                  <div>
+                    <h3 class="text-lg font-extrabold font-heading text-ink">Match Strength</h3>
+                    <p class="text-xs text-ink-muted font-medium">Philippine Criteria Verified</p>
+                  </div>
+                  <button onclick="navigateTo('profile')" class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center hover:bg-accent-amber transition-colors shadow-pop-sm">
+                    <span class="material-symbols-outlined text-[18px]">edit</span>
+                  </button>
+                </div>
+
+                <div class="flex items-center gap-4 mb-4 relative z-10">
+                  <div class="relative w-16 h-16 rounded-full bg-paper border-2 border-ink flex items-center justify-center shadow-pop-sm shrink-0">
+                    <svg class="w-full h-full radial-progress p-1" viewBox="0 0 36 36">
+                      <path class="text-border-subtle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="4"></path>
+                      <path id="dash-profile-strength-circle" class="text-accent-violet progress-ring-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="88, 100" stroke-linecap="round" stroke-width="4"></path>
+                    </svg>
+                    <span id="dash-profile-strength-num" class="absolute text-sm font-heading font-extrabold text-accent-violet">88%</span>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-success mb-0.5">Profile Complete</p>
+                    <p class="text-xs font-semibold text-ink leading-snug">2nd-Year IT Student • Cebu Region VII • 82% GPA</p>
+                  </div>
+                </div>
+
+                <div class="mt-auto relative z-10 flex flex-wrap gap-1.5">
+                  <span class="badge-sticker badge-violet text-[10px]">
+                    <span class="material-symbols-outlined text-[13px]">school</span> Tuition Aid
+                  </span>
+                  <span class="badge-sticker badge-pink text-[10px]">
+                    <span class="material-symbols-outlined text-[13px]">directions_bus</span> Transport
+                  </span>
+                  <span class="badge-sticker badge-mint text-[10px]">
+                    <span class="material-symbols-outlined text-[13px]">badge</span> Assistantship
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Key Metrics Grid -->
+          <!-- Key Metrics Grid (Sticker Cards with Candy Shadows) -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 relative overflow-hidden group">
+            <!-- Metric 1 -->
+            <div class="card-sticker card-sticker-mint p-5 flex flex-col justify-between">
               <div class="flex justify-between items-start mb-3">
-                <div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center shadow-inner">
-                  <span class="material-symbols-outlined text-[20px]">search</span>
+                <div class="w-11 h-11 rounded-2xl bg-accent-mint border-2 border-ink flex items-center justify-center text-ink shadow-pop-sm">
+                  <span class="material-symbols-outlined text-[22px]">search</span>
                 </div>
-                <span class="bg-success/10 text-success text-xs font-semibold px-2 py-0.5 rounded-md flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[13px]">trending_up</span> +15%
+                <span class="badge-sticker badge-mint text-[10px]">
+                  <span class="material-symbols-outlined text-[13px]">trending_up</span> Open Now
                 </span>
               </div>
-              <h4 class="text-xs font-medium text-on-surface-variant mb-1">Available PH Opportunities</h4>
-              <span id="dash-stat-found" class="text-2xl font-bold text-on-surface">8</span>
-            </div>
-
-            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 relative overflow-hidden group">
-              <div class="flex justify-between items-start mb-3">
-                <div class="w-10 h-10 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center shadow-inner">
-                  <span class="material-symbols-outlined text-[20px]">verified</span>
-                </div>
-                <span class="bg-success/10 text-success text-xs font-semibold px-2 py-0.5 rounded-md flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[13px]">trending_up</span> Top Tier
-                </span>
-              </div>
-              <h4 class="text-xs font-medium text-on-surface-variant mb-1">Strong Matches (&gt;80%)</h4>
-              <div class="flex items-baseline gap-1.5">
-                <span id="dash-stat-strong" class="text-2xl font-bold text-on-surface">5</span>
-                <span class="text-xs text-on-surface-variant">/ <span id="dash-stat-total">8</span> Total</span>
+              <div>
+                <h4 class="text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Available Programs</h4>
+                <span id="dash-stat-found" class="text-3xl font-extrabold font-heading text-ink">8</span>
               </div>
             </div>
 
-            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 relative overflow-hidden group">
+            <!-- Metric 2 -->
+            <div class="card-sticker card-sticker-pink p-5 flex flex-col justify-between">
               <div class="flex justify-between items-start mb-3">
-                <div class="w-10 h-10 rounded-xl bg-tertiary-container text-on-tertiary-container flex items-center justify-center shadow-inner">
-                  <span class="material-symbols-outlined text-[20px]">bolt</span>
+                <div class="w-11 h-11 rounded-2xl bg-accent-pink border-2 border-ink flex items-center justify-center text-white shadow-pop-sm">
+                  <span class="material-symbols-outlined text-[22px]">verified</span>
                 </div>
-              </div>
-              <h4 class="text-xs font-medium text-on-surface-variant mb-1">Potential Fits (60-80%)</h4>
-              <span id="dash-stat-potential" class="text-2xl font-bold text-on-surface">2</span>
-            </div>
-
-            <div onclick="navigateTo('saved-applications')" class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 relative overflow-hidden group cursor-pointer hover:border-primary/50 transition-all">
-              <div class="flex justify-between items-start mb-3">
-                <div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform">
-                  <span class="material-symbols-outlined text-[20px]">bookmark</span>
-                </div>
-                <span class="text-xs font-semibold text-primary group-hover:underline flex items-center gap-0.5">
-                  View Saved <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                <span class="badge-sticker badge-pink text-[10px]">
+                  <span class="material-symbols-outlined text-[13px]">star</span> Top Match
                 </span>
               </div>
-              <h4 class="text-xs font-medium text-on-surface-variant mb-1">Saved Applications</h4>
-              <span id="dash-stat-saved" class="text-2xl font-bold text-on-surface">3</span>
+              <div>
+                <h4 class="text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Eligible / Strong Fits</h4>
+                <div class="flex items-baseline gap-1.5">
+                  <span id="dash-stat-strong" class="text-3xl font-extrabold font-heading text-ink">5</span>
+                  <span class="text-xs font-heading font-bold text-ink-muted">/ <span id="dash-stat-total">8</span> Total</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metric 3 -->
+            <div class="card-sticker card-sticker-amber p-5 flex flex-col justify-between">
+              <div class="flex justify-between items-start mb-3">
+                <div class="w-11 h-11 rounded-2xl bg-accent-amber border-2 border-ink flex items-center justify-center text-ink shadow-pop-sm">
+                  <span class="material-symbols-outlined text-[22px]">bolt</span>
+                </div>
+                <span class="badge-sticker badge-amber text-[10px]">
+                  Need Review
+                </span>
+              </div>
+              <div>
+                <h4 class="text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Potential Fits (60-80%)</h4>
+                <span id="dash-stat-potential" class="text-3xl font-extrabold font-heading text-ink">2</span>
+              </div>
+            </div>
+
+            <!-- Metric 4 -->
+            <div onclick="navigateTo('saved-applications')" class="card-sticker p-5 flex flex-col justify-between cursor-pointer hover:bg-card-subtle">
+              <div class="flex justify-between items-start mb-3">
+                <div class="w-11 h-11 rounded-2xl bg-accent-violet border-2 border-ink flex items-center justify-center text-white shadow-pop-sm">
+                  <span class="material-symbols-outlined text-[22px]">bookmark</span>
+                </div>
+                <span class="text-xs font-heading font-bold text-accent-violet flex items-center gap-0.5">
+                  View Saved &rarr;
+                </span>
+              </div>
+              <div>
+                <h4 class="text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Saved Applications</h4>
+                <span id="dash-stat-saved" class="text-3xl font-extrabold font-heading text-ink">3</span>
+              </div>
             </div>
           </div>
 
           <!-- Recommended For You Section -->
-          <div class="w-full bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
-            <div class="p-6 border-b border-outline-variant/30 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div class="w-full card-sticker overflow-hidden flex flex-col p-0">
+            <div class="p-6 border-b-2 border-ink bg-paper flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h2 class="text-xl font-bold text-on-surface flex items-center gap-2">
-                  Top Recommended Philippine Programs
-                  <span class="bg-primary-container text-on-primary-container text-xs font-semibold px-2.5 py-0.5 rounded-full">AI Calibrated</span>
-                </h2>
-                <p class="text-sm text-on-surface-variant mt-0.5">Matched with your UP Diliman Bioinformatics &amp; AI track records.</p>
+                <div class="flex items-center gap-2">
+                  <h2 class="text-xl font-extrabold font-heading text-ink">Top Recommended Philippine Programs</h2>
+                  <span class="badge-sticker badge-violet text-[10px]">AI Calibrated</span>
+                </div>
+                <p class="text-xs text-ink-muted mt-1 font-medium">Ranked by eligibility and financial assistance category.</p>
               </div>
-              <button onclick="navigateTo('opportunities')" class="bg-primary text-on-primary font-medium text-sm px-4 py-2 rounded-xl shadow-sm hover:bg-primary-container transition-all flex items-center gap-1.5 font-semibold">
+              <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-sm">
                 View All Programs <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
               </button>
             </div>
             
-            <div id="dash-recommended-list" class="flex flex-col">
+            <div id="dash-recommended-list" class="flex flex-col divide-y-2 divide-ink">
               <!-- Dynamically populated -->
             </div>
           </div>
@@ -368,59 +404,59 @@
           <div class="w-full max-w-3xl flex flex-col items-center text-center space-y-6">
             
             <div class="space-y-2">
-              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider">
-                <span class="material-symbols-outlined text-[16px]">neurology</span> QualiFind AI Matching Engine
+              <div class="badge-sticker badge-violet mb-2">
+                <span class="material-symbols-outlined text-[16px]">neurology</span> QualiFind Natural Language AI
               </div>
-              <h1 class="text-3xl lg:text-4xl font-extrabold text-on-surface tracking-tight">Describe your ideal Philippine opportunity</h1>
-              <p class="text-base text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
-                Describe your research interests, university, degree progress, and target stipend in natural language. QualiFind matches you across DOST-SEI, CHED, SUC consortiums, and Philippine foundation grants.
+              <h1 class="text-3xl lg:text-4xl font-extrabold font-heading text-ink tracking-tight">Describe your situation in plain words</h1>
+              <p class="text-sm md:text-base text-ink-muted max-w-2xl mx-auto leading-relaxed font-medium">
+                Tell us about your year, degree, GPA, location, and the financial help you need. QualiFind AI parses your details and matches you to government aid, scholarships, tuition discounts, or student jobs.
               </p>
             </div>
 
-            <!-- AI Prompt Input Box -->
-            <div class="w-full relative group text-left">
-              <div class="absolute -inset-1 bg-gradient-to-r from-primary/30 via-secondary/30 to-primary/30 rounded-2xl blur opacity-30 group-focus-within:opacity-80 transition duration-500"></div>
-              <div class="relative w-full bg-surface-container-lowest rounded-2xl shadow-xl overflow-hidden flex flex-col transition-all duration-300 ring-1 ring-outline-variant focus-within:ring-2 focus-within:ring-primary/50">
-                <textarea id="ai-prompt-input" class="w-full h-44 bg-transparent p-5 text-base text-on-surface placeholder:text-outline-variant resize-none focus:outline-none transition-colors" placeholder="E.g., I'm a second-year graduate student in computational biology at UP Diliman looking for DOST-SEI or PGC grants for genomic epidemiology and supercomputing. I have a 1.35 GWA and experience with Python and PyTorch..."></textarea>
+            <!-- AI Prompt Input Box (Playful Sticker Container) -->
+            <div class="w-full text-left">
+              <div class="card-sticker p-0 overflow-hidden">
+                <textarea id="ai-prompt-input" class="w-full h-44 bg-transparent p-5 text-base text-ink placeholder:text-ink-muted/60 resize-none focus:outline-none font-medium" placeholder="E.g., I'm Maria, 20 years old, a 2nd-year IT student in Cebu with an 82% GPA. My family has limited income, and I'm looking for assistance to cover my tuition fees and daily transportation expenses..."></textarea>
 
                 <div id="matcher-doc-chips" class="hidden flex-wrap gap-2 px-5 pb-4"></div>
 
                 <input type="file" id="matcher-doc-input" class="hidden" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="handleDocumentSelect(event)"/>
-                <div class="bg-surface-container-low px-5 py-3.5 flex flex-wrap items-center justify-between gap-3 border-t border-outline-variant/30">
-                  <div class="flex items-center gap-2 text-outline">
+                
+                <div class="bg-paper px-5 py-3.5 flex flex-wrap items-center justify-between gap-3 border-t-2 border-ink">
+                  <div class="flex items-center gap-2 text-ink-muted">
                     <span class="material-symbols-outlined text-[20px]">mic</span>
-                    <span class="text-xs uppercase tracking-wider font-semibold">Natural Language Query</span>
+                    <span class="text-xs uppercase tracking-wider font-heading font-bold">Natural Language Query</span>
                   </div>
                   <div class="flex items-center gap-2 ml-auto">
-                    <button type="button" onclick="document.getElementById('matcher-doc-input').click()" class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant font-semibold text-sm px-4 py-2.5 rounded-full flex items-center gap-2 transition-all border border-outline-variant/40" title="Attach a transcript, COE, or other supporting document">
-                      <span class="material-symbols-outlined text-[20px]">attach_file</span>
+                    <button type="button" onclick="document.getElementById('matcher-doc-input').click()" class="btn-candy btn-candy-secondary btn-candy-sm" title="Attach supporting documents">
+                      <span class="material-symbols-outlined text-[18px]">attach_file</span>
                       <span class="hidden sm:inline">Attach Documents</span>
                     </button>
-                    <button id="btn-find-matches" onclick="handleFindMatches()" class="bg-primary hover:bg-primary-container text-on-primary font-semibold text-sm px-6 py-2.5 rounded-full flex items-center gap-2 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                      <span class="material-symbols-outlined text-[20px] fill">auto_awesome</span>
-                      Find Matches
+                    <button id="btn-find-matches" onclick="handleFindMatches()" class="btn-candy btn-candy-sm">
+                      <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                      Find Assistance
                     </button>
                   </div>
                 </div>
               </div>
-              <p id="matcher-loading-status" class="hidden mt-3 text-center text-xs font-semibold text-primary animate-pulse">Reading your research interests...</p>
+              <p id="matcher-loading-status" class="hidden mt-3 text-center text-xs font-heading font-extrabold text-accent-violet animate-pulse">Analyzing your profile requirements...</p>
             </div>
 
             <!-- Starting Points Chips -->
             <div class="w-full flex flex-col items-center space-y-3 pt-2">
-              <span class="text-xs font-semibold uppercase text-outline tracking-wider">Philippine Starting Points</span>
+              <span class="text-xs font-heading font-bold uppercase text-ink-muted tracking-wider">Demo Presets &amp; Starting Points</span>
               <div id="matcher-chips" class="flex flex-wrap justify-center gap-2">
-                <button data-prompt="Looking for DOST-SEI ASTHRDP or ERDT graduate scholarships with monthly stipends around ₱35,000 in AI, genomics, and computing." class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface-variant font-medium text-xs px-3.5 py-2 rounded-full transition-all border border-outline-variant/30 shadow-sm">
+                <button data-prompt="I'm Maria, 20 years old, a 2nd-year IT student in Cebu with an 82% GPA. My family has limited income, and I'm looking for assistance to cover my tuition fees and daily transportation expenses." class="badge-sticker badge-pink hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3">
+                  🌟 Maria's Demo Story (Cebu 2nd-Yr IT, 82% GPA)
+                </button>
+                <button data-prompt="Looking for DOST-SEI ASTHRDP or ERDT graduate scholarships with monthly stipends around ₱35,000 in AI, genomics, and computing." class="badge-sticker badge-violet hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3">
                   DOST-SEI ASTHRDP &amp; ERDT Scholarships
                 </button>
-                <button data-prompt="Seeking Philippine Genome Center and DOST-ASTI research fellowships with supercomputer COARE access." class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface-variant font-medium text-xs px-3.5 py-2 rounded-full transition-all border border-outline-variant/30 shadow-sm">
-                  PGC &amp; DOST-ASTI AI Supercomputing Grants
+                <button data-prompt="Seeking CHED Tulong Dunong or Cebu City LGU college financial grants for undergraduate tuition assistance." class="badge-sticker badge-amber hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3">
+                  CHED Tulong Dunong &amp; Cebu LGU Grants
                 </button>
-                <button data-prompt="Find Gokongwei Brothers Foundation and Ayala Foundation STEM leadership grants in the Philippines." class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface-variant font-medium text-xs px-3.5 py-2 rounded-full transition-all border border-outline-variant/30 shadow-sm">
-                  GBF &amp; Ayala Foundation STEM Fellowships
-                </button>
-                <button data-prompt="Looking for CHED and SUC graduate faculty development grants in science and engineering." class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface-variant font-medium text-xs px-3.5 py-2 rounded-full transition-all border border-outline-variant/30 shadow-sm">
-                  CHED SUC Faculty &amp; Graduate Grants
+                <button data-prompt="Find campus student assistantships and IT technical support work-study programs." class="badge-sticker badge-mint hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3">
+                  University IT Student Assistantships
                 </button>
               </div>
             </div>
@@ -435,34 +471,34 @@
           <!-- Page Header & Action Bar -->
           <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <h1 class="text-3xl font-extrabold text-on-surface tracking-tight mb-1">Philippine Grants &amp; Scholarships</h1>
-              <p class="text-base text-on-surface-variant max-w-2xl">Discover and evaluate opportunities ranked by QualiFind match score against your academic profile.</p>
+              <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight mb-1">Philippine Assistance Programs</h1>
+              <p class="text-sm text-ink-muted max-w-2xl font-medium">Explore scholarships, educational assistance, assistantships, and certification grants ranked for you.</p>
             </div>
             <div class="flex gap-3">
-              <button id="btn-toggle-filters" onclick="toggleFilterDrawer()" class="h-11 px-5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-sm transition-all border border-outline-variant/40 flex items-center gap-2 shadow-sm">
-                <span class="material-symbols-outlined text-[20px]">filter_list</span>
+              <button id="btn-toggle-filters" onclick="toggleFilterDrawer()" class="btn-candy btn-candy-secondary btn-candy-sm">
+                <span class="material-symbols-outlined text-[18px]">filter_list</span>
                 <span>Filters</span>
-                <span id="filter-active-count-badge" class="hidden bg-primary text-on-primary text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                <span id="filter-active-count-badge" class="hidden bg-accent-pink text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
               </button>
-              <button onclick="navigateTo('matcher')" class="h-11 px-5 rounded-full bg-primary flex items-center justify-center text-on-primary font-medium text-sm transition-all hover:bg-primary-container shadow-sm font-semibold">
-                <span class="material-symbols-outlined mr-2 text-[20px]">auto_awesome</span>
-                QualiFind AI Search
+              <button onclick="navigateTo('matcher')" class="btn-candy btn-candy-sm">
+                <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                AI Search
               </button>
             </div>
           </div>
 
           <!-- Collapsible Filter Panel -->
-          <div id="filter-drawer-panel" class="hidden mb-6 bg-surface-container-lowest rounded-2xl p-6 shadow-md border border-outline-variant/30 transition-all duration-300">
-            <div class="flex items-center justify-between pb-4 mb-4 border-b border-outline-variant/20">
-              <h3 class="text-base font-bold text-on-surface flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-[20px]">tune</span>
-                Filter Opportunities
+          <div id="filter-drawer-panel" class="hidden mb-6 card-sticker p-6 bg-card">
+            <div class="flex items-center justify-between pb-4 mb-4 border-b-2 border-ink">
+              <h3 class="text-base font-extrabold font-heading text-ink flex items-center gap-2">
+                <span class="material-symbols-outlined text-accent-violet text-[20px]">tune</span>
+                Filter Assistance Programs
               </h3>
               <div class="flex items-center gap-3">
-                <button onclick="resetFilters()" class="text-xs font-semibold text-primary hover:underline">
+                <button onclick="resetFilters()" class="text-xs font-heading font-extrabold text-accent-violet hover:underline">
                   Reset All Filters
                 </button>
-                <button onclick="toggleFilterDrawer(false)" class="text-on-surface-variant hover:text-on-surface p-1">
+                <button onclick="toggleFilterDrawer(false)" class="text-ink hover:text-accent-pink p-1">
                   <span class="material-symbols-outlined text-[20px]">close</span>
                 </button>
               </div>
@@ -472,57 +508,61 @@
               <!-- Keyword Search & Saved Only -->
               <div class="flex flex-col gap-3">
                 <div>
-                  <h4 class="text-xs font-bold text-on-surface uppercase tracking-wider mb-2">Search Keyword</h4>
+                  <h4 class="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2">Search Keyword</h4>
                   <div class="relative flex items-center">
-                    <span class="material-symbols-outlined absolute left-3 text-outline text-[18px]">search</span>
-                    <input id="search-opportunities-input" type="text" placeholder="Filter DOST, CHED, PGC..." class="w-full bg-surface-container-low pl-9 pr-3 py-2 text-sm rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20"/>
+                    <span class="material-symbols-outlined absolute left-3 text-ink-muted text-[18px]">search</span>
+                    <input id="search-opportunities-input" type="text" placeholder="Filter DOST, CHED, Cebu, IT..." class="w-full input-playful pl-9 py-2 text-xs"/>
                   </div>
                 </div>
 
-                <div class="p-2.5 rounded-xl bg-primary/5 border border-primary/20 mt-1">
+                <div class="p-3 rounded-2xl bg-paper border-2 border-ink mt-1">
                   <label class="flex items-center justify-between cursor-pointer">
-                    <span class="flex items-center gap-2 text-xs font-bold text-primary">
-                      <span class="material-symbols-outlined text-[18px]">bookmark</span>
+                    <span class="flex items-center gap-2 text-xs font-heading font-bold text-ink">
+                      <span class="material-symbols-outlined text-[18px] text-accent-pink">bookmark</span>
                       Saved Applications Only
                     </span>
-                    <input type="checkbox" id="filter-saved-only-checkbox" onchange="toggleSavedOnlyFilter(this.checked)" class="rounded text-primary focus:ring-primary w-4 h-4"/>
+                    <input type="checkbox" id="filter-saved-only-checkbox" onchange="toggleSavedOnlyFilter(this.checked)" class="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"/>
                   </label>
                 </div>
               </div>
 
               <!-- Program Type -->
               <div>
-                <h4 class="text-xs font-bold text-on-surface uppercase tracking-wider mb-2.5">Program Type</h4>
+                <h4 class="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2.5">Category</h4>
                 <div class="flex flex-col gap-2">
-                  <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-on-surface">
-                    <input type="checkbox" value="Fellowship" checked class="filter-type-checkbox rounded text-primary focus:ring-primary w-4 h-4"/>
-                    <span>Graduate Fellowship</span>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
+                    <input type="checkbox" value="Scholarship" checked class="filter-type-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
+                    <span>Scholarships (Merit / SUC)</span>
                   </label>
-                  <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-on-surface">
-                    <input type="checkbox" value="Research Grant" checked class="filter-type-checkbox rounded text-primary focus:ring-primary w-4 h-4"/>
-                    <span>Research &amp; Thesis Grant</span>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
+                    <input type="checkbox" value="Educational Assistance" checked class="filter-type-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
+                    <span>Government &amp; LGU Assistance</span>
                   </label>
-                  <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-on-surface">
-                    <input type="checkbox" value="Scholarship" checked class="filter-type-checkbox rounded text-primary focus:ring-primary w-4 h-4"/>
-                    <span>CHED / Foundation Scholarship</span>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
+                    <input type="checkbox" value="Student Employment" checked class="filter-type-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
+                    <span>Student Assistantship / Jobs</span>
+                  </label>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
+                    <input type="checkbox" value="Training & Certification" checked class="filter-type-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
+                    <span>Training &amp; Certification Grants</span>
                   </label>
                 </div>
               </div>
 
               <!-- Match Quality -->
               <div>
-                <h4 class="text-xs font-bold text-on-surface uppercase tracking-wider mb-2.5">Match Quality</h4>
+                <h4 class="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2.5">Match Quality</h4>
                 <div class="flex flex-col gap-2">
-                  <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-on-surface">
-                    <input type="checkbox" value="high" checked class="filter-match-checkbox rounded text-primary focus:ring-primary w-4 h-4"/>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
+                    <input type="checkbox" value="high" checked class="filter-match-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
                     <span class="flex items-center gap-1.5">
-                      <span class="w-2 h-2 rounded-full bg-success"></span> High Match (&gt;80%)
+                      <span class="w-2.5 h-2.5 rounded-full bg-accent-mint border border-ink"></span> High Match (&gt;80%)
                     </span>
                   </label>
-                  <label class="flex items-center gap-2.5 cursor-pointer text-sm font-medium text-on-surface">
-                    <input type="checkbox" value="good" checked class="filter-match-checkbox rounded text-primary focus:ring-primary w-4 h-4"/>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
+                    <input type="checkbox" value="good" checked class="filter-match-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
                     <span class="flex items-center gap-1.5">
-                      <span class="w-2 h-2 rounded-full bg-warning"></span> Good Match (60-80%)
+                      <span class="w-2.5 h-2.5 rounded-full bg-accent-amber border border-ink"></span> Good Match (60-80%)
                     </span>
                   </label>
                 </div>
@@ -532,17 +572,17 @@
 
           <!-- Opportunity Cards Container (Full Width Grid) -->
           <div class="flex flex-col gap-5">
-            <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex items-center justify-between">
+            <div class="card-sticker p-4 flex items-center justify-between bg-card">
               <div class="flex items-center gap-3">
-                <span class="text-sm font-semibold text-on-surface">
-                  <span id="opp-count-badge" class="text-primary font-bold">8</span> programs matched in the Philippines
+                <span class="text-sm font-heading font-bold text-ink">
+                  <span id="opp-count-badge" class="text-accent-violet font-extrabold">8</span> opportunities in the Philippines
                 </span>
-                <div class="h-4 w-px bg-outline-variant/40"></div>
-                <span class="text-xs text-on-surface-variant font-medium">Ranked by QualiFind AI Score</span>
+                <div class="h-4 w-0.5 bg-ink"></div>
+                <span class="text-xs text-ink-muted font-medium">Ranked by QualiFind AI Score</span>
               </div>
             </div>
 
-            <div id="opportunities-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div id="opportunities-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <!-- Dynamically Populated -->
             </div>
           </div>
@@ -556,19 +596,19 @@
           <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <div class="flex items-center gap-2 mb-2">
-                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5">
+                <span class="badge-sticker badge-pink">
                   <span class="material-symbols-outlined text-[16px]">bookmark</span> Drafts &amp; Bookmarks
                 </span>
               </div>
-              <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">Saved Applications</h1>
-              <p class="text-base text-on-surface-variant max-w-2xl mt-1">
-                Your bookmarked Philippine funding opportunities, scholarships, and R&amp;D grants.
+              <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Saved Applications</h1>
+              <p class="text-sm text-ink-muted max-w-2xl mt-1 font-medium">
+                Your bookmarked Philippine funding opportunities, scholarships, and assistance programs.
               </p>
             </div>
             <div class="flex gap-3">
-              <button onclick="navigateTo('opportunities')" class="h-11 px-5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-sm transition-all border border-outline-variant/40 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[20px]">add</span>
-                Browse More Grants
+              <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-secondary btn-candy-sm">
+                <span class="material-symbols-outlined text-[18px]">add</span>
+                Browse More Programs
               </button>
             </div>
           </div>
@@ -583,93 +623,113 @@
       <!-- ================= VIEW 4: ELIGIBILITY CHECK (STUDENT ONLY) ================= -->
       <section id="view-eligibility" class="view-section">
         <div class="flex flex-col w-full gap-6">
-          <div class="flex items-center gap-2 text-sm text-on-surface-variant cursor-pointer hover:text-primary transition-colors font-medium" onclick="navigateTo('opportunities')">
-            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Philippine Opportunities
+          <div class="flex items-center gap-2 text-sm font-heading font-bold text-ink cursor-pointer hover:text-accent-violet transition-colors" onclick="navigateTo('opportunities')">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Opportunities
           </div>
 
-          <div id="eligibility-not-found" class="hidden bg-surface-container-lowest rounded-2xl p-2xl text-center flex flex-col items-center justify-center border border-outline-variant/30">
-            <span class="material-symbols-outlined text-6xl text-outline mb-md">search_off</span>
-            <h3 class="text-xl font-bold text-on-surface mb-1">This program isn't in the registry anymore</h3>
-            <p class="text-sm text-on-surface-variant max-w-md mb-lg">It may have been removed or the link is out of date. Head back to the catalog to keep browsing.</p>
-            <button class="bg-primary text-on-primary px-5 py-2.5 rounded-full font-medium text-sm" onclick="navigateTo('opportunities')">Back to Opportunities</button>
+          <div id="eligibility-not-found" class="hidden card-sticker p-12 text-center flex flex-col items-center justify-center">
+            <span class="material-symbols-outlined text-6xl text-ink-muted mb-4">search_off</span>
+            <h3 class="text-xl font-bold font-heading text-ink mb-1">This program isn't in the registry anymore</h3>
+            <p class="text-sm text-ink-muted max-w-md mb-6 font-medium">It may have been removed or the link is out of date.</p>
+            <button class="btn-candy" onclick="navigateTo('opportunities')">Back to Opportunities</button>
           </div>
 
           <div id="eligibility-content" class="grid grid-cols-12 gap-6 items-start">
             <!-- Left 8 Columns: Detail Hero & Breakdown -->
             <div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
               
-              <!-- Hero Card -->
-              <div class="relative overflow-hidden bg-primary text-on-primary rounded-2xl shadow-xl flex flex-col p-6 lg:p-8">
-                <div class="absolute top-0 right-0 w-96 h-96 bg-primary-container rounded-full blur-3xl opacity-40 -mr-24 -mt-24 pointer-events-none"></div>
+              <!-- Hero Sticker Card -->
+              <div class="card-sticker p-6 lg:p-8 bg-card relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-48 h-48 bg-accent-violet/15 rounded-full pointer-events-none"></div>
                 <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                   <div>
                     <div class="flex items-center gap-2 mb-3">
-                      <span id="eligibility-status-icon" class="material-symbols-outlined text-3xl text-secondary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                      <span id="eligibility-status-badge" class="text-xs font-semibold uppercase tracking-widest text-primary-fixed-dim">Status: Confirmed Eligible (GWA Verified)</span>
+                      <span id="eligibility-status-icon" class="material-symbols-outlined text-2xl text-success" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                      <span id="eligibility-status-badge" class="badge-sticker badge-mint text-xs">Status: Eligible</span>
                     </div>
-                    <h1 id="eligibility-title" class="text-2xl lg:text-3xl font-extrabold mb-2 leading-snug">DOST-SEI ASTHRDP Graduate Research Scholarship</h1>
-                    <p id="eligibility-provider" class="text-sm text-primary-fixed font-medium mb-3">Department of Science and Technology - SEI</p>
-                    <p id="eligibility-summary" class="text-sm text-primary-fixed/90 max-w-2xl leading-relaxed">
-                      Based on your UP Diliman academic standing (1.35 GWA), research publications, and NSC enrollment, you satisfy all baseline requirements.
+                    <h1 id="eligibility-title" class="text-2xl lg:text-3xl font-extrabold font-heading text-ink mb-2 leading-snug">DOST-SEI ASTHRDP Graduate Research Scholarship</h1>
+                    <p id="eligibility-provider" class="text-sm font-bold font-heading text-accent-violet mb-3">Department of Science and Technology - SEI</p>
+                    <p id="eligibility-summary" class="text-sm text-ink-muted max-w-2xl leading-relaxed font-medium">
+                      Based on your academic profile and requirements, the AI has generated this eligibility assessment.
                     </p>
                   </div>
 
-                  <div class="shrink-0 flex flex-col items-center justify-center p-5 bg-surface/10 backdrop-blur-md rounded-2xl border border-on-primary/10">
-                    <span id="eligibility-score" class="text-4xl font-extrabold text-secondary-container">95%</span>
-                    <span class="text-[11px] font-semibold text-on-primary/80 uppercase tracking-wider mt-1">QualiFind Match</span>
+                  <div class="shrink-0 flex flex-col items-center justify-center p-5 bg-paper rounded-2xl border-2 border-ink shadow-pop-sm">
+                    <span id="eligibility-score" class="text-4xl font-extrabold font-heading text-accent-violet">95%</span>
+                    <span class="text-[11px] font-heading font-extrabold text-ink uppercase tracking-wider mt-1">Match Score</span>
                   </div>
                 </div>
 
-                <div class="relative z-10 mt-6 pt-6 border-t border-on-primary/15 flex flex-wrap gap-3">
-                  <button onclick="navigateTo('action-plan')" class="bg-surface text-primary px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-surface-container-low transition-all shadow-md flex items-center gap-1.5">
+                <div class="relative z-10 mt-6 pt-6 border-t-2 border-ink flex flex-wrap gap-3">
+                  <button onclick="navigateTo('action-plan')" class="btn-candy btn-candy-sm">
                     <span class="material-symbols-outlined text-[18px]">checklist</span> Generate Action Plan
                   </button>
-                  <button id="eligibility-bookmark-btn" class="px-5 py-2.5 rounded-xl text-sm font-medium bg-on-primary/10 hover:bg-on-primary/20 transition-all border border-on-primary/20 flex items-center gap-1.5">
+                  <button id="eligibility-bookmark-btn" class="btn-candy btn-candy-secondary btn-candy-sm">
                     <span class="material-symbols-outlined text-[18px]">bookmark</span> Save for Later
                   </button>
                 </div>
               </div>
 
-              <!-- Why You're a Strong Match Section -->
+              <!-- Official Verification Disclaimer Callout -->
+              <div class="p-4 rounded-2xl bg-accent-amber/20 border-2 border-ink flex items-start gap-3 shadow-pop-sm">
+                <span class="material-symbols-outlined text-ink text-[22px] shrink-0 mt-0.5">info</span>
+                <p class="text-xs font-semibold text-ink leading-relaxed">
+                  <strong>Official Verification Disclaimer:</strong> AI eligibility assessments are provided for guidance purposes. Always verify requirements, deadlines, and submission procedures directly with the official program provider or university financial aid office.
+                </p>
+              </div>
+
+              <!-- Why You Match / Gap Diagnosis Section -->
               <div class="flex flex-col gap-4">
-                <h2 class="text-xl font-bold text-on-surface flex items-center gap-2">
-                  <span class="material-symbols-outlined text-primary">auto_awesome</span>
-                  Why You're a Strong Match in the Philippines
+                <h2 class="text-xl font-extrabold font-heading text-ink flex items-center gap-2">
+                  <span class="material-symbols-outlined text-accent-violet">auto_awesome</span>
+                  Requirement &amp; Gap Analysis
                 </h2>
                 <div id="eligibility-reasons-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <!-- Dynamically Rendered -->
                 </div>
               </div>
+
+              <!-- Alternative Assistance Pathways (When ineligibility or low fit occurs) -->
+              <div id="eligibility-alternatives-container" class="hidden flex flex-col gap-4">
+                <h2 class="text-xl font-extrabold font-heading text-ink flex items-center gap-2">
+                  <span class="material-symbols-outlined text-accent-pink">swap_calls</span>
+                  Alternative Assistance Pathways
+                </h2>
+                <div id="eligibility-alternatives-list" class="grid grid-cols-1 gap-3">
+                  <!-- Dynamically Rendered -->
+                </div>
+              </div>
+
             </div>
 
             <!-- Right 4 Columns: Requirements Checklist & Meta -->
             <div class="col-span-12 lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-24">
               
               <!-- Quick Info Card -->
-              <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-4">
-                <h3 class="text-base font-bold text-on-surface flex items-center gap-2">
-                  <span class="material-symbols-outlined text-primary">info</span> Program Overview
+              <div class="card-sticker p-5 flex flex-col gap-4 bg-card">
+                <h3 class="text-base font-extrabold font-heading text-ink flex items-center gap-2">
+                  <span class="material-symbols-outlined text-accent-violet">info</span> Program Overview
                 </h3>
-                <div class="grid grid-cols-2 gap-4 pt-2 border-t border-outline-variant/20">
+                <div class="grid grid-cols-2 gap-4 pt-2 border-t-2 border-ink">
                   <div>
-                    <span class="text-xs text-outline uppercase font-semibold">Grant / Stipend</span>
-                    <p id="eligibility-funding" class="text-sm font-bold text-on-surface mt-0.5">₱480,000 / yr + Tuition</p>
+                    <span class="text-[11px] font-heading font-bold text-ink-muted uppercase">Stipend / Value</span>
+                    <p id="eligibility-funding" class="text-sm font-extrabold font-heading text-ink mt-0.5">₱480,000 / yr</p>
                   </div>
                   <div>
-                    <span class="text-xs text-outline uppercase font-semibold">Deadline</span>
-                    <p id="eligibility-deadline" class="text-sm font-bold text-on-surface mt-0.5">Oct 15, 2024</p>
+                    <span class="text-[11px] font-heading font-bold text-ink-muted uppercase">Deadline</span>
+                    <p id="eligibility-deadline" class="text-sm font-extrabold font-heading text-ink mt-0.5">Oct 15, 2024</p>
                   </div>
                 </div>
               </div>
 
               <!-- Requirements Checklist Card -->
-              <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
-                <div class="bg-surface-container-low px-5 py-4 border-b border-outline-variant/30">
-                  <h3 class="text-base font-bold text-on-surface flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary">task_alt</span>
-                    PH Checklist &amp; Clearances
+              <div class="card-sticker overflow-hidden flex flex-col p-0 bg-card">
+                <div class="bg-paper px-5 py-4 border-b-2 border-ink">
+                  <h3 class="text-base font-extrabold font-heading text-ink flex items-center gap-2">
+                    <span class="material-symbols-outlined text-accent-mint">task_alt</span>
+                    Requirements Checklist
                   </h3>
-                  <p class="text-xs text-on-surface-variant mt-0.5">DOST/CHED documentation requirements.</p>
+                  <p class="text-xs text-ink-muted mt-0.5 font-medium">Philippine documentation &amp; clearances.</p>
                 </div>
                 <div id="eligibility-checklist-items" class="p-5 flex flex-col gap-4">
                   <!-- Dynamically Rendered -->
@@ -684,82 +744,92 @@
       <!-- ================= VIEW 5: ACTION PLAN (STUDENT ONLY) ================= -->
       <section id="view-action-plan" class="view-section">
         <div class="flex flex-col w-full max-w-4xl mx-auto gap-6">
-          <div class="flex items-center gap-2 text-sm text-on-surface-variant cursor-pointer hover:text-primary transition-colors font-medium" onclick="navigateTo('eligibility')">
-            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Program
+          <div class="flex items-center gap-2 text-sm font-heading font-bold text-ink cursor-pointer hover:text-accent-violet transition-colors" onclick="navigateTo('eligibility')">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Program Details
           </div>
 
           <div>
-            <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">Your Customized QualiFind Action Plan</h1>
-            <p class="text-base text-on-surface-variant mt-1">
-              Step-by-step roadmap to submit your application for <strong id="action-plan-target-title" class="text-primary">DOST-SEI ASTHRDP</strong>.
+            <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Personalized Action Plan</h1>
+            <p class="text-sm text-ink-muted mt-1 font-medium">
+              Step-by-step roadmap to submit your application for <strong id="action-plan-target-title" class="text-accent-violet">DOST-SEI ASTHRDP</strong>.
             </p>
           </div>
 
-          <!-- AI Recommendation Hero Card -->
-          <div class="relative w-full rounded-2xl bg-surface-container-highest p-6 shadow-sm overflow-hidden border border-outline-variant/30">
-            <div class="absolute -right-8 -top-8 w-36 h-36 bg-primary-container/20 rounded-full blur-2xl"></div>
-            <div class="relative z-10 flex flex-col gap-3">
-              <div class="flex items-center gap-2 text-primary font-semibold text-sm">
-                <span class="material-symbols-outlined text-primary fill">auto_awesome</span>
-                <span>QualiFind Strategic Recommendation</span>
+          <!-- Highlighted "Your Next Step" Hero Callout Box -->
+          <div class="card-sticker card-sticker-amber p-6 bg-card relative overflow-hidden">
+            <div class="relative z-10 flex flex-col gap-2">
+              <div class="flex items-center gap-2">
+                <span class="badge-sticker badge-amber">
+                  <span class="material-symbols-outlined text-[15px]">flag</span> RECOMMENDED NEXT ACTION
+                </span>
               </div>
-              <p id="action-plan-recommendation-text" class="text-sm text-on-surface leading-relaxed">
-                Based on your UP GWA of 1.35 and published machine learning preprints, your proposal has a high competitive index for national DOST-SEI funding. Focus on completing your NSC faculty endorsement letters and DOST NHRDA thesis concept note.
+              <h3 id="action-plan-next-step-title" class="text-lg font-extrabold font-heading text-ink mt-1">
+                Your Next Step: Prepare your Certificate of Enrollment and latest grades
+              </h3>
+              <p id="action-plan-recommendation-text" class="text-sm text-ink-muted leading-relaxed font-medium">
+                Gather your 2nd year IT enrollment documentation and registrar grade slip before starting the official online submission.
               </p>
             </div>
           </div>
 
-          <!-- Numbered Action Cards -->
-          <div class="flex flex-col gap-4">
-            <h3 class="text-lg font-bold text-on-surface">Milestone Action Items</h3>
-            
-            <div class="space-y-3">
-              <div class="flex gap-4 p-5 rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/30 items-start">
-                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center shrink-0 text-base">
-                  01
-                </div>
-                <div class="flex-1">
-                  <h4 class="text-base font-bold text-on-surface">Request Endorsement from 2 NSC Faculty Members</h4>
-                  <p class="text-sm text-on-surface-variant mt-1">Provide your CV and thesis concept note to Dr. Saloma and Dr. Montoya at UP Diliman / PGC.</p>
-                  <div class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-warning/10 text-warning text-xs font-semibold">
-                    <span class="material-symbols-outlined text-[14px]">schedule</span> Priority: High (Due in 14 days)
-                  </div>
+          <!-- 5-Point Plan Components -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Required Documents Box -->
+            <div class="card-sticker p-5 bg-card flex flex-col gap-3">
+              <h3 class="text-base font-extrabold font-heading text-ink flex items-center gap-2">
+                <span class="material-symbols-outlined text-accent-violet">description</span>
+                Required Documents
+              </h3>
+              <ul id="action-plan-docs-list" class="flex flex-col gap-2 text-xs font-semibold text-ink">
+                <li class="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30">
+                  <span class="material-symbols-outlined text-accent-mint text-[18px]">check_circle</span>
+                  Certificate of Enrollment (COE)
+                </li>
+                <li class="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30">
+                  <span class="material-symbols-outlined text-accent-mint text-[18px]">check_circle</span>
+                  Official Transcript / True Copy of Grades
+                </li>
+                <li class="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30">
+                  <span class="material-symbols-outlined text-accent-amber text-[18px]">pending</span>
+                  Barangay Certificate of Indigency
+                </li>
+              </ul>
+            </div>
+
+            <!-- Official Application Source & Deadlines -->
+            <div class="card-sticker p-5 bg-card flex flex-col justify-between">
+              <div>
+                <h3 class="text-base font-extrabold font-heading text-ink flex items-center gap-2 mb-3">
+                  <span class="material-symbols-outlined text-accent-pink">link</span>
+                  Official Application Source
+                </h3>
+                <p class="text-xs text-ink-muted font-medium mb-3">Submit your forms directly to the verified portal:</p>
+                <div class="p-3 rounded-xl bg-paper border-2 border-ink flex items-center justify-between">
+                  <span id="action-plan-portal-name" class="text-xs font-extrabold font-heading text-ink">DOST-SEI E-Scholarship Portal</span>
+                  <span class="material-symbols-outlined text-accent-violet text-[18px]">open_in_new</span>
                 </div>
               </div>
-
-              <div class="flex gap-4 p-5 rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/30 items-start">
-                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center shrink-0 text-base">
-                  02
-                </div>
-                <div class="flex-1">
-                  <h4 class="text-base font-bold text-on-surface">Draft DOST Harmonized R&amp;D Concept Note</h4>
-                  <p class="text-sm text-on-surface-variant mt-1">Map your computational genomics research to Philippine priority health and pandemic preparedness agendas.</p>
-                  <div class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
-                    <span class="material-symbols-outlined text-[14px]">edit_note</span> In Progress (AI Assisted)
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex gap-4 p-5 rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/30 items-start">
-                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center shrink-0 text-base">
-                  03
-                </div>
-                <div class="flex-1">
-                  <h4 class="text-base font-bold text-on-surface">Secure Official Transcript of Records (TOR) &amp; Clearances</h4>
-                  <p class="text-sm text-on-surface-variant mt-1">Obtain certified true copy of grades from the University Registrar and updated NBI / Barangay clearances.</p>
-                  <div class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 text-success text-xs font-semibold">
-                    <span class="material-symbols-outlined text-[14px]">check</span> Ready to Upload
-                  </div>
-                </div>
+              <div class="mt-4 pt-3 border-t border-ink/20 flex justify-between items-center text-xs">
+                <span class="font-heading font-bold text-ink-muted">Deadline:</span>
+                <span id="action-plan-deadline-tag" class="badge-sticker badge-pink text-[10px]">Oct 15, 2024</span>
               </div>
             </div>
           </div>
 
+          <!-- Numbered Step-by-Step Application Steps -->
+          <div class="flex flex-col gap-4">
+            <h3 class="text-lg font-extrabold font-heading text-ink">Step-by-Step Application Flow</h3>
+            
+            <div id="action-plan-steps-container" class="space-y-3">
+              <!-- Dynamically populated in app.js -->
+            </div>
+          </div>
+
           <div class="pt-4 flex justify-end gap-3">
-            <button onclick="navigateTo('opportunities')" class="px-5 py-2.5 rounded-full bg-surface-container text-on-surface font-medium text-sm hover:bg-surface-container-high font-semibold">
+            <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-secondary btn-candy-sm">
               Browse More Programs
             </button>
-            <button onclick="showToast('Action plan saved to your QualiFind drafts.');" class="px-6 py-2.5 rounded-full bg-primary text-on-primary font-medium text-sm hover:bg-primary-container shadow-sm flex items-center gap-1.5 font-semibold">
+            <button onclick="showToast('Action plan saved to your QualiFind drafts.');" class="btn-candy btn-candy-sm">
               <span class="material-symbols-outlined text-[18px]">bookmark_add</span> Save Action Plan
             </button>
           </div>
@@ -770,63 +840,49 @@
       <section id="view-profile" class="view-section">
         <div class="flex flex-col w-full max-w-3xl mx-auto gap-6">
           <div>
-            <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">QualiFind Academic Profile</h1>
-            <p class="text-base text-on-surface-variant mt-1">Manage your Philippine academic standing, GWA, institution, and R&amp;D preferences.</p>
+            <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Student Profile</h1>
+            <p class="text-sm text-ink-muted mt-1 font-medium">Review and update your educational, academic, and financial background.</p>
           </div>
 
-          <!-- Account Role Notice -->
-          <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-primary text-2xl">devices</span>
-              <div>
-                <p class="text-xs font-bold text-on-surface">Active Role: Student / Opportunity Seeker</p>
-                <p class="text-xs text-on-surface-variant">Available on Mobile Browsers &amp; Desktop Web</p>
-              </div>
-            </div>
-            <button type="button" onclick="openUserSwitchModal()" class="px-3.5 py-1.5 rounded-lg bg-surface text-primary border border-outline-variant/40 text-xs font-bold hover:bg-surface-container-high transition-colors">
-              Switch Account
-            </button>
-          </div>
-
-          <form onsubmit="saveProfile(event)" class="bg-surface-container-lowest rounded-2xl p-6 lg:p-8 shadow-sm border border-outline-variant/30 flex flex-col gap-6">
+          <form onsubmit="saveProfile(event)" class="card-sticker p-6 lg:p-8 bg-card flex flex-col gap-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="profile-name-input">Full Name</label>
-                <input id="profile-name-input" type="text" class="w-full bg-surface px-4 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium"/>
+                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink" for="profile-name-input">Full Name</label>
+                <input id="profile-name-input" type="text" class="input-playful text-sm"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="profile-email-input">Email Address</label>
-                <input id="profile-email-input" type="email" class="w-full bg-surface px-4 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium"/>
+                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink" for="profile-email-input">Email Address</label>
+                <input id="profile-email-input" type="email" class="input-playful text-sm"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="profile-gpa-input">General Weighted Average (GWA)</label>
-                <input id="profile-gpa-input" type="number" step="0.01" min="1.0" max="5.0" class="w-full bg-surface px-4 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium" title="Philippine GWA (1.00 is highest honors)"/>
+                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink" for="profile-gpa-input">Current GPA / GWA (%)</label>
+                <input id="profile-gpa-input" type="number" step="0.1" min="50" max="100" class="input-playful text-sm" title="Grade percentage (e.g. 82)"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="profile-dept-input">Institution &amp; Department</label>
-                <input id="profile-dept-input" type="text" class="w-full bg-surface px-4 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium"/>
+                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink" for="profile-dept-input">Institution &amp; Region</label>
+                <input id="profile-dept-input" type="text" class="input-playful text-sm"/>
               </div>
             </div>
 
             <div class="flex flex-col gap-1.5">
-              <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="profile-bio-input">Research Background &amp; Thesis Scopes</label>
-              <textarea id="profile-bio-input" rows="3" class="w-full bg-surface px-4 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium"></textarea>
+              <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink" for="profile-bio-input">Situation &amp; Financial Background</label>
+              <textarea id="profile-bio-input" rows="3" class="input-playful text-sm"></textarea>
             </div>
 
             <!-- Skills & Competencies -->
             <div class="flex flex-col gap-2">
-              <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Key Skills &amp; Facilities Access</label>
+              <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Skills &amp; Interests</label>
               <div id="profile-skills-list" class="flex flex-wrap gap-2 pt-1">
                 <!-- Dynamically Populated -->
               </div>
             </div>
 
-            <div class="pt-4 border-t border-outline-variant/30 flex justify-end">
-              <button type="submit" class="bg-primary hover:bg-primary-container text-on-primary font-semibold text-sm px-6 py-2.5 rounded-full transition-all shadow-sm">
-                Save QualiFind Profile
+            <div class="pt-4 border-t-2 border-ink flex justify-end">
+              <button type="submit" class="btn-candy">
+                Save Profile
               </button>
             </div>
           </form>
@@ -836,291 +892,195 @@
       <!-- ================= VIEW 7: ADMIN REGISTRY ANALYTICS (ADMIN ONLY - WEB ONLY) ================= -->
       <section id="view-admin-dashboard" class="view-section">
         
-        <!-- Mobile Guard Notice (Displayed on small screens when Admin is active) -->
-        <div class="block lg:hidden bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-warning/30 text-center flex flex-col items-center justify-center my-4">
-          <div class="w-14 h-14 rounded-2xl bg-warning/10 text-warning flex items-center justify-center mb-3">
-            <span class="material-symbols-outlined text-3xl">desktop_windows</span>
+        <!-- Mobile Guard Notice -->
+        <div class="block lg:hidden card-sticker p-6 text-center flex flex-col items-center justify-center my-4">
+          <div class="w-14 h-14 rounded-2xl bg-accent-amber border-2 border-ink flex items-center justify-center mb-3 shadow-pop-sm">
+            <span class="material-symbols-outlined text-3xl text-ink">desktop_windows</span>
           </div>
-          <h2 class="text-xl font-bold text-on-surface mb-1.5">Admin Portal is Desktop Web-Only</h2>
-          <p class="text-sm text-on-surface-variant max-w-sm mb-5 leading-relaxed">
-            The QualiFind Registry Analytics and Program Management suite requires a desktop web workstation to manage Philippine grant databases.
+          <h2 class="text-xl font-extrabold font-heading text-ink mb-1.5">Admin Portal is Desktop Web-Only</h2>
+          <p class="text-xs text-ink-muted max-w-sm mb-5 leading-relaxed font-medium">
+            The QualiFind Registry Analytics suite requires a desktop workstation to manage Philippine grant databases.
           </p>
-          <button onclick="setRole('student')" class="bg-primary text-on-primary font-bold text-xs px-5 py-3 rounded-full shadow-md hover:bg-primary-container transition-all flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-[18px]">school</span> Switch to Student Portal (Mobile Friendly)
+          <button onclick="setRole('student')" class="btn-candy btn-candy-sm">
+            <span class="material-symbols-outlined text-[18px]">school</span> Switch to Student Portal
           </button>
         </div>
 
         <!-- Desktop Web Content -->
         <div class="hidden lg:flex flex-col w-full gap-8">
-          
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div class="flex items-center gap-2">
-                <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">QualiFind Registry Analytics</h1>
-                <span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-bold text-[10px]">WEB WORKSTATION</span>
+                <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Registry Analytics</h1>
+                <span class="badge-sticker badge-violet text-[10px]">ADMIN WORKSTATION</span>
               </div>
-              <p class="text-base text-on-surface-variant mt-0.5">National program registry, student evaluation volume, and DOST/CHED program updates.</p>
+              <p class="text-sm text-ink-muted mt-0.5 font-medium">National program registry, student evaluation volume, and DOST/CHED program updates.</p>
             </div>
-            <button onclick="openAddProgramModal()" class="h-11 px-5 rounded-full bg-primary text-on-primary font-semibold text-sm hover:bg-primary-container transition-all flex items-center gap-1.5 shadow-sm">
-              <span class="material-symbols-outlined text-[20px]">add</span> Add Philippine Program
+            <button onclick="openAddProgramModal()" class="btn-candy btn-candy-sm">
+              <span class="material-symbols-outlined text-[18px]">add</span> Add Philippine Program
             </button>
           </div>
 
           <!-- Admin Metric Cards -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-2">
+            <div class="card-sticker p-5 flex flex-col gap-2">
               <div class="flex justify-between items-start">
-                <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Total Registry</span>
-                <div class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
+                <span class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink-muted">Total Registry</span>
+                <div class="w-9 h-9 rounded-xl bg-accent-violet text-white border-2 border-ink flex items-center justify-center shadow-pop-sm">
                   <span class="material-symbols-outlined text-[18px]">inventory_2</span>
                 </div>
               </div>
-              <span id="admin-stat-total" class="text-3xl font-extrabold text-on-surface">8</span>
-              <div class="flex items-center gap-1 text-success text-xs font-semibold">
+              <span id="admin-stat-total" class="text-3xl font-extrabold font-heading text-ink">8</span>
+              <div class="flex items-center gap-1 text-success text-xs font-bold">
                 <span class="material-symbols-outlined text-[14px]">arrow_upward</span> +15% active grants
               </div>
             </div>
 
-            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-2">
+            <div class="card-sticker p-5 flex flex-col gap-2">
               <div class="flex justify-between items-start">
-                <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Active Programs</span>
-                <div class="w-9 h-9 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+                <span class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink-muted">Active Programs</span>
+                <div class="w-9 h-9 rounded-xl bg-accent-mint text-ink border-2 border-ink flex items-center justify-center shadow-pop-sm">
                   <span class="material-symbols-outlined text-[18px]">check_circle</span>
                 </div>
               </div>
-              <span id="admin-stat-active" class="text-3xl font-extrabold text-on-surface">6</span>
-              <div class="flex items-center gap-1 text-success text-xs font-semibold">
+              <span id="admin-stat-active" class="text-3xl font-extrabold font-heading text-ink">6</span>
+              <div class="flex items-center gap-1 text-success text-xs font-bold">
                 <span class="material-symbols-outlined text-[14px]">check</span> Open for applications
               </div>
             </div>
 
-            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-2">
+            <div class="card-sticker p-5 flex flex-col gap-2">
               <div class="flex justify-between items-start">
-                <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">In Review / Draft</span>
-                <div class="w-9 h-9 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center">
+                <span class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink-muted">In Review / Draft</span>
+                <div class="w-9 h-9 rounded-xl bg-accent-amber text-ink border-2 border-ink flex items-center justify-center shadow-pop-sm">
                   <span class="material-symbols-outlined text-[18px]">pending_actions</span>
                 </div>
               </div>
-              <span id="admin-stat-review" class="text-3xl font-extrabold text-on-surface">1</span>
-              <div class="flex items-center gap-1 text-warning text-xs font-semibold">
-                <span class="material-symbols-outlined text-[14px]">schedule</span> PCHRD Call for Proposals
+              <span id="admin-stat-review" class="text-3xl font-extrabold font-heading text-ink">1</span>
+              <div class="flex items-center gap-1 text-warning text-xs font-bold">
+                <span class="material-symbols-outlined text-[14px]">schedule</span> 1 Draft
               </div>
             </div>
 
-            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-2">
+            <div class="card-sticker p-5 flex flex-col gap-2">
               <div class="flex justify-between items-start">
-                <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Expired / Closed</span>
-                <div class="w-9 h-9 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+                <span class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink-muted">Expired / Closed</span>
+                <div class="w-9 h-9 rounded-xl bg-accent-pink text-white border-2 border-ink flex items-center justify-center shadow-pop-sm">
                   <span class="material-symbols-outlined text-[18px]">error</span>
                 </div>
               </div>
-              <span id="admin-stat-expired" class="text-3xl font-extrabold text-on-surface">1</span>
-              <div class="flex items-center gap-1 text-error text-xs font-semibold">
-                <span class="material-symbols-outlined text-[14px]">archive</span> Archived calls
+              <span id="admin-stat-expired" class="text-3xl font-extrabold font-heading text-ink">1</span>
+              <div class="flex items-center gap-1 text-error text-xs font-bold">
+                <span class="material-symbols-outlined text-[14px]">archive</span> Archived
               </div>
-            </div>
-          </div>
-
-          <!-- Activity Chart & System Alerts -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <!-- Left: Activity Visualization -->
-            <div class="lg:col-span-8 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 flex flex-col gap-4">
-              <div class="flex justify-between items-center">
-                <div>
-                  <h3 class="text-lg font-bold text-on-surface">National Application &amp; Match Volume</h3>
-                  <p class="text-xs text-on-surface-variant">Monthly volume of QualiFind AI match queries vs verified Philippine student applications</p>
-                </div>
-              </div>
-
-              <!-- Interactive Chart SVG -->
-              <div class="relative w-full h-56 mt-2">
-                <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 220">
-                  <line class="text-outline-variant/20" stroke="currentColor" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="40" y2="40"></line>
-                  <line class="text-outline-variant/20" stroke="currentColor" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="90" y2="90"></line>
-                  <line class="text-outline-variant/20" stroke="currentColor" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="140" y2="140"></line>
-                  <line class="text-outline-variant/20" stroke="currentColor" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="190" y2="190"></line>
-                  
-                  <path class="text-primary/10" d="M0 220 L0 160 C120 140, 240 190, 360 110 C480 30, 600 140, 720 70 L800 90 L800 220 Z" fill="currentColor"></path>
-                  <path class="text-primary" d="M0 160 C120 140, 240 190, 360 110 C480 30, 600 140, 720 70 L800 90" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3"></path>
-                </svg>
-              </div>
-
-              <div class="flex items-center gap-6 pt-2 border-t border-outline-variant/20 text-xs text-on-surface-variant font-medium">
-                <div class="flex items-center gap-2">
-                  <div class="w-3 h-3 rounded-full bg-primary"></div> QualiFind Match Queries
-                </div>
-                <div class="flex items-center gap-2">
-                  <div class="w-3 h-3 rounded-full bg-secondary"></div> Applications Submitted to SUCs
-                </div>
-              </div>
-            </div>
-
-            <!-- Right: System Alerts -->
-            <div class="lg:col-span-4 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 flex flex-col gap-4">
-              <h3 class="text-lg font-bold text-on-surface">DOST / CHED Alerts</h3>
-              <div class="flex flex-col gap-3">
-                <div class="p-3.5 rounded-xl bg-warning/10 border border-warning/20 flex gap-3 items-start">
-                  <span class="material-symbols-outlined text-warning text-[20px] shrink-0">schedule</span>
-                  <div>
-                    <h4 class="text-xs font-bold text-on-surface">DOST-SEI ASTHRDP Deadline Soon</h4>
-                    <p class="text-xs text-on-surface-variant mt-0.5">Application portal closes in 14 days for 1st Semester cycle.</p>
-                  </div>
-                </div>
-
-                <div class="p-3.5 rounded-xl bg-primary/10 border border-primary/20 flex gap-3 items-start">
-                  <span class="material-symbols-outlined text-primary text-[20px] shrink-0">neurology</span>
-                  <div>
-                    <h4 class="text-xs font-bold text-on-surface">COARE Supercomputing Allocation</h4>
-                    <p class="text-xs text-on-surface-variant mt-0.5">DOST-ASTI AI research grant nodes refreshed.</p>
-                  </div>
-                </div>
-              </div>
-
-              <button onclick="navigateTo('admin-programs')" class="mt-auto w-full py-2.5 rounded-xl bg-surface-container-low text-primary font-semibold text-xs hover:bg-surface-container transition-colors">
-                Go to Program Registry &rarr;
-              </button>
             </div>
           </div>
 
           <!-- Quick Program Table Preview -->
-          <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
-            <div class="p-5 border-b border-outline-variant/30 flex justify-between items-center">
+          <div class="card-sticker overflow-hidden flex flex-col p-0">
+            <div class="p-5 border-b-2 border-ink bg-paper flex justify-between items-center">
               <div>
-                <h3 class="text-base font-bold text-on-surface">Recent Philippine Program Entries</h3>
-                <p class="text-xs text-on-surface-variant">Review recent government and consortium grant records.</p>
+                <h3 class="text-base font-extrabold font-heading text-ink">Recent Philippine Program Entries</h3>
+                <p class="text-xs text-ink-muted font-medium">Review active scholarship and assistance records.</p>
               </div>
-              <button onclick="navigateTo('admin-programs')" class="text-xs font-semibold text-primary hover:underline">
-                View Full Registry
+              <button onclick="navigateTo('admin-programs')" class="text-xs font-heading font-extrabold text-accent-violet hover:underline">
+                View Full Registry &rarr;
               </button>
             </div>
 
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse">
                 <thead>
-                  <tr class="bg-surface-container-low/50 text-xs font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant/20">
+                  <tr class="bg-paper text-xs font-heading font-extrabold text-ink uppercase tracking-wider border-b-2 border-ink">
                     <th class="py-3 px-6">Program Name</th>
-                    <th class="py-3 px-4">Department</th>
+                    <th class="py-3 px-4">Category</th>
                     <th class="py-3 px-4">Status</th>
                     <th class="py-3 px-4">Deadline</th>
                     <th class="py-3 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody id="admin-recent-programs-tbody" class="text-sm divide-y divide-outline-variant/20">
+                <tbody id="admin-recent-programs-tbody" class="text-sm divide-y-2 divide-ink">
                   <!-- Dynamically Rendered -->
                 </tbody>
               </table>
             </div>
           </div>
-
         </div>
       </section>
 
-      <!-- ================= VIEW 8: ADMIN PROGRAM MANAGEMENT (ADMIN ONLY - WEB ONLY) ================= -->
+      <!-- ================= VIEW 8: ADMIN PROGRAM MANAGEMENT (ADMIN ONLY) ================= -->
       <section id="view-admin-programs" class="view-section">
-        
-        <!-- Mobile Guard Notice -->
-        <div class="block lg:hidden bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-warning/30 text-center flex flex-col items-center justify-center my-4">
-          <div class="w-14 h-14 rounded-2xl bg-warning/10 text-warning flex items-center justify-center mb-3">
-            <span class="material-symbols-outlined text-3xl">desktop_windows</span>
-          </div>
-          <h2 class="text-xl font-bold text-on-surface mb-1.5">Program Registry is Desktop Web-Only</h2>
-          <p class="text-sm text-on-surface-variant max-w-sm mb-5 leading-relaxed">
-            Data table administration and multi-criteria grant authoring are restricted to desktop web workstations.
-          </p>
-          <button onclick="setRole('student')" class="bg-primary text-on-primary font-bold text-xs px-5 py-3 rounded-full shadow-md hover:bg-primary-container transition-all flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-[18px]">school</span> Switch to Student Portal (Mobile Friendly)
-          </button>
-        </div>
-
-        <!-- Desktop Web Content -->
         <div class="hidden lg:flex flex-col w-full gap-6">
-          
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div class="flex items-center gap-2">
-                <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">Manage Philippine Programs</h1>
-                <span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-bold text-[10px]">WEB WORKSTATION</span>
+                <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Manage Philippine Programs</h1>
+                <span class="badge-sticker badge-violet text-[10px]">ADMIN WORKSTATION</span>
               </div>
-              <p class="text-base text-on-surface-variant mt-0.5">Administer and edit all DOST, CHED, SUC, and private foundation grants in the registry.</p>
+              <p class="text-sm text-ink-muted mt-0.5 font-medium">Administer and edit all scholarships, grants, and assistance records in the registry.</p>
             </div>
-            <button onclick="openAddProgramModal()" class="h-11 px-6 rounded-full bg-primary text-on-primary font-semibold text-sm hover:bg-primary-container transition-all flex items-center gap-1.5 shadow-sm">
-              <span class="material-symbols-outlined text-[20px]">add</span> Add Philippine Program
+            <button onclick="openAddProgramModal()" class="btn-candy btn-candy-sm">
+              <span class="material-symbols-outlined text-[18px]">add</span> Add Program
             </button>
           </div>
 
-          <!-- Search & Filter Controls -->
-          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="relative w-full sm:w-96">
-              <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
-              <input id="admin-search-input" type="text" placeholder="Search DOST, ERDT, CHED, PGC, or ID..." class="w-full pl-10 pr-4 py-2.5 bg-surface-container-lowest rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm shadow-sm"/>
-            </div>
-
-            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
-              <span id="admin-programs-count" class="text-xs font-semibold text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full">
-                8 Philippine Programs
-              </span>
-            </div>
-          </div>
-
           <!-- Full Table -->
-          <div class="w-full bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
+          <div class="card-sticker overflow-hidden flex flex-col p-0">
             <div class="overflow-x-auto w-full">
               <table class="w-full text-left whitespace-nowrap">
-                <thead class="bg-surface-container-low border-b border-outline-variant/30 text-xs font-bold text-on-surface-variant uppercase tracking-wider">
+                <thead class="bg-paper border-b-2 border-ink text-xs font-heading font-extrabold text-ink uppercase tracking-wider">
                   <tr>
                     <th class="px-6 py-3.5 w-10"></th>
                     <th class="px-6 py-3.5">Program Name</th>
                     <th class="px-6 py-3.5">Agency / Provider</th>
-                    <th class="px-6 py-3.5">Type</th>
+                    <th class="px-6 py-3.5">Category</th>
                     <th class="px-6 py-3.5">Deadline</th>
                     <th class="px-6 py-3.5">Status</th>
                     <th class="px-6 py-3.5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody id="admin-programs-full-tbody" class="divide-y divide-outline-variant/20 text-sm">
+                <tbody id="admin-programs-full-tbody" class="divide-y-2 divide-ink text-sm">
                   <!-- Dynamically Rendered -->
                 </tbody>
               </table>
             </div>
           </div>
-
         </div>
       </section>
 
-      <!-- ================= VIEW 9: ADMIN LIAISON PROFILE (ADMIN ONLY - WEB ONLY) ================= -->
+      <!-- ================= VIEW 9: ADMIN LIAISON PROFILE ================= -->
       <section id="view-admin-profile" class="view-section">
         <div class="flex flex-col w-full max-w-3xl mx-auto gap-6">
           <div>
-            <h1 class="text-3xl font-extrabold text-on-surface tracking-tight">Research &amp; Fellowships Office Profile</h1>
-            <p class="text-base text-on-surface-variant mt-1">Administrator agency details, DOST/CHED accreditation parameters, and evaluation priorities.</p>
+            <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Officer &amp; Agency Profile</h1>
+            <p class="text-sm text-ink-muted mt-1 font-medium">Administrator agency details and program parameters.</p>
           </div>
 
-          <div class="bg-surface-container-lowest rounded-2xl p-6 lg:p-8 shadow-sm border border-outline-variant/30 flex flex-col gap-6">
+          <div class="card-sticker p-6 lg:p-8 bg-card flex flex-col gap-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Administrator Name</label>
-                <input type="text" readonly value="Dr. Ernesto Ramos" class="w-full bg-surface-container-low px-4 py-2.5 rounded-xl border border-outline-variant/40 text-sm font-bold text-on-surface"/>
+                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Administrator Name</label>
+                <input type="text" readonly value="Dr. Ernesto Ramos" class="input-playful text-sm font-bold bg-paper"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Official Agency Email</label>
-                <input type="email" readonly value="ernesto.ramos@up.edu.ph" class="w-full bg-surface-container-low px-4 py-2.5 rounded-xl border border-outline-variant/40 text-sm font-bold text-on-surface"/>
+                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Official Agency Email</label>
+                <input type="email" readonly value="ernesto.ramos@up.edu.ph" class="input-playful text-sm font-bold bg-paper"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Office &amp; Designation</label>
-                <input type="text" readonly value="Director, Office of Research &amp; Fellowships" class="w-full bg-surface-container-low px-4 py-2.5 rounded-xl border border-outline-variant/40 text-sm font-bold text-on-surface"/>
+                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Office &amp; Designation</label>
+                <input type="text" readonly value="Director, Office of Scholarships &amp; Grants" class="input-playful text-sm font-bold bg-paper"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">National Consortium Scope</label>
-                <input type="text" readonly value="DOST-SEI NSC &amp; CHED SUC Network" class="w-full bg-surface-container-low px-4 py-2.5 rounded-xl border border-outline-variant/40 text-sm font-bold text-on-surface"/>
+                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Consortium Scope</label>
+                <input type="text" readonly value="DOST-SEI &amp; CHED Higher Ed Network" class="input-playful text-sm font-bold bg-paper"/>
               </div>
             </div>
 
-            <div class="pt-4 border-t border-outline-variant/30 flex justify-between items-center">
-              <span class="text-xs text-on-surface-variant">Accredited by DOST National Science Consortium</span>
-              <button onclick="showToast('Office configuration saved.');" class="bg-primary text-on-primary font-semibold text-sm px-6 py-2.5 rounded-full transition-all shadow-sm">
+            <div class="pt-4 border-t-2 border-ink flex justify-end">
+              <button onclick="showToast('Office configuration saved.');" class="btn-candy btn-candy-sm">
                 Save Office Settings
               </button>
             </div>
@@ -1131,72 +1091,72 @@
     </main>
   </div>
 
-  <!-- Mobile Bottom Navigation Bar (ONLY Visible to Student / Opportunity Seekers on Mobile) -->
-  <nav id="student-mobile-nav" class="lg:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl border-t border-outline-variant/30">
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav id="student-mobile-nav" class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-paper/95 backdrop-blur-md border-t-2 border-ink">
     <div class="flex justify-around items-center h-16 px-4">
-      <a href="#dashboard" onclick="navigateTo('dashboard'); return false;" class="flex flex-col items-center gap-1 text-primary">
+      <a href="#dashboard" onclick="navigateTo('dashboard'); return false;" class="flex flex-col items-center gap-0.5 text-accent-violet font-heading font-bold">
         <span class="material-symbols-outlined text-[22px]">dashboard</span>
-        <span class="text-[11px] font-medium">Home</span>
+        <span class="text-[10px]">Home</span>
       </a>
-      <a href="#matcher" onclick="navigateTo('matcher'); return false;" class="flex flex-col items-center gap-1 text-on-surface-variant">
+      <a href="#matcher" onclick="navigateTo('matcher'); return false;" class="flex flex-col items-center gap-0.5 text-ink font-heading font-bold">
         <span class="material-symbols-outlined text-[22px]">auto_awesome</span>
-        <span class="text-[11px] font-medium">QualiFind</span>
+        <span class="text-[10px]">Match</span>
       </a>
-      <a href="#opportunities" onclick="navigateTo('opportunities'); return false;" class="flex flex-col items-center gap-1 text-on-surface-variant">
+      <a href="#opportunities" onclick="navigateTo('opportunities'); return false;" class="flex flex-col items-center gap-0.5 text-ink font-heading font-bold">
         <span class="material-symbols-outlined text-[22px]">search</span>
-        <span class="text-[11px] font-medium">Grants</span>
+        <span class="text-[10px]">Programs</span>
       </a>
-      <a href="#profile" onclick="navigateTo('profile'); return false;" class="flex flex-col items-center gap-1 text-on-surface-variant">
+      <a href="#profile" onclick="navigateTo('profile'); return false;" class="flex flex-col items-center gap-0.5 text-ink font-heading font-bold">
         <span class="material-symbols-outlined text-[22px]">person</span>
-        <span class="text-[11px] font-medium">Profile</span>
+        <span class="text-[10px]">Profile</span>
       </a>
     </div>
   </nav>
 
   <!-- ================= USER / ROLE SWITCHER MODAL ================= -->
-  <div id="user-switch-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/40 backdrop-blur-sm">
-    <div class="bg-surface-container-lowest rounded-2xl max-w-md w-full p-6 shadow-2xl border border-outline-variant/40">
-      <div class="flex justify-between items-center pb-3 border-b border-outline-variant/30 mb-4">
+  <div id="user-switch-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+    <div class="card-sticker max-w-md w-full p-6 bg-card shadow-pop-lg">
+      <div class="flex justify-between items-center pb-3 border-b-2 border-ink mb-4">
         <div>
-          <h3 class="text-lg font-bold text-on-surface">Switch User Account</h3>
-          <p class="text-xs text-on-surface-variant">Completely isolated portals for Student and Administrator</p>
+          <h3 class="text-lg font-extrabold font-heading text-ink">Switch User Account</h3>
+          <p class="text-xs text-ink-muted font-medium">Select Student or Admin portal</p>
         </div>
-        <button onclick="closeUserSwitchModal()" class="text-on-surface-variant hover:text-on-surface">
-          <span class="material-symbols-outlined text-[22px]">close</span>
+        <button onclick="closeUserSwitchModal()" class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-pink hover:text-white transition-colors shadow-pop-sm">
+          <span class="material-symbols-outlined text-[18px]">close</span>
         </button>
       </div>
 
       <div class="flex flex-col gap-3">
-        <!-- User 1: Student -->
-        <div onclick="setRole('student'); closeUserSwitchModal();" class="p-4 rounded-xl border-2 border-primary/30 hover:border-primary bg-primary/5 hover:bg-primary/10 cursor-pointer transition-all flex items-start gap-3.5 group">
-          <div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
+        <!-- User 1: Student (Maria) -->
+        <div onclick="setRole('student'); closeUserSwitchModal();" class="p-4 rounded-2xl border-2 border-ink bg-accent-violet/10 hover:bg-accent-violet/20 cursor-pointer transition-all flex items-start gap-3.5 group shadow-pop-sm hover:shadow-pop">
+          <div class="w-10 h-10 rounded-full bg-accent-violet text-white border-2 border-ink flex items-center justify-center font-heading font-extrabold text-sm shrink-0 shadow-pop-sm">
             MS
           </div>
           <div class="flex-1">
             <div class="flex items-center justify-between">
-              <h4 class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Maria Clara Santos</h4>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-success/15 text-success">Student Portal</span>
+              <h4 class="text-sm font-extrabold font-heading text-ink group-hover:text-accent-violet transition-colors">Maria Clara Santos</h4>
+              <span class="badge-sticker badge-mint text-[9px] py-0.5 px-2">Student</span>
             </div>
-            <p class="text-xs text-on-surface-variant mt-0.5">Opportunity Seeker &bull; UP Diliman</p>
-            <div class="mt-2 flex items-center gap-1.5 text-[11px] font-semibold text-primary">
+            <p class="text-xs text-ink-muted mt-0.5 font-medium">20 y/o • 2nd-Year IT • Cebu (82% GPA)</p>
+            <div class="mt-2 flex items-center gap-1.5 text-[11px] font-heading font-bold text-accent-violet">
               <span class="material-symbols-outlined text-[14px]">devices</span>
-              <span>Available on Both Mobile &amp; Desktop Web</span>
+              <span>Mobile &amp; Desktop Web Supported</span>
             </div>
           </div>
         </div>
 
         <!-- User 2: Admin -->
-        <div onclick="setRole('admin'); closeUserSwitchModal();" class="p-4 rounded-xl border border-outline-variant/40 hover:border-secondary bg-surface-container-low hover:bg-surface-container cursor-pointer transition-all flex items-start gap-3.5 group">
-          <div class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
+        <div onclick="setRole('admin'); closeUserSwitchModal();" class="p-4 rounded-2xl border-2 border-ink bg-accent-amber/10 hover:bg-accent-amber/20 cursor-pointer transition-all flex items-start gap-3.5 group shadow-pop-sm hover:shadow-pop">
+          <div class="w-10 h-10 rounded-full bg-accent-amber text-ink border-2 border-ink flex items-center justify-center font-heading font-extrabold text-sm shrink-0 shadow-pop-sm">
             ER
           </div>
           <div class="flex-1">
             <div class="flex items-center justify-between">
-              <h4 class="text-sm font-bold text-on-surface group-hover:text-secondary transition-colors">Dr. Ernesto Ramos</h4>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container">Admin Portal</span>
+              <h4 class="text-sm font-extrabold font-heading text-ink group-hover:text-accent-amber transition-colors">Dr. Ernesto Ramos</h4>
+              <span class="badge-sticker badge-amber text-[9px] py-0.5 px-2">Admin</span>
             </div>
-            <p class="text-xs text-on-surface-variant mt-0.5">Director &bull; DOST/CHED Research Liaison</p>
-            <div class="mt-2 flex items-center gap-1.5 text-[11px] font-semibold text-outline">
+            <p class="text-xs text-ink-muted mt-0.5 font-medium">Director • DOST/CHED Programs Liaison</p>
+            <div class="mt-2 flex items-center gap-1.5 text-[11px] font-heading font-bold text-ink-muted">
               <span class="material-symbols-outlined text-[14px]">desktop_windows</span>
               <span>Desktop Web Workstation Only</span>
             </div>
@@ -1207,12 +1167,12 @@
   </div>
 
   <!-- ================= PROGRAM ADD/EDIT MODAL ================= -->
-  <div id="program-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/40 backdrop-blur-sm">
-    <div class="bg-surface-container-lowest rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-outline-variant/40 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center pb-4 border-b border-outline-variant/30 mb-4">
-        <h3 id="program-modal-title" class="text-xl font-bold text-on-surface">Add Philippine Program / Grant</h3>
-        <button onclick="closeProgramModal()" class="text-on-surface-variant hover:text-on-surface">
-          <span class="material-symbols-outlined text-[24px]">close</span>
+  <div id="program-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+    <div class="card-sticker max-w-xl w-full p-6 bg-card shadow-pop-lg max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-4 border-b-2 border-ink mb-4">
+        <h3 id="program-modal-title" class="text-xl font-extrabold font-heading text-ink">Add Philippine Program</h3>
+        <button onclick="closeProgramModal()" class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-pink hover:text-white transition-colors shadow-pop-sm">
+          <span class="material-symbols-outlined text-[18px]">close</span>
         </button>
       </div>
 
@@ -1220,48 +1180,49 @@
         <input type="hidden" id="prog-id-input"/>
         
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-title-input">Program Title *</label>
-          <input id="prog-title-input" required type="text" placeholder="e.g. DOST-SEI ASTHRDP Graduate Fellowship" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"/>
+          <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-title-input">Program Title *</label>
+          <input id="prog-title-input" required type="text" placeholder="e.g. Cebu City College Scholarship Program" class="input-playful text-sm"/>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-provider-input">Agency / Provider *</label>
-            <input id="prog-provider-input" required type="text" placeholder="e.g. DOST-SEI / CHED / UP System" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"/>
+            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-provider-input">Agency / Provider *</label>
+            <input id="prog-provider-input" required type="text" placeholder="e.g. Cebu City LGU / CHED" class="input-playful text-sm"/>
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-type-input">Program Type</label>
-            <select id="prog-type-input" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm">
-              <option value="Fellowship">Fellowship</option>
-              <option value="Research Grant">Research Grant</option>
+            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-type-input">Category</label>
+            <select id="prog-type-input" class="input-playful text-sm">
               <option value="Scholarship">Scholarship</option>
-              <option value="Postdoc Position">Postdoc Position</option>
+              <option value="Educational Assistance">Educational Assistance</option>
+              <option value="Student Employment">Student Employment</option>
+              <option value="Student Loan">Student Loan</option>
+              <option value="Training & Certification">Training & Certification</option>
             </select>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-dept-input">Discipline / Department</label>
-            <input id="prog-dept-input" required type="text" placeholder="e.g. Bioinformatics &amp; AI" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"/>
+            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-dept-input">Discipline / Coverage</label>
+            <input id="prog-dept-input" required type="text" placeholder="e.g. IT & Engineering / General" class="input-playful text-sm"/>
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-funding-input">Stipend / Funding (₱)</label>
-            <input id="prog-funding-input" required type="text" placeholder="e.g. ₱480,000 / yr + Tuition" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"/>
+            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-funding-input">Stipend / Grant (₱)</label>
+            <input id="prog-funding-input" required type="text" placeholder="e.g. ₱50,000 / yr + Allowance" class="input-playful text-sm"/>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-deadline-input">Application Deadline *</label>
-            <input id="prog-deadline-input" required type="date" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"/>
+            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-deadline-input">Deadline *</label>
+            <input id="prog-deadline-input" required type="date" class="input-playful text-sm"/>
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-status-input">Status</label>
-            <select id="prog-status-input" class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm">
+            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-status-input">Status</label>
+            <select id="prog-status-input" class="input-playful text-sm">
               <option value="Active">Active</option>
               <option value="In Review">In Review</option>
               <option value="Draft">Draft</option>
@@ -1271,15 +1232,15 @@
         </div>
 
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-bold text-on-surface-variant uppercase" for="prog-desc-input">Program Summary &amp; Philippine Criteria</label>
-          <textarea id="prog-desc-input" rows="3" required placeholder="Describe GWA thresholds, Philippine residency, return service, and proposal guidelines..." class="w-full bg-surface px-3.5 py-2.5 rounded-xl border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"></textarea>
+          <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-desc-input">Program Summary &amp; Criteria</label>
+          <textarea id="prog-desc-input" rows="3" required placeholder="Describe minimum GPA, location, and requirements..." class="input-playful text-sm"></textarea>
         </div>
 
-        <div class="pt-4 border-t border-outline-variant/30 flex justify-end gap-3">
-          <button type="button" onclick="closeProgramModal()" class="px-5 py-2.5 rounded-full bg-surface-container text-on-surface font-medium text-sm hover:bg-surface-container-high font-semibold">
+        <div class="pt-4 border-t-2 border-ink flex justify-end gap-3">
+          <button type="button" onclick="closeProgramModal()" class="btn-candy btn-candy-secondary btn-candy-sm">
             Cancel
           </button>
-          <button type="submit" class="px-6 py-2.5 rounded-full bg-primary text-on-primary font-semibold text-sm hover:bg-primary-container shadow-sm">
+          <button type="submit" class="btn-candy btn-candy-sm">
             Save Program
           </button>
         </div>
@@ -1287,10 +1248,10 @@
     </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-on-surface text-surface shadow-2xl border border-outline-variant/20 translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
-    <span id="toast-icon" class="material-symbols-outlined text-success text-[20px]">check_circle</span>
-    <span id="toast-message" class="text-sm font-medium">Notification message</span>
+  <!-- Toast Notification (Sticker Style) -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-card text-ink border-2 border-ink shadow-pop-lg translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+    <span id="toast-icon" class="material-symbols-outlined text-accent-mint text-[22px]">check_circle</span>
+    <span id="toast-message" class="text-sm font-heading font-bold">Notification message</span>
   </div>
 
   <!-- Vite ES Module Entry Point -->

@@ -1,350 +1,363 @@
-// QualiFind - AI-Powered Academic & Research Opportunity Matching Platform (Philippine Setting)
+// QualiFind - AI-Powered Student Assistance Navigator (Philippine Higher Education Setting)
+// Playful Geometric Design System Integration
 
 const INITIAL_OPPORTUNITIES = [
   {
-    id: "DOST-ASTHRDP-2024",
-    title: "DOST-SEI ASTHRDP Graduate Research Scholarship",
-    provider: "Department of Science and Technology - SEI",
-    type: "Fellowship",
-    dept: "Computer Science & Biotechnology",
-    duration: "2 - 3 Years",
-    funding: "₱480,000 / yr + Tuition",
-    annualValue: 480000,
-    deadline: "2024-10-15",
-    deadlineFormatted: "Oct 15, 2024",
-    deadlineDays: 14,
-    status: "Active",
-    matchScore: 95,
-    minGpa: 1.75, // in PH GWA scale (1.0 is highest, 1.75 is top tier)
-    eligible: true,
-    eligibilityNotes: "100% Eligible (GWA Verified)",
-    degreeRequired: "M.S. / Ph.D. STEM Enrolled",
-    citizenship: "Filipino Citizen",
-    leadProf: "Dr. Jaime C. Montoya",
-    teamCount: 4,
-    icon: "biotech",
-    colorTheme: "primary",
-    summary: "The Accelerated Science and Technology Human Resource Development Program (ASTHRDP) aims to help improve the country's global competitiveness and capacity for high-level STEM innovation.",
-    whyStrongMatch: [
-      "Your current GWA of 1.35 (UP Diliman) surpasses the DOST-SEI requirement of 1.75 or better.",
-      "Your computational biology and AI modeling research aligns directly with National Harmonized R&D Agenda (NHRDA) priorities.",
-      "Endorsed by accredited National Science Consortium (NSC) member universities."
-    ],
-    requirements: [
-      { id: "req-1", title: "Academic GWA Standing", desc: "Must have a General Weighted Average of 1.75 or better.", status: "satisfied", note: "Satisfied: GWA 1.35" },
-      { id: "req-2", title: "Philippine Citizenship", desc: "Natural-born Filipino citizen without pending immigrant status.", status: "satisfied", note: "Satisfied: Verified PSA Birth Cert" },
-      { id: "req-3", title: "Recommendation from 2 Former Professors", desc: "Formal endorsement letters from NSC faculty.", status: "action", note: "Action Required: 1 Letter Pending" },
-      { id: "req-4", title: "Approved Research Proposal / Concept Note", desc: "Aligned with DOST Harmonized National R&D Priorities.", status: "pending", note: "Draft in Progress (AI / Genomics)" }
-    ],
-    tags: ["DOST-SEI", "Full Tuition", "Monthly Stipend ₱33k", "Thesis Grant ₱100k", "National Science Consortium"],
-    keywords: ["dost", "asthrdp", "sei", "scholarship", "philippines", "computational biology", "genomics", "machine learning", "stem", "up diliman", "fellowship"]
-  },
-  {
-    id: "DOST-ERDT-2024",
-    title: "Engineering Research & Development for Technology (ERDT)",
-    provider: "DOST-SEI & ERDT Consortium",
-    type: "Fellowship",
-    dept: "Engineering & Applied Computing",
-    duration: "2 - 3 Years",
-    funding: "₱450,000 / yr + Research Grant",
-    annualValue: 450000,
-    deadline: "2024-10-31",
-    deadlineFormatted: "Oct 31, 2024",
-    deadlineDays: 30,
-    status: "Active",
-    matchScore: 91,
-    minGpa: 1.75,
-    eligible: true,
-    eligibilityNotes: "100% Eligible",
-    degreeRequired: "M.S. / Ph.D. Engineering & Computing",
-    citizenship: "Filipino Citizen",
-    leadProf: "Dr. Rizalinda L. De Leon",
-    teamCount: 3,
-    icon: "terminal",
-    colorTheme: "primary",
-    summary: "Consortium of eight member universities providing full graduate scholarship, monthly living allowances, book stipend, and international research conference support.",
-    whyStrongMatch: [
-      "Enrolled in UP COE / DLSU / Ateneo ERDT consortium track in high-performance computing.",
-      "High GWA in foundational applied mathematics and algorithmic physics.",
-      "Includes ₱200,000 research dissemination and thesis dissemination grant."
-    ],
-    requirements: [
-      { id: "req-1", title: "Consortium University Admission", desc: "Official acceptance into an ERDT consortium institution.", status: "satisfied", note: "Satisfied: UP Diliman" },
-      { id: "req-2", title: "Full-Time Student Status", desc: "Willing to render full-time commitment without concurrent employment.", status: "satisfied", note: "Satisfied" },
-      { id: "req-3", title: "NBI & Medical Clearance", desc: "Standard government medical and background verification.", status: "action", note: "Action: Submit NBI Clearance" }
-    ],
-    tags: ["ERDT", "Engineering", "High Performance Computing", "DOST Consortium"],
-    keywords: ["erdt", "engineering", "computing", "dost", "up", "dlsu", "fellowship", "thesis grant", "philippines"]
-  },
-  {
-    id: "PGC-COMPGEN-2024",
-    title: "Philippine Genome Center (PGC) Research Fellowship",
-    provider: "Philippine Genome Center & UP System",
-    type: "Research Grant",
-    dept: "Genomics & Bioinformatics",
-    duration: "1 - 2 Years",
-    funding: "₱360,000 / yr + Cloud Compute",
-    annualValue: 360000,
-    deadline: "2024-11-15",
-    deadlineFormatted: "Nov 15, 2024",
+    id: "CEBU-LGU-SCHOLARSHIP-2024",
+    title: "Cebu City College Scholarship Program (CCCSP)",
+    provider: "Cebu City Local Government Unit (LGU)",
+    type: "Educational Assistance",
+    dept: "Information Technology & Tertiary Education",
+    duration: "Per Semester (Renewable)",
+    funding: "₱50,000 / yr + Tuition Support",
+    annualValue: 50000,
+    deadline: "2026-09-30",
+    deadlineFormatted: "Sep 30, 2026",
     deadlineDays: 45,
     status: "Active",
-    matchScore: 94,
-    minGpa: 2.0,
-    eligible: true,
-    eligibilityNotes: "100% Eligible (Top Match)",
-    degreeRequired: "Graduate Student or Resident Researcher",
-    citizenship: "Open to PH Residents",
-    leadProf: "Dr. Cynthia P. Saloma",
-    teamCount: 5,
-    icon: "biotech",
-    colorTheme: "secondary",
-    summary: "Hands-on fellowship at PGC Core Facility for Bioinformatics (CFB), conducting genomic epidemiology, next-gen sequencing (NGS), and endemic biodiversity data modeling.",
-    whyStrongMatch: [
-      "Direct computational genomics and Python/PyTorch modeling expertise.",
-      "Project focus directly supports Philippine endemic pathogen surveillance and local agri-genomics."
-    ],
-    requirements: [
-      { id: "req-1", title: "Bioinformatics Pipeline Competency", desc: "Demonstrated RNA-seq / Python NGS workflow experience.", status: "satisfied", note: "Satisfied: GitHub Project Linked" },
-      { id: "req-2", title: "Institutional Endorsement", desc: "Endorsement from thesis adviser or department chair.", status: "satisfied", note: "Satisfied" },
-      { id: "req-3", title: "Data Ethics & Biosafety Protocol", desc: "Compliance with National Health Research Ethics Committee guidelines.", status: "action", note: "Action: Complete Ethics Form" }
-    ],
-    tags: ["Philippine Genome Center", "Bioinformatics", "Genomics", "UP Diliman", "NGS"],
-    keywords: ["pgc", "philippine genome center", "genomics", "bioinformatics", "python", "pathogen", "up", "health", "philippines"]
-  },
-  {
-    id: "CHED-K12-GRAD-2024",
-    title: "CHED SUC Faculty & Graduate Development Grant",
-    provider: "Commission on Higher Education (CHED)",
-    type: "Scholarship",
-    dept: "Higher Education Research",
-    duration: "2 Years",
-    funding: "₱300,000 / yr",
-    annualValue: 300000,
-    deadline: "2024-12-01",
-    deadlineFormatted: "Dec 01, 2024",
-    deadlineDays: 61,
-    status: "Active",
-    matchScore: 82,
-    minGpa: 2.0,
-    eligible: true,
-    eligibilityNotes: "100% Eligible",
-    degreeRequired: "Master's / Ph.D. Candidate",
-    citizenship: "Filipino Citizen",
-    leadProf: "Dr. J. Prospero E. De Vera III",
-    teamCount: 2,
-    icon: "school",
-    colorTheme: "primary",
-    summary: "Scholarship program for developing future tertiary educators and scientific leaders across State Universities and Colleges (SUCs) in the Philippines.",
-    whyStrongMatch: [
-      "Track record of undergraduate teaching assistantships and university tutoring.",
-      "Qualifies under CHED Priority Discipline in Information Technology & Science."
-    ],
-    requirements: [
-      { id: "req-1", title: "Faculty Intent / Return Service", desc: "Willingness to render return service in a Philippine HEI/SUC.", status: "satisfied", note: "Satisfied" },
-      { id: "req-2", title: "Certified True Copy of Grades (TCG)", desc: "Official university registrar transcript.", status: "satisfied", note: "Satisfied" },
-      { id: "req-3", title: "Barangay & Moral Clearance", desc: "Local clearance certificate.", status: "action", note: "Action: Submit Barangay Certificate" }
-    ],
-    tags: ["CHED", "Higher Education", "SUC", "Teaching Fellowship"],
-    keywords: ["ched", "higher education", "suc", "scholarship", "teaching", "faculty", "philippines", "manila"]
-  },
-  {
-    id: "GBF-STEM-2024",
-    title: "Gokongwei Brothers Foundation (GBF) STEM Leaders Fellowship",
-    provider: "Gokongwei Brothers Foundation",
-    type: "Fellowship",
-    dept: "Applied Science & Tech Innovation",
-    duration: "2 Years",
-    funding: "₱250,000 / yr + Industry Mentorship",
-    annualValue: 250000,
-    deadline: "2024-11-20",
-    deadlineFormatted: "Nov 20, 2024",
-    deadlineDays: 50,
-    status: "Active",
-    matchScore: 89,
-    minGpa: 1.75,
-    eligible: true,
-    eligibilityNotes: "100% Eligible",
-    degreeRequired: "M.S. STEM Student",
-    citizenship: "Filipino Citizen",
-    leadProf: "Engr. Lance Y. Gokongwei",
-    teamCount: 3,
-    icon: "diversity_3",
-    colorTheme: "primary",
-    summary: "Supports exceptional Filipino youth dedicated to advancing STEM innovation for community building and Philippine industry transformation.",
-    whyStrongMatch: [
-      "Strong blend of AI technical depth and community orientation.",
-      "Clear intent to contribute to Philippine digital manufacturing & smart technology infrastructure."
-    ],
-    requirements: [
-      { id: "req-1", title: "Leadership & Community Track Record", desc: "Demonstrated involvement in collegiate STEM student chapters.", status: "satisfied", note: "Satisfied" },
-      { id: "req-2", title: "Innovation Statement", desc: "500-word essay on solving a Philippine community challenge.", status: "action", note: "Action Required: Draft Essay" }
-    ],
-    tags: ["GBF", "STEM", "Industry Mentorship", "Filipino Youth", "Fellowship"],
-    keywords: ["gbf", "gokongwei", "stem", "philippines", "industry", "innovation", "youth", "fellowship", "scholarship"]
-  },
-  {
-    id: "DOST-ASTI-AI-2024",
-    title: "DOST-ASTI AI & Quantum Computing R&D Practicum Grant",
-    provider: "DOST - Advanced Science and Technology Institute",
-    type: "Research Grant",
-    dept: "Artificial Intelligence & Advanced Computing",
-    duration: "1 Year",
-    funding: "₱420,000 / yr + COARE Supercomputer Access",
-    annualValue: 420000,
-    deadline: "2024-10-25",
-    deadlineFormatted: "Oct 25, 2024",
-    deadlineDays: 24,
-    status: "Active",
     matchScore: 96,
-    minGpa: 1.75,
+    minGpa: 80.0, // Minimum 80% GPA
     eligible: true,
-    eligibilityNotes: "Top AI Match",
-    degreeRequired: "Graduate Researcher (M.S./Ph.D.)",
-    citizenship: "Filipino Citizen",
-    leadProf: "Dr. Franz A. De Leon",
-    teamCount: 6,
-    icon: "memory",
-    colorTheme: "primary",
-    summary: "Direct grant with access to the COARE High-Performance Computing and Cloud Facility for generative AI, remote sensing, and quantum circuit simulations in the Philippines.",
+    eligibilityStatus: "Eligible", // "Eligible" | "Potentially Eligible" | "Not Eligible"
+    eligibilityNotes: "Requirements appear to be met (Cebu Resident & 82% GPA)",
+    degreeRequired: "Undergraduate (Enrolled in Cebu HEI / SUC)",
+    citizenship: "Filipino Citizen (Cebu Resident)",
+    leadProf: "Mayor's Scholarship Office",
+    teamCount: 4,
+    icon: "location_city",
+    colorTheme: "mint",
+    summary: "Financial aid and tuition assistance program for qualified resident tertiary students enrolled in accredited colleges and universities across Cebu.",
     whyStrongMatch: [
-      "Your specific training in PyTorch and quantum computing frameworks matches ASTI R&D targets.",
-      "Includes dedicated GPU cluster allocation on the national COARE facility in Diliman, Quezon City."
+      "Your current 82% GPA exceeds the 80% minimum requirement for Cebu City tertiary aid.",
+      "Matches your location in Cebu (Region VII) and undergraduate 2nd-year standing.",
+      "Directly provides tuition assistance and daily transport subsidy for indigent students."
     ],
     requirements: [
-      { id: "req-1", title: "Supercomputer Project Proposal", desc: "Technical proposal utilizing high-performance GPU resources.", status: "satisfied", note: "Satisfied: Concept Approved" },
-      { id: "req-2", title: "Advisor Endorsement", desc: "Endorsement from NSC Graduate Faculty.", status: "satisfied", note: "Satisfied" },
-      { id: "req-3", title: "DOST Intellectual Property Agreement", desc: "Standard government IP management agreement.", status: "action", note: "Action: Sign IP Form" }
+      { id: "req-1", title: "Cebu Residency & Voter's Certification", desc: "Must be a bona fide resident of Cebu City.", status: "satisfied", note: "Satisfied: Cebu Resident" },
+      { id: "req-2", title: "Academic GPA Cutoff (Min 80%)", desc: "General weighted average of at least 80% with no failing marks.", status: "satisfied", note: "Satisfied: 82% GPA" },
+      { id: "req-3", title: "Certificate of Enrollment (COE)", desc: "Proof of enrollment in an accredited Philippine college.", status: "action", note: "Action: Upload 2nd Year COE" },
+      { id: "req-4", title: "Barangay Indigency Certificate", desc: "Proof of low or limited family household income.", status: "action", note: "Action: Submit Indigency Slip" }
     ],
-    tags: ["DOST-ASTI", "COARE Supercomputer", "AI Research", "HPC", "Quezon City"],
-    keywords: ["dost", "asti", "coare", "supercomputing", "ai", "quantum", "machine learning", "gpu", "philippines", "diliman"]
+    tags: ["Cebu LGU", "Tuition Aid", "Transportation Allowance", "Undergraduate", "Region VII"],
+    keywords: ["cebu", "lgu", "scholarship", "tuition", "transportation", "information technology", "undergraduate", "it", "philippines"]
   },
   {
-    id: "AYALA-CLIMATE-2024",
-    title: "Ayala Foundation Sustainability & Climate Research Grant",
-    provider: "Ayala Foundation & AC Energy",
-    type: "Research Grant",
-    dept: "Sustainability & Environmental Computing",
-    duration: "1 Year",
-    funding: "₱350,000 / yr",
-    annualValue: 350000,
-    deadline: "2024-11-10",
-    deadlineFormatted: "Nov 10, 2024",
-    deadlineDays: 40,
+    id: "CIT-STUDENT-ASSISTANT-2024",
+    title: "University IT & Computer Lab Student Assistantship",
+    provider: "Campus Student Affairs & IT Services Office",
+    type: "Student Employment",
+    dept: "Computer Science & IT Infrastructure",
+    duration: "1 Academic Year (Flexible 15 hrs/wk)",
+    funding: "₱42,000 / yr (₱70/hr + Tuition Discount)",
+    annualValue: 42000,
+    deadline: "2026-09-15",
+    deadlineFormatted: "Sep 15, 2026",
+    deadlineDays: 30,
+    status: "Active",
+    matchScore: 94,
+    minGpa: 75.0,
+    eligible: true,
+    eligibilityStatus: "Eligible",
+    eligibilityNotes: "Excellent Match: IT Student Skills Match",
+    degreeRequired: "2nd to 4th Year IT / Computer Science",
+    citizenship: "Enrolled Student",
+    leadProf: "Prof. Alan Turing / Head of IT Lab",
+    teamCount: 8,
+    icon: "laptop_chromebook",
+    colorTheme: "violet",
+    summary: "Work-study employment for computing students to assist in university computer labs, software maintenance, and student helpdesk support while earning tuition credits.",
+    whyStrongMatch: [
+      "Perfect fit for 2nd-year B.S. IT students looking to offset transport expenses through campus hours.",
+      "Requires minimum 75% GPA, well below your 82% academic standing.",
+      "Flexible schedule tailored around your class timetable."
+    ],
+    requirements: [
+      { id: "req-1", title: "Enrolled in IT / Computing Course", desc: "Currently enrolled in 2nd year or higher.", status: "satisfied", note: "Satisfied: 2nd Year IT" },
+      { id: "req-2", title: "Academic Standing (Min 75%)", desc: "Must maintain good standing without academic probation.", status: "satisfied", note: "Satisfied: 82% GPA" },
+      { id: "req-3", title: "Student Work Permit & Schedule", desc: "Available for 12-15 hours of lab monitoring per week.", status: "action", note: "Action: Submit Class Timetable" }
+    ],
+    tags: ["Student Job", "IT Lab Assistant", "Campus Employment", "Tuition Credit"],
+    keywords: ["student assistant", "assistantship", "it", "computer lab", "employment", "tuition discount", "cebu", "work study"]
+  },
+  {
+    id: "CHED-TULONG-DUNONG-2024",
+    title: "CHED Tulong Dunong Program (TDP-TES)",
+    provider: "Commission on Higher Education (CHED) & UniFAST",
+    type: "Educational Assistance",
+    dept: "Higher Education Priority Disciplines",
+    duration: "1 Year (Renewable)",
+    funding: "₱15,000 / semester (₱30,000 / yr)",
+    annualValue: 30000,
+    deadline: "2026-10-15",
+    deadlineFormatted: "Oct 15, 2026",
+    deadlineDays: 60,
+    status: "Active",
+    matchScore: 90,
+    minGpa: 80.0,
+    eligible: true,
+    eligibilityStatus: "Eligible",
+    eligibilityNotes: "Eligible for Tertiary Education Subsidy",
+    degreeRequired: "Undergraduate Student in SUC / LUC / HEI",
+    citizenship: "Filipino Citizen",
+    leadProf: "CHED Regional Office VII",
+    teamCount: 3,
+    icon: "account_balance",
+    colorTheme: "amber",
+    summary: "Government educational subsidy for underprivileged Filipino students enrolled in CHED-recognized higher education institutions to assist with educational living costs.",
+    whyStrongMatch: [
+      "Targeted for students facing financial constraints to cover books, daily allowances, and school supplies.",
+      "Your 82% GPA easily meets the CHED Tulong Dunong threshold."
+    ],
+    requirements: [
+      { id: "req-1", title: "Certificate of True Copy of Grades", desc: "Weighted average of 80% or equivalent.", status: "satisfied", note: "Satisfied: 82% GPA" },
+      { id: "req-2", title: "Certificate of Registration", desc: "Certified enrollment in CHED-recognized program.", status: "satisfied", note: "Satisfied: B.S. IT" },
+      { id: "req-3", title: "Income Tax Return or BIR Certificate of Exemption", desc: "Combined parental income not exceeding ₱400,000/yr.", status: "action", note: "Action: Submit BIR Certificate" }
+    ],
+    tags: ["CHED", "UniFAST", "Tulong Dunong", "Educational Grant", "National Aid"],
+    keywords: ["ched", "unifast", "tulong dunong", "grant", "subsidy", "philippines", "allowance"]
+  },
+  {
+    id: "DICT-DIGITALJOBS-2024",
+    title: "DICT digitaljobsPH & Cloud Skills Certification Voucher",
+    provider: "Department of Information and Communications Technology",
+    type: "Training & Certification",
+    dept: "Information Technology & Cloud Computing",
+    duration: "3 - 6 Months Self-Paced",
+    funding: "Free Full Certification Voucher (₱25,000 value)",
+    annualValue: 25000,
+    deadline: "2026-11-01",
+    deadlineFormatted: "Nov 01, 2026",
+    deadlineDays: 75,
+    status: "Active",
+    matchScore: 88,
+    minGpa: 75.0,
+    eligible: true,
+    eligibilityStatus: "Eligible",
+    eligibilityNotes: "Eligible (Free Industry IT Certification)",
+    degreeRequired: "Filipino Youth & College Students",
+    citizenship: "Filipino Citizen",
+    leadProf: "DICT Regional Cluster - Visayas",
+    teamCount: 5,
+    icon: "terminal",
+    colorTheme: "mint",
+    summary: "Free industry-recognized tech certification vouchers (AWS, Google Cloud, Python, Web Dev) sponsored by DICT to boost employment prospects for tech students.",
+    whyStrongMatch: [
+      "Directly complements your B.S. Information Technology coursework with zero out-of-pocket costs.",
+      "Provides verified credentials that boost candidacy for campus and remote student jobs."
+    ],
+    requirements: [
+      { id: "req-1", title: "Valid Student ID / Government ID", desc: "Proof of identity and student status.", status: "satisfied", note: "Satisfied" },
+      { id: "req-2", title: "Online Readiness Assessment", desc: "Short 20-minute digital literacy check.", status: "action", note: "Action: Take 20-Min Quiz" }
+    ],
+    tags: ["DICT", "Free Certification", "IT Skills", "Cloud Computing", "DigitaljobsPH"],
+    keywords: ["dict", "certification", "it", "free voucher", "technology", "python", "cloud", "cebu"]
+  },
+  {
+    id: "DSWD-AICS-STUDENT-2024",
+    title: "DSWD AICS Educational & Transport Assistance",
+    provider: "Department of Social Welfare and Development (DSWD)",
+    type: "Educational Assistance",
+    dept: "Student Welfare & Emergency Aid",
+    duration: "One-Time Outright Cash Aid (Renewable Annually)",
+    funding: "₱5,000 - ₱10,000 Cash Grant",
+    annualValue: 10000,
+    deadline: "2026-12-15",
+    deadlineFormatted: "Dec 15, 2026",
+    deadlineDays: 120,
+    status: "Active",
+    matchScore: 84,
+    minGpa: 75.0,
+    eligible: true,
+    eligibilityStatus: "Potentially Eligible",
+    eligibilityNotes: "Potentially Eligible (Requires Social Worker Interview)",
+    degreeRequired: "Enrolled in Tertiary Education",
+    citizenship: "Filipino Citizen",
+    leadProf: "DSWD Field Office VII",
+    teamCount: 2,
+    icon: "handshake",
+    colorTheme: "pink",
+    summary: "Assistance to Individuals in Crisis Situations (AICS) providing immediate cash grants for low-income students needing direct assistance for tuition and daily commuting fare.",
+    whyStrongMatch: [
+      "Directly addresses your urgent need for daily transportation expenses and school fees.",
+      "Low GPA threshold (75% passing), focusing on financial need rather than academic rank."
+    ],
+    requirements: [
+      { id: "req-1", title: "Certificate of Enrollment", desc: "Valid enrollment registration.", status: "satisfied", note: "Satisfied" },
+      { id: "req-2", title: "Social Worker Assessment & Case Study", desc: "Interview with local DSWD or LGU social welfare desk.", status: "pending", note: "Pending: Schedule Interview" },
+      { id: "req-3", title: "Valid Student ID & Barangay Certificate", desc: "Local community endorsement.", status: "action", note: "Action: Submit Barangay Certificate" }
+    ],
+    tags: ["DSWD", "AICS", "Cash Assistance", "Transportation Fare", "Emergency Aid"],
+    keywords: ["dswd", "aics", "financial assistance", "transportation", "indigent", "crisis", "cash grant"]
+  },
+  {
+    id: "DOST-SEI-MERIT-2024",
+    title: "DOST-SEI S&T Undergraduate Merit Scholarship",
+    provider: "Department of Science and Technology - SEI",
+    type: "Scholarship",
+    dept: "Priority STEM Disciplines (BS IT / CS)",
+    duration: "4 Years (Full College)",
+    funding: "₱480,000 / yr + Tuition + Allowance",
+    annualValue: 480000,
+    deadline: "2026-10-15",
+    deadlineFormatted: "Oct 15, 2026",
+    deadlineDays: 60,
+    status: "Active",
+    matchScore: 62,
+    minGpa: 90.0, // High 90% GPA requirement
+    eligible: false,
+    eligibilityStatus: "Not Eligible",
+    eligibilityNotes: "Unmet Requirement: Minimum GPA is 90% (Your GPA: 82%)",
+    degreeRequired: "Top 5% of Class / Min 90% GPA",
+    citizenship: "Natural-Born Filipino Citizen",
+    leadProf: "Dr. Josette T. Biyo / SEI Director",
+    teamCount: 4,
+    icon: "biotech",
+    colorTheme: "pink",
+    summary: "Competitive national scholarship awarded to students with high aptitude in science and mathematics pursuing priority degree programs.",
+    whyStrongMatch: [
+      "Your B.S. Information Technology degree is an accredited DOST Priority STEM course.",
+      "Filipino citizen studying in a recognized Philippine institution."
+    ],
+    gapAnalysis: {
+      metCount: 3,
+      totalCount: 4,
+      gapSummary: "You meet 3 of 4 requirements. The program requires a minimum GPA of 90%, while your current GPA is 82%.",
+      missingRequirement: "Academic GPA Standing (Min 90% Required)",
+      alternativeCategories: ["Educational Assistance", "Student Employment", "Training & Certification"]
+    },
+    requirements: [
+      { id: "req-1", title: "Academic GPA Standing (Min 90%)", desc: "Must maintain a minimum General Weighted Average of 90.0%.", status: "action", note: "Unmet: Your GPA is 82.0%" },
+      { id: "req-2", title: "Enrolled in DOST Priority S&T Course", desc: "BS IT / Computer Science / Engineering.", status: "satisfied", note: "Satisfied: BS IT" },
+      { id: "req-3", title: "Natural-Born Filipino Citizen", desc: "PSA Birth Certificate verified.", status: "satisfied", note: "Satisfied" },
+      { id: "req-4", title: "Good Moral Character", desc: "Certificate of good moral standing from dean.", status: "satisfied", note: "Satisfied" }
+    ],
+    tags: ["DOST-SEI", "Merit Scholarship", "High GPA", "STEM Priority"],
+    keywords: ["dost", "merit", "scholarship", "stem", "it", "computer science", "philippines"]
+  },
+  {
+    id: "LANDBANK-STUDENT-LOAN-2024",
+    title: "UniFAST & Landbank I-RESCUE Student Loan Program",
+    provider: "Land Bank of the Philippines & CHED UniFAST",
+    type: "Student Loan",
+    dept: "Higher Education Tuition Financing",
+    duration: "Flexible Repayment (Up to 5 years post-grad)",
+    funding: "Up to ₱150,000 / yr (Low 5% Interest)",
+    annualValue: 150000,
+    deadline: "2026-11-30",
+    deadlineFormatted: "Nov 30, 2026",
+    deadlineDays: 105,
     status: "Active",
     matchScore: 78,
-    minGpa: 2.0,
+    minGpa: 75.0,
     eligible: true,
-    eligibilityNotes: "Eligible (Requires Agri-Environmental focus)",
-    degreeRequired: "Graduate Student in Philippine HEI",
+    eligibilityStatus: "Potentially Eligible",
+    eligibilityNotes: "Potentially Eligible (Requires Co-Maker / Parent Guarantor)",
+    degreeRequired: "Undergraduate or Vocational Student",
     citizenship: "Filipino Citizen",
-    leadProf: "Jaime Augusto Zobel de Ayala",
-    teamCount: 3,
-    icon: "public",
-    colorTheme: "secondary",
-    summary: "Grants for multidisciplinary student researchers addressing typhoon resilience, renewable energy forecasting, and marine biodiversity in the Philippine archipelago.",
+    leadProf: "UniFAST Secretariat",
+    teamCount: 2,
+    icon: "payments",
+    colorTheme: "amber",
+    summary: "Government-backed soft student loan program designed to cover unpaid tuition, laptops, and educational devices with grace periods until after graduation.",
     whyStrongMatch: [
-      "AI and geospatial data analytics can be applied to local flood modeling and renewable energy optimization."
+      "Enables students facing mid-semester tuition blockages to clear balances.",
+      "75% passing grade requirement is met by your 82% standing."
     ],
     requirements: [
-      { id: "req-1", title: "Sustainability Impact Plan", desc: "Demonstrated application to Philippine environmental resilience.", status: "action", note: "Action: Draft Impact Plan" },
-      { id: "req-2", title: "Enrolled in Philippine University", desc: "Recognized CHED accredited program.", status: "satisfied", note: "Satisfied: UP Diliman" }
+      { id: "req-1", title: "Certificate of Assessment / Tuition Bill", desc: "Official school statement of account.", status: "action", note: "Action: Submit Assessment Bill" },
+      { id: "req-2", title: "Co-Maker / Parent Guarantor", desc: "Employed or barangay-certified guarantor.", status: "pending", note: "Pending: Co-Maker Sign" }
     ],
-    tags: ["Ayala Foundation", "Sustainability", "Climate AI", "Philippine Resilience"],
-    keywords: ["ayala", "climate", "sustainability", "philippines", "resilience", "renewable", "energy", "data"]
+    tags: ["Student Loan", "Landbank", "UniFAST", "Tuition Bridge", "Low Interest"],
+    keywords: ["loan", "landbank", "unifast", "tuition", "financing", "student loan"]
   },
   {
-    id: "DOST-PCHRD-2024",
-    title: "DOST-PCHRD Health Innovation & Disease Modeling Grant",
-    provider: "Philippine Council for Health Research and Development",
-    type: "Research Grant",
-    dept: "Public Health & Computational Medicine",
+    id: "DOST-ASTHRDP-GRAD-2024",
+    title: "DOST-SEI ASTHRDP Graduate Research Scholarship",
+    provider: "DOST-SEI Graduate Consortium",
+    type: "Scholarship",
+    dept: "Advanced IT & AI Systems",
     duration: "2 Years",
-    funding: "₱400,000 / yr + Research Budget",
-    annualValue: 400000,
-    deadline: "2024-12-15",
-    deadlineFormatted: "Dec 15, 2024",
-    deadlineDays: 75,
-    status: "Draft",
-    matchScore: 88,
-    minGpa: 1.75,
-    eligible: true,
-    eligibilityNotes: "100% Eligible",
-    degreeRequired: "M.S. / Ph.D. Health Sciences or Bioinformatics",
+    funding: "₱480,000 / yr + Tuition",
+    annualValue: 480000,
+    deadline: "2026-08-01",
+    deadlineFormatted: "Aug 01, 2026",
+    deadlineDays: -13,
+    status: "Expired",
+    matchScore: 50,
+    minGpa: 88.0,
+    eligible: false,
+    eligibilityStatus: "Not Eligible",
+    eligibilityNotes: "Past deadline & Requires Graduate (M.S.) standing",
+    degreeRequired: "M.S. STEM Enrolled",
     citizenship: "Filipino Citizen",
     leadProf: "Dr. Jaime C. Montoya",
     teamCount: 4,
-    icon: "local_hospital",
-    colorTheme: "primary",
-    summary: "Supports health research projects addressing tropical diseases (Dengue, Tuberculosis), telemedicine, and health informatics across Philippine regional health hubs.",
-    whyStrongMatch: [
-      "Computational modeling capabilities for infectious disease progression and local genomic epidemiology.",
-      "High GWA (1.35) matching PCHRD evaluation standards."
-    ],
-    requirements: [
-      { id: "req-1", title: "Ethics Review Board (ERB) Approval", desc: "Protocol review from Philippine Health Research Ethics Board.", status: "pending", note: "Pending Board Review" },
-      { id: "req-2", title: "Line-Item Budget (LIB)", desc: "Detailed breakdown of equipment and supplies.", status: "action", note: "Action: Submit LIB Document" }
-    ],
-    tags: ["DOST-PCHRD", "Health Informatics", "Disease Modeling", "Tropical Medicine"],
-    keywords: ["pchrd", "health", "dost", "medicine", "bioinformatics", "dengue", "philippines", "manila", "up manila"]
-  },
-  {
-    id: "DOST-PCAARRD-2023",
-    title: "DOST-PCAARRD Agri-Aqua Innovation Research Grant",
-    provider: "DOST - PCAARRD",
-    type: "Research Grant",
-    dept: "Agricultural Technology & Aquaculture",
-    duration: "1 Year",
-    funding: "₱280,000 / yr",
-    annualValue: 280000,
-    deadline: "2024-08-01",
-    deadlineFormatted: "Aug 01, 2024",
-    deadlineDays: -13,
-    status: "Expired",
-    matchScore: 48,
-    minGpa: 2.25,
-    eligible: false,
-    eligibilityNotes: "Past deadline",
-    degreeRequired: "Graduate Researcher",
-    citizenship: "Filipino Citizen",
-    leadProf: "Dr. Reynaldo V. Ebora",
-    teamCount: 2,
-    icon: "agriculture",
-    colorTheme: "tertiary",
-    summary: "Focuses on smart farming IoT systems, sustainable fisheries, and crop genome enhancement for Philippine agricultural security.",
-    whyStrongMatch: ["Low direct alignment with current focus on quantum computing and human genomics."],
+    icon: "school",
+    colorTheme: "pink",
+    summary: "Graduate fellowship for Master's and Ph.D. students conducting advanced technological and scientific research.",
+    whyStrongMatch: ["Requires graduate enrollment (M.S./Ph.D.). Shown for historical registry reference."],
     requirements: [],
-    tags: ["DOST-PCAARRD", "Agriculture", "Aquaculture", "Los Baños"],
-    keywords: ["pcaarrd", "agriculture", "aqua", "farming", "dost", "los banos", "philippines"]
+    tags: ["DOST-SEI", "Graduate Only", "Expired"],
+    keywords: ["dost", "graduate", "master", "phd"]
   }
 ];
 
-// App State
-const AppState = {
-  currentUser: {
+// App State: Calibrated for Maria (Cebu, 20yo, 2nd-year IT, 82% GPA)
+const USER_PROFILES = {
+  student: {
     name: "Maria Clara Santos",
-    role: "student", // "student" | "admin"
-    title: "Graduate Researcher (M.S. Computer Science & Bioinformatics, Year 2)",
-    email: "maria.santos@up.edu.ph",
-    avatar: "person",
-    gpa: 1.35, // Philippine GWA (General Weighted Average)
-    gpaFormatted: "1.35 GWA (92% / 3.85 GPA Equivalent)",
-    degree: "M.S. Computer Science (Bioinformatics Track)",
-    department: "Department of Computer Science & Philippine Genome Center",
-    institution: "University of the Philippines Diliman",
+    role: "student",
+    title: "2nd-Year B.S. Information Technology Student",
+    email: "maria.santos@student.cebu.edu.ph",
+    avatar: "MS",
+    badge: "Student • Cebu",
+    location: "Cebu City, Region VII",
+    educationLevel: "Undergraduate (2nd Year College)",
+    course: "B.S. Information Technology",
+    gpa: 82.0,
+    gpaFormatted: "82.0% GPA (Good Standing)",
+    incomeBracket: "Limited Family Income (< ₱250k/yr)",
+    needs: "Tuition Assistance & Daily Transportation Allowance",
+    department: "College of Computer Studies • Cebu City",
+    institution: "Cebu Technological University / SUC",
     profileStrength: 88,
-    skills: ["Bioinformatics & Genomics", "Python / PyTorch", "COARE Supercomputer", "Qiskit Quantum", "Data Modeling (R)"],
-    bio: "Second-year graduate researcher at UP Diliman specializing in computational genomics, AI-driven epidemic simulation, and high-performance computing in the Philippine setting."
+    skills: ["Basic Web Dev (HTML/JS)", "Python Fundamentals", "Computer Lab Support", "Database Administration (MySQL)"],
+    interests: ["Software Engineering", "Campus IT Support", "Digital Certification", "Community Technology"],
+    bio: "20-year-old 2nd-year IT student in Cebu seeking financial aid, scholarships, or campus assistantships to support tuition and daily commuting expenses."
   },
+  admin: {
+    name: "Dr. Ernesto Ramos",
+    role: "admin",
+    title: "Director of Scholarships & Grants (DOST / CHED Liaison)",
+    email: "ernesto.ramos@ched.gov.ph",
+    avatar: "ER",
+    badge: "Admin • Workstation",
+    location: "National Capital Region / Central Visayas",
+    educationLevel: "Ph.D. Computer Science",
+    course: "Higher Education Administration",
+    gpa: 95.0,
+    gpaFormatted: "Ph.D. Evaluator",
+    incomeBracket: "Agency Administrator",
+    needs: "Program Administration",
+    department: "Office of Student Financial Assistance (OSFA)",
+    institution: "DOST & CHED Higher Education Network",
+    profileStrength: 100,
+    skills: ["Grant Administration", "CHED TDP-TES Validation", "DOST Priority Screening", "LGU Partnership"],
+    interests: ["National Scholarship Expansion", "Indigent Student Aid", "Work-Study Policies"],
+    bio: "Lead program coordinator overseeing national higher education subsidies, student employment frameworks, and LGU scholarship accreditation."
+  }
+};
+
+const AppState = {
+  currentUser: { ...USER_PROFILES.student },
   currentView: "dashboard",
-  selectedOpportunityId: "DOST-ASTHRDP-2024",
+  selectedOpportunityId: "CEBU-LGU-SCHOLARSHIP-2024",
   matcherDocuments: [],
   opportunities: [...INITIAL_OPPORTUNITIES],
-  savedOpportunities: ["DOST-ASTHRDP-2024", "DOST-ASTI-AI-2024", "PGC-COMPGEN-2024"],
+  savedOpportunities: ["CEBU-LGU-SCHOLARSHIP-2024", "CIT-STUDENT-ASSISTANT-2024", "CHED-TULONG-DUNONG-2024"],
   activeFilters: {
-    types: ["Research Grant", "Fellowship", "Scholarship"],
+    types: ["Scholarship", "Educational Assistance", "Student Employment", "Training & Certification"],
     matchQuality: ["high", "good"],
-    deadline: "Any Time",
     searchQuery: "",
     savedOnly: false
   },
@@ -359,13 +372,13 @@ const AppState = {
 // LocalStorage Hydration
 function loadSavedState() {
   try {
-    const savedOpps = localStorage.getItem("qualifind_opps");
+    const savedOpps = localStorage.getItem("qualifind_opps_v2");
     if (savedOpps) AppState.opportunities = JSON.parse(savedOpps);
     
-    const savedBookmarks = localStorage.getItem("qualifind_saved");
+    const savedBookmarks = localStorage.getItem("qualifind_saved_v2");
     if (savedBookmarks) AppState.savedOpportunities = JSON.parse(savedBookmarks);
 
-    const savedUser = localStorage.getItem("qualifind_user");
+    const savedUser = localStorage.getItem("qualifind_user_v2");
     if (savedUser) AppState.currentUser = JSON.parse(savedUser);
   } catch (e) {
     console.warn("LocalStorage load error:", e);
@@ -374,9 +387,9 @@ function loadSavedState() {
 
 function saveState() {
   try {
-    localStorage.setItem("qualifind_opps", JSON.stringify(AppState.opportunities));
-    localStorage.setItem("qualifind_saved", JSON.stringify(AppState.savedOpportunities));
-    localStorage.setItem("qualifind_user", JSON.stringify(AppState.currentUser));
+    localStorage.setItem("qualifind_opps_v2", JSON.stringify(AppState.opportunities));
+    localStorage.setItem("qualifind_saved_v2", JSON.stringify(AppState.savedOpportunities));
+    localStorage.setItem("qualifind_user_v2", JSON.stringify(AppState.currentUser));
   } catch (e) {
     console.warn("LocalStorage save error:", e);
   }
@@ -393,7 +406,7 @@ function handleBrandClick() {
   }
 }
 
-// Router & View Switcher with Strict Role Separation
+// Router & View Switcher
 function navigateTo(viewId, payload = null) {
   const currentRole = AppState.currentUser.role || "student";
 
@@ -429,11 +442,11 @@ function navigateTo(viewId, payload = null) {
   document.querySelectorAll("[data-nav-view]").forEach(link => {
     const linkView = link.getAttribute("data-nav-view");
     if (linkView === viewId) {
-      link.classList.add("bg-primary-container", "text-on-primary-container", "font-bold", "shadow-sm");
-      link.classList.remove("text-on-surface-variant");
+      link.classList.add("bg-accent-violet", "text-white", "border-ink", "shadow-pop");
+      link.classList.remove("text-ink", "border-transparent");
     } else {
-      link.classList.remove("bg-primary-container", "text-on-primary-container", "font-bold", "shadow-sm");
-      link.classList.add("text-on-surface-variant");
+      link.classList.remove("bg-accent-violet", "text-white", "shadow-pop");
+      link.classList.add("text-ink", "border-transparent");
     }
   });
 
@@ -475,7 +488,7 @@ function renderCurrentView() {
   updateGlobalBadges();
 }
 
-// Dark Mode
+// Dark Mode Toggle
 function initTheme() {
   updateThemeToggleUI(document.documentElement.classList.contains("dark"));
 }
@@ -493,11 +506,9 @@ function toggleDarkMode() {
 function updateThemeToggleUI(isDark) {
   const icon = document.getElementById("theme-toggle-icon");
   if (icon) icon.textContent = isDark ? "light_mode" : "dark_mode";
-  const btn = document.getElementById("theme-toggle-btn");
-  if (btn) btn.title = isDark ? "Switch to light mode" : "Switch to dark mode";
 }
 
-// Toast System
+// Toast System (Sticker Style)
 function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
   const toastMsg = document.getElementById("toast-message");
@@ -507,13 +518,13 @@ function showToast(message, type = "success") {
   toastMsg.textContent = message;
   if (type === "success") {
     toastIcon.textContent = "check_circle";
-    toastIcon.className = "material-symbols-outlined text-success text-[20px]";
+    toastIcon.className = "material-symbols-outlined text-accent-mint text-[22px]";
   } else if (type === "warning") {
     toastIcon.textContent = "warning";
-    toastIcon.className = "material-symbols-outlined text-warning text-[20px]";
+    toastIcon.className = "material-symbols-outlined text-accent-amber text-[22px]";
   } else {
     toastIcon.textContent = "info";
-    toastIcon.className = "material-symbols-outlined text-primary text-[20px]";
+    toastIcon.className = "material-symbols-outlined text-accent-violet text-[22px]";
   }
 
   toast.classList.remove("translate-y-20", "opacity-0", "pointer-events-none");
@@ -531,22 +542,22 @@ function toggleBookmark(oppId, event) {
   const idx = AppState.savedOpportunities.indexOf(oppId);
   if (idx > -1) {
     AppState.savedOpportunities.splice(idx, 1);
-    showToast("Removed opportunity from saved drafts", "info");
+    showToast("Removed program from saved drafts", "info");
   } else {
     AppState.savedOpportunities.push(oppId);
-    showToast("Saved opportunity to your drafts!");
+    showToast("Saved program to your drafts!");
   }
   saveState();
   renderCurrentView();
 }
 
-// Match Calculation Engine (Philippine Grading & Context)
+// Natural Language AI Match Calculation Engine
 function calculateMatchForPrompt(userPrompt) {
   const query = userPrompt.toLowerCase();
   const keywords = query.split(/\s+/).filter(w => w.length > 2);
   
   const results = AppState.opportunities.map(opp => {
-    let score = 52;
+    let score = 55;
     
     const allKeywords = (opp.keywords || []).concat([
       opp.title.toLowerCase(),
@@ -562,13 +573,18 @@ function calculateMatchForPrompt(userPrompt) {
       }
     });
 
-    score += Math.min(42, matchedKeywordsCount * 14);
+    score += Math.min(35, matchedKeywordsCount * 10);
 
-    // In PH, GWA <= minGpa (e.g., 1.35 <= 1.75 is honors level)
-    if (AppState.currentUser.gpa <= opp.minGpa) {
+    // Academic threshold check (Percentage scale: Maria has 82%)
+    if (AppState.currentUser.gpa >= (opp.minGpa || 75.0)) {
       score += 10;
     } else {
-      score -= 15;
+      score -= 25;
+    }
+
+    // Location boost (Cebu Region VII)
+    if (query.includes("cebu") && (opp.tags || []).some(t => t.toLowerCase().includes("cebu"))) {
+      score += 10;
     }
 
     score = Math.min(98, Math.max(35, score));
@@ -590,13 +606,21 @@ function renderDashboard() {
   const potentialCount = AppState.opportunities.filter(o => o.status === "Active" && o.matchScore >= 60 && o.matchScore < 80).length;
   const savedCount = AppState.savedOpportunities.length;
 
-  document.getElementById("dash-stat-found").textContent = foundCount;
-  document.getElementById("dash-stat-strong").textContent = strongCount;
-  document.getElementById("dash-stat-total").textContent = foundCount;
-  document.getElementById("dash-stat-potential").textContent = potentialCount;
-  document.getElementById("dash-stat-saved").textContent = savedCount;
+  const foundEl = document.getElementById("dash-stat-found");
+  if (foundEl) foundEl.textContent = foundCount;
 
-  // Render Philippine Date
+  const strongEl = document.getElementById("dash-stat-strong");
+  if (strongEl) strongEl.textContent = strongCount;
+
+  const totalEl = document.getElementById("dash-stat-total");
+  if (totalEl) totalEl.textContent = foundCount;
+
+  const potEl = document.getElementById("dash-stat-potential");
+  if (potEl) potEl.textContent = potentialCount;
+
+  const savedEl = document.getElementById("dash-stat-saved");
+  if (savedEl) savedEl.textContent = savedCount;
+
   const dateOptions = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'Asia/Manila' };
   const todayStr = new Date().toLocaleDateString('en-US', dateOptions);
   const dateEl = document.getElementById("dash-current-date");
@@ -615,12 +639,19 @@ function renderDashboard() {
       deadlineTitle.textContent = soonest.title;
       deadlineDays.textContent = soonest.deadlineDays === 0 ? "Closes today" : `${soonest.deadlineDays} day${soonest.deadlineDays === 1 ? "" : "s"} left`;
       deadlineCard.onclick = () => navigateTo("eligibility", { opportunityId: soonest.id });
-      deadlineCard.classList.add("cursor-pointer", "hover:shadow-md", "hover:border-primary/40", "transition-all");
     } else {
       deadlineTitle.textContent = "No upcoming deadlines";
       deadlineDays.textContent = "—";
       deadlineCard.onclick = null;
     }
+  }
+
+  const strengthEl = document.getElementById("dash-profile-strength-num");
+  if (strengthEl) strengthEl.textContent = `${AppState.currentUser.profileStrength}%`;
+  
+  const circleEl = document.getElementById("dash-profile-strength-circle");
+  if (circleEl) {
+    circleEl.style.strokeDasharray = `${AppState.currentUser.profileStrength}, 100`;
   }
 
   // Recommended cards container
@@ -634,46 +665,44 @@ function renderDashboard() {
 
   recContainer.innerHTML = topMatches.map(opp => {
     const isSaved = AppState.savedOpportunities.includes(opp.id);
-    const scoreColorClass = opp.matchScore >= 80 ? "text-success" : (opp.matchScore >= 60 ? "text-warning" : "text-on-surface-variant");
-    const containerClass = opp.colorTheme === "secondary" ? "bg-secondary-container text-on-secondary-container" : "bg-primary-container text-on-primary-container";
+    const scoreColorClass = opp.matchScore >= 80 ? "text-accent-mint" : (opp.matchScore >= 60 ? "text-accent-amber" : "text-ink-muted");
+    
+    // Playful Category Badge
+    let badgeClass = "badge-violet";
+    if (opp.type === "Educational Assistance") badgeClass = "badge-pink";
+    if (opp.type === "Student Employment") badgeClass = "badge-amber";
+    if (opp.type === "Training & Certification") badgeClass = "badge-mint";
 
     return `
-      <div class="p-lg hover:bg-surface-container-low transition-colors group flex flex-col lg:flex-row gap-lg items-start border-b border-surface-variant/50 last:border-0 relative cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
-        <div class="w-16 h-16 rounded-xl ${containerClass} flex items-center justify-center flex-shrink-0 shadow-inner group-hover:scale-105 transition-transform">
-          <span class="material-symbols-outlined text-[28px]">${opp.icon || 'school'}</span>
-        </div>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-sm mb-1">
-            <span class="text-label-sm font-label-sm text-primary uppercase tracking-wider font-semibold">${opp.dept}</span>
-            <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-            <span class="text-body-sm font-body-sm text-on-surface-variant font-medium">${opp.duration} &bull; ${opp.funding}</span>
+      <div class="p-6 hover:bg-paper transition-colors group flex flex-col lg:flex-row gap-6 items-start justify-between relative cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
+        <div class="flex items-start gap-4 flex-1 min-w-0">
+          <div class="w-14 h-14 rounded-2xl bg-paper border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+            <span class="material-symbols-outlined text-[28px] text-ink">${opp.icon || 'school'}</span>
           </div>
-          <h3 class="text-headline-sm font-headline-sm text-on-surface mb-2 truncate group-hover:text-primary transition-colors">
-            ${opp.title}
-          </h3>
-          <p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mb-4 max-w-3xl">
-            ${opp.summary}
-          </p>
-          <div class="flex items-center gap-md">
-            <div class="flex -space-x-2">
-              <div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-primary-container text-on-primary-container flex items-center justify-center text-label-sm font-bold">
-                ${opp.leadProf.split(" ")[1]?.charAt(0) || 'P'}
-              </div>
-              <div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-surface-variant flex items-center justify-center text-label-sm font-label-sm text-on-surface-variant font-semibold">+${opp.teamCount}</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+              <span class="badge-sticker ${badgeClass} text-[10px]">${opp.type}</span>
+              <span class="text-xs font-heading font-bold text-ink-muted">${opp.duration} &bull; ${opp.funding}</span>
             </div>
-            <span class="text-body-sm font-body-sm text-on-surface-variant">Project Lead: ${opp.leadProf}</span>
+            <h3 class="text-lg font-extrabold font-heading text-ink truncate group-hover:text-accent-violet transition-colors">
+              ${opp.title}
+            </h3>
+            <p class="text-xs text-ink-muted line-clamp-2 mt-1 font-medium max-w-2xl">
+              ${opp.summary}
+            </p>
           </div>
         </div>
-        <div class="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto gap-md lg:gap-4 mt-4 lg:mt-0" onclick="event.stopPropagation()">
+
+        <div class="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto gap-4 mt-2 lg:mt-0" onclick="event.stopPropagation()">
           <div class="flex flex-col items-start lg:items-end">
-            <span class="text-label-sm font-label-sm text-outline-variant uppercase tracking-widest mb-1">Match Score</span>
-            <span class="text-headline-md font-headline-md ${scoreColorClass} font-bold">${opp.matchScore}%</span>
+            <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase tracking-wider">AI Match</span>
+            <span class="text-2xl font-extrabold font-heading ${scoreColorClass}">${opp.matchScore}%</span>
           </div>
           <div class="flex gap-2">
-            <button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" onclick="toggleBookmark('${opp.id}', event)">
-              <span class="material-symbols-outlined ${isSaved ? 'fill text-primary' : ''}">bookmark</span>
+            <button class="w-9 h-9 rounded-full bg-card hover:bg-accent-amber border-2 border-ink flex items-center justify-center text-ink transition-colors shadow-pop-sm" onclick="toggleBookmark('${opp.id}', event)">
+              <span class="material-symbols-outlined text-[18px] ${isSaved ? 'fill text-accent-pink' : ''}">bookmark</span>
             </button>
-            <button class="bg-surface-container text-on-surface hover:bg-surface-variant font-label-md text-label-md px-4 py-2 rounded-lg transition-colors font-semibold" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
+            <button class="btn-candy btn-candy-sm" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
               Review Match
             </button>
           </div>
@@ -718,7 +747,7 @@ function handleDocumentSelect(event) {
   event.target.value = "";
 
   renderMatcherDocChips();
-  showToast(`Attached ${files.length} document${files.length > 1 ? "s" : ""} for context.`, "info");
+  showToast(`Attached ${files.length} document${files.length > 1 ? "s" : ""} for AI context.`, "info");
 }
 
 function removeMatcherDocument(idx) {
@@ -740,20 +769,20 @@ function renderMatcherDocChips() {
   container.classList.remove("hidden");
   container.classList.add("flex");
   container.innerHTML = AppState.matcherDocuments.map((doc, idx) => `
-    <span class="inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full bg-primary-container/15 text-primary text-label-sm font-label-sm font-semibold">
+    <span class="badge-sticker badge-violet text-xs py-1 px-3">
       <span class="material-symbols-outlined text-[16px]">description</span>
       ${doc.name}
-      <span class="text-outline font-normal">(${doc.sizeLabel})</span>
+      <span class="text-ink-muted text-[10px]">(${doc.sizeLabel})</span>
       <button type="button" onclick="removeMatcherDocument(${idx})" class="hover:text-error text-[16px] leading-none font-bold ml-1">&times;</button>
     </span>
   `).join("");
 }
 
 const MATCHER_LOADING_STEPS = [
-  "Reading your research interests...",
-  "Scanning DOST, CHED & foundation registry...",
-  "Comparing against your GWA & profile...",
-  "Ranking matches..."
+  "Parsing Maria's 2nd-Year IT standing & 82% GPA...",
+  "Evaluating Cebu Region VII municipal & institutional aid...",
+  "Screening tuition assistance, assistantships & certification grants...",
+  "Ranking personalized opportunities..."
 ];
 
 function handleFindMatches() {
@@ -761,7 +790,7 @@ function handleFindMatches() {
   const promptText = textarea ? textarea.value.trim() : "";
 
   if (!promptText) {
-    showToast("Please enter a research topic or select a prompt chip.", "warning");
+    showToast("Please enter your situation or click Maria's demo preset.", "warning");
     return;
   }
 
@@ -775,7 +804,7 @@ function handleFindMatches() {
   let step = 0;
   const setStep = () => {
     if (matchBtn) {
-      matchBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[20px]">sync</span> Analyzing...`;
+      matchBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[18px]">sync</span> Analyzing...`;
     }
     if (statusEl) {
       statusEl.textContent = MATCHER_LOADING_STEPS[step];
@@ -795,7 +824,7 @@ function handleFindMatches() {
     clearInterval(stepInterval);
 
     if (matchBtn) {
-      matchBtn.innerHTML = `<span class="material-symbols-outlined text-[20px] fill">auto_awesome</span> Find Matches`;
+      matchBtn.innerHTML = `<span class="material-symbols-outlined text-[18px]">auto_awesome</span> Find Assistance`;
       matchBtn.disabled = false;
     }
     if (textarea) textarea.disabled = false;
@@ -816,11 +845,11 @@ function handleFindMatches() {
     const filterInput = document.getElementById("search-opportunities-input");
     if (filterInput) filterInput.value = "";
 
-    AppState.activeFilters.matchQuality = ["high", "good", "low"];
+    AppState.activeFilters.matchQuality = ["high", "good"];
     document.querySelectorAll(".filter-match-checkbox").forEach(cb => cb.checked = true);
 
     navigateTo("opportunities");
-    showToast(`QualiFind AI Match Complete: Ranked ${scored.length} Philippine programs!`);
+    showToast(`QualiFind AI Match Complete: Ranked ${scored.length} student assistance programs!`);
   }, 1600);
 }
 
@@ -867,11 +896,11 @@ function renderOpportunitiesList() {
 
   if (filtered.length === 0) {
     container.innerHTML = `
-      <div class="col-span-12 bg-surface-container-lowest rounded-2xl p-2xl text-center flex flex-col items-center justify-center border border-outline-variant/30">
-        <span class="material-symbols-outlined text-6xl text-outline mb-md">search_off</span>
-        <h3 class="text-headline-sm font-headline-sm text-on-surface mb-xs">No opportunities match your filters</h3>
-        <p class="text-body-md text-on-surface-variant max-w-md mb-lg">Try expanding your search terms or checking different Philippine scholarship types.</p>
-        <button class="bg-primary text-on-primary px-lg py-2.5 rounded-full font-label-md" onclick="resetFilters()">Reset Filters</button>
+      <div class="col-span-12 card-sticker p-12 text-center flex flex-col items-center justify-center">
+        <span class="material-symbols-outlined text-6xl text-ink-muted mb-4">search_off</span>
+        <h3 class="text-xl font-bold font-heading text-ink mb-1">No programs match your filters</h3>
+        <p class="text-sm text-ink-muted max-w-md mb-6 font-medium">Try broadening your search or resetting category filters.</p>
+        <button class="btn-candy" onclick="resetFilters()">Reset Filters</button>
       </div>
     `;
     return;
@@ -879,60 +908,58 @@ function renderOpportunitiesList() {
 
   container.innerHTML = filtered.map(opp => {
     const isSaved = AppState.savedOpportunities.includes(opp.id);
-    const scoreColor = opp.matchScore >= 80 ? "text-success" : (opp.matchScore >= 60 ? "text-warning" : "text-on-surface-variant");
-    const strokeClass = opp.matchScore >= 80 ? "text-success" : (opp.matchScore >= 60 ? "text-warning" : "text-outline");
-    const borderHighlight = !opp.eligible ? "border-error/30" : (opp.matchScore >= 80 ? "border-success/30" : "border-outline-variant/30");
+    const scoreColor = opp.matchScore >= 80 ? "text-accent-mint" : (opp.matchScore >= 60 ? "text-accent-amber" : "text-ink-muted");
+    
+    // 3-Tier Status Badge (Eligible / Potentially Eligible / Not Eligible)
+    let statusBadge = `<span class="badge-sticker badge-mint text-[9px]"><span class="material-symbols-outlined text-[13px]">check_circle</span> Eligible</span>`;
+    if (opp.eligibilityStatus === "Potentially Eligible") {
+      statusBadge = `<span class="badge-sticker badge-amber text-[9px]"><span class="material-symbols-outlined text-[13px]">pending</span> Potentially Eligible</span>`;
+    } else if (opp.eligibilityStatus === "Not Eligible" || !opp.eligible) {
+      statusBadge = `<span class="badge-sticker badge-pink text-[9px]"><span class="material-symbols-outlined text-[13px]">cancel</span> Not Eligible</span>`;
+    }
+
+    let typeBadge = "badge-violet";
+    if (opp.type === "Educational Assistance") typeBadge = "badge-pink";
+    if (opp.type === "Student Employment") typeBadge = "badge-amber";
+    if (opp.type === "Training & Certification") typeBadge = "badge-mint";
 
     return `
-      <div class="opportunity-card bg-surface-container-lowest rounded-2xl p-lg shadow-sm hover:shadow-md border ${borderHighlight} flex flex-col h-full relative overflow-hidden group cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
-        <div class="absolute top-0 right-0 w-24 h-24 ${opp.matchScore >= 80 ? 'bg-success/5' : 'bg-primary/5'} rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
-        
-        <div class="flex justify-between items-start mb-md">
-          <span class="px-3 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">
-            ${opp.type}
-          </span>
-          <button class="text-outline hover:text-primary transition-colors p-1" onclick="toggleBookmark('${opp.id}', event)">
-            <span class="material-symbols-outlined ${isSaved ? 'fill text-primary' : ''}">bookmark</span>
-          </button>
-        </div>
-
-        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs group-hover:text-primary transition-colors font-bold">
-          ${opp.title}
-        </h3>
-        <p class="font-body-md text-body-md text-on-surface-variant mb-lg font-medium">${opp.provider}</p>
-
-        <div class="grid grid-cols-2 gap-md mb-xl mt-auto pt-md border-t border-outline-variant/20">
-          <div>
-            <p class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-1">Grant / Stipend</p>
-            <p class="font-label-md text-label-md text-on-surface font-bold">${opp.funding}</p>
+      <div class="card-sticker p-6 flex flex-col justify-between group cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
+        <div>
+          <div class="flex justify-between items-start mb-3">
+            <span class="badge-sticker ${typeBadge} text-[10px]">
+              ${opp.type}
+            </span>
+            <button class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-amber transition-colors shadow-pop-sm" onclick="toggleBookmark('${opp.id}', event)">
+              <span class="material-symbols-outlined text-[18px] ${isSaved ? 'fill text-accent-pink' : ''}">bookmark</span>
+            </button>
           </div>
-          <div>
-            <p class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-1">Deadline</p>
-            <p class="font-label-md text-label-md text-on-surface font-semibold">${opp.deadlineFormatted}</p>
-          </div>
-        </div>
 
-        <div class="flex items-center justify-between bg-surface-container-low rounded-xl p-md">
-          <div class="flex items-center gap-md">
-            <div class="relative w-12 h-12 flex items-center justify-center">
-              <svg class="absolute inset-0 w-full h-full radial-progress" viewBox="0 0 36 36">
-                <path class="text-outline-variant/30" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
-                <path class="${strokeClass} progress-ring-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="${opp.matchScore}, 100" stroke-linecap="round" stroke-width="3"></path>
-              </svg>
-              <span class="font-label-md text-label-md ${scoreColor} relative z-10 font-bold">${opp.matchScore}%</span>
+          <h3 class="text-lg font-extrabold font-heading text-ink mb-1 group-hover:text-accent-violet transition-colors">
+            ${opp.title}
+          </h3>
+          <p class="text-xs font-semibold text-ink-muted mb-4">${opp.provider}</p>
+
+          <div class="grid grid-cols-2 gap-3 p-3 bg-paper rounded-2xl border-2 border-ink mb-4">
+            <div>
+              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase">Stipend / Value</span>
+              <p class="text-xs font-extrabold font-heading text-ink">${opp.funding}</p>
             </div>
             <div>
-              <p class="font-label-md text-label-md text-on-surface leading-none mb-1 font-semibold">${opp.matchScore >= 80 ? 'Excellent Match' : 'Good Match'}</p>
-              <p class="font-label-sm text-label-sm ${opp.eligible ? 'text-success' : 'text-error'} flex items-center gap-1 font-medium">
-                <span class="material-symbols-outlined text-[14px]">${opp.eligible ? 'check_circle' : 'cancel'}</span>
-                ${opp.eligibilityNotes}
-              </p>
+              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase">Deadline</span>
+              <p class="text-xs font-extrabold font-heading text-ink">${opp.deadlineFormatted}</p>
             </div>
           </div>
+        </div>
 
-          <button class="w-10 h-10 rounded-full bg-surface-container-highest hover:bg-primary/10 hover:text-primary flex items-center justify-center transition-colors text-on-surface-variant">
-            <span class="material-symbols-outlined">arrow_forward</span>
-          </button>
+        <div class="pt-3 border-t-2 border-ink flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            ${statusBadge}
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase">Score</span>
+            <span class="text-sm font-extrabold font-heading ${scoreColor}">${opp.matchScore}%</span>
+          </div>
         </div>
       </div>
     `;
@@ -946,7 +973,6 @@ function toggleSavedOnlyFilter(isSavedOnly) {
 
 function toggleFilterDrawer(forceState) {
   const panel = document.getElementById("filter-drawer-panel");
-  const btn = document.getElementById("btn-toggle-filters");
   if (!panel) return;
 
   const isHidden = panel.classList.contains("hidden");
@@ -954,10 +980,8 @@ function toggleFilterDrawer(forceState) {
 
   if (shouldShow) {
     panel.classList.remove("hidden");
-    if (btn) btn.classList.add("bg-primary-container", "text-on-primary-container", "border-primary");
   } else {
     panel.classList.add("hidden");
-    if (btn) btn.classList.remove("bg-primary-container", "text-on-primary-container", "border-primary");
   }
 }
 
@@ -970,13 +994,13 @@ function renderSavedApplicationsView() {
 
   if (savedList.length === 0) {
     container.innerHTML = `
-      <div class="col-span-12 bg-surface-container-lowest rounded-2xl p-12 text-center flex flex-col items-center justify-center border border-outline-variant/30">
-        <div class="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4">
+      <div class="col-span-12 card-sticker p-12 text-center flex flex-col items-center justify-center">
+        <div class="w-16 h-16 rounded-3xl bg-accent-amber border-2 border-ink text-ink flex items-center justify-center mb-4 shadow-pop-sm">
           <span class="material-symbols-outlined text-4xl">bookmark_border</span>
         </div>
-        <h3 class="text-xl font-bold text-on-surface mb-2">No Saved Applications Yet</h3>
-        <p class="text-sm text-on-surface-variant max-w-md mb-6">Explore Philippine grants, scholarships, and R&amp;D programs, and click the bookmark icon to save them here for easy access.</p>
-        <button onclick="navigateTo('opportunities')" class="bg-primary hover:bg-primary-container text-on-primary font-semibold text-sm px-6 py-2.5 rounded-full shadow-md transition-all flex items-center gap-2">
+        <h3 class="text-xl font-extrabold font-heading text-ink mb-2">No Saved Applications Yet</h3>
+        <p class="text-xs text-ink-muted max-w-md mb-6 font-medium">Explore scholarships, LGU assistance, and campus assistantships, and bookmark them for fast access.</p>
+        <button onclick="navigateTo('opportunities')" class="btn-candy">
           <span class="material-symbols-outlined text-[18px]">search_insights</span> Explore Opportunities
         </button>
       </div>
@@ -985,44 +1009,43 @@ function renderSavedApplicationsView() {
   }
 
   container.innerHTML = savedList.map(opp => {
-    const scoreColor = opp.matchScore >= 80 ? "text-success" : (opp.matchScore >= 60 ? "text-warning" : "text-on-surface-variant");
-    const borderHighlight = !opp.eligible ? "border-error/30" : (opp.matchScore >= 80 ? "border-success/30" : "border-outline-variant/30");
+    const scoreColor = opp.matchScore >= 80 ? "text-accent-mint" : (opp.matchScore >= 60 ? "text-accent-amber" : "text-ink-muted");
 
     return `
-      <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm hover:shadow-md border ${borderHighlight} flex flex-col justify-between relative overflow-hidden group transition-all">
+      <div class="card-sticker p-6 flex flex-col justify-between group">
         <div>
           <div class="flex justify-between items-start mb-3">
-            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-semibold uppercase tracking-wider">
+            <span class="badge-sticker badge-violet text-[10px]">
               ${opp.type}
             </span>
-            <button class="text-primary hover:text-error transition-colors p-1" title="Remove from saved" onclick="toggleBookmark('${opp.id}', event)">
-              <span class="material-symbols-outlined text-[22px] fill">bookmark</span>
+            <button class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-colors shadow-pop-sm" title="Remove from saved" onclick="toggleBookmark('${opp.id}', event)">
+              <span class="material-symbols-outlined text-[18px] fill">bookmark</span>
             </button>
           </div>
 
-          <h3 class="text-lg font-bold text-on-surface mb-1 group-hover:text-primary transition-colors">
+          <h3 class="text-lg font-extrabold font-heading text-ink mb-1 group-hover:text-accent-violet transition-colors">
             ${opp.title}
           </h3>
-          <p class="text-xs font-medium text-on-surface-variant mb-4">${opp.provider}</p>
+          <p class="text-xs font-semibold text-ink-muted mb-4">${opp.provider}</p>
 
-          <div class="p-3 bg-surface-container-low rounded-xl flex items-center justify-between mb-4">
+          <div class="p-3 bg-paper rounded-2xl border-2 border-ink flex items-center justify-between mb-4">
             <div>
-              <span class="text-[10px] text-outline uppercase font-semibold block">Funding / Stipend</span>
-              <span class="text-xs font-bold text-on-surface">${opp.funding}</span>
+              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase block">Value</span>
+              <span class="text-xs font-extrabold font-heading text-ink">${opp.funding}</span>
             </div>
             <div class="text-right">
-              <span class="text-[10px] text-outline uppercase font-semibold block">Match Score</span>
-              <span class="text-sm font-extrabold ${scoreColor}">${opp.matchScore}%</span>
+              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase block">AI Match</span>
+              <span class="text-sm font-extrabold font-heading ${scoreColor}">${opp.matchScore}%</span>
             </div>
           </div>
         </div>
 
-        <div class="flex items-center gap-2 pt-3 border-t border-outline-variant/20">
-          <button onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })" class="flex-1 bg-primary text-on-primary hover:bg-primary-container text-xs font-semibold py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1">
-            <span class="material-symbols-outlined text-[16px]">visibility</span> Review Match
+        <div class="flex items-center gap-2 pt-3 border-t-2 border-ink">
+          <button onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })" class="btn-candy btn-candy-sm flex-1">
+            Review Match
           </button>
-          <button onclick="navigateTo('action-plan', { opportunityId: '${opp.id}' })" class="flex-1 bg-surface-container text-on-surface hover:bg-surface-container-high text-xs font-semibold py-2.5 rounded-xl transition-all border border-outline-variant/30 flex items-center justify-center gap-1">
-            <span class="material-symbols-outlined text-[16px]">checklist</span> Action Plan
+          <button onclick="navigateTo('action-plan', { opportunityId: '${opp.id}' })" class="btn-candy btn-candy-secondary btn-candy-sm flex-1">
+            Action Plan
           </button>
         </div>
       </div>
@@ -1032,9 +1055,8 @@ function renderSavedApplicationsView() {
 
 function resetFilters() {
   AppState.activeFilters = {
-    types: ["Research Grant", "Fellowship", "Scholarship", "Postdoc Position"],
+    types: ["Scholarship", "Educational Assistance", "Student Employment", "Training & Certification"],
     matchQuality: ["high", "good", "low"],
-    deadline: "Any Time",
     searchQuery: "",
     savedOnly: false
   };
@@ -1048,20 +1070,7 @@ function resetFilters() {
   renderOpportunitiesList();
 }
 
-// Computes a live GWA comparison between the current user and a program, recalculated on every render
-function computeGwaReason(opp) {
-  const gwa = AppState.currentUser.gpa;
-  const meets = gwa <= opp.minGpa;
-  return {
-    meets,
-    title: meets ? "Academic GWA Standing" : "GWA Above Requirement",
-    text: meets
-      ? `Your current GWA of ${gwa.toFixed(2)} meets the ${opp.provider} requirement of ${opp.minGpa.toFixed(2)} or better (lower is stronger on the PH scale).`
-      : `Your current GWA of ${gwa.toFixed(2)} does not meet the required ${opp.minGpa.toFixed(2)} for this program. You may still apply, but expect this to weaken your standing.`
-  };
-}
-
-// Render Eligibility Detail View
+// Render Eligibility Detail View with 3-Tier Status, Gap Diagnosis, & Alternatives
 function renderEligibilityDetails(oppId) {
   const opp = AppState.opportunities.find(o => o.id === oppId);
   const notFoundEl = document.getElementById("eligibility-not-found");
@@ -1075,9 +1084,6 @@ function renderEligibilityDetails(oppId) {
   if (notFoundEl) notFoundEl.classList.add("hidden");
   if (contentEl) contentEl.classList.remove("hidden");
 
-  const gwaReason = computeGwaReason(opp);
-  const liveEligible = opp.status !== "Expired" && gwaReason.meets;
-
   document.getElementById("eligibility-title").textContent = opp.title;
   document.getElementById("eligibility-provider").textContent = opp.provider;
   document.getElementById("eligibility-summary").textContent = opp.summary;
@@ -1087,92 +1093,132 @@ function renderEligibilityDetails(oppId) {
 
   const statusBadge = document.getElementById("eligibility-status-badge");
   const statusIcon = document.getElementById("eligibility-status-icon");
-  if (statusBadge) {
-    statusBadge.textContent = liveEligible
-      ? "Status: Eligible (GWA Verified Live)"
-      : (opp.status === "Expired" ? "Status: Deadline Passed" : "Status: GWA Does Not Meet Cutoff");
-  }
-  if (statusIcon) {
-    statusIcon.textContent = liveEligible ? "check_circle" : "error";
-    statusIcon.className = `material-symbols-outlined text-3xl ${liveEligible ? 'text-secondary-container' : 'text-warning'}`;
-    statusIcon.style.fontVariationSettings = "'FILL' 1";
+  
+  // 3-Tier Status Setting
+  if (statusBadge && statusIcon) {
+    if (opp.eligibilityStatus === "Eligible") {
+      statusBadge.textContent = "Status: Eligible (Requirements Met)";
+      statusBadge.className = "badge-sticker badge-mint text-xs";
+      statusIcon.textContent = "check_circle";
+      statusIcon.className = "material-symbols-outlined text-2xl text-accent-mint";
+    } else if (opp.eligibilityStatus === "Potentially Eligible") {
+      statusBadge.textContent = "Status: Potentially Eligible (Verification Needed)";
+      statusBadge.className = "badge-sticker badge-amber text-xs";
+      statusIcon.textContent = "pending";
+      statusIcon.className = "material-symbols-outlined text-2xl text-accent-amber";
+    } else {
+      statusBadge.textContent = "Status: Not Eligible (Unmet Requirement)";
+      statusBadge.className = "badge-sticker badge-pink text-xs";
+      statusIcon.textContent = "cancel";
+      statusIcon.className = "material-symbols-outlined text-2xl text-accent-pink";
+    }
   }
 
-  // Why Strong Match Points — GWA comparison is computed live; everything else is supporting program context
+  // Requirement & Gap Identification Cards
   const reasonsContainer = document.getElementById("eligibility-reasons-grid");
   if (reasonsContainer) {
-    const reasons = [
-      { title: gwaReason.title, text: gwaReason.text, ok: gwaReason.meets }
-    ];
+    const reasons = [];
 
-    if (opp.status === "Expired") {
+    if (opp.gapAnalysis) {
       reasons.push({
-        title: "Application Deadline Passed",
-        text: `This program's deadline (${opp.deadlineFormatted}) has already passed. It's shown for reference only.`,
+        title: "Requirement Gap Identified",
+        text: opp.gapAnalysis.gapSummary,
         ok: false
+      });
+    } else {
+      reasons.push({
+        title: "Academic Standing Match",
+        text: `Your current GPA of ${AppState.currentUser.gpa.toFixed(1)}% satisfies the program requirement (minimum ${opp.minGpa || 75}%).`,
+        ok: true
       });
     }
 
-    (opp.whyStrongMatch || [])
-      .filter(r => !/\bGWA\b/i.test(r))
-      .forEach(r => reasons.push({ title: "Program Alignment", text: r, ok: true }));
+    (opp.whyStrongMatch || []).forEach(r => {
+      reasons.push({ title: "Profile Alignment", text: r, ok: true });
+    });
 
     reasonsContainer.innerHTML = reasons.map(r => `
-      <div class="bg-surface-container-lowest p-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
-        <div class="absolute top-0 right-0 w-24 h-24 ${r.ok ? 'bg-primary/10 group-hover:bg-primary/20' : 'bg-warning/10 group-hover:bg-warning/20'} rounded-full blur-xl -mr-8 -mt-8 transition-colors"></div>
-        <div class="flex items-center gap-md mb-md relative z-10">
-          <div class="w-10 h-10 rounded-full ${r.ok ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'} flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined">${r.ok ? 'check_circle' : 'warning'}</span>
+      <div class="card-sticker p-5 bg-card flex flex-col justify-between">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-8 h-8 rounded-full ${r.ok ? 'bg-accent-mint text-ink' : 'bg-accent-pink text-white'} border-2 border-ink flex items-center justify-center shrink-0 shadow-pop-sm">
+            <span class="material-symbols-outlined text-[16px]">${r.ok ? 'check' : 'warning'}</span>
           </div>
-          <h3 class="text-headline-sm font-headline-sm text-on-surface font-bold">${r.title}</h3>
+          <h3 class="text-sm font-extrabold font-heading text-ink">${r.title}</h3>
         </div>
-        <p class="text-body-md font-body-md text-on-surface-variant relative z-10 leading-relaxed font-medium">
+        <p class="text-xs text-ink-muted leading-relaxed font-medium">
           ${r.text}
         </p>
       </div>
     `).join("");
   }
 
+  // Alternative Assistance Recommendation (Preventing Dead End for Ineligible Students)
+  const altContainer = document.getElementById("eligibility-alternatives-container");
+  const altList = document.getElementById("eligibility-alternatives-list");
+  if (altContainer && altList) {
+    if (opp.eligibilityStatus === "Not Eligible" || !opp.eligible) {
+      altContainer.classList.remove("hidden");
+      
+      const altOpportunities = AppState.opportunities.filter(o => o.id !== opp.id && o.eligible).slice(0, 3);
+      altList.innerHTML = altOpportunities.map(alt => `
+        <div class="p-4 rounded-2xl border-2 border-ink bg-paper flex items-center justify-between hover:bg-card transition-colors cursor-pointer shadow-pop-sm" onclick="navigateTo('eligibility', { opportunityId: '${alt.id}' })">
+          <div class="flex items-center gap-3">
+            <span class="badge-sticker badge-mint text-[9px]">Potential Match</span>
+            <div>
+              <h4 class="text-xs font-extrabold font-heading text-ink">${alt.title}</h4>
+              <p class="text-[11px] text-ink-muted font-medium">${alt.type} • ${alt.funding}</p>
+            </div>
+          </div>
+          <button class="btn-candy btn-candy-sm text-[11px] py-1 px-3">
+            View Alternative &rarr;
+          </button>
+        </div>
+      `).join("");
+    } else {
+      altContainer.classList.add("hidden");
+    }
+  }
+
   // Checklist
   const checklistContainer = document.getElementById("eligibility-checklist-items");
   if (checklistContainer) {
     checklistContainer.innerHTML = (opp.requirements || []).map(req => {
-      let iconColor = "bg-success text-on-primary";
+      let iconColor = "bg-accent-mint text-ink";
       let iconSymbol = "check";
-      let badgeClass = "bg-surface-container-low text-success";
+      let badgeClass = "badge-mint";
 
       if (req.status === "action") {
-        iconColor = "bg-warning text-on-primary";
+        iconColor = "bg-accent-amber text-ink";
         iconSymbol = "priority_high";
-        badgeClass = "bg-warning/10 text-warning";
+        badgeClass = "badge-amber";
       } else if (req.status === "pending") {
-        iconColor = "bg-surface-container-high text-outline-variant";
+        iconColor = "bg-paper text-ink-muted";
         iconSymbol = "schedule";
-        badgeClass = "bg-surface-container text-on-surface-variant";
+        badgeClass = "badge-violet";
       }
 
       return `
-        <div class="flex items-start gap-md">
-          <div class="w-6 h-6 rounded-full ${iconColor} flex items-center justify-center shrink-0 mt-1 shadow-sm">
-            <span class="material-symbols-outlined text-[16px]">${iconSymbol}</span>
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full ${iconColor} border-2 border-ink flex items-center justify-center shrink-0 mt-0.5 shadow-pop-sm">
+            <span class="material-symbols-outlined text-[14px] font-bold">${iconSymbol}</span>
           </div>
           <div class="flex-1">
-            <h4 class="text-label-md font-label-md text-on-surface font-semibold">${req.title}</h4>
-            <p class="text-body-sm font-body-sm text-on-surface-variant mt-xs">${req.desc}</p>
-            <div class="mt-xs inline-flex items-center px-2 py-1 rounded text-label-sm font-label-sm ${badgeClass} font-semibold">
+            <h4 class="text-xs font-extrabold font-heading text-ink">${req.title}</h4>
+            <p class="text-[11px] text-ink-muted mt-0.5 font-medium">${req.desc}</p>
+            <span class="badge-sticker ${badgeClass} text-[9px] mt-1">
               ${req.note}
-            </div>
+            </span>
           </div>
         </div>
       `;
-    }).join(`<div class="w-full h-px bg-outline-variant/30"></div>`);
+    }).join(`<div class="w-full h-0.5 bg-ink/15"></div>`);
   }
 
   const bookmarkBtn = document.getElementById("eligibility-bookmark-btn");
   if (bookmarkBtn) {
     const isSaved = AppState.savedOpportunities.includes(opp.id);
     bookmarkBtn.innerHTML = `
-      <span class="material-symbols-outlined ${isSaved ? 'fill text-primary' : ''}">bookmark</span>
+      <span class="material-symbols-outlined text-[18px] ${isSaved ? 'fill text-accent-pink' : ''}">bookmark</span>
       ${isSaved ? 'Saved in Drafts' : 'Save for Later'}
     `;
     bookmarkBtn.onclick = (e) => {
@@ -1182,7 +1228,7 @@ function renderEligibilityDetails(oppId) {
   }
 }
 
-// Render Action Plan Screen
+// Render Action Plan Screen (5-Point Plan)
 function renderActionPlan(oppId) {
   const opp = AppState.opportunities.find(o => o.id === oppId);
   if (!opp) {
@@ -1194,15 +1240,70 @@ function renderActionPlan(oppId) {
   const titleEl = document.getElementById("action-plan-target-title");
   if (titleEl) titleEl.textContent = opp.title;
 
-  const gwa = AppState.currentUser.gpa;
-  const pendingReqs = (opp.requirements || []).filter(r => r.status !== "satisfied");
+  const deadlineTag = document.getElementById("action-plan-deadline-tag");
+  if (deadlineTag) deadlineTag.textContent = opp.deadlineFormatted;
 
+  const portalName = document.getElementById("action-plan-portal-name");
+  if (portalName) portalName.textContent = `${opp.provider} Application Desk`;
+
+  const nextStepEl = document.getElementById("action-plan-next-step-title");
   const planDescEl = document.getElementById("action-plan-recommendation-text");
-  if (planDescEl) {
-    const nextStep = pendingReqs[0]
-      ? pendingReqs[0].title.toLowerCase()
-      : "final document review";
-    planDescEl.textContent = `Based on your ${opp.matchScore}% match score and GWA of ${gwa.toFixed(2)}, the highest-leverage next step is ${nextStep}. ${pendingReqs.length} of ${opp.requirements.length} requirements still need action.`;
+  
+  if (nextStepEl && planDescEl) {
+    if (opp.type === "Student Employment") {
+      nextStepEl.textContent = "Your Next Step: Submit your 2nd Year class timetable to the IT lab supervisor";
+      planDescEl.textContent = `Based on your 82% GPA and IT skills, secure your lab shift slot before the ${opp.deadlineFormatted} cutoff.`;
+    } else if (opp.type === "Educational Assistance") {
+      nextStepEl.textContent = "Your Next Step: Secure your Barangay Certificate of Indigency and 2nd Year COE";
+      planDescEl.textContent = `Gather your municipal certification slips to finalize your tuition grant application for ${opp.provider}.`;
+    } else {
+      nextStepEl.textContent = "Your Next Step: Prepare your Certificate of Enrollment and latest grades";
+      planDescEl.textContent = `Download your latest registrar grade report before launching the online submission portal.`;
+    }
+  }
+
+  const stepsContainer = document.getElementById("action-plan-steps-container");
+  if (stepsContainer) {
+    stepsContainer.innerHTML = `
+      <div class="card-sticker p-5 bg-card flex gap-4 items-start">
+        <div class="w-10 h-10 rounded-2xl bg-accent-violet text-white border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm">
+          01
+        </div>
+        <div class="flex-1">
+          <h4 class="text-sm font-extrabold font-heading text-ink">Download and Prepare Required Documents</h4>
+          <p class="text-xs text-ink-muted mt-1 font-medium">Obtain Certificate of Enrollment (COE) and official True Copy of Grades from university registrar.</p>
+          <div class="mt-2 inline-flex items-center gap-1 badge-sticker badge-mint text-[9px]">
+            <span class="material-symbols-outlined text-[13px]">check</span> In Progress
+          </div>
+        </div>
+      </div>
+
+      <div class="card-sticker p-5 bg-card flex gap-4 items-start">
+        <div class="w-10 h-10 rounded-2xl bg-accent-pink text-white border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm">
+          02
+        </div>
+        <div class="flex-1">
+          <h4 class="text-sm font-extrabold font-heading text-ink">Fill Out Official Application Form</h4>
+          <p class="text-xs text-ink-muted mt-1 font-medium">Complete the online registry submission at ${opp.provider} portal.</p>
+          <div class="mt-2 inline-flex items-center gap-1 badge-sticker badge-amber text-[9px]">
+            <span class="material-symbols-outlined text-[13px]">schedule</span> Due ${opp.deadlineFormatted}
+          </div>
+        </div>
+      </div>
+
+      <div class="card-sticker p-5 bg-card flex gap-4 items-start">
+        <div class="w-10 h-10 rounded-2xl bg-accent-mint text-ink border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm">
+          03
+        </div>
+        <div class="flex-1">
+          <h4 class="text-sm font-extrabold font-heading text-ink">Confirmation &amp; Document Endorsement</h4>
+          <p class="text-xs text-ink-muted mt-1 font-medium">Receive application reference number and retain receipt for university financial clearance.</p>
+          <div class="mt-2 inline-flex items-center gap-1 badge-sticker badge-violet text-[9px]">
+            Final Step
+          </div>
+        </div>
+      </div>
+    `;
   }
 }
 
@@ -1225,15 +1326,15 @@ function renderProfile() {
   const skillsContainer = document.getElementById("profile-skills-list");
   if (skillsContainer) {
     skillsContainer.innerHTML = user.skills.map((skill, idx) => `
-      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-container/20 text-primary font-label-md text-label-md font-semibold">
+      <span class="badge-sticker badge-violet text-xs py-1 px-3">
         ${skill}
-        <button type="button" onclick="removeSkill(${idx})" class="hover:text-error text-[16px] leading-none font-bold">&times;</button>
+        <button type="button" onclick="removeSkill(${idx})" class="hover:text-error text-[16px] leading-none font-bold ml-1">&times;</button>
       </span>
     `).join("") + `
-      <span class="inline-flex items-center gap-1 rounded-full border border-dashed border-primary/50 focus-within:border-primary transition-colors">
-        <input type="text" id="new-skill-input" placeholder="Add a skill..." onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill();}" class="bg-transparent px-3 py-1.5 text-label-md font-label-md text-on-surface placeholder:text-outline focus:outline-none w-32"/>
-        <button type="button" onclick="addSkill()" class="pr-3 text-primary hover:text-primary-container">
-          <span class="material-symbols-outlined text-[18px]">add_circle</span>
+      <span class="inline-flex items-center gap-1 rounded-full border-2 border-dashed border-ink focus-within:border-accent-violet">
+        <input type="text" id="new-skill-input" placeholder="Add a skill..." onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill();}" class="bg-transparent px-3 py-1 text-xs font-heading font-bold text-ink placeholder:text-ink-muted focus:outline-none w-28"/>
+        <button type="button" onclick="addSkill()" class="pr-2.5 text-accent-violet">
+          <span class="material-symbols-outlined text-[16px]">add_circle</span>
         </button>
       </span>
     `;
@@ -1245,18 +1346,18 @@ function saveProfile(event) {
   
   AppState.currentUser.name = document.getElementById("profile-name-input").value;
   AppState.currentUser.email = document.getElementById("profile-email-input").value;
-  AppState.currentUser.gpa = parseFloat(document.getElementById("profile-gpa-input").value) || 1.35;
+  AppState.currentUser.gpa = parseFloat(document.getElementById("profile-gpa-input").value) || 82.0;
   AppState.currentUser.department = document.getElementById("profile-dept-input").value;
   AppState.currentUser.bio = document.getElementById("profile-bio-input").value;
 
   let strength = 70;
-  if (AppState.currentUser.gpa <= 1.75) strength += 10;
-  if (AppState.currentUser.skills.length >= 4) strength += 10;
+  if (AppState.currentUser.gpa >= 80) strength += 10;
+  if (AppState.currentUser.skills.length >= 3) strength += 10;
   if (AppState.currentUser.bio.length > 20) strength += 8;
   AppState.currentUser.profileStrength = Math.min(100, strength);
 
   saveState();
-  showToast("QualiFind profile updated successfully!");
+  showToast("QualiFind student profile updated successfully!");
   updateGlobalBadges();
 }
 
@@ -1273,8 +1374,6 @@ function addSkill() {
     AppState.currentUser.skills.push(newSkill);
     saveState();
     renderProfile();
-    const refocused = document.getElementById("new-skill-input");
-    if (refocused) refocused.focus();
   }
 }
 
@@ -1285,50 +1384,42 @@ function renderAdminDashboard() {
   const inReview = AppState.opportunities.filter(o => o.status === "In Review" || o.status === "Draft").length;
   const expired = AppState.opportunities.filter(o => o.status === "Expired").length;
 
-  document.getElementById("admin-stat-total").textContent = total;
-  document.getElementById("admin-stat-active").textContent = active;
-  document.getElementById("admin-stat-review").textContent = inReview;
-  document.getElementById("admin-stat-expired").textContent = expired;
+  const statTotal = document.getElementById("admin-stat-total");
+  if (statTotal) statTotal.textContent = total;
+
+  const statActive = document.getElementById("admin-stat-active");
+  if (statActive) statActive.textContent = active;
+
+  const statReview = document.getElementById("admin-stat-review");
+  if (statReview) statReview.textContent = inReview;
+
+  const statExpired = document.getElementById("admin-stat-expired");
+  if (statExpired) statExpired.textContent = expired;
 
   const tbody = document.getElementById("admin-recent-programs-tbody");
   if (!tbody) return;
 
   const recent = AppState.opportunities.slice(0, 4);
   tbody.innerHTML = recent.map(opp => {
-    let statusClass = "bg-success/10 text-success";
-    let statusDot = "bg-success";
+    let statusBadge = `<span class="badge-sticker badge-mint text-[9px]">${opp.status}</span>`;
     if (opp.status === "Expired") {
-      statusClass = "bg-error-container/30 text-error";
-      statusDot = "bg-error";
+      statusBadge = `<span class="badge-sticker badge-pink text-[9px]">${opp.status}</span>`;
     } else if (opp.status === "In Review" || opp.status === "Draft") {
-      statusClass = "bg-warning/10 text-warning";
-      statusDot = "bg-warning";
+      statusBadge = `<span class="badge-sticker badge-amber text-[9px]">${opp.status}</span>`;
     }
 
     return `
-      <tr class="hover:bg-surface-container-lowest/80 transition-colors">
-        <td class="py-4 px-xl">
-          <div class="flex items-center gap-md">
-            <div class="w-10 h-10 rounded bg-primary-container/20 flex items-center justify-center text-primary font-bold">
-              ${opp.title.charAt(0)}
-            </div>
-            <div>
-              <div class="font-label-md text-label-md text-on-surface font-semibold">${opp.title}</div>
-              <div class="text-on-surface-variant text-label-sm mt-0.5">Ref: ${opp.id}</div>
-            </div>
-          </div>
+      <tr class="hover:bg-paper transition-colors">
+        <td class="py-3 px-6">
+          <div class="font-heading font-bold text-xs text-ink">${opp.title}</div>
+          <div class="text-ink-muted text-[10px]">Ref: ${opp.id}</div>
         </td>
-        <td class="py-4 px-md">${opp.dept}</td>
-        <td class="py-4 px-md">
-          <span class="inline-flex items-center gap-xs px-2.5 py-1 rounded-full ${statusClass} font-label-sm text-label-sm font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full ${statusDot}"></span>
-            ${opp.status}
-          </span>
-        </td>
-        <td class="py-4 px-md text-on-surface-variant font-medium">${opp.deadlineFormatted}</td>
-        <td class="py-4 px-xl text-right">
-          <button class="p-2 text-outline hover:text-primary transition-colors rounded-full hover:bg-surface-container" onclick="openEditProgramModal('${opp.id}')">
-            <span class="material-symbols-outlined text-[20px]">edit</span>
+        <td class="py-3 px-4 text-xs font-semibold text-ink">${opp.type}</td>
+        <td class="py-3 px-4">${statusBadge}</td>
+        <td class="py-3 px-4 text-xs font-semibold text-ink-muted">${opp.deadlineFormatted}</td>
+        <td class="py-3 px-6 text-right">
+          <button class="w-8 h-8 rounded-full bg-paper border-2 border-ink inline-flex items-center justify-center text-ink hover:bg-accent-violet hover:text-white transition-colors shadow-pop-sm" onclick="openEditProgramModal('${opp.id}')">
+            <span class="material-symbols-outlined text-[16px]">edit</span>
           </button>
         </td>
       </tr>
@@ -1336,16 +1427,14 @@ function renderAdminDashboard() {
   }).join("");
 }
 
-// Render Admin Programs Management Screen
+// Render Admin Programs Full Management Screen
 function renderAdminPrograms() {
   const tbody = document.getElementById("admin-programs-full-tbody");
   if (!tbody) return;
 
   const searchQuery = (AppState.adminFilter.search || "").toLowerCase();
-  const statusFilter = AppState.adminFilter.status;
 
   const filtered = AppState.opportunities.filter(opp => {
-    if (statusFilter !== "All" && opp.status !== statusFilter) return false;
     if (searchQuery) {
       const match = opp.title.toLowerCase().includes(searchQuery) ||
                     opp.provider.toLowerCase().includes(searchQuery) ||
@@ -1358,64 +1447,34 @@ function renderAdminPrograms() {
   const countBadge = document.getElementById("admin-programs-count");
   if (countBadge) countBadge.textContent = `${filtered.length} Philippine Programs`;
 
-  if (filtered.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="7" class="py-8 text-center text-on-surface-variant">
-          No programs found matching your search.
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
   tbody.innerHTML = filtered.map(opp => {
-    let statusBadge = `<span class="inline-flex items-center gap-xs px-3 py-1 bg-success/10 text-success rounded-full font-label-sm font-semibold"><span class="w-2 h-2 rounded-full bg-success"></span>Active</span>`;
+    let statusBadge = `<span class="badge-sticker badge-mint text-[9px]">Active</span>`;
     if (opp.status === "Expired") {
-      statusBadge = `<span class="inline-flex items-center gap-xs px-3 py-1 bg-error-container/30 text-error rounded-full font-label-sm font-semibold"><span class="w-2 h-2 rounded-full bg-error"></span>Expired</span>`;
+      statusBadge = `<span class="badge-sticker badge-pink text-[9px]">Expired</span>`;
     } else if (opp.status === "In Review" || opp.status === "Draft") {
-      statusBadge = `<span class="inline-flex items-center gap-xs px-3 py-1 bg-warning/10 text-warning rounded-full font-label-sm font-semibold"><span class="w-2 h-2 rounded-full bg-warning"></span>${opp.status}</span>`;
+      statusBadge = `<span class="badge-sticker badge-amber text-[9px]">${opp.status}</span>`;
     }
 
     return `
-      <tr class="hover:bg-surface-container-lowest/50 transition-colors group cursor-pointer">
-        <td class="px-lg py-md">
-          <div class="w-5 h-5 rounded border border-outline-variant bg-surface flex items-center justify-center"></div>
+      <tr class="hover:bg-paper transition-colors group">
+        <td class="px-6 py-3.5">
+          <div class="w-4 h-4 rounded border-2 border-ink bg-card"></div>
         </td>
-        <td class="px-lg py-md">
-          <div class="flex items-center gap-md">
-            <div class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center text-primary font-headline-sm text-headline-sm font-bold">
-              ${opp.title.charAt(0)}
-            </div>
-            <div class="flex flex-col">
-              <span class="font-headline-sm text-headline-sm text-on-surface line-clamp-1 font-bold">${opp.title}</span>
-              <span class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">Ref: ${opp.id}</span>
-            </div>
-          </div>
-        </td>
-        <td class="px-lg py-md font-body-sm text-body-sm text-on-surface font-medium">${opp.provider}</td>
-        <td class="px-lg py-md">
-          <span class="px-3 py-1 bg-surface-container-high text-on-surface rounded-full font-label-sm text-label-sm font-semibold">${opp.type}</span>
-        </td>
-        <td class="px-lg py-md">
-          <div class="flex flex-col">
-            <span class="font-body-sm text-body-sm text-on-surface font-semibold">${opp.deadlineFormatted}</span>
-            <span class="font-label-sm text-label-sm ${opp.deadlineDays < 0 ? 'text-error' : (opp.deadlineDays < 20 ? 'text-warning' : 'text-on-surface-variant')} font-medium">
-              ${opp.deadlineDays < 0 ? 'Past due' : `In ${opp.deadlineDays} days`}
-            </span>
-          </div>
-        </td>
-        <td class="px-lg py-md">${statusBadge}</td>
-        <td class="px-lg py-md text-right" onclick="event.stopPropagation()">
-          <div class="flex items-center justify-end gap-sm">
-            <button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors" title="Edit Program" onclick="openEditProgramModal('${opp.id}')">
-              <span class="material-symbols-outlined text-[20px]">edit</span>
+        <td class="px-6 py-3.5 font-heading font-bold text-xs text-ink">${opp.title}</td>
+        <td class="px-6 py-3.5 text-xs font-semibold text-ink-muted">${opp.provider}</td>
+        <td class="px-6 py-3.5 text-xs font-bold text-ink">${opp.type}</td>
+        <td class="px-6 py-3.5 text-xs font-semibold text-ink-muted">${opp.deadlineFormatted}</td>
+        <td class="px-6 py-3.5">${statusBadge}</td>
+        <td class="px-6 py-3.5 text-right">
+          <div class="flex items-center justify-end gap-1.5">
+            <button class="w-7 h-7 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-violet hover:text-white transition-colors shadow-pop-sm" title="Edit" onclick="openEditProgramModal('${opp.id}')">
+              <span class="material-symbols-outlined text-[14px]">edit</span>
             </button>
-            <button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors" title="Duplicate" onclick="duplicateProgram('${opp.id}')">
-              <span class="material-symbols-outlined text-[20px]">content_copy</span>
+            <button class="w-7 h-7 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-amber transition-colors shadow-pop-sm" title="Duplicate" onclick="duplicateProgram('${opp.id}')">
+              <span class="material-symbols-outlined text-[14px]">content_copy</span>
             </button>
-            <button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error-container hover:text-error transition-colors" title="Delete" onclick="deleteProgram('${opp.id}')">
-              <span class="material-symbols-outlined text-[20px]">delete</span>
+            <button class="w-7 h-7 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-pink hover:text-white transition-colors shadow-pop-sm" title="Delete" onclick="deleteProgram('${opp.id}')">
+              <span class="material-symbols-outlined text-[14px]">delete</span>
             </button>
           </div>
         </td>
@@ -1424,12 +1483,12 @@ function renderAdminPrograms() {
   }).join("");
 }
 
-// Program Modal (Add/Edit)
+// Program Modal Functions
 function openAddProgramModal() {
   AppState.editingProgramId = null;
-  document.getElementById("program-modal-title").textContent = "Add Philippine Program / Grant";
+  document.getElementById("program-modal-title").textContent = "Add Philippine Assistance Program";
   document.getElementById("program-form").reset();
-  document.getElementById("prog-id-input").value = `DOST-GRANT-${Math.floor(100 + Math.random() * 900)}`;
+  document.getElementById("prog-id-input").value = `PH-GRANT-${Math.floor(100 + Math.random() * 900)}`;
   
   const modal = document.getElementById("program-modal");
   if (modal) modal.classList.remove("hidden");
@@ -1501,20 +1560,19 @@ function handleSaveProgram(event) {
       status,
       summary,
       matchScore: 88,
-      minGpa: 1.75,
+      minGpa: 80.0,
       eligible: true,
-      eligibilityNotes: "New Philippine Program",
-      leadProf: "Dr. Faculty Adviser",
-      teamCount: 2,
+      eligibilityStatus: "Eligible",
+      eligibilityNotes: "New Registered Program",
       icon: "school",
-      colorTheme: "primary",
+      colorTheme: "violet",
       requirements: [
-        { id: "req-1", title: "Eligibility", desc: "General Philippine HEI criteria met.", status: "satisfied", note: "Satisfied" }
+        { id: "req-1", title: "General Eligibility", desc: "Criteria verified.", status: "satisfied", note: "Satisfied" }
       ],
       keywords: [title.toLowerCase(), provider.toLowerCase(), dept.toLowerCase(), "philippines"]
     };
     AppState.opportunities.unshift(newProgram);
-    showToast("New program added to QualiFind registry!");
+    showToast("New assistance program added to QualiFind registry!");
   }
 
   saveState();
@@ -1551,44 +1609,6 @@ function deleteProgram(progId) {
   }
 }
 
-// Explicit Multi-User Profiles
-const USER_PROFILES = {
-  student: {
-    name: "Maria Clara Santos",
-    role: "student",
-    title: "Graduate Researcher (UP Diliman)",
-    email: "maria.santos@up.edu.ph",
-    avatar: "MS",
-    badge: "Student • Web & Mobile",
-    platformSupport: "Mobile & Desktop Web Supported",
-    gpa: 1.35,
-    gpaFormatted: "1.35 GWA (92% / 3.85 GPA Equivalent)",
-    degree: "M.S. Computer Science (Bioinformatics Track)",
-    department: "Department of Computer Science & Philippine Genome Center",
-    institution: "University of the Philippines Diliman",
-    profileStrength: 88,
-    skills: ["Bioinformatics & Genomics", "Python / PyTorch", "COARE Supercomputer", "Qiskit Quantum", "Data Modeling (R)"],
-    bio: "Second-year graduate researcher at UP Diliman specializing in computational genomics, AI-driven epidemic simulation, and high-performance computing in the Philippine setting."
-  },
-  admin: {
-    name: "Dr. Ernesto Ramos",
-    role: "admin",
-    title: "Director of Research & Fellowships Office (DOST / CHED Liaison)",
-    email: "ernesto.ramos@up.edu.ph",
-    avatar: "ER",
-    badge: "Admin • Web Only",
-    platformSupport: "Desktop Web Workstation Only",
-    gpa: 1.0,
-    gpaFormatted: "Ph.D. Computer Science",
-    degree: "Ph.D. Computer Science & AI Systems",
-    department: "Office of the Vice Chancellor for Research & Development",
-    institution: "University of the Philippines Diliman",
-    profileStrength: 100,
-    skills: ["Grant Administration", "DOST NHRDA Evaluation", "CHED SUC Accreditation", "Curriculum Review"],
-    bio: "Lead program coordinator overseeing national science fellowships, high-performance computing allocations, and Philippine government R&D grant disbursements."
-  }
-};
-
 // User / Role Switcher
 function openUserSwitchModal() {
   const modal = document.getElementById("user-switch-modal");
@@ -1607,27 +1627,18 @@ function setRole(roleName) {
     updateRoleUI();
     
     if (roleName === "admin") {
-      showToast("Switched to Admin Portal (Desktop Web Optimized)");
+      showToast("Switched to Admin Portal (Desktop Workstation)");
       navigateTo("admin-dashboard");
     } else {
-      showToast("Switched to Student Portal (Mobile & Web Supported)");
+      showToast("Switched to Student Portal (Maria • Cebu 2nd-Yr IT)");
       navigateTo("dashboard");
     }
-  }
-}
-
-function toggleRole() {
-  if (AppState.currentUser.role === "student") {
-    setRole("admin");
-  } else {
-    setRole("student");
   }
 }
 
 function updateRoleUI() {
   const isStudent = AppState.currentUser.role === "student";
   
-  // Strict Navigation Group Toggling
   const studentNavGroup = document.getElementById("student-nav-group");
   const adminNavGroup = document.getElementById("admin-nav-group");
   const studentMobileNav = document.getElementById("student-mobile-nav");
@@ -1638,9 +1649,8 @@ function updateRoleUI() {
   if (studentMobileNav) studentMobileNav.style.display = isStudent ? "" : "none";
   if (appSubtitle) appSubtitle.textContent = isStudent ? "Student Portal" : "DOST / CHED Admin";
 
-  // Update header labels
   const roleLabel = document.getElementById("header-user-role");
-  if (roleLabel) roleLabel.textContent = isStudent ? "Student • Mobile & Web" : "Admin • Desktop Web Only";
+  if (roleLabel) roleLabel.textContent = isStudent ? "Student • Mobile & Web" : "Admin • Workstation";
 
   const nameLabel = document.getElementById("header-user-name");
   if (nameLabel) nameLabel.textContent = AppState.currentUser.name;
@@ -1648,30 +1658,22 @@ function updateRoleUI() {
   const headerAvatar = document.getElementById("header-user-avatar");
   if (headerAvatar) {
     headerAvatar.textContent = AppState.currentUser.avatar || (isStudent ? "MS" : "ER");
-    headerAvatar.className = `w-6 h-6 rounded-full ${isStudent ? 'bg-primary' : 'bg-secondary'} text-on-primary flex items-center justify-center text-[10px] font-bold`;
+    headerAvatar.className = `w-7 h-7 rounded-full ${isStudent ? 'bg-accent-violet' : 'bg-accent-amber'} text-ink border border-ink flex items-center justify-center text-[10px] font-heading font-extrabold`;
   }
 
-  // Update sidebar labels
   const sidebarName = document.getElementById("sidebar-user-name");
   if (sidebarName) sidebarName.textContent = AppState.currentUser.name;
 
   const sidebarBadge = document.getElementById("sidebar-user-badge");
   if (sidebarBadge) {
-    sidebarBadge.textContent = isStudent ? "Student • Web & Mobile" : "Admin • Web Only";
-    sidebarBadge.className = `inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full ${isStudent ? 'bg-primary/10 text-primary' : 'bg-secondary-container text-on-secondary-container'}`;
+    sidebarBadge.textContent = isStudent ? "Student • Cebu" : "Admin • Workstation";
+    sidebarBadge.className = `badge-sticker ${isStudent ? 'badge-violet' : 'badge-amber'} text-[10px] py-0.5 px-2`;
   }
 
   const sidebarAvatar = document.getElementById("sidebar-user-avatar");
   if (sidebarAvatar) {
     sidebarAvatar.textContent = AppState.currentUser.avatar || (isStudent ? "MS" : "ER");
-    sidebarAvatar.className = `w-8 h-8 rounded-full ${isStudent ? 'bg-primary' : 'bg-secondary'} text-on-primary flex items-center justify-center font-bold text-xs shrink-0`;
-  }
-
-  const roleSwitchBtn = document.getElementById("role-switch-btn");
-  if (roleSwitchBtn) {
-    roleSwitchBtn.innerHTML = isStudent 
-      ? `<span class="material-symbols-outlined text-[18px]">admin_panel_settings</span> Switch to Admin View`
-      : `<span class="material-symbols-outlined text-[18px]">school</span> Switch to Student View`;
+    sidebarAvatar.className = `w-10 h-10 rounded-full ${isStudent ? 'bg-accent-violet' : 'bg-accent-amber'} text-white border-2 border-ink flex items-center justify-center font-heading font-extrabold text-sm shrink-0 shadow-pop-sm`;
   }
 }
 
@@ -1743,7 +1745,7 @@ function setupFilterListeners() {
   }
 }
 
-// Expose interactive methods globally for HTML event handlers in Vite ES Module mode
+// Expose interactive methods globally for HTML event handlers
 window.navigateTo = navigateTo;
 window.handleBrandClick = handleBrandClick;
 window.handleFindMatches = handleFindMatches;
@@ -1763,14 +1765,13 @@ window.closeProgramModal = closeProgramModal;
 window.handleSaveProgram = handleSaveProgram;
 window.duplicateProgram = duplicateProgram;
 window.deleteProgram = deleteProgram;
-window.toggleRole = toggleRole;
 window.setRole = setRole;
 window.openUserSwitchModal = openUserSwitchModal;
 window.closeUserSwitchModal = closeUserSwitchModal;
 window.showToast = showToast;
 window.toggleDarkMode = toggleDarkMode;
 
-// App Initialization (Supports direct load & DOMContentLoaded)
+// App Initialization
 function initApp() {
   initTheme();
   loadSavedState();

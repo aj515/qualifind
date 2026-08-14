@@ -1,142 +1,338 @@
-/* Academic Nexus Design Tokens — light palette (default) */
-:root {
-  --color-primary: 0 74 198;
-  --color-primary-container: 37 99 235;
-  --color-on-primary: 255 255 255;
-  --color-on-primary-container: 238 239 255;
-  --color-primary-fixed: 219 225 255;
-  --color-primary-fixed-dim: 180 197 255;
-  --color-secondary: 0 108 73;
-  --color-secondary-container: 108 248 187;
-  --color-on-secondary: 255 255 255;
-  --color-on-secondary-container: 0 113 77;
-  --color-tertiary: 120 75 0;
-  --color-tertiary-container: 153 97 0;
-  --color-on-tertiary: 255 255 255;
-  --color-on-tertiary-container: 255 238 221;
-  --color-surface: 248 249 255;
-  --color-surface-dim: 203 219 245;
-  --color-surface-bright: 248 249 255;
-  --color-surface-container-lowest: 255 255 255;
-  --color-surface-container-low: 239 244 255;
-  --color-surface-container: 229 238 255;
-  --color-surface-container-high: 220 233 255;
-  --color-surface-container-highest: 211 228 254;
-  --color-on-surface: 11 28 48;
-  --color-on-surface-variant: 67 70 85;
-  --color-outline: 115 118 134;
-  --color-outline-variant: 195 198 215;
-  --color-background: 248 249 255;
-  --color-on-background: 11 28 48;
-  --color-success: 16 185 129;
-  --color-warning: 245 158 11;
-  --color-error: 186 26 26;
-  --color-error-container: 255 218 214;
-  --glass-header-bg: 248 249 255;
-  --glass-modal-bg: 255 255 255;
-}
+/* QualiFind - Playful Geometric Design System */
 
-/* Dark palette — toggled via .dark class on <html> */
-html.dark {
-  --color-primary: 169 198 255;
-  --color-primary-container: 39 74 134;
-  --color-on-primary: 10 44 99;
-  --color-on-primary-container: 217 226 255;
-  --color-secondary: 108 248 187;
-  --color-secondary-container: 0 82 47;
-  --color-on-secondary: 0 57 31;
-  --color-on-secondary-container: 137 255 207;
-  --color-tertiary: 255 184 77;
-  --color-tertiary-container: 92 58 0;
-  --color-on-tertiary: 66 43 0;
-  --color-on-tertiary-container: 255 221 176;
-  --color-surface: 15 21 32;
-  --color-surface-dim: 11 15 24;
-  --color-surface-bright: 51 58 72;
-  --color-surface-container-lowest: 10 14 23;
-  --color-surface-container-low: 22 29 43;
-  --color-surface-container: 27 35 49;
-  --color-surface-container-high: 38 48 63;
-  --color-surface-container-highest: 49 60 76;
-  --color-on-surface: 226 230 240;
-  --color-on-surface-variant: 183 188 208;
-  --color-outline: 139 144 166;
-  --color-outline-variant: 60 68 87;
-  --color-background: 15 21 32;
-  --color-on-background: 226 230 240;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap');
+
+:root {
+  /* Playful Geometric Light Palette */
+  --color-paper: 255 253 245;          /* #FFFDF5 Warm Cream Paper */
+  --color-ink: 30 41 59;               /* #1E293B Slate 800 */
+  --color-ink-muted: 100 116 139;      /* #64748B Slate 500 */
+  --color-border-subtle: 226 232 240;  /* #E2E8F0 Slate 200 */
+  --color-card: 255 255 255;           /* #FFFFFF Pure White */
+  --color-card-subtle: 248 250 252;    /* #F8FAFC */
+
+  /* Vibrant Accents */
+  --color-accent-violet: 139 92 246;   /* #8B5CF6 Vivid Violet (Primary) */
+  --color-accent-pink: 244 114 182;    /* #F472B6 Hot Pink (Playful Pop) */
+  --color-accent-amber: 251 191 36;    /* #FBBF24 Amber / Sunshine (Optimism) */
+  --color-accent-mint: 52 211 153;     /* #34D399 Emerald / Mint (Freshness) */
+  --color-accent-cyan: 56 189 248;     /* #38BDF8 Sky Cyan */
+
+  /* Semantic */
   --color-success: 52 211 153;
   --color-warning: 251 191 36;
-  --color-error: 255 180 171;
-  --color-error-container: 147 0 10;
-  --glass-header-bg: 15 21 32;
-  --glass-modal-bg: 20 26 38;
+  --color-error: 244 63 94;            /* #F43F5E Rose Red */
+
+  /* Hard Shadow Color */
+  --shadow-ink: #1E293B;
+  --shadow-pink: #F472B6;
+  --shadow-amber: #FBBF24;
+  --shadow-mint: #34D399;
+  --shadow-violet: #8B5CF6;
+}
+
+html.dark {
+  /* Playful Geometric Dark Palette (High Contrast Midnight) */
+  --color-paper: 15 23 42;             /* #0F172A Midnight Slate */
+  --color-ink: 248 250 252;            /* #F8FAFC Crisp White */
+  --color-ink-muted: 148 163 184;      /* #94A3B8 Slate 400 */
+  --color-border-subtle: 51 65 85;     /* #334155 Slate 700 */
+  --color-card: 30 41 59;              /* #1E293B Slate 800 */
+  --color-card-subtle: 23 32 51;
+
+  /* Vibrant Accents (Retain Pop) */
+  --color-accent-violet: 167 139 250;  /* #A78BFA */
+  --color-accent-pink: 244 114 182;
+  --color-accent-amber: 251 191 36;
+  --color-accent-mint: 52 211 153;
+  --color-accent-cyan: 56 189 248;
+
+  --shadow-ink: #000000;
+  --shadow-pink: #BE185D;
+  --shadow-amber: #B45309;
+  --shadow-mint: #047857;
+  --shadow-violet: #6D28D9;
 }
 
 @layer base {
   html, body {
     margin: 0;
     padding: 0;
-    font-family: 'Inter', sans-serif;
-    background-color: rgb(var(--color-background));
-    color: rgb(var(--color-on-background));
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background-color: rgb(var(--color-paper));
+    color: rgb(var(--color-ink));
     scroll-behavior: smooth;
     transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Outfit', system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
 
   body {
     overscroll-behavior: none;
   }
-
-  .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  .pt-safe {
-    padding-top: env(safe-area-inset-top, 0px);
-  }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* Dot Grid Background Texture */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(30, 41, 59, 0.12) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
 }
-::-webkit-scrollbar-track {
-  background: transparent;
+
+html.dark .bg-dot-grid {
+  background-image: radial-gradient(rgba(248, 250, 252, 0.08) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
 }
-::-webkit-scrollbar-thumb {
-  background: rgb(var(--color-outline-variant));
+
+/* =========================================================================
+   PLAYFUL GEOMETRIC HARD SHADOWS ("THE POP SHADOW")
+   ========================================================================= */
+.shadow-pop-sm {
+  box-shadow: 2px 2px 0px 0px var(--shadow-ink);
+}
+
+.shadow-pop {
+  box-shadow: 4px 4px 0px 0px var(--shadow-ink);
+}
+
+.shadow-pop-lg {
+  box-shadow: 8px 8px 0px 0px var(--shadow-ink);
+}
+
+.shadow-pop-pink {
+  box-shadow: 4px 4px 0px 0px var(--shadow-pink);
+}
+
+.shadow-pop-pink-lg {
+  box-shadow: 6px 6px 0px 0px var(--shadow-pink);
+}
+
+.shadow-pop-amber {
+  box-shadow: 4px 4px 0px 0px var(--shadow-amber);
+}
+
+.shadow-pop-mint {
+  box-shadow: 4px 4px 0px 0px var(--shadow-mint);
+}
+
+.shadow-pop-violet {
+  box-shadow: 4px 4px 0px 0px var(--shadow-violet);
+}
+
+/* =========================================================================
+   BUTTONS: THE CANDY BUTTONS (TACTILE & BOUNCY)
+   ========================================================================= */
+.btn-candy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: rgb(var(--color-accent-violet));
+  color: #FFFFFF;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.625rem 1.375rem;
   border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--color-outline));
+  border: 2px solid var(--shadow-ink);
+  box-shadow: 4px 4px 0px 0px var(--shadow-ink);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
 }
 
-/* Smooth view transitions */
+.btn-candy:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--shadow-ink);
+}
+
+.btn-candy:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px var(--shadow-ink);
+}
+
+.btn-candy-pink {
+  background-color: rgb(var(--color-accent-pink));
+  color: #FFFFFF;
+}
+
+.btn-candy-amber {
+  background-color: rgb(var(--color-accent-amber));
+  color: #1E293B;
+}
+
+.btn-candy-mint {
+  background-color: rgb(var(--color-accent-mint));
+  color: #1E293B;
+}
+
+.btn-candy-secondary {
+  background-color: rgb(var(--color-card));
+  color: rgb(var(--color-ink));
+  border: 2px solid var(--shadow-ink);
+  box-shadow: 4px 4px 0px 0px var(--shadow-ink);
+}
+
+.btn-candy-secondary:hover:not(:disabled) {
+  background-color: rgb(var(--color-accent-amber));
+  color: #1E293B;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--shadow-ink);
+}
+
+.btn-candy-sm {
+  padding: 0.375rem 0.875rem;
+  font-size: 0.8125rem;
+  box-shadow: 3px 3px 0px 0px var(--shadow-ink);
+}
+
+.btn-candy-sm:hover:not(:disabled) {
+  box-shadow: 4px 4px 0px 0px var(--shadow-ink);
+}
+
+/* =========================================================================
+   CARDS: THE STICKER CARD
+   ========================================================================= */
+.card-sticker {
+  background-color: rgb(var(--color-card));
+  border: 2px solid var(--shadow-ink);
+  border-radius: 1.25rem;
+  box-shadow: 6px 6px 0px 0px var(--shadow-ink);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.card-sticker:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 8px 8px 0px 0px var(--shadow-ink);
+}
+
+.card-sticker-pink:hover {
+  box-shadow: 8px 8px 0px 0px var(--shadow-pink);
+}
+
+.card-sticker-amber:hover {
+  box-shadow: 8px 8px 0px 0px var(--shadow-amber);
+}
+
+.card-sticker-mint:hover {
+  box-shadow: 8px 8px 0px 0px var(--shadow-mint);
+}
+
+/* =========================================================================
+   INPUTS: PLAYFUL HIGH-CONTRAST FORM CONTROLS
+   ========================================================================= */
+.input-playful {
+  background-color: rgb(var(--color-card));
+  color: rgb(var(--color-ink));
+  border: 2px solid rgb(var(--color-ink) / 0.35);
+  border-radius: 0.875rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  outline: none;
+}
+
+.input-playful:focus {
+  border-color: rgb(var(--color-accent-violet));
+  box-shadow: 4px 4px 0px 0px rgb(var(--color-accent-violet));
+  transform: translate(-1px, -1px);
+}
+
+/* =========================================================================
+   BADGES & STICKERS
+   ========================================================================= */
+.badge-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  border: 1.5px solid var(--shadow-ink);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 2px 2px 0px 0px var(--shadow-ink);
+}
+
+.badge-violet {
+  background-color: #EDE9FE;
+  color: #6D28D9;
+}
+
+html.dark .badge-violet {
+  background-color: #4C1D95;
+  color: #EDE9FE;
+}
+
+.badge-pink {
+  background-color: #FCE7F3;
+  color: #BE185D;
+}
+
+html.dark .badge-pink {
+  background-color: #831843;
+  color: #FCE7F3;
+}
+
+.badge-amber {
+  background-color: #FEF3C7;
+  color: #B45309;
+}
+
+html.dark .badge-amber {
+  background-color: #78350F;
+  color: #FEF3C7;
+}
+
+.badge-mint {
+  background-color: #D1FAE5;
+  color: #047857;
+}
+
+html.dark .badge-mint {
+  background-color: #064E3B;
+  color: #D1FAE5;
+}
+
+/* =========================================================================
+   VIEW TRANSITIONS & UTILITIES
+   ========================================================================= */
 .view-section {
   display: none;
   opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+  transform: translateY(8px) scale(0.995);
+  transition: opacity 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .view-section.active {
   display: block;
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
-/* Glassmorphism & Tonal Surfaces */
-.glass-header {
-  background: rgb(var(--glass-header-bg) / 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
-
-.glass-modal {
-  background: rgb(var(--glass-modal-bg) / 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-ink) / 0.25);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--color-accent-violet));
 }
 
 /* Radial Progress Ring SVG */
@@ -145,60 +341,42 @@ html.dark {
 }
 
 .progress-ring-circle {
-  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Pulse & Shimmer Animations */
-@keyframes subtle-pulse {
-  0%, 100% {
-    opacity: 0.15;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.3;
-    transform: scale(1.05);
-  }
+/* Wiggle Keyframe Animation for Icons */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(8deg); }
+  75% { transform: rotate(-8deg); }
 }
 
-.animate-subtle-pulse {
-  animation: subtle-pulse 4s ease-in-out infinite;
+.group:hover .animate-wiggle {
+  animation: wiggle 0.4s ease-in-out;
 }
 
-@keyframes ai-glow {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(37, 99, 235, 0.45);
-  }
+/* Float Animation for Hero Stickers */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
 }
 
-.ai-glow-active {
-  animation: ai-glow 2.5s infinite;
+.animate-float {
+  animation: float-slow 4s ease-in-out infinite;
 }
 
 /* Material symbols adjustments */
 .material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
   vertical-align: middle;
   line-height: 1;
 }
 
 .material-symbols-outlined.fill {
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}
-
-/* Card Hover Elevation */
-.opportunity-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
-.opportunity-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(11, 28, 48, 0.08), 0 8px 10px -6px rgba(11, 28, 48, 0.04);
+  font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
 }
 
 /* Toast styling */
 #toast {
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
 }
