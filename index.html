@@ -18,10 +18,10 @@
   </script>
   <meta name="description" content="QualiFind - AI-Powered Student Assistance Navigator in the Philippine Higher Education Setting."/>
 
-  <!-- Google Fonts: Outfit (Headings) & Plus Jakarta Sans (Body) & Material Symbols -->
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit & Material Symbols -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -38,7 +38,7 @@
             "card-subtle": "rgb(var(--color-card-subtle) / <alpha-value>)",
             "border-subtle": "rgb(var(--color-border-subtle) / <alpha-value>)",
             
-            // Playful Geometric Palette
+            // Minimalist Accents
             "accent-violet": "rgb(var(--color-accent-violet) / <alpha-value>)",
             "accent-pink": "rgb(var(--color-accent-pink) / <alpha-value>)",
             "accent-amber": "rgb(var(--color-accent-amber) / <alpha-value>)",
@@ -52,15 +52,6 @@
           fontFamily: {
             sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
             heading: ['Outfit', 'system-ui', 'sans-serif'],
-          },
-          boxShadow: {
-            'pop-sm': '2px 2px 0px 0px var(--shadow-ink)',
-            'pop': '4px 4px 0px 0px var(--shadow-ink)',
-            'pop-lg': '8px 8px 0px 0px var(--shadow-ink)',
-            'pop-pink': '4px 4px 0px 0px var(--shadow-pink)',
-            'pop-amber': '4px 4px 0px 0px var(--shadow-amber)',
-            'pop-mint': '4px 4px 0px 0px var(--shadow-mint)',
-            'pop-violet': '4px 4px 0px 0px var(--shadow-violet)',
           }
         }
       }
@@ -71,12 +62,13 @@
 </head>
 <body class="bg-paper font-sans text-ink antialiased bg-dot-grid min-h-screen">
 
-  <!-- Desktop Sidebar Navigation (Playful Geometric Sticker Style) -->
-  <aside id="app-sidebar" class="hidden lg:flex fixed left-0 top-0 h-full w-72 bg-card z-50 flex-col border-r-2 border-ink">
-    <div class="h-20 flex items-center px-6 border-b-2 border-ink">
+  <!-- Desktop Sidebar Navigation (Minimalist Geometric Style) -->
+  <aside id="app-sidebar" class="hidden lg:flex fixed left-0 top-0 h-full w-72 bg-card z-50 flex-col border-r border-border-subtle shadow-sm">
+    <!-- Brand Header -->
+    <div class="h-20 flex items-center px-6 border-b border-border-subtle">
       <div class="flex items-center gap-3 cursor-pointer group" onclick="handleBrandClick()">
-        <div class="w-11 h-11 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center group-hover:rotate-6 transition-transform">
-          <span class="material-symbols-outlined text-white text-[24px]">verified</span>
+        <div class="w-10 h-10 bg-accent-violet rounded-xl flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
+          <span class="material-symbols-outlined text-[24px]">verified</span>
         </div>
         <div class="flex flex-col">
           <span class="font-heading font-extrabold text-2xl text-ink tracking-tight leading-none">QualiFind</span>
@@ -86,91 +78,91 @@
     </div>
 
     <!-- Active User Card in Sidebar -->
-    <div class="mx-4 my-4 p-3.5 bg-paper rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-between">
+    <div class="mx-4 my-4 p-3.5 bg-paper rounded-xl border border-border-subtle flex items-center justify-between shadow-sm">
       <div class="flex items-center gap-3 min-w-0">
-        <div id="sidebar-user-avatar" class="w-10 h-10 rounded-full bg-accent-violet text-white border-2 border-ink flex items-center justify-center font-heading font-extrabold text-sm shrink-0 shadow-pop-sm">
+        <div id="sidebar-user-avatar" class="w-9 h-9 rounded-lg bg-accent-violet text-white flex items-center justify-center font-heading font-extrabold text-xs shrink-0 shadow-sm">
           MS
         </div>
         <div class="min-w-0">
-          <p id="sidebar-user-name" class="text-sm font-extrabold font-heading text-ink truncate">Maria Clara Santos</p>
+          <p id="sidebar-user-name" class="text-xs font-extrabold font-heading text-ink truncate">Maria Clara Santos</p>
           <span id="sidebar-user-badge" class="badge-sticker badge-violet text-[10px] py-0.5 px-2">
             Student • Cebu
           </span>
         </div>
       </div>
-      <button onclick="openUserSwitchModal()" class="w-8 h-8 rounded-full bg-card hover:bg-accent-amber border-2 border-ink flex items-center justify-center text-ink transition-colors shadow-pop-sm" title="Switch User Role">
-        <span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+      <button onclick="openUserSwitchModal()" class="w-7 h-7 rounded-lg bg-card hover:bg-card-subtle border border-border-subtle flex items-center justify-center text-ink transition-colors" title="Switch User Role">
+        <span class="material-symbols-outlined text-[16px]">swap_horiz</span>
       </button>
     </div>
 
     <!-- Nav Links: STRICT ROLE SEPARATION -->
-    <nav class="flex-1 px-4 flex flex-col gap-2 overflow-y-auto py-2">
+    <nav class="flex-1 px-4 flex flex-col gap-1.5 overflow-y-auto py-2">
       
       <!-- STUDENT NAV GROUP (Visible ONLY to Student / Opportunity Seeker) -->
-      <div id="student-nav-group" class="flex flex-col gap-2">
+      <div id="student-nav-group" class="flex flex-col gap-1.5">
         <div class="px-3 py-1">
-          <span class="text-[11px] font-extrabold font-heading uppercase text-ink-muted tracking-wider">Student Navigator</span>
+          <span class="text-[10px] font-extrabold font-heading uppercase text-ink-muted tracking-wider">Student Navigator</span>
         </div>
         
-        <a href="#dashboard" data-nav-view="dashboard" onclick="navigateTo('dashboard'); return false;" class="flex items-center px-4 py-3 rounded-2xl transition-all group border-2 border-ink font-heading font-bold text-sm bg-accent-violet text-white shadow-pop">
-          <span class="material-symbols-outlined mr-3 text-[22px]">dashboard</span>
+        <a href="#dashboard" data-nav-view="dashboard" onclick="navigateTo('dashboard'); return false;" class="flex items-center px-4 py-2.5 rounded-xl transition-all group font-heading font-bold text-sm bg-accent-violet text-white shadow-sm">
+          <span class="material-symbols-outlined mr-3 text-[20px]">dashboard</span>
           <span>Student Dashboard</span>
         </a>
 
-        <a href="#matcher" data-nav-view="matcher" onclick="navigateTo('matcher'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
-          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-violet">auto_awesome</span>
+        <a href="#matcher" data-nav-view="matcher" onclick="navigateTo('matcher'); return false;" class="flex items-center px-4 py-2.5 rounded-xl text-ink hover:bg-card-subtle transition-all font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[20px] text-accent-violet">auto_awesome</span>
           <span>AI Profile Matcher</span>
         </a>
 
-        <a href="#opportunities" data-nav-view="opportunities" onclick="navigateTo('opportunities'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
-          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-pink">search_insights</span>
+        <a href="#opportunities" data-nav-view="opportunities" onclick="navigateTo('opportunities'); return false;" class="flex items-center px-4 py-2.5 rounded-xl text-ink hover:bg-card-subtle transition-all font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[20px] text-accent-violet">search_insights</span>
           <span>Assistance Programs</span>
         </a>
 
-        <a href="#saved-applications" data-nav-view="saved-applications" onclick="navigateTo('saved-applications'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
-          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-amber">bookmark</span>
+        <a href="#saved-applications" data-nav-view="saved-applications" onclick="navigateTo('saved-applications'); return false;" class="flex items-center px-4 py-2.5 rounded-xl text-ink hover:bg-card-subtle transition-all font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[20px] text-amber-500">bookmark</span>
           <span>Saved Drafts</span>
-          <span id="nav-saved-count" class="ml-auto bg-accent-pink text-white text-xs px-2.5 py-0.5 rounded-full font-heading font-extrabold border border-ink shadow-pop-sm">3</span>
+          <span id="nav-saved-count" class="ml-auto bg-indigo-50 text-accent-violet text-xs px-2 py-0.5 rounded-full font-heading font-extrabold border border-indigo-100">3</span>
         </a>
 
-        <a href="#profile" data-nav-view="profile" onclick="navigateTo('profile'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
-          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-mint">person</span>
+        <a href="#profile" data-nav-view="profile" onclick="navigateTo('profile'); return false;" class="flex items-center px-4 py-2.5 rounded-xl text-ink hover:bg-card-subtle transition-all font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[20px] text-emerald-600">person</span>
           <span>Student Profile</span>
         </a>
       </div>
 
       <!-- ADMIN NAV GROUP (Visible ONLY to Administrator - Web Workstation Only) -->
-      <div id="admin-nav-group" class="flex flex-col gap-2 hidden">
+      <div id="admin-nav-group" class="flex flex-col gap-1.5 hidden">
         <div class="px-3 py-1 flex items-center justify-between">
-          <span class="text-[11px] font-extrabold font-heading uppercase text-accent-pink tracking-wider">DOST / CHED Admin</span>
-          <span class="text-[9px] bg-accent-amber text-ink px-2 py-0.5 rounded-full font-heading font-extrabold border border-ink">DESKTOP</span>
+          <span class="text-[10px] font-extrabold font-heading uppercase text-accent-violet tracking-wider">DOST / CHED Admin</span>
+          <span class="text-[9px] bg-indigo-50 text-accent-violet px-2 py-0.5 rounded-full font-heading font-extrabold border border-indigo-100">DESKTOP</span>
         </div>
 
-        <a href="#admin-dashboard" data-nav-view="admin-dashboard" onclick="navigateTo('admin-dashboard'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
-          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-violet">analytics</span>
+        <a href="#admin-dashboard" data-nav-view="admin-dashboard" onclick="navigateTo('admin-dashboard'); return false;" class="flex items-center px-4 py-2.5 rounded-xl text-ink hover:bg-card-subtle transition-all font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[20px] text-accent-violet">analytics</span>
           <span>Registry Analytics</span>
         </a>
 
-        <a href="#admin-programs" data-nav-view="admin-programs" onclick="navigateTo('admin-programs'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
-          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-pink">inventory_2</span>
+        <a href="#admin-programs" data-nav-view="admin-programs" onclick="navigateTo('admin-programs'); return false;" class="flex items-center px-4 py-2.5 rounded-xl text-ink hover:bg-card-subtle transition-all font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[20px] text-accent-violet">inventory_2</span>
           <span>Manage PH Programs</span>
         </a>
 
-        <a href="#admin-profile" data-nav-view="admin-profile" onclick="navigateTo('admin-profile'); return false;" class="flex items-center px-4 py-3 rounded-2xl text-ink hover:bg-card-subtle transition-all border-2 border-transparent hover:border-ink font-heading font-bold text-sm">
-          <span class="material-symbols-outlined mr-3 text-[22px] text-accent-mint">badge</span>
+        <a href="#admin-profile" data-nav-view="admin-profile" onclick="navigateTo('admin-profile'); return false;" class="flex items-center px-4 py-2.5 rounded-xl text-ink hover:bg-card-subtle transition-all font-heading font-bold text-sm">
+          <span class="material-symbols-outlined mr-3 text-[20px] text-emerald-600">badge</span>
           <span>Liaison Office</span>
         </a>
       </div>
     </nav>
 
-    <!-- Bottom Role Switcher & Log Out Buttons -->
-    <div class="p-4 border-t-2 border-ink bg-paper flex flex-col gap-2">
+    <!-- Bottom Actions: Switch Role & Logout -->
+    <div class="p-4 border-t border-border-subtle bg-paper flex flex-col gap-2">
       <button onclick="openUserSwitchModal()" class="btn-candy btn-candy-secondary w-full py-2 text-xs">
-        <span class="material-symbols-outlined text-[18px]">switch_account</span>
+        <span class="material-symbols-outlined text-[16px]">switch_account</span>
         Switch Role Profile
       </button>
-      <button onclick="handleLogout()" class="btn-candy btn-candy-secondary w-full py-2 text-xs hover:bg-accent-pink hover:text-white">
-        <span class="material-symbols-outlined text-[18px]">logout</span>
+      <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-card hover:bg-rose-50 text-ink-muted hover:text-error text-xs font-bold border border-border-subtle transition-all">
+        <span class="material-symbols-outlined text-[16px]">logout</span>
         Sign Out
       </button>
     </div>
@@ -179,12 +171,12 @@
   <!-- Main Container -->
   <div id="main-layout-wrapper" class="lg:pl-72 flex flex-col min-h-screen">
     <!-- Top Header -->
-    <header id="app-header" class="fixed top-0 left-0 lg:left-72 right-0 h-20 bg-paper/95 backdrop-blur-md z-40 border-b-2 border-ink flex items-center justify-between px-4 lg:px-8">
+    <header id="app-header" class="fixed top-0 left-0 lg:left-72 right-0 h-20 bg-card/95 backdrop-blur-md z-40 border-b border-border-subtle flex items-center justify-between px-4 lg:px-8 shadow-sm">
       <!-- Search Bar -->
       <div class="flex-1 max-w-xl">
         <div class="relative flex items-center">
-          <span class="material-symbols-outlined absolute left-4 text-ink-muted text-[20px]">search</span>
-          <input id="global-search-input" class="w-full input-playful pl-11 pr-4 py-2.5 shadow-pop-sm" placeholder="Search scholarships, grants, loans, assistantships... (Press Enter)" type="text"/>
+          <span class="material-symbols-outlined absolute left-3.5 text-ink-muted text-[20px]">search</span>
+          <input id="global-search-input" class="w-full input-playful pl-11 pr-4 py-2 text-sm" placeholder="Search scholarships, grants, loans, assistantships... (Press Enter)" type="text"/>
         </div>
       </div>
 
@@ -192,15 +184,15 @@
       <div class="flex items-center gap-3 ml-4">
         
         <!-- User Switcher Header Pill -->
-        <button onclick="openUserSwitchModal()" class="flex items-center gap-2.5 px-3.5 py-1.5 bg-card hover:bg-card-subtle rounded-full border-2 border-ink transition-colors shadow-pop-sm text-left">
-          <div id="header-user-avatar" class="w-7 h-7 rounded-full bg-accent-violet text-white border border-ink flex items-center justify-center text-[10px] font-heading font-extrabold">
+        <button onclick="openUserSwitchModal()" class="flex items-center gap-2.5 px-3 py-1.5 bg-paper hover:bg-card-subtle rounded-xl border border-border-subtle transition-colors shadow-sm text-left">
+          <div id="header-user-avatar" class="w-7 h-7 rounded-lg bg-accent-violet text-white flex items-center justify-center text-[10px] font-heading font-extrabold">
             MS
           </div>
           <div class="hidden sm:block">
-            <span id="header-user-name" class="text-xs font-heading font-extrabold text-ink block leading-tight">Maria Clara Santos</span>
+            <span id="header-user-name" class="text-xs font-extrabold font-heading text-ink block leading-tight">Maria Clara Santos</span>
             <span id="header-user-role" class="text-[10px] text-ink-muted block leading-tight font-medium">Student • Mobile &amp; Web</span>
           </div>
-          <span class="material-symbols-outlined text-[16px] text-ink">expand_more</span>
+          <span class="material-symbols-outlined text-[16px] text-ink-muted">expand_more</span>
         </button>
 
         <button onclick="handleLogout()" class="hidden sm:flex btn-candy btn-candy-secondary btn-candy-sm text-xs py-1.5 px-3" title="Sign Out">
@@ -208,13 +200,13 @@
           Sign Out
         </button>
 
-        <button onclick="navigateTo('saved-applications')" class="relative w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all" title="Saved Applications">
-          <span class="material-symbols-outlined text-[20px] text-ink">bookmark</span>
-          <span id="header-saved-badge" class="absolute -top-1.5 -right-1.5 bg-accent-pink text-white text-[10px] font-heading font-extrabold w-5 h-5 rounded-full flex items-center justify-center border border-ink shadow-pop-sm">3</span>
+        <button onclick="navigateTo('saved-applications')" class="relative w-9 h-9 flex items-center justify-center rounded-xl bg-card border border-border-subtle shadow-sm hover:bg-card-subtle transition-all" title="Saved Applications">
+          <span class="material-symbols-outlined text-[18px] text-accent-violet">bookmark</span>
+          <span id="header-saved-badge" class="absolute -top-1 -right-1 bg-accent-violet text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">3</span>
         </button>
 
-        <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all" title="Toggle dark mode">
-          <span id="theme-toggle-icon" class="material-symbols-outlined text-[20px] text-ink">dark_mode</span>
+        <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="w-9 h-9 flex items-center justify-center rounded-xl bg-card border border-border-subtle shadow-sm hover:bg-card-subtle transition-all" title="Toggle dark mode">
+          <span id="theme-toggle-icon" class="material-symbols-outlined text-[18px] text-ink-muted">dark_mode</span>
         </button>
       </div>
     </header>
@@ -225,53 +217,53 @@
       <!-- ================= VIEW: LOGIN PAGE (AUTHENTICATION PORTAL) ================= -->
       <section id="view-login" class="view-section">
         <div class="min-h-screen flex items-center justify-center py-10 px-4">
-          <div class="w-full max-w-4xl card-sticker bg-card shadow-pop-lg p-0 overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+          <div class="w-full max-w-4xl card-sticker p-0 overflow-hidden grid grid-cols-1 lg:grid-cols-12 shadow-sm border border-border-subtle">
             
-            <!-- Left Panel: Playful Geometric Branding (5 Cols) -->
-            <div class="lg:col-span-5 bg-accent-violet p-8 lg:p-10 text-white flex flex-col justify-between relative overflow-hidden border-b-2 lg:border-b-0 lg:border-r-2 border-ink">
-              <div class="absolute -right-8 -top-8 w-40 h-40 bg-accent-amber rounded-full opacity-30 pointer-events-none"></div>
-              <div class="absolute right-8 bottom-8 w-20 h-20 bg-accent-pink rounded-2xl rotate-12 opacity-30 pointer-events-none"></div>
-
+            <!-- Left Panel: Minimalist Branding (5 Cols) -->
+            <div class="lg:col-span-5 bg-slate-900 p-8 lg:p-10 text-white flex flex-col justify-between relative overflow-hidden">
               <div class="relative z-10 space-y-6">
                 <!-- App Brand Badge -->
                 <div class="flex items-center gap-3">
-                  <div class="w-12 h-12 bg-paper text-ink rounded-2xl border-2 border-ink flex items-center justify-center shadow-pop-sm font-bold">
-                    <span class="material-symbols-outlined text-accent-violet text-[26px]">verified</span>
+                  <div class="w-11 h-11 bg-accent-violet text-white rounded-xl flex items-center justify-center shadow-sm font-extrabold">
+                    <span class="material-symbols-outlined text-[24px]">verified</span>
                   </div>
                   <div>
-                    <h2 class="font-extrabold text-2xl tracking-tight leading-none text-white font-heading">QualiFind</h2>
-                    <span class="badge-sticker badge-amber text-[9px] mt-1">PH Student Portal</span>
+                    <h2 class="font-extrabold font-heading text-2xl tracking-tight leading-none text-white">QualiFind</h2>
+                    <span class="text-[10px] uppercase tracking-widest text-slate-300 font-extrabold font-heading">Philippine HEI Portal</span>
                   </div>
                 </div>
 
                 <div class="space-y-2 pt-2">
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-bold uppercase tracking-wider">
+                    <span class="material-symbols-outlined text-[15px]">flag</span> Philippine Higher Ed
+                  </span>
                   <h1 class="text-2xl lg:text-3xl font-extrabold font-heading text-white tracking-tight leading-snug">
-                    AI Student Assistance Navigator
+                    AI-Powered Academic &amp; Research Grant Matching
                   </h1>
-                  <p class="text-xs text-white/90 leading-relaxed font-medium">
-                    Evaluates your profile across scholarships, educational grants, LGU assistance, campus work-study, and student loans.
+                  <p class="text-xs text-slate-300 leading-relaxed font-normal">
+                    Connect with DOST-SEI, CHED, LGU assistance, campus assistantships, and SUC consortiums calibrated for Philippine colleges.
                   </p>
                 </div>
 
                 <!-- Feature Badges -->
-                <div class="space-y-2.5 pt-2">
-                  <div class="flex items-center gap-3 text-xs font-bold bg-white/10 p-3 rounded-2xl border border-white/20">
-                    <span class="material-symbols-outlined text-accent-amber text-[20px]">school</span>
-                    <span>Philippine GPA &amp; GWA Calibrated</span>
+                <div class="space-y-2 pt-2">
+                  <div class="flex items-center gap-3 text-xs font-semibold bg-white/5 p-3 rounded-xl border border-white/10">
+                    <span class="material-symbols-outlined text-indigo-300 text-[20px]">school</span>
+                    <span>Philippine GPA &amp; GWA Scale Calibrated</span>
                   </div>
-                  <div class="flex items-center gap-3 text-xs font-bold bg-white/10 p-3 rounded-2xl border border-white/20">
-                    <span class="material-symbols-outlined text-accent-pink text-[20px]">auto_awesome</span>
+                  <div class="flex items-center gap-3 text-xs font-semibold bg-white/5 p-3 rounded-xl border border-white/10">
+                    <span class="material-symbols-outlined text-indigo-300 text-[20px]">auto_awesome</span>
                     <span>3-Tier Eligibility &amp; Gap Diagnosis</span>
                   </div>
-                  <div class="flex items-center gap-3 text-xs font-bold bg-white/10 p-3 rounded-2xl border border-white/20">
-                    <span class="material-symbols-outlined text-accent-mint text-[20px]">checklist</span>
+                  <div class="flex items-center gap-3 text-xs font-semibold bg-white/5 p-3 rounded-xl border border-white/10">
+                    <span class="material-symbols-outlined text-indigo-300 text-[20px]">checklist</span>
                     <span>5-Point Action Roadmap</span>
                   </div>
                 </div>
               </div>
 
               <!-- Footer note -->
-              <div class="relative z-10 pt-6 mt-6 border-t border-white/20 text-xs text-white/80 flex items-center justify-between font-heading font-bold">
+              <div class="relative z-10 pt-6 mt-6 border-t border-white/15 text-xs text-slate-400 flex items-center justify-between font-medium">
                 <span>DOST-SEI &amp; CHED Aligned</span>
                 <span>v1.0.0</span>
               </div>
@@ -282,16 +274,16 @@
               
               <div class="mb-5">
                 <h2 class="text-2xl font-extrabold font-heading text-ink tracking-tight mb-1">Sign In to QualiFind</h2>
-                <p class="text-xs text-ink-muted font-medium">Select your portal role or enter your credentials below.</p>
+                <p class="text-xs text-ink-muted">Select your portal role or enter your credentials below.</p>
               </div>
 
-              <!-- Role Switcher Tabs (Playful Candy Style) -->
-              <div class="flex p-1 bg-paper rounded-2xl mb-5 border-2 border-ink shadow-pop-sm">
-                <button type="button" id="login-role-student-btn" onclick="selectLoginRole('student')" class="flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 bg-accent-violet text-white border-2 border-ink shadow-pop-sm">
+              <!-- Role Switcher Tabs -->
+              <div class="flex p-1 bg-paper rounded-xl mb-5 border border-border-subtle">
+                <button type="button" id="login-role-student-btn" onclick="selectLoginRole('student')" class="flex-1 py-2 px-3 rounded-lg text-xs font-extrabold font-heading transition-all flex items-center justify-center gap-1.5 bg-card text-accent-violet shadow-sm">
                   <span class="material-symbols-outlined text-[16px]">school</span>
-                  Student Seeker
+                  Student / Seeker
                 </button>
-                <button type="button" id="login-role-admin-btn" onclick="selectLoginRole('admin')" class="flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 text-ink hover:bg-card-subtle">
+                <button type="button" id="login-role-admin-btn" onclick="selectLoginRole('admin')" class="flex-1 py-2 px-3 rounded-lg text-xs font-extrabold font-heading transition-all flex items-center justify-center gap-1.5 text-ink-muted hover:text-ink">
                   <span class="material-symbols-outlined text-[16px]">admin_panel_settings</span>
                   DOST / CHED Admin
                 </button>
@@ -303,22 +295,22 @@
 
                 <!-- Email Input -->
                 <div class="space-y-1">
-                  <label for="login-email-input" class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Institutional Email</label>
+                  <label for="login-email-input" class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted block">Institutional Email</label>
                   <div class="relative flex items-center">
                     <span class="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px]">mail</span>
-                    <input id="login-email-input" type="email" required value="maria.santos@student.cebu.edu.ph" placeholder="e.g. maria.santos@student.cebu.edu.ph" class="w-full input-playful py-2.5 pl-10 pr-4 text-xs font-semibold"/>
+                    <input id="login-email-input" type="email" required value="maria.santos@student.cebu.edu.ph" placeholder="e.g. maria.santos@student.cebu.edu.ph" class="w-full input-playful py-2 pl-10 pr-4 text-xs font-medium"/>
                   </div>
                 </div>
 
                 <!-- Password Input -->
                 <div class="space-y-1">
                   <div class="flex justify-between items-center">
-                    <label for="login-password-input" class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Password</label>
-                    <a href="#" onclick="showToast('Password reset link sent to your institutional email.', 'info'); return false;" class="text-xs font-bold font-heading text-accent-violet hover:underline">Forgot password?</a>
+                    <label for="login-password-input" class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted block">Password</label>
+                    <a href="#" onclick="showToast('Password reset link sent to your institutional email.', 'info'); return false;" class="text-xs font-bold text-accent-violet hover:underline">Forgot password?</a>
                   </div>
                   <div class="relative flex items-center">
                     <span class="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px]">lock</span>
-                    <input id="login-password-input" type="password" required value="qualifind2026" placeholder="Enter your password" class="w-full input-playful py-2.5 pl-10 pr-10 text-xs font-semibold"/>
+                    <input id="login-password-input" type="password" required value="qualifind2026" placeholder="Enter your password" class="w-full input-playful py-2 pl-10 pr-10 text-xs font-medium"/>
                     <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 text-ink-muted hover:text-ink p-1">
                       <span id="password-toggle-icon" class="material-symbols-outlined text-[18px]">visibility</span>
                     </button>
@@ -327,14 +319,14 @@
 
                 <!-- Remember Me Checkbox -->
                 <div class="flex items-center justify-between pt-0.5">
-                  <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">
-                    <input type="checkbox" checked class="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"/>
+                  <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-ink-muted">
+                    <input type="checkbox" checked class="w-4 h-4 rounded border-border-subtle text-accent-violet focus:ring-accent-violet"/>
                     <span>Remember this device</span>
                   </label>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" id="btn-login-submit" class="btn-candy w-full py-3 text-sm">
+                <button type="submit" id="btn-login-submit" class="btn-candy btn-candy-violet w-full py-2.5 text-sm">
                   <span>Sign In to QualiFind</span>
                   <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                 </button>
@@ -342,28 +334,28 @@
 
               <!-- Divider -->
               <div class="relative my-5 flex items-center justify-center">
-                <div class="w-full border-t-2 border-ink"></div>
+                <div class="w-full border-t border-border-subtle"></div>
                 <span class="absolute bg-card px-3 text-[10px] font-extrabold font-heading uppercase tracking-wider text-ink-muted">Quick Demo Sign In</span>
               </div>
 
               <!-- Quick Demo Login Action Cards -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <button type="button" onclick="quickLoginAs('student')" class="p-3 rounded-2xl bg-paper border-2 border-ink hover:bg-accent-violet/10 transition-all flex items-center gap-3 group text-left shadow-pop-sm">
-                  <div class="w-9 h-9 rounded-full bg-accent-violet text-white border-2 border-ink font-heading font-extrabold text-xs flex items-center justify-center shrink-0">
+                <button type="button" onclick="quickLoginAs('student')" class="p-3 rounded-xl bg-paper hover:bg-card-subtle border border-border-subtle transition-all flex items-center gap-3 group text-left shadow-sm hover:-translate-y-0.5">
+                  <div class="w-8 h-8 rounded-lg bg-accent-violet text-white font-extrabold font-heading text-xs flex items-center justify-center shrink-0">
                     MS
                   </div>
                   <div class="min-w-0">
-                    <p class="text-xs font-extrabold font-heading text-ink truncate group-hover:text-accent-violet">Maria Clara Santos</p>
+                    <p class="text-xs font-bold text-ink truncate group-hover:text-accent-violet transition-colors">Maria Clara Santos</p>
                     <span class="text-[10px] text-ink-muted block font-medium">Student (Cebu 2nd-Yr IT)</span>
                   </div>
                 </button>
 
-                <button type="button" onclick="quickLoginAs('admin')" class="p-3 rounded-2xl bg-paper border-2 border-ink hover:bg-accent-amber/10 transition-all flex items-center gap-3 group text-left shadow-pop-sm">
-                  <div class="w-9 h-9 rounded-full bg-accent-amber text-ink border-2 border-ink font-heading font-extrabold text-xs flex items-center justify-center shrink-0">
+                <button type="button" onclick="quickLoginAs('admin')" class="p-3 rounded-xl bg-paper hover:bg-card-subtle border border-border-subtle transition-all flex items-center gap-3 group text-left shadow-sm hover:-translate-y-0.5">
+                  <div class="w-8 h-8 rounded-lg bg-slate-900 text-white font-extrabold font-heading text-xs flex items-center justify-center shrink-0">
                     ER
                   </div>
                   <div class="min-w-0">
-                    <p class="text-xs font-extrabold font-heading text-ink truncate group-hover:text-accent-amber">Dr. Ernesto Ramos</p>
+                    <p class="text-xs font-bold text-ink truncate group-hover:text-accent-violet transition-colors">Dr. Ernesto Ramos</p>
                     <span class="text-[10px] text-ink-muted block font-medium">Admin (DOST/CHED)</span>
                   </div>
                 </button>
@@ -376,33 +368,29 @@
 
       <!-- ================= VIEW 1: STUDENT DASHBOARD (STUDENT ONLY) ================= -->
       <section id="view-dashboard" class="view-section active">
-        <div class="flex flex-col w-full gap-8">
+        <div class="flex flex-col w-full gap-6">
           
-          <!-- Welcome Hero Banner with Memphis Decorative Elements -->
+          <!-- Welcome Hero Banner (Minimalist Clean Presentation) -->
           <div class="grid grid-cols-12 gap-6 w-full mt-2">
             <!-- Left Banner -->
-            <div class="col-span-12 xl:col-span-8 flex flex-col justify-center bg-card rounded-3xl p-6 lg:p-8 relative overflow-hidden border-2 border-ink shadow-pop-lg">
-              <!-- Decorative background circle -->
-              <div class="absolute -right-12 -top-12 w-64 h-64 bg-accent-amber rounded-full opacity-30 pointer-events-none"></div>
-              <div class="absolute right-32 bottom-2 w-16 h-16 bg-accent-pink rounded-2xl rotate-12 opacity-25 pointer-events-none"></div>
-              
+            <div class="col-span-12 xl:col-span-8 flex flex-col justify-center bg-card rounded-2xl p-6 lg:p-8 relative overflow-hidden border border-border-subtle shadow-sm">
               <div class="relative z-10 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
                 <div class="max-w-xl">
                   <div class="flex items-center gap-2 mb-3">
-                    <span class="badge-sticker badge-amber">
+                    <span class="badge-sticker badge-violet">
                       <span class="material-symbols-outlined text-[15px]">waving_hand</span> Mabuhay, Maria!
                     </span>
                     <span id="dash-current-date" class="text-ink-muted text-xs font-bold font-heading">Aug 14, 2026</span>
                   </div>
                   <h1 class="text-3xl lg:text-4xl font-extrabold font-heading text-ink tracking-tight leading-tight mb-2">
-                    Find student assistance that <span class="text-accent-violet underline decoration-accent-pink decoration-wavy">actually fits you</span>
+                    Find student assistance that <span class="text-accent-violet">actually fits you</span>
                   </h1>
-                  <p class="text-sm md:text-base text-ink-muted max-w-md font-medium leading-relaxed">
+                  <p class="text-sm text-ink-muted max-w-md font-medium leading-relaxed">
                     AI evaluates your profile across scholarships, educational grants, LGU assistance, campus jobs, and student loans.
                   </p>
                   <div class="mt-6 flex flex-wrap gap-3">
-                    <button onclick="navigateTo('matcher')" class="btn-candy">
-                      <span class="material-symbols-outlined text-[20px]">auto_awesome</span> Start AI Matcher
+                    <button onclick="navigateTo('matcher')" class="btn-candy btn-candy-violet">
+                      <span class="material-symbols-outlined text-[18px]">auto_awesome</span> Start AI Matcher
                     </button>
                     <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-secondary">
                       Browse All Programs
@@ -411,14 +399,14 @@
                 </div>
 
                 <!-- Closing Soonest Callout Card -->
-                <div id="dash-next-deadline-card" class="w-full md:w-56 shrink-0 flex flex-col gap-2 bg-paper rounded-2xl p-4 border-2 border-ink shadow-pop-sm hover:scale-105 transition-transform cursor-pointer">
+                <div id="dash-next-deadline-card" class="w-full md:w-56 shrink-0 flex flex-col gap-2 bg-paper rounded-xl p-4 border border-border-subtle shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer">
                   <span class="badge-sticker badge-pink text-[9px] w-fit">
                     <span class="material-symbols-outlined text-[13px]">schedule</span> Closing Soonest
                   </span>
-                  <p id="dash-next-deadline-title" class="text-xs font-extrabold font-heading text-ink line-clamp-2 leading-tight">Cebu City College Scholarship</p>
-                  <div class="flex items-center justify-between mt-1 pt-2 border-t border-ink/20">
+                  <p id="dash-next-deadline-title" class="text-xs font-bold font-heading text-ink line-clamp-2 leading-tight">Cebu City College Scholarship</p>
+                  <div class="flex items-center justify-between mt-1 pt-2 border-t border-border-subtle">
                     <span class="text-[10px] font-heading font-bold text-ink-muted uppercase">Time Left:</span>
-                    <span id="dash-next-deadline-days" class="text-xs font-extrabold font-heading text-accent-pink">45 days left</span>
+                    <span id="dash-next-deadline-days" class="text-xs font-bold font-heading text-rose-600">45 days left</span>
                   </div>
                 </div>
               </div>
@@ -426,32 +414,34 @@
 
             <!-- Profile Strength Card -->
             <div class="col-span-12 xl:col-span-4 flex flex-col">
-              <div class="card-sticker p-6 flex flex-col h-full relative overflow-hidden bg-card">
-                <div class="flex justify-between items-start mb-4 relative z-10">
-                  <div>
-                    <h3 class="text-lg font-extrabold font-heading text-ink">Match Strength</h3>
-                    <p class="text-xs text-ink-muted font-medium">Philippine Criteria Verified</p>
+              <div class="card-sticker p-6 flex flex-col h-full justify-between bg-card">
+                <div>
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 class="text-base font-extrabold font-heading text-ink">Match Strength</h3>
+                      <p class="text-xs text-ink-muted font-medium">Philippine Criteria Verified</p>
+                    </div>
+                    <button onclick="navigateTo('profile')" class="w-8 h-8 rounded-lg bg-paper border border-border-subtle flex items-center justify-center hover:bg-card-subtle transition-colors">
+                      <span class="material-symbols-outlined text-[16px]">edit</span>
+                    </button>
                   </div>
-                  <button onclick="navigateTo('profile')" class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center hover:bg-accent-amber transition-colors shadow-pop-sm">
-                    <span class="material-symbols-outlined text-[18px]">edit</span>
-                  </button>
+
+                  <div class="flex items-center gap-4 mb-4">
+                    <div class="relative w-16 h-16 rounded-full bg-paper border border-border-subtle flex items-center justify-center shadow-sm shrink-0">
+                      <svg class="w-full h-full radial-progress p-1" viewBox="0 0 36 36">
+                        <path class="text-border-subtle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="3.5"></path>
+                        <path id="dash-profile-strength-circle" class="text-accent-violet progress-ring-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="88, 100" stroke-linecap="round" stroke-width="3.5"></path>
+                      </svg>
+                      <span id="dash-profile-strength-num" class="absolute text-sm font-heading font-extrabold text-accent-violet">88%</span>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold text-success mb-0.5">Profile Complete</p>
+                      <p class="text-xs font-medium text-ink leading-snug">2nd-Year IT Student • Cebu Region VII • 82% GPA</p>
+                    </div>
+                  </div>
                 </div>
 
-                <div class="flex items-center gap-4 mb-4 relative z-10">
-                  <div class="relative w-16 h-16 rounded-full bg-paper border-2 border-ink flex items-center justify-center shadow-pop-sm shrink-0">
-                    <svg class="w-full h-full radial-progress p-1" viewBox="0 0 36 36">
-                      <path class="text-border-subtle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="4"></path>
-                      <path id="dash-profile-strength-circle" class="text-accent-violet progress-ring-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="88, 100" stroke-linecap="round" stroke-width="4"></path>
-                    </svg>
-                    <span id="dash-profile-strength-num" class="absolute text-sm font-heading font-extrabold text-accent-violet">88%</span>
-                  </div>
-                  <div>
-                    <p class="text-xs font-bold text-success mb-0.5">Profile Complete</p>
-                    <p class="text-xs font-semibold text-ink leading-snug">2nd-Year IT Student • Cebu Region VII • 82% GPA</p>
-                  </div>
-                </div>
-
-                <div class="mt-auto relative z-10 flex flex-wrap gap-1.5">
+                <div class="pt-3 border-t border-border-subtle flex flex-wrap gap-1.5">
                   <span class="badge-sticker badge-violet text-[10px]">
                     <span class="material-symbols-outlined text-[13px]">school</span> Tuition Aid
                   </span>
@@ -466,13 +456,13 @@
             </div>
           </div>
 
-          <!-- Key Metrics Grid (Sticker Cards with Candy Shadows) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+          <!-- Key Metrics Grid (Minimalist Pastel Tiles) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
             <!-- Metric 1 -->
-            <div class="card-sticker card-sticker-mint p-5 flex flex-col justify-between">
+            <div class="card-sticker p-5 flex flex-col justify-between">
               <div class="flex justify-between items-start mb-3">
-                <div class="w-11 h-11 rounded-2xl bg-accent-mint border-2 border-ink flex items-center justify-center text-ink shadow-pop-sm">
-                  <span class="material-symbols-outlined text-[22px]">search</span>
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">search</span>
                 </div>
                 <span class="badge-sticker badge-mint text-[10px]">
                   <span class="material-symbols-outlined text-[13px]">trending_up</span> Open Now
@@ -485,12 +475,12 @@
             </div>
 
             <!-- Metric 2 -->
-            <div class="card-sticker card-sticker-pink p-5 flex flex-col justify-between">
+            <div class="card-sticker p-5 flex flex-col justify-between">
               <div class="flex justify-between items-start mb-3">
-                <div class="w-11 h-11 rounded-2xl bg-accent-pink border-2 border-ink flex items-center justify-center text-white shadow-pop-sm">
-                  <span class="material-symbols-outlined text-[22px]">verified</span>
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-accent-violet border border-indigo-100 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">verified</span>
                 </div>
-                <span class="badge-sticker badge-pink text-[10px]">
+                <span class="badge-sticker badge-violet text-[10px]">
                   <span class="material-symbols-outlined text-[13px]">star</span> Top Match
                 </span>
               </div>
@@ -504,10 +494,10 @@
             </div>
 
             <!-- Metric 3 -->
-            <div class="card-sticker card-sticker-amber p-5 flex flex-col justify-between">
+            <div class="card-sticker p-5 flex flex-col justify-between">
               <div class="flex justify-between items-start mb-3">
-                <div class="w-11 h-11 rounded-2xl bg-accent-amber border-2 border-ink flex items-center justify-center text-ink shadow-pop-sm">
-                  <span class="material-symbols-outlined text-[22px]">bolt</span>
+                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">bolt</span>
                 </div>
                 <span class="badge-sticker badge-amber text-[10px]">
                   Need Review
@@ -520,12 +510,12 @@
             </div>
 
             <!-- Metric 4 -->
-            <div onclick="navigateTo('saved-applications')" class="card-sticker p-5 flex flex-col justify-between cursor-pointer hover:bg-card-subtle">
+            <div onclick="navigateTo('saved-applications')" class="card-sticker p-5 flex flex-col justify-between cursor-pointer hover:border-accent-violet">
               <div class="flex justify-between items-start mb-3">
-                <div class="w-11 h-11 rounded-2xl bg-accent-violet border-2 border-ink flex items-center justify-center text-white shadow-pop-sm">
-                  <span class="material-symbols-outlined text-[22px]">bookmark</span>
+                <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">bookmark</span>
                 </div>
-                <span class="text-xs font-heading font-bold text-accent-violet flex items-center gap-0.5">
+                <span class="text-xs font-bold text-accent-violet flex items-center gap-0.5">
                   View Saved &rarr;
                 </span>
               </div>
@@ -538,21 +528,21 @@
 
           <!-- Recommended For You Section -->
           <div class="w-full card-sticker overflow-hidden flex flex-col p-0">
-            <div class="p-6 border-b-2 border-ink bg-paper flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="p-5 border-b border-border-subtle bg-card flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <div class="flex items-center gap-2">
-                  <h2 class="text-xl font-extrabold font-heading text-ink">Top Recommended Philippine Programs</h2>
+                  <h2 class="text-base font-extrabold font-heading text-ink">Top Recommended Philippine Programs</h2>
                   <span class="badge-sticker badge-violet text-[10px]">AI Calibrated</span>
                 </div>
-                <p class="text-xs text-ink-muted mt-1 font-medium">Ranked by eligibility and financial assistance category.</p>
+                <p class="text-xs text-ink-muted mt-0.5">Ranked by eligibility and financial assistance category.</p>
               </div>
-              <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-sm">
+              <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-secondary btn-candy-sm text-xs">
                 View All Programs <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
               </button>
             </div>
             
-            <div id="dash-recommended-list" class="flex flex-col divide-y-2 divide-ink">
-              <!-- Dynamically populated -->
+            <div id="dash-recommended-list" class="flex flex-col divide-y divide-border-subtle">
+              <!-- Dynamically populated via app.js -->
             </div>
           </div>
 
@@ -569,62 +559,62 @@
                 <span class="material-symbols-outlined text-[16px]">neurology</span> QualiFind Natural Language AI
               </div>
               <h1 class="text-3xl lg:text-4xl font-extrabold font-heading text-ink tracking-tight">Describe your situation or select quick tags</h1>
-              <p class="text-sm md:text-base text-ink-muted max-w-2xl mx-auto leading-relaxed font-medium">
+              <p class="text-sm text-ink-muted max-w-2xl mx-auto leading-relaxed">
                 Tap tags that apply to you or type freely. QualiFind AI parses your details across scholarships, tuition grants, LGU assistance, campus jobs, and student loans.
               </p>
             </div>
 
-            <!-- Quick Profile Tags (Multi-Select Memphis Chips) -->
+            <!-- Quick Profile Tags (Multi-Select Chips) -->
             <div class="w-full flex flex-col items-center space-y-2">
-              <span class="text-xs font-heading font-extrabold uppercase text-ink-muted tracking-wider">Tap what applies to you (Multi-Select)</span>
+              <span class="text-xs font-extrabold font-heading uppercase text-ink-muted tracking-wider">Tap what applies to you (Multi-Select)</span>
               <div id="matcher-profile-chips" class="flex flex-wrap justify-center gap-2">
                 <!-- Dynamically rendered via renderMatcherProfileChips() -->
               </div>
             </div>
 
-            <!-- AI Prompt Input Box (Playful Sticker Container) -->
+            <!-- AI Prompt Input Box (Clean Container) -->
             <div class="w-full text-left">
-              <div class="card-sticker p-0 overflow-hidden">
-                <textarea id="ai-prompt-input" class="w-full h-40 bg-transparent p-5 text-base text-ink placeholder:text-ink-muted/60 resize-none focus:outline-none font-medium" placeholder="E.g., I'm Maria, 20 years old, a 2nd-year IT student in Cebu with an 82% GPA. My family has limited income, and I'm looking for assistance to cover tuition and transportation expenses..."></textarea>
+              <div class="card-sticker p-0 overflow-hidden shadow-sm">
+                <textarea id="ai-prompt-input" class="w-full h-36 bg-transparent p-5 text-sm text-ink placeholder:text-ink-muted/60 resize-none focus:outline-none font-medium leading-relaxed" placeholder="E.g., I'm Maria, 20 years old, a 2nd-year IT student in Cebu with an 82% GPA. My family has limited income, and I'm looking for assistance to cover tuition and transportation expenses..."></textarea>
 
                 <div id="matcher-doc-chips" class="hidden flex-wrap gap-2 px-5 pb-4"></div>
 
                 <input type="file" id="matcher-doc-input" class="hidden" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="handleDocumentSelect(event)"/>
                 
-                <div class="bg-paper px-5 py-3.5 flex flex-wrap items-center justify-between gap-3 border-t-2 border-ink">
+                <div class="bg-paper px-5 py-3 flex flex-wrap items-center justify-between gap-3 border-t border-border-subtle">
                   <div class="flex items-center gap-2 text-ink-muted">
-                    <span class="material-symbols-outlined text-[20px]">mic</span>
-                    <span class="text-xs uppercase tracking-wider font-heading font-bold">Natural Language Query</span>
+                    <span class="material-symbols-outlined text-[18px]">mic</span>
+                    <span class="text-xs uppercase tracking-wider font-semibold">Natural Language Query</span>
                   </div>
                   <div class="flex items-center gap-2 ml-auto">
-                    <button type="button" onclick="document.getElementById('matcher-doc-input').click()" class="btn-candy btn-candy-secondary btn-candy-sm" title="Attach supporting documents">
-                      <span class="material-symbols-outlined text-[18px]">attach_file</span>
+                    <button type="button" onclick="document.getElementById('matcher-doc-input').click()" class="btn-candy btn-candy-secondary btn-candy-sm text-xs" title="Attach supporting documents">
+                      <span class="material-symbols-outlined text-[16px]">attach_file</span>
                       <span class="hidden sm:inline">Attach Documents</span>
                     </button>
-                    <button id="btn-find-matches" onclick="handleFindMatches()" class="btn-candy btn-candy-sm">
-                      <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                    <button id="btn-find-matches" onclick="handleFindMatches()" class="btn-candy btn-candy-violet btn-candy-sm text-xs">
+                      <span class="material-symbols-outlined text-[16px]">auto_awesome</span>
                       Find Assistance
                     </button>
                   </div>
                 </div>
               </div>
-              <p id="matcher-loading-status" class="hidden mt-3 text-center text-xs font-heading font-extrabold text-accent-violet animate-pulse">Analyzing your profile requirements...</p>
+              <p id="matcher-loading-status" class="hidden mt-3 text-center text-xs font-bold text-accent-violet animate-pulse">Analyzing your profile requirements...</p>
             </div>
 
             <!-- Starting Points Chips -->
             <div class="w-full flex flex-col items-center space-y-3 pt-2">
-              <span class="text-xs font-heading font-bold uppercase text-ink-muted tracking-wider">Demo Presets &amp; Starting Stories</span>
+              <span class="text-xs font-extrabold font-heading uppercase text-ink-muted tracking-wider">Demo Presets &amp; Starting Stories</span>
               <div id="matcher-chips" class="flex flex-wrap justify-center gap-2">
-                <button data-prompt="I'm Maria, 20 years old, a 2nd-year IT student in Cebu with an 82% GPA. My family has limited income, and I'm looking for assistance to cover my tuition fees and daily transportation expenses." class="badge-sticker badge-pink hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3">
+                <button data-prompt="I'm Maria, 20 years old, a 2nd-year IT student in Cebu with an 82% GPA. My family has limited income, and I'm looking for assistance to cover my tuition fees and daily transportation expenses." class="badge-sticker badge-violet hover:bg-accent-violet hover:text-white cursor-pointer text-xs py-1.5 px-3 transition-colors">
                   🌟 Maria's Demo Story (Cebu 2nd-Yr IT, 82% GPA)
                 </button>
-                <button data-prompt="Looking for DOST-SEI ASTHRDP or ERDT graduate scholarships with monthly stipends around ₱35,000 in AI, genomics, and computing." class="badge-sticker badge-violet hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3">
+                <button data-prompt="Looking for DOST-SEI ASTHRDP or ERDT graduate scholarships with monthly stipends around ₱35,000 in AI, genomics, and computing." class="badge-sticker badge-cyan hover:bg-accent-cyan hover:text-white cursor-pointer text-xs py-1.5 px-3 transition-colors">
                   DOST-SEI ASTHRDP &amp; ERDT Scholarships
                 </button>
-                <button data-prompt="Seeking CHED Tulong Dunong or Cebu City LGU college financial grants for undergraduate tuition assistance." class="badge-sticker badge-amber hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3">
+                <button data-prompt="Seeking CHED Tulong Dunong or Cebu City LGU college financial grants for undergraduate tuition assistance." class="badge-sticker badge-amber hover:bg-warning hover:text-white cursor-pointer text-xs py-1.5 px-3 transition-colors">
                   CHED Tulong Dunong &amp; Cebu LGU Grants
                 </button>
-                <button data-prompt="Find campus student assistantships and IT technical support work-study programs." class="badge-sticker badge-mint hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3">
+                <button data-prompt="Find campus student assistantships and IT technical support work-study programs." class="badge-sticker badge-mint hover:bg-success hover:text-white cursor-pointer text-xs py-1.5 px-3 transition-colors">
                   University IT Student Assistantships
                 </button>
               </div>
@@ -641,16 +631,16 @@
           <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight mb-1">Philippine Assistance Programs</h1>
-              <p class="text-sm text-ink-muted max-w-2xl font-medium">Explore scholarships, educational assistance, assistantships, and certification grants ranked for you.</p>
+              <p class="text-sm text-ink-muted max-w-2xl">Explore scholarships, educational assistance, assistantships, and certification grants ranked for you.</p>
             </div>
             <div class="flex gap-3">
-              <button id="btn-toggle-filters" onclick="toggleFilterDrawer()" class="btn-candy btn-candy-secondary btn-candy-sm">
-                <span class="material-symbols-outlined text-[18px]">filter_list</span>
+              <button id="btn-toggle-filters" onclick="toggleFilterDrawer()" class="btn-candy btn-candy-secondary btn-candy-sm text-xs">
+                <span class="material-symbols-outlined text-[16px]">filter_list</span>
                 <span>Filters</span>
-                <span id="filter-active-count-badge" class="hidden bg-accent-pink text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+                <span id="filter-active-count-badge" class="hidden bg-accent-violet text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
               </button>
-              <button onclick="navigateTo('matcher')" class="btn-candy btn-candy-sm">
-                <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+              <button onclick="navigateTo('matcher')" class="btn-candy btn-candy-violet btn-candy-sm text-xs">
+                <span class="material-symbols-outlined text-[16px]">auto_awesome</span>
                 AI Search
               </button>
             </div>
@@ -658,17 +648,17 @@
 
           <!-- Collapsible Filter Panel -->
           <div id="filter-drawer-panel" class="hidden mb-6 card-sticker p-6 bg-card">
-            <div class="flex items-center justify-between pb-4 mb-4 border-b-2 border-ink">
-              <h3 class="text-base font-extrabold font-heading text-ink flex items-center gap-2">
+            <div class="flex items-center justify-between pb-4 mb-4 border-b border-border-subtle">
+              <h3 class="text-base font-bold font-heading text-ink flex items-center gap-2">
                 <span class="material-symbols-outlined text-accent-violet text-[20px]">tune</span>
                 Filter Assistance Programs
               </h3>
               <div class="flex items-center gap-3">
-                <button onclick="resetFilters()" class="text-xs font-heading font-extrabold text-accent-violet hover:underline">
+                <button onclick="resetFilters()" class="text-xs font-bold text-accent-violet hover:underline">
                   Reset All Filters
                 </button>
-                <button onclick="toggleFilterDrawer(false)" class="text-ink hover:text-accent-pink p-1">
-                  <span class="material-symbols-outlined text-[20px]">close</span>
+                <button onclick="toggleFilterDrawer(false)" class="text-ink-muted hover:text-ink p-1">
+                  <span class="material-symbols-outlined text-[18px]">close</span>
                 </button>
               </div>
             </div>
@@ -677,42 +667,42 @@
               <!-- Keyword Search & Saved Only -->
               <div class="flex flex-col gap-3">
                 <div>
-                  <h4 class="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2">Search Keyword</h4>
+                  <h4 class="text-xs font-extrabold font-heading text-ink uppercase tracking-wider mb-2">Search Keyword</h4>
                   <div class="relative flex items-center">
-                    <span class="material-symbols-outlined absolute left-3 text-ink-muted text-[18px]">search</span>
-                    <input id="search-opportunities-input" type="text" placeholder="Filter DOST, CHED, Cebu, IT..." class="w-full input-playful pl-9 py-2 text-xs"/>
+                    <span class="material-symbols-outlined absolute left-3 text-ink-muted text-[16px]">search</span>
+                    <input id="search-opportunities-input" type="text" placeholder="Filter DOST, CHED, Cebu, IT..." class="w-full input-playful pl-9 py-1.5 text-xs"/>
                   </div>
                 </div>
 
-                <div class="p-3 rounded-2xl bg-paper border-2 border-ink mt-1">
+                <div class="p-3 rounded-xl bg-paper border border-border-subtle mt-1">
                   <label class="flex items-center justify-between cursor-pointer">
-                    <span class="flex items-center gap-2 text-xs font-heading font-bold text-ink">
-                      <span class="material-symbols-outlined text-[18px] text-accent-pink">bookmark</span>
+                    <span class="flex items-center gap-2 text-xs font-bold text-ink">
+                      <span class="material-symbols-outlined text-[18px] text-accent-violet">bookmark</span>
                       Saved Applications Only
                     </span>
-                    <input type="checkbox" id="filter-saved-only-checkbox" onchange="toggleSavedOnlyFilter(this.checked)" class="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"/>
+                    <input type="checkbox" id="filter-saved-only-checkbox" onchange="toggleSavedOnlyFilter(this.checked)" class="w-4 h-4 rounded border-border-subtle text-accent-violet focus:ring-accent-violet"/>
                   </label>
                 </div>
               </div>
 
               <!-- Program Type -->
               <div>
-                <h4 class="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2.5">Category</h4>
+                <h4 class="text-xs font-extrabold font-heading text-ink uppercase tracking-wider mb-2.5">Category</h4>
                 <div class="flex flex-col gap-2">
-                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
-                    <input type="checkbox" value="Scholarship" checked class="filter-type-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-medium text-ink">
+                    <input type="checkbox" value="Scholarship" checked class="filter-type-checkbox w-4 h-4 rounded border-border-subtle text-accent-violet focus:ring-accent-violet"/>
                     <span>Scholarships (Merit / SUC)</span>
                   </label>
-                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
-                    <input type="checkbox" value="Educational Assistance" checked class="filter-type-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-medium text-ink">
+                    <input type="checkbox" value="Educational Assistance" checked class="filter-type-checkbox w-4 h-4 rounded border-border-subtle text-accent-violet focus:ring-accent-violet"/>
                     <span>Government &amp; LGU Assistance</span>
                   </label>
-                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
-                    <input type="checkbox" value="Student Employment" checked class="filter-type-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-medium text-ink">
+                    <input type="checkbox" value="Student Employment" checked class="filter-type-checkbox w-4 h-4 rounded border-border-subtle text-accent-violet focus:ring-accent-violet"/>
                     <span>Student Assistantship / Jobs</span>
                   </label>
-                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
-                    <input type="checkbox" value="Training & Certification" checked class="filter-type-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-medium text-ink">
+                    <input type="checkbox" value="Training & Certification" checked class="filter-type-checkbox w-4 h-4 rounded border-border-subtle text-accent-violet focus:ring-accent-violet"/>
                     <span>Training &amp; Certification Grants</span>
                   </label>
                 </div>
@@ -720,18 +710,18 @@
 
               <!-- Match Quality -->
               <div>
-                <h4 class="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2.5">Match Quality</h4>
+                <h4 class="text-xs font-extrabold font-heading text-ink uppercase tracking-wider mb-2.5">Match Quality</h4>
                 <div class="flex flex-col gap-2">
-                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
-                    <input type="checkbox" value="high" checked class="filter-match-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-medium text-ink">
+                    <input type="checkbox" value="high" checked class="filter-match-checkbox w-4 h-4 rounded border-border-subtle text-accent-violet focus:ring-accent-violet"/>
                     <span class="flex items-center gap-1.5">
-                      <span class="w-2.5 h-2.5 rounded-full bg-accent-mint border border-ink"></span> High Match (&gt;80%)
+                      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> High Match (&gt;80%)
                     </span>
                   </label>
-                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
-                    <input type="checkbox" value="good" checked class="filter-match-checkbox w-4 h-4 rounded border-2 border-ink text-accent-violet"/>
+                  <label class="flex items-center gap-2.5 cursor-pointer text-xs font-medium text-ink">
+                    <input type="checkbox" value="good" checked class="filter-match-checkbox w-4 h-4 rounded border-border-subtle text-accent-violet focus:ring-accent-violet"/>
                     <span class="flex items-center gap-1.5">
-                      <span class="w-2.5 h-2.5 rounded-full bg-accent-amber border border-ink"></span> Good Match (60-80%)
+                      <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Good Match (60-80%)
                     </span>
                   </label>
                 </div>
@@ -739,20 +729,20 @@
             </div>
           </div>
 
-          <!-- Opportunity Cards Container (Full Width Grid) -->
-          <div class="flex flex-col gap-5">
+          <!-- Opportunity Cards Container -->
+          <div class="flex flex-col gap-4">
             <div class="card-sticker p-4 flex items-center justify-between bg-card">
               <div class="flex items-center gap-3">
-                <span class="text-sm font-heading font-bold text-ink">
+                <span class="text-sm font-bold font-heading text-ink">
                   <span id="opp-count-badge" class="text-accent-violet font-extrabold">8</span> opportunities in the Philippines
                 </span>
-                <div class="h-4 w-0.5 bg-ink"></div>
-                <span class="text-xs text-ink-muted font-medium">Ranked by QualiFind AI Score</span>
+                <div class="h-4 w-px bg-border-subtle"></div>
+                <span class="text-xs text-ink-muted">Ranked by QualiFind AI Score</span>
               </div>
             </div>
 
-            <div id="opportunities-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <!-- Dynamically Populated -->
+            <div id="opportunities-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              <!-- Dynamically Populated via app.js -->
             </div>
           </div>
         </div>
@@ -765,25 +755,25 @@
           <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <div class="flex items-center gap-2 mb-2">
-                <span class="badge-sticker badge-pink">
+                <span class="badge-sticker badge-violet">
                   <span class="material-symbols-outlined text-[16px]">bookmark</span> Drafts &amp; Bookmarks
                 </span>
               </div>
               <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Saved Applications</h1>
-              <p class="text-sm text-ink-muted max-w-2xl mt-1 font-medium">
+              <p class="text-sm text-ink-muted max-w-2xl mt-1">
                 Your bookmarked Philippine funding opportunities, scholarships, and assistance programs.
               </p>
             </div>
             <div class="flex gap-3">
-              <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-secondary btn-candy-sm">
-                <span class="material-symbols-outlined text-[18px]">add</span>
+              <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-secondary btn-candy-sm text-xs">
+                <span class="material-symbols-outlined text-[16px]">add</span>
                 Browse More Programs
               </button>
             </div>
           </div>
 
           <!-- Saved Applications Cards Container -->
-          <div id="saved-applications-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div id="saved-applications-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             <!-- Dynamically populated via renderSavedApplicationsView() -->
           </div>
         </div>
@@ -792,100 +782,99 @@
       <!-- ================= VIEW 4: ELIGIBILITY CHECK (STUDENT ONLY) ================= -->
       <section id="view-eligibility" class="view-section">
         <div class="flex flex-col w-full gap-6">
-          <div class="flex items-center gap-2 text-sm font-heading font-bold text-ink cursor-pointer hover:text-accent-violet transition-colors" onclick="navigateTo('opportunities')">
+          <div class="flex items-center gap-2 text-sm font-bold text-ink-muted hover:text-accent-violet cursor-pointer transition-colors" onclick="navigateTo('opportunities')">
             <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Opportunities
           </div>
 
           <div id="eligibility-not-found" class="hidden card-sticker p-12 text-center flex flex-col items-center justify-center">
             <span class="material-symbols-outlined text-6xl text-ink-muted mb-4">search_off</span>
             <h3 class="text-xl font-bold font-heading text-ink mb-1">This program isn't in the registry anymore</h3>
-            <p class="text-sm text-ink-muted max-w-md mb-6 font-medium">It may have been removed or the link is out of date.</p>
-            <button class="btn-candy" onclick="navigateTo('opportunities')">Back to Opportunities</button>
+            <p class="text-sm text-ink-muted max-w-md mb-6">It may have been removed or the link is out of date.</p>
+            <button class="btn-candy btn-candy-violet" onclick="navigateTo('opportunities')">Back to Opportunities</button>
           </div>
 
           <div id="eligibility-content" class="grid grid-cols-12 gap-6 items-start">
             <!-- Left 8 Columns: Detail Hero & Breakdown -->
-            <div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+            <div class="col-span-12 lg:col-span-8 flex flex-col gap-5">
               
-              <!-- Hero Sticker Card -->
+              <!-- Hero Card -->
               <div class="card-sticker p-6 lg:p-8 bg-card relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 w-48 h-48 bg-accent-violet/15 rounded-full pointer-events-none"></div>
                 <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                   <div>
                     <div class="flex items-center gap-2 mb-3">
-                      <span id="eligibility-status-icon" class="material-symbols-outlined text-2xl text-success" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                      <span id="eligibility-status-icon" class="material-symbols-outlined text-2xl text-emerald-600" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                       <span id="eligibility-status-badge" class="badge-sticker badge-mint text-xs">Status: Eligible</span>
                     </div>
                     <h1 id="eligibility-title" class="text-2xl lg:text-3xl font-extrabold font-heading text-ink mb-2 leading-snug">DOST-SEI ASTHRDP Graduate Research Scholarship</h1>
-                    <p id="eligibility-provider" class="text-sm font-bold font-heading text-accent-violet mb-3">Department of Science and Technology - SEI</p>
-                    <p id="eligibility-summary" class="text-sm text-ink-muted max-w-2xl leading-relaxed font-medium">
+                    <p id="eligibility-provider" class="text-sm font-bold text-accent-violet mb-3">Department of Science and Technology - SEI</p>
+                    <p id="eligibility-summary" class="text-sm text-ink-muted max-w-2xl leading-relaxed">
                       Based on your academic profile and requirements, the AI has generated this eligibility assessment.
                     </p>
                   </div>
 
-                  <div class="shrink-0 flex flex-col items-center justify-center p-5 bg-paper rounded-2xl border-2 border-ink shadow-pop-sm">
+                  <div class="shrink-0 flex flex-col items-center justify-center p-5 bg-paper rounded-xl border border-border-subtle shadow-sm">
                     <span id="eligibility-score" class="text-4xl font-extrabold font-heading text-accent-violet">95%</span>
-                    <span class="text-[11px] font-heading font-extrabold text-ink uppercase tracking-wider mt-1">Match Score</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-ink-muted mt-1">Match Score</span>
                   </div>
                 </div>
 
-                <div class="relative z-10 mt-6 pt-6 border-t-2 border-ink flex flex-wrap gap-3">
-                  <button onclick="navigateTo('action-plan')" class="btn-candy btn-candy-sm">
-                    <span class="material-symbols-outlined text-[18px]">checklist</span> Generate Action Plan
+                <div class="relative z-10 mt-6 pt-6 border-t border-border-subtle flex flex-wrap gap-3">
+                  <button onclick="navigateTo('action-plan')" class="btn-candy btn-candy-violet btn-candy-sm">
+                    <span class="material-symbols-outlined text-[16px]">checklist</span> Generate Action Plan
                   </button>
                   <button id="eligibility-bookmark-btn" class="btn-candy btn-candy-secondary btn-candy-sm">
-                    <span class="material-symbols-outlined text-[18px]">bookmark</span> Save for Later
+                    <span class="material-symbols-outlined text-[16px]">bookmark</span> Save for Later
                   </button>
                 </div>
               </div>
 
               <!-- Official Verification Disclaimer Callout -->
-              <div class="p-4 rounded-2xl bg-accent-amber/20 border-2 border-ink flex items-start gap-3 shadow-pop-sm">
-                <span class="material-symbols-outlined text-ink text-[22px] shrink-0 mt-0.5">info</span>
-                <p class="text-xs font-semibold text-ink leading-relaxed">
+              <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-3">
+                <span class="material-symbols-outlined text-amber-600 text-[20px] shrink-0 mt-0.5">info</span>
+                <p class="text-xs font-medium text-amber-900 leading-relaxed">
                   <strong>Official Verification Disclaimer:</strong> AI eligibility assessments are provided for guidance purposes. Always verify requirements, deadlines, and submission procedures directly with the official program provider or university financial aid office.
                 </p>
               </div>
 
               <!-- Why You Match / Gap Diagnosis Section -->
               <div class="flex flex-col gap-4">
-                <h2 class="text-xl font-extrabold font-heading text-ink flex items-center gap-2">
+                <h2 class="text-lg font-bold font-heading text-ink flex items-center gap-2">
                   <span class="material-symbols-outlined text-accent-violet">auto_awesome</span>
                   Requirement &amp; Gap Analysis
                 </h2>
                 <div id="eligibility-reasons-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <!-- Dynamically Rendered -->
+                  <!-- Dynamically Rendered via app.js -->
                 </div>
               </div>
 
               <!-- Alternative Assistance Pathways (When ineligibility or low fit occurs) -->
               <div id="eligibility-alternatives-container" class="hidden flex flex-col gap-4">
-                <h2 class="text-xl font-extrabold font-heading text-ink flex items-center gap-2">
-                  <span class="material-symbols-outlined text-accent-pink">swap_calls</span>
+                <h2 class="text-lg font-bold font-heading text-ink flex items-center gap-2">
+                  <span class="material-symbols-outlined text-accent-violet">swap_calls</span>
                   Alternative Assistance Pathways
                 </h2>
                 <div id="eligibility-alternatives-list" class="grid grid-cols-1 gap-3">
-                  <!-- Dynamically Rendered -->
+                  <!-- Dynamically Rendered via app.js -->
                 </div>
               </div>
 
             </div>
 
             <!-- Right 4 Columns: Requirements Checklist & Meta -->
-            <div class="col-span-12 lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-24">
+            <div class="col-span-12 lg:col-span-4 flex flex-col gap-5 lg:sticky lg:top-24">
               
               <!-- Quick Info Card -->
               <div class="card-sticker p-5 flex flex-col gap-4 bg-card">
-                <h3 class="text-base font-extrabold font-heading text-ink flex items-center gap-2">
+                <h3 class="text-base font-bold font-heading text-ink flex items-center gap-2">
                   <span class="material-symbols-outlined text-accent-violet">info</span> Program Overview
                 </h3>
-                <div class="grid grid-cols-2 gap-4 pt-2 border-t-2 border-ink">
+                <div class="grid grid-cols-2 gap-4 pt-2 border-t border-border-subtle">
                   <div>
-                    <span class="text-[11px] font-heading font-bold text-ink-muted uppercase">Stipend / Value</span>
+                    <span class="text-[10px] font-bold font-heading text-ink-muted uppercase">Stipend / Value</span>
                     <p id="eligibility-funding" class="text-sm font-extrabold font-heading text-ink mt-0.5">₱480,000 / yr</p>
                   </div>
                   <div>
-                    <span class="text-[11px] font-heading font-bold text-ink-muted uppercase">Deadline</span>
+                    <span class="text-[10px] font-bold font-heading text-ink-muted uppercase">Deadline</span>
                     <p id="eligibility-deadline" class="text-sm font-extrabold font-heading text-ink mt-0.5">Oct 15, 2024</p>
                   </div>
                 </div>
@@ -893,15 +882,15 @@
 
               <!-- Requirements Checklist Card -->
               <div class="card-sticker overflow-hidden flex flex-col p-0 bg-card">
-                <div class="bg-paper px-5 py-4 border-b-2 border-ink">
-                  <h3 class="text-base font-extrabold font-heading text-ink flex items-center gap-2">
-                    <span class="material-symbols-outlined text-accent-mint">task_alt</span>
+                <div class="bg-paper px-5 py-4 border-b border-border-subtle">
+                  <h3 class="text-base font-bold font-heading text-ink flex items-center gap-2">
+                    <span class="material-symbols-outlined text-emerald-600">task_alt</span>
                     Requirements Checklist
                   </h3>
-                  <p class="text-xs text-ink-muted mt-0.5 font-medium">Philippine documentation &amp; clearances.</p>
+                  <p class="text-xs text-ink-muted mt-0.5">Philippine documentation &amp; clearances.</p>
                 </div>
                 <div id="eligibility-checklist-items" class="p-5 flex flex-col gap-4">
-                  <!-- Dynamically Rendered -->
+                  <!-- Dynamically Rendered via app.js -->
                 </div>
               </div>
 
@@ -913,29 +902,29 @@
       <!-- ================= VIEW 5: ACTION PLAN (STUDENT ONLY) ================= -->
       <section id="view-action-plan" class="view-section">
         <div class="flex flex-col w-full max-w-4xl mx-auto gap-6">
-          <div class="flex items-center gap-2 text-sm font-heading font-bold text-ink cursor-pointer hover:text-accent-violet transition-colors" onclick="navigateTo('eligibility')">
+          <div class="flex items-center gap-2 text-sm font-bold text-ink-muted hover:text-accent-violet cursor-pointer transition-colors" onclick="navigateTo('eligibility')">
             <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Program Details
           </div>
 
           <div>
             <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Personalized Action Plan</h1>
-            <p class="text-sm text-ink-muted mt-1 font-medium">
+            <p class="text-sm text-ink-muted mt-1">
               Step-by-step roadmap to submit your application for <strong id="action-plan-target-title" class="text-accent-violet">DOST-SEI ASTHRDP</strong>.
             </p>
           </div>
 
           <!-- Highlighted "Your Next Step" Hero Callout Box -->
-          <div class="card-sticker card-sticker-amber p-6 bg-card relative overflow-hidden">
-            <div class="relative z-10 flex flex-col gap-2">
+          <div class="card-sticker p-6 bg-paper border-l-4 border-l-accent-violet">
+            <div class="flex flex-col gap-2">
               <div class="flex items-center gap-2">
-                <span class="badge-sticker badge-amber">
+                <span class="badge-sticker badge-violet">
                   <span class="material-symbols-outlined text-[15px]">flag</span> RECOMMENDED NEXT ACTION
                 </span>
               </div>
               <h3 id="action-plan-next-step-title" class="text-lg font-extrabold font-heading text-ink mt-1">
                 Your Next Step: Prepare your Certificate of Enrollment and latest grades
               </h3>
-              <p id="action-plan-recommendation-text" class="text-sm text-ink-muted leading-relaxed font-medium">
+              <p id="action-plan-recommendation-text" class="text-sm text-ink-muted leading-relaxed">
                 Gather your 2nd year IT enrollment documentation and registrar grade slip before starting the official online submission.
               </p>
             </div>
@@ -945,21 +934,21 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Required Documents Box -->
             <div class="card-sticker p-5 bg-card flex flex-col gap-3">
-              <h3 class="text-base font-extrabold font-heading text-ink flex items-center gap-2">
+              <h3 class="text-base font-bold font-heading text-ink flex items-center gap-2">
                 <span class="material-symbols-outlined text-accent-violet">description</span>
                 Required Documents
               </h3>
-              <ul id="action-plan-docs-list" class="flex flex-col gap-2 text-xs font-semibold text-ink">
-                <li class="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30">
-                  <span class="material-symbols-outlined text-accent-mint text-[18px]">check_circle</span>
+              <ul id="action-plan-docs-list" class="flex flex-col gap-2 text-xs font-bold text-ink">
+                <li class="flex items-center gap-2 p-2.5 rounded-xl bg-paper border border-border-subtle">
+                  <span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
                   Certificate of Enrollment (COE)
                 </li>
-                <li class="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30">
-                  <span class="material-symbols-outlined text-accent-mint text-[18px]">check_circle</span>
+                <li class="flex items-center gap-2 p-2.5 rounded-xl bg-paper border border-border-subtle">
+                  <span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
                   Official Transcript / True Copy of Grades
                 </li>
-                <li class="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30">
-                  <span class="material-symbols-outlined text-accent-amber text-[18px]">pending</span>
+                <li class="flex items-center gap-2 p-2.5 rounded-xl bg-paper border border-border-subtle">
+                  <span class="material-symbols-outlined text-amber-500 text-[18px]">pending</span>
                   Barangay Certificate of Indigency
                 </li>
               </ul>
@@ -968,18 +957,18 @@
             <!-- Official Application Source & Deadlines -->
             <div class="card-sticker p-5 bg-card flex flex-col justify-between">
               <div>
-                <h3 class="text-base font-extrabold font-heading text-ink flex items-center gap-2 mb-3">
-                  <span class="material-symbols-outlined text-accent-pink">link</span>
+                <h3 class="text-base font-bold font-heading text-ink flex items-center gap-2 mb-3">
+                  <span class="material-symbols-outlined text-accent-violet">link</span>
                   Official Application Source
                 </h3>
-                <p class="text-xs text-ink-muted font-medium mb-3">Submit your forms directly to the verified portal:</p>
-                <div class="p-3 rounded-xl bg-paper border-2 border-ink flex items-center justify-between">
-                  <span id="action-plan-portal-name" class="text-xs font-extrabold font-heading text-ink">DOST-SEI E-Scholarship Portal</span>
+                <p class="text-xs text-ink-muted mb-3">Submit your forms directly to the verified portal:</p>
+                <div class="p-3 rounded-xl bg-paper border border-border-subtle flex items-center justify-between">
+                  <span id="action-plan-portal-name" class="text-xs font-bold font-heading text-ink">DOST-SEI E-Scholarship Portal</span>
                   <span class="material-symbols-outlined text-accent-violet text-[18px]">open_in_new</span>
                 </div>
               </div>
-              <div class="mt-4 pt-3 border-t border-ink/20 flex justify-between items-center text-xs">
-                <span class="font-heading font-bold text-ink-muted">Deadline:</span>
+              <div class="mt-4 pt-3 border-t border-border-subtle flex justify-between items-center text-xs">
+                <span class="font-bold font-heading text-ink-muted">Deadline:</span>
                 <span id="action-plan-deadline-tag" class="badge-sticker badge-pink text-[10px]">Oct 15, 2024</span>
               </div>
             </div>
@@ -987,7 +976,7 @@
 
           <!-- Numbered Step-by-Step Application Steps -->
           <div class="flex flex-col gap-4">
-            <h3 class="text-lg font-extrabold font-heading text-ink">Step-by-Step Application Flow</h3>
+            <h3 class="text-lg font-bold font-heading text-ink">Step-by-Step Application Flow</h3>
             
             <div id="action-plan-steps-container" class="space-y-3">
               <!-- Dynamically populated in app.js -->
@@ -995,11 +984,11 @@
           </div>
 
           <div class="pt-4 flex justify-end gap-3">
-            <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-secondary btn-candy-sm">
+            <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-secondary btn-candy-sm text-xs">
               Browse More Programs
             </button>
-            <button onclick="showToast('Action plan saved to your QualiFind drafts.');" class="btn-candy btn-candy-sm">
-              <span class="material-symbols-outlined text-[18px]">bookmark_add</span> Save Action Plan
+            <button onclick="showToast('Action plan saved to your QualiFind drafts.');" class="btn-candy btn-candy-violet btn-candy-sm text-xs">
+              <span class="material-symbols-outlined text-[16px]">bookmark_add</span> Save Action Plan
             </button>
           </div>
         </div>
@@ -1010,47 +999,47 @@
         <div class="flex flex-col w-full max-w-3xl mx-auto gap-6">
           <div>
             <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Student Profile</h1>
-            <p class="text-sm text-ink-muted mt-1 font-medium">Review and update your educational, academic, and financial background.</p>
+            <p class="text-sm text-ink-muted mt-1">Review and update your educational, academic, and financial background.</p>
           </div>
 
           <form onsubmit="saveProfile(event)" class="card-sticker p-6 lg:p-8 bg-card flex flex-col gap-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink" for="profile-name-input">Full Name</label>
-                <input id="profile-name-input" type="text" class="input-playful text-sm"/>
+                <label class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted" for="profile-name-input">Full Name</label>
+                <input id="profile-name-input" type="text" class="input-playful text-sm font-medium"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink" for="profile-email-input">Email Address</label>
-                <input id="profile-email-input" type="email" class="input-playful text-sm"/>
+                <label class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted" for="profile-email-input">Email Address</label>
+                <input id="profile-email-input" type="email" class="input-playful text-sm font-medium"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink" for="profile-gpa-input">Current GPA / GWA (%)</label>
-                <input id="profile-gpa-input" type="number" step="0.1" min="50" max="100" class="input-playful text-sm" title="Grade percentage (e.g. 82)"/>
+                <label class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted" for="profile-gpa-input">Current GPA / GWA (%)</label>
+                <input id="profile-gpa-input" type="number" step="0.1" min="50" max="100" class="input-playful text-sm font-medium" title="Grade percentage (e.g. 82)"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink" for="profile-dept-input">Institution &amp; Region</label>
-                <input id="profile-dept-input" type="text" class="input-playful text-sm"/>
+                <label class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted" for="profile-dept-input">Institution &amp; Region</label>
+                <input id="profile-dept-input" type="text" class="input-playful text-sm font-medium"/>
               </div>
             </div>
 
             <div class="flex flex-col gap-1.5">
-              <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink" for="profile-bio-input">Situation &amp; Financial Background</label>
-              <textarea id="profile-bio-input" rows="3" class="input-playful text-sm"></textarea>
+              <label class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted" for="profile-bio-input">Situation &amp; Financial Background</label>
+              <textarea id="profile-bio-input" rows="3" class="input-playful text-sm font-medium"></textarea>
             </div>
 
             <!-- Skills & Competencies -->
             <div class="flex flex-col gap-2">
-              <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Skills &amp; Interests</label>
+              <label class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted">Skills &amp; Interests</label>
               <div id="profile-skills-list" class="flex flex-wrap gap-2 pt-1">
                 <!-- Dynamically Populated -->
               </div>
             </div>
 
-            <div class="pt-4 border-t-2 border-ink flex justify-end">
-              <button type="submit" class="btn-candy">
+            <div class="pt-4 border-t border-border-subtle flex justify-end">
+              <button type="submit" class="btn-candy btn-candy-violet">
                 Save Profile
               </button>
             </div>
@@ -1058,88 +1047,88 @@
         </div>
       </section>
 
-      <!-- ================= VIEW 7: ADMIN REGISTRY ANALYTICS (ADMIN ONLY - WEB ONLY) ================= -->
+      <!-- ================= VIEW 7: ADMIN REGISTRY ANALYTICS (ADMIN ONLY) ================= -->
       <section id="view-admin-dashboard" class="view-section">
         
         <!-- Mobile Guard Notice -->
         <div class="block lg:hidden card-sticker p-6 text-center flex flex-col items-center justify-center my-4">
-          <div class="w-14 h-14 rounded-2xl bg-accent-amber border-2 border-ink flex items-center justify-center mb-3 shadow-pop-sm">
-            <span class="material-symbols-outlined text-3xl text-ink">desktop_windows</span>
+          <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-3">
+            <span class="material-symbols-outlined text-2xl">desktop_windows</span>
           </div>
-          <h2 class="text-xl font-extrabold font-heading text-ink mb-1.5">Admin Portal is Desktop Web-Only</h2>
-          <p class="text-xs text-ink-muted max-w-sm mb-5 leading-relaxed font-medium">
+          <h2 class="text-lg font-bold font-heading text-ink mb-1.5">Admin Portal is Desktop Web-Only</h2>
+          <p class="text-xs text-ink-muted max-w-sm mb-5 leading-relaxed">
             The QualiFind Registry Analytics suite requires a desktop workstation to manage Philippine grant databases.
           </p>
-          <button onclick="setRole('student')" class="btn-candy btn-candy-sm">
-            <span class="material-symbols-outlined text-[18px]">school</span> Switch to Student Portal
+          <button onclick="setRole('student')" class="btn-candy btn-candy-violet btn-candy-sm">
+            <span class="material-symbols-outlined text-[16px]">school</span> Switch to Student Portal
           </button>
         </div>
 
         <!-- Desktop Web Content -->
-        <div class="hidden lg:flex flex-col w-full gap-8">
+        <div class="hidden lg:flex flex-col w-full gap-6">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div class="flex items-center gap-2">
                 <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Registry Analytics</h1>
                 <span class="badge-sticker badge-violet text-[10px]">ADMIN WORKSTATION</span>
               </div>
-              <p class="text-sm text-ink-muted mt-0.5 font-medium">National program registry, student evaluation volume, and DOST/CHED program updates.</p>
+              <p class="text-sm text-ink-muted mt-0.5">National program registry, student evaluation volume, and DOST/CHED program updates.</p>
             </div>
-            <button onclick="openAddProgramModal()" class="btn-candy btn-candy-sm">
-              <span class="material-symbols-outlined text-[18px]">add</span> Add Philippine Program
+            <button onclick="openAddProgramModal()" class="btn-candy btn-candy-violet btn-candy-sm">
+              <span class="material-symbols-outlined text-[16px]">add</span> Add Philippine Program
             </button>
           </div>
 
           <!-- Admin Metric Cards -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="card-sticker p-5 flex flex-col gap-2">
               <div class="flex justify-between items-start">
-                <span class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink-muted">Total Registry</span>
-                <div class="w-9 h-9 rounded-xl bg-accent-violet text-white border-2 border-ink flex items-center justify-center shadow-pop-sm">
+                <span class="text-xs font-bold font-heading uppercase tracking-wider text-ink-muted">Total Registry</span>
+                <div class="w-8 h-8 rounded-lg bg-indigo-50 text-accent-violet flex items-center justify-center">
                   <span class="material-symbols-outlined text-[18px]">inventory_2</span>
                 </div>
               </div>
               <span id="admin-stat-total" class="text-3xl font-extrabold font-heading text-ink">8</span>
-              <div class="flex items-center gap-1 text-success text-xs font-bold">
+              <div class="flex items-center gap-1 text-success text-xs font-bold font-heading">
                 <span class="material-symbols-outlined text-[14px]">arrow_upward</span> +15% active grants
               </div>
             </div>
 
             <div class="card-sticker p-5 flex flex-col gap-2">
               <div class="flex justify-between items-start">
-                <span class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink-muted">Active Programs</span>
-                <div class="w-9 h-9 rounded-xl bg-accent-mint text-ink border-2 border-ink flex items-center justify-center shadow-pop-sm">
+                <span class="text-xs font-bold font-heading uppercase tracking-wider text-ink-muted">Active Programs</span>
+                <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
                   <span class="material-symbols-outlined text-[18px]">check_circle</span>
                 </div>
               </div>
               <span id="admin-stat-active" class="text-3xl font-extrabold font-heading text-ink">6</span>
-              <div class="flex items-center gap-1 text-success text-xs font-bold">
+              <div class="flex items-center gap-1 text-success text-xs font-bold font-heading">
                 <span class="material-symbols-outlined text-[14px]">check</span> Open for applications
               </div>
             </div>
 
             <div class="card-sticker p-5 flex flex-col gap-2">
               <div class="flex justify-between items-start">
-                <span class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink-muted">In Review / Draft</span>
-                <div class="w-9 h-9 rounded-xl bg-accent-amber text-ink border-2 border-ink flex items-center justify-center shadow-pop-sm">
+                <span class="text-xs font-bold font-heading uppercase tracking-wider text-ink-muted">In Review / Draft</span>
+                <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
                   <span class="material-symbols-outlined text-[18px]">pending_actions</span>
                 </div>
               </div>
               <span id="admin-stat-review" class="text-3xl font-extrabold font-heading text-ink">1</span>
-              <div class="flex items-center gap-1 text-warning text-xs font-bold">
+              <div class="flex items-center gap-1 text-warning text-xs font-bold font-heading">
                 <span class="material-symbols-outlined text-[14px]">schedule</span> 1 Draft
               </div>
             </div>
 
             <div class="card-sticker p-5 flex flex-col gap-2">
               <div class="flex justify-between items-start">
-                <span class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink-muted">Expired / Closed</span>
-                <div class="w-9 h-9 rounded-xl bg-accent-pink text-white border-2 border-ink flex items-center justify-center shadow-pop-sm">
+                <span class="text-xs font-bold font-heading uppercase tracking-wider text-ink-muted">Expired / Closed</span>
+                <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
                   <span class="material-symbols-outlined text-[18px]">error</span>
                 </div>
               </div>
               <span id="admin-stat-expired" class="text-3xl font-extrabold font-heading text-ink">1</span>
-              <div class="flex items-center gap-1 text-error text-xs font-bold">
+              <div class="flex items-center gap-1 text-error text-xs font-bold font-heading">
                 <span class="material-symbols-outlined text-[14px]">archive</span> Archived
               </div>
             </div>
@@ -1147,12 +1136,12 @@
 
           <!-- Quick Program Table Preview -->
           <div class="card-sticker overflow-hidden flex flex-col p-0">
-            <div class="p-5 border-b-2 border-ink bg-paper flex justify-between items-center">
+            <div class="p-5 border-b border-border-subtle bg-card flex justify-between items-center">
               <div>
-                <h3 class="text-base font-extrabold font-heading text-ink">Recent Philippine Program Entries</h3>
-                <p class="text-xs text-ink-muted font-medium">Review active scholarship and assistance records.</p>
+                <h3 class="text-base font-bold font-heading text-ink">Recent Philippine Program Entries</h3>
+                <p class="text-xs text-ink-muted">Review active scholarship and assistance records.</p>
               </div>
-              <button onclick="navigateTo('admin-programs')" class="text-xs font-heading font-extrabold text-accent-violet hover:underline">
+              <button onclick="navigateTo('admin-programs')" class="text-xs font-bold text-accent-violet hover:underline">
                 View Full Registry &rarr;
               </button>
             </div>
@@ -1160,7 +1149,7 @@
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse">
                 <thead>
-                  <tr class="bg-paper text-xs font-heading font-extrabold text-ink uppercase tracking-wider border-b-2 border-ink">
+                  <tr class="bg-paper text-xs font-bold font-heading text-ink-muted uppercase tracking-wider border-b border-border-subtle">
                     <th class="py-3 px-6">Program Name</th>
                     <th class="py-3 px-4">Category</th>
                     <th class="py-3 px-4">Status</th>
@@ -1168,8 +1157,8 @@
                     <th class="py-3 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody id="admin-recent-programs-tbody" class="text-sm divide-y-2 divide-ink">
-                  <!-- Dynamically Rendered -->
+                <tbody id="admin-recent-programs-tbody" class="text-sm divide-y divide-border-subtle">
+                  <!-- Dynamically Rendered via app.js -->
                 </tbody>
               </table>
             </div>
@@ -1186,10 +1175,10 @@
                 <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Manage Philippine Programs</h1>
                 <span class="badge-sticker badge-violet text-[10px]">ADMIN WORKSTATION</span>
               </div>
-              <p class="text-sm text-ink-muted mt-0.5 font-medium">Administer and edit all scholarships, grants, and assistance records in the registry.</p>
+              <p class="text-sm text-ink-muted mt-0.5">Administer and edit all scholarships, grants, and assistance records in the registry.</p>
             </div>
-            <button onclick="openAddProgramModal()" class="btn-candy btn-candy-sm">
-              <span class="material-symbols-outlined text-[18px]">add</span> Add Program
+            <button onclick="openAddProgramModal()" class="btn-candy btn-candy-violet btn-candy-sm">
+              <span class="material-symbols-outlined text-[16px]">add</span> Add Program
             </button>
           </div>
 
@@ -1197,7 +1186,7 @@
           <div class="card-sticker overflow-hidden flex flex-col p-0">
             <div class="overflow-x-auto w-full">
               <table class="w-full text-left whitespace-nowrap">
-                <thead class="bg-paper border-b-2 border-ink text-xs font-heading font-extrabold text-ink uppercase tracking-wider">
+                <thead class="bg-paper border-b border-border-subtle text-xs font-bold font-heading text-ink-muted uppercase tracking-wider">
                   <tr>
                     <th class="px-6 py-3.5 w-10"></th>
                     <th class="px-6 py-3.5">Program Name</th>
@@ -1208,8 +1197,8 @@
                     <th class="px-6 py-3.5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody id="admin-programs-full-tbody" class="divide-y-2 divide-ink text-sm">
-                  <!-- Dynamically Rendered -->
+                <tbody id="admin-programs-full-tbody" class="divide-y divide-border-subtle text-sm">
+                  <!-- Dynamically Rendered via app.js -->
                 </tbody>
               </table>
             </div>
@@ -1222,34 +1211,34 @@
         <div class="flex flex-col w-full max-w-3xl mx-auto gap-6">
           <div>
             <h1 class="text-3xl font-extrabold font-heading text-ink tracking-tight">Officer &amp; Agency Profile</h1>
-            <p class="text-sm text-ink-muted mt-1 font-medium">Administrator agency details and program parameters.</p>
+            <p class="text-sm text-ink-muted mt-1">Administrator agency details and program parameters.</p>
           </div>
 
           <div class="card-sticker p-6 lg:p-8 bg-card flex flex-col gap-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Administrator Name</label>
+                <label class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted">Administrator Name</label>
                 <input type="text" readonly value="Dr. Ernesto Ramos" class="input-playful text-sm font-bold bg-paper"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Official Agency Email</label>
+                <label class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted">Official Agency Email</label>
                 <input type="email" readonly value="ernesto.ramos@ched.gov.ph" class="input-playful text-sm font-bold bg-paper"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Office &amp; Designation</label>
+                <label class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted">Office &amp; Designation</label>
                 <input type="text" readonly value="Director, Office of Scholarships &amp; Grants" class="input-playful text-sm font-bold bg-paper"/>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Consortium Scope</label>
+                <label class="text-xs font-extrabold font-heading uppercase tracking-wider text-ink-muted">Consortium Scope</label>
                 <input type="text" readonly value="DOST-SEI &amp; CHED Higher Ed Network" class="input-playful text-sm font-bold bg-paper"/>
               </div>
             </div>
 
-            <div class="pt-4 border-t-2 border-ink flex justify-end">
-              <button onclick="showToast('Office configuration saved.');" class="btn-candy btn-candy-sm">
+            <div class="pt-4 border-t border-border-subtle flex justify-end">
+              <button onclick="showToast('Office configuration saved.');" class="btn-candy btn-candy-violet btn-candy-sm">
                 Save Office Settings
               </button>
             </div>
@@ -1261,21 +1250,21 @@
   </div>
 
   <!-- Mobile Bottom Navigation Bar -->
-  <nav id="student-mobile-nav" class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-paper/95 backdrop-blur-md border-t-2 border-ink">
+  <nav id="student-mobile-nav" class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border-subtle shadow-sm">
     <div class="flex justify-around items-center h-16 px-4">
-      <a href="#dashboard" onclick="navigateTo('dashboard'); return false;" class="flex flex-col items-center gap-0.5 text-accent-violet font-heading font-bold">
+      <a href="#dashboard" onclick="navigateTo('dashboard'); return false;" class="flex flex-col items-center gap-0.5 text-accent-violet font-bold font-heading">
         <span class="material-symbols-outlined text-[22px]">dashboard</span>
         <span class="text-[10px]">Home</span>
       </a>
-      <a href="#matcher" onclick="navigateTo('matcher'); return false;" class="flex flex-col items-center gap-0.5 text-ink font-heading font-bold">
+      <a href="#matcher" onclick="navigateTo('matcher'); return false;" class="flex flex-col items-center gap-0.5 text-ink-muted hover:text-ink font-bold font-heading">
         <span class="material-symbols-outlined text-[22px]">auto_awesome</span>
         <span class="text-[10px]">Match</span>
       </a>
-      <a href="#opportunities" onclick="navigateTo('opportunities'); return false;" class="flex flex-col items-center gap-0.5 text-ink font-heading font-bold">
+      <a href="#opportunities" onclick="navigateTo('opportunities'); return false;" class="flex flex-col items-center gap-0.5 text-ink-muted hover:text-ink font-bold font-heading">
         <span class="material-symbols-outlined text-[22px]">search</span>
         <span class="text-[10px]">Programs</span>
       </a>
-      <a href="#profile" onclick="navigateTo('profile'); return false;" class="flex flex-col items-center gap-0.5 text-ink font-heading font-bold">
+      <a href="#profile" onclick="navigateTo('profile'); return false;" class="flex flex-col items-center gap-0.5 text-ink-muted hover:text-ink font-bold font-heading">
         <span class="material-symbols-outlined text-[22px]">person</span>
         <span class="text-[10px]">Profile</span>
       </a>
@@ -1283,31 +1272,31 @@
   </nav>
 
   <!-- ================= USER / ROLE SWITCHER MODAL ================= -->
-  <div id="user-switch-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
-    <div class="card-sticker max-w-md w-full p-6 bg-card shadow-pop-lg">
-      <div class="flex justify-between items-center pb-3 border-b-2 border-ink mb-4">
+  <div id="user-switch-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+    <div class="card-sticker max-w-md w-full p-6 bg-card shadow-lg">
+      <div class="flex justify-between items-center pb-3 border-b border-border-subtle mb-4">
         <div>
-          <h3 class="text-lg font-extrabold font-heading text-ink">Switch User Account</h3>
-          <p class="text-xs text-ink-muted font-medium">Select Student or Admin portal</p>
+          <h3 class="text-base font-extrabold font-heading text-ink">Switch User Account</h3>
+          <p class="text-xs text-ink-muted">Select Student or Admin portal</p>
         </div>
-        <button onclick="closeUserSwitchModal()" class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-pink hover:text-white transition-colors shadow-pop-sm">
-          <span class="material-symbols-outlined text-[18px]">close</span>
+        <button onclick="closeUserSwitchModal()" class="w-7 h-7 rounded-lg bg-paper hover:bg-card-subtle border border-border-subtle flex items-center justify-center text-ink-muted hover:text-ink transition-colors">
+          <span class="material-symbols-outlined text-[16px]">close</span>
         </button>
       </div>
 
       <div class="flex flex-col gap-3">
         <!-- User 1: Student (Maria) -->
-        <div onclick="setRole('student'); closeUserSwitchModal();" class="p-4 rounded-2xl border-2 border-ink bg-accent-violet/10 hover:bg-accent-violet/20 cursor-pointer transition-all flex items-start gap-3.5 group shadow-pop-sm hover:shadow-pop">
-          <div class="w-10 h-10 rounded-full bg-accent-violet text-white border-2 border-ink flex items-center justify-center font-heading font-extrabold text-sm shrink-0 shadow-pop-sm">
+        <div onclick="setRole('student'); closeUserSwitchModal();" class="p-3.5 rounded-xl border border-border-subtle bg-paper hover:bg-card-subtle cursor-pointer transition-all flex items-start gap-3.5 group shadow-sm">
+          <div class="w-10 h-10 rounded-lg bg-accent-violet text-white flex items-center justify-center font-heading font-extrabold text-sm shrink-0">
             MS
           </div>
           <div class="flex-1">
             <div class="flex items-center justify-between">
               <h4 class="text-sm font-extrabold font-heading text-ink group-hover:text-accent-violet transition-colors">Maria Clara Santos</h4>
-              <span class="badge-sticker badge-mint text-[9px] py-0.5 px-2">Student</span>
+              <span class="badge-sticker badge-violet text-[9px] py-0.5 px-2">Student</span>
             </div>
-            <p class="text-xs text-ink-muted mt-0.5 font-medium">20 y/o • 2nd-Year IT • Cebu (82% GPA)</p>
-            <div class="mt-2 flex items-center gap-1.5 text-[11px] font-heading font-bold text-accent-violet">
+            <p class="text-xs text-ink-muted mt-0.5">20 y/o • 2nd-Year IT • Cebu (82% GPA)</p>
+            <div class="mt-2 flex items-center gap-1.5 text-[11px] font-bold text-accent-violet">
               <span class="material-symbols-outlined text-[14px]">devices</span>
               <span>Mobile &amp; Desktop Web Supported</span>
             </div>
@@ -1315,17 +1304,17 @@
         </div>
 
         <!-- User 2: Admin -->
-        <div onclick="setRole('admin'); closeUserSwitchModal();" class="p-4 rounded-2xl border-2 border-ink bg-accent-amber/10 hover:bg-accent-amber/20 cursor-pointer transition-all flex items-start gap-3.5 group shadow-pop-sm hover:shadow-pop">
-          <div class="w-10 h-10 rounded-full bg-accent-amber text-ink border-2 border-ink flex items-center justify-center font-heading font-extrabold text-sm shrink-0 shadow-pop-sm">
+        <div onclick="setRole('admin'); closeUserSwitchModal();" class="p-3.5 rounded-xl border border-border-subtle bg-paper hover:bg-card-subtle cursor-pointer transition-all flex items-start gap-3.5 group shadow-sm">
+          <div class="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center font-heading font-extrabold text-sm shrink-0">
             ER
           </div>
           <div class="flex-1">
             <div class="flex items-center justify-between">
-              <h4 class="text-sm font-extrabold font-heading text-ink group-hover:text-accent-amber transition-colors">Dr. Ernesto Ramos</h4>
-              <span class="badge-sticker badge-amber text-[9px] py-0.5 px-2">Admin</span>
+              <h4 class="text-sm font-extrabold font-heading text-ink group-hover:text-accent-violet transition-colors">Dr. Ernesto Ramos</h4>
+              <span class="badge-sticker badge-violet text-[9px] py-0.5 px-2">Admin</span>
             </div>
-            <p class="text-xs text-ink-muted mt-0.5 font-medium">Director • DOST/CHED Programs Liaison</p>
-            <div class="mt-2 flex items-center gap-1.5 text-[11px] font-heading font-bold text-ink-muted">
+            <p class="text-xs text-ink-muted mt-0.5">Director • DOST/CHED Programs Liaison</p>
+            <div class="mt-2 flex items-center gap-1.5 text-[11px] font-bold text-ink-muted">
               <span class="material-symbols-outlined text-[14px]">desktop_windows</span>
               <span>Desktop Web Workstation Only</span>
             </div>
@@ -1336,12 +1325,12 @@
   </div>
 
   <!-- ================= PROGRAM ADD/EDIT MODAL ================= -->
-  <div id="program-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
-    <div class="card-sticker max-w-xl w-full p-6 bg-card shadow-pop-lg max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center pb-4 border-b-2 border-ink mb-4">
-        <h3 id="program-modal-title" class="text-xl font-extrabold font-heading text-ink">Add Philippine Program</h3>
-        <button onclick="closeProgramModal()" class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-pink hover:text-white transition-colors shadow-pop-sm">
-          <span class="material-symbols-outlined text-[18px]">close</span>
+  <div id="program-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+    <div class="card-sticker max-w-xl w-full p-6 bg-card shadow-lg max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-4 border-b border-border-subtle mb-4">
+        <h3 id="program-modal-title" class="text-lg font-extrabold font-heading text-ink">Add Philippine Assistance Program</h3>
+        <button onclick="closeProgramModal()" class="w-7 h-7 rounded-lg bg-paper hover:bg-card-subtle border border-border-subtle flex items-center justify-center text-ink-muted hover:text-ink transition-colors">
+          <span class="material-symbols-outlined text-[16px]">close</span>
         </button>
       </div>
 
@@ -1349,19 +1338,19 @@
         <input type="hidden" id="prog-id-input"/>
         
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-title-input">Program Title *</label>
-          <input id="prog-title-input" required type="text" placeholder="e.g. Cebu City College Scholarship Program" class="input-playful text-sm"/>
+          <label class="text-xs font-extrabold font-heading text-ink-muted uppercase" for="prog-title-input">Program Title *</label>
+          <input id="prog-title-input" required type="text" placeholder="e.g. Cebu City College Scholarship Program" class="input-playful text-sm font-medium"/>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-provider-input">Agency / Provider *</label>
-            <input id="prog-provider-input" required type="text" placeholder="e.g. Cebu City LGU / CHED" class="input-playful text-sm"/>
+            <label class="text-xs font-extrabold font-heading text-ink-muted uppercase" for="prog-provider-input">Agency / Provider *</label>
+            <input id="prog-provider-input" required type="text" placeholder="e.g. Cebu City LGU / CHED" class="input-playful text-sm font-medium"/>
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-type-input">Category</label>
-            <select id="prog-type-input" class="input-playful text-sm">
+            <label class="text-xs font-extrabold font-heading text-ink-muted uppercase" for="prog-type-input">Category</label>
+            <select id="prog-type-input" class="input-playful text-sm font-medium">
               <option value="Scholarship">Scholarship</option>
               <option value="Educational Assistance">Educational Assistance</option>
               <option value="Student Employment">Student Employment</option>
@@ -1373,25 +1362,25 @@
 
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-dept-input">Discipline / Coverage</label>
-            <input id="prog-dept-input" required type="text" placeholder="e.g. IT & Engineering / General" class="input-playful text-sm"/>
+            <label class="text-xs font-extrabold font-heading text-ink-muted uppercase" for="prog-dept-input">Discipline / Coverage</label>
+            <input id="prog-dept-input" required type="text" placeholder="e.g. IT & Engineering / General" class="input-playful text-sm font-medium"/>
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-funding-input">Stipend / Grant (₱)</label>
-            <input id="prog-funding-input" required type="text" placeholder="e.g. ₱50,000 / yr + Allowance" class="input-playful text-sm"/>
+            <label class="text-xs font-extrabold font-heading text-ink-muted uppercase" for="prog-funding-input">Stipend / Grant (₱)</label>
+            <input id="prog-funding-input" required type="text" placeholder="e.g. ₱50,000 / yr + Allowance" class="input-playful text-sm font-medium"/>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-deadline-input">Deadline *</label>
-            <input id="prog-deadline-input" required type="date" class="input-playful text-sm"/>
+            <label class="text-xs font-extrabold font-heading text-ink-muted uppercase" for="prog-deadline-input">Deadline *</label>
+            <input id="prog-deadline-input" required type="date" class="input-playful text-sm font-medium"/>
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-status-input">Status</label>
-            <select id="prog-status-input" class="input-playful text-sm">
+            <label class="text-xs font-extrabold font-heading text-ink-muted uppercase" for="prog-status-input">Status</label>
+            <select id="prog-status-input" class="input-playful text-sm font-medium">
               <option value="Active">Active</option>
               <option value="In Review">In Review</option>
               <option value="Draft">Draft</option>
@@ -1401,15 +1390,15 @@
         </div>
 
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-heading font-extrabold text-ink uppercase" for="prog-desc-input">Program Summary &amp; Criteria</label>
-          <textarea id="prog-desc-input" rows="3" required placeholder="Describe minimum GPA, location, and requirements..." class="input-playful text-sm"></textarea>
+          <label class="text-xs font-extrabold font-heading text-ink-muted uppercase" for="prog-desc-input">Program Summary &amp; Criteria</label>
+          <textarea id="prog-desc-input" rows="3" required placeholder="Describe minimum GPA, location, and requirements..." class="input-playful text-sm font-medium"></textarea>
         </div>
 
-        <div class="pt-4 border-t-2 border-ink flex justify-end gap-3">
-          <button type="button" onclick="closeProgramModal()" class="btn-candy btn-candy-secondary btn-candy-sm">
+        <div class="pt-4 border-t border-border-subtle flex justify-end gap-3">
+          <button type="button" onclick="closeProgramModal()" class="btn-candy btn-candy-secondary btn-candy-sm text-xs">
             Cancel
           </button>
-          <button type="submit" class="btn-candy btn-candy-sm">
+          <button type="submit" class="btn-candy btn-candy-violet btn-candy-sm text-xs">
             Save Program
           </button>
         </div>
@@ -1417,10 +1406,10 @@
     </div>
   </div>
 
-  <!-- Toast Notification (Sticker Style) -->
-  <div id="toast" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-card text-ink border-2 border-ink shadow-pop-lg translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
-    <span id="toast-icon" class="material-symbols-outlined text-accent-mint text-[22px]">check_circle</span>
-    <span id="toast-message" class="text-sm font-heading font-bold">Notification message</span>
+  <!-- Toast Notification (Minimalist Floating Pill) -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl bg-card text-ink border border-border-subtle shadow-lg translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+    <span id="toast-icon" class="material-symbols-outlined text-emerald-600 text-[20px]">check_circle</span>
+    <span id="toast-message" class="text-xs font-bold">Notification message</span>
   </div>
 
   <!-- Vite ES Module Entry Point -->

@@ -1,46 +1,41 @@
-/* QualiFind - Playful Geometric Design System (Minimalist & Eye-Friendly Palette) */
+/* QualiFind - Minimalist Geometric Design System (Clean, Anti-Glare & Easy on the Eyes) */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap');
 
 :root {
-  /* Minimalist & Soothing Light Palette (Anti-Eye Strain) */
-  --color-paper: 248 250 252;          /* #F8FAFC - Crisp, calm slate-white */
-  --color-ink: 15 23 42;               /* #0F172A - Deep slate for sharp, legible text */
+  /* Minimalist Calm Light Palette */
+  --color-paper: 248 250 252;          /* #F8FAFC - Calm Slate White */
+  --color-ink: 15 23 42;               /* #0F172A - Deep Slate */
   --color-ink-muted: 100 116 139;      /* #64748B - Slate 500 */
   --color-border-subtle: 226 232 240;  /* #E2E8F0 - Slate 200 */
   --color-card: 255 255 255;           /* #FFFFFF - Pure White */
   --color-card-subtle: 241 245 249;    /* #F1F5F9 - Slate 100 */
 
-  /* Minimalist Softer Accents (Harmonious & Gentle on the Eyes) */
-  --color-accent-violet: 99 102 241;   /* #6366F1 - Soft Iris/Indigo */
-  --color-accent-pink: 244 63 94;      /* #F43F5E - Warm Coral Rose */
-  --color-accent-amber: 245 158 11;    /* #F59E0B - Warm Honey Amber */
-  --color-accent-mint: 16 185 129;     /* #10B981 - Soothing Emerald Mint */
-  --color-accent-cyan: 14 165 233;     /* #0EA5E9 - Soft Sky Blue */
+  /* Minimalist Accents (Gentle Pastel Tones) */
+  --color-accent-violet: 79 70 229;    /* #4F46E5 - Indigo */
+  --color-accent-pink: 225 29 72;      /* #E11D48 - Muted Rose */
+  --color-accent-amber: 217 119 6;     /* #D97706 - Warm Amber */
+  --color-accent-mint: 5 150 105;      /* #059669 - Forest Sage */
+  --color-accent-cyan: 2 132 199;      /* #0284C7 - Soft Sky */
 
   /* Semantic Feedback */
   --color-success: 16 185 129;
   --color-warning: 245 158 11;
-  --color-error: 244 63 94;
+  --color-error: 239 68 68;
 
-  /* Softer Geometric Pop Shadows (Graphite Slate instead of Stark Black) */
-  --shadow-ink: #334155;               /* Slate 700 - Crisp, refined shadow */
-  --shadow-pink: #FDA4AF;
-  --shadow-amber: #FDE68A;
-  --shadow-mint: #A7F3D0;
-  --shadow-violet: #C7D2FE;
+  /* Minimalist Refined Shadows (Subtle, Not Jarring) */
+  --shadow-ink: #CBD5E1;               /* Slate 300 - Light clean geometric offset */
+  --shadow-dark: #334155;
 }
 
 html.dark {
-  /* Minimalist Soothing Dark Palette */
-  --color-paper: 15 23 42;             /* #0F172A Midnight Slate */
-  --color-ink: 248 250 252;            /* #F8FAFC Crisp White */
+  --color-paper: 15 23 42;             /* #0F172A Midnight */
+  --color-ink: 248 250 252;            /* #F8FAFC White */
   --color-ink-muted: 148 163 184;      /* #94A3B8 Slate 400 */
   --color-border-subtle: 51 65 85;     /* #334155 Slate 700 */
   --color-card: 30 41 59;              /* #1E293B Slate 800 */
   --color-card-subtle: 23 32 51;
 
-  /* Refined Accents in Dark Mode */
   --color-accent-violet: 129 140 248;  /* #818CF8 */
   --color-accent-pink: 251 113 133;
   --color-accent-amber: 251 191 36;
@@ -48,10 +43,7 @@ html.dark {
   --color-accent-cyan: 56 189 248;
 
   --shadow-ink: #0F172A;
-  --shadow-pink: #9F1239;
-  --shadow-amber: #92400E;
-  --shadow-mint: #065F46;
-  --shadow-violet: #4338CA;
+  --shadow-dark: #000000;
 }
 
 @layer base {
@@ -62,187 +54,135 @@ html.dark {
     background-color: rgb(var(--color-paper));
     color: rgb(var(--color-ink));
     scroll-behavior: smooth;
-    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   h1, h2, h3, h4, h5, h6, .font-heading {
     font-family: 'Outfit', system-ui, sans-serif;
     letter-spacing: -0.02em;
   }
-
-  body {
-    overscroll-behavior: none;
-  }
 }
 
-/* Subtle, Gentle Dot Grid Background Texture */
+/* Subtle, Calm Background (Zero Visual Noise) */
 .bg-dot-grid {
-  background-image: radial-gradient(rgba(100, 116, 139, 0.08) 1.25px, transparent 1.25px);
-  background-size: 24px 24px;
-}
-
-html.dark .bg-dot-grid {
-  background-image: radial-gradient(rgba(248, 250, 252, 0.06) 1.25px, transparent 1.25px);
-  background-size: 24px 24px;
+  background-image: radial-gradient(rgba(100, 116, 139, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 /* =========================================================================
-   MINIMALIST PLAYFUL GEOMETRIC POP SHADOWS (CLEAN & REFINED)
+   MINIMALIST GEOMETRIC SHADOWS (REFINED & CLEAN)
    ========================================================================= */
 .shadow-pop-sm {
-  box-shadow: 2px 2px 0px 0px var(--shadow-ink);
+  box-shadow: 2px 2px 0px 0px rgba(15, 23, 42, 0.08);
 }
 
 .shadow-pop {
-  box-shadow: 3px 3px 0px 0px var(--shadow-ink);
+  box-shadow: 3px 3px 0px 0px rgba(15, 23, 42, 0.08);
 }
 
 .shadow-pop-lg {
-  box-shadow: 5px 5px 0px 0px var(--shadow-ink);
-}
-
-.shadow-pop-pink {
-  box-shadow: 3px 3px 0px 0px var(--shadow-pink);
-}
-
-.shadow-pop-pink-lg {
-  box-shadow: 5px 5px 0px 0px var(--shadow-pink);
-}
-
-.shadow-pop-amber {
-  box-shadow: 3px 3px 0px 0px var(--shadow-amber);
-}
-
-.shadow-pop-mint {
-  box-shadow: 3px 3px 0px 0px var(--shadow-mint);
-}
-
-.shadow-pop-violet {
-  box-shadow: 3px 3px 0px 0px var(--shadow-violet);
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 3px 3px 0px 0px rgba(15, 23, 42, 0.06);
 }
 
 /* =========================================================================
-   BUTTONS: THE CANDY BUTTONS (TACTILE & SMOOTH)
+   BUTTONS: MINIMALIST GEOMETRIC BUTTONS
    ========================================================================= */
 .btn-candy {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background-color: rgb(var(--color-accent-violet));
+  background-color: #0F172A;
   color: #FFFFFF;
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
   font-size: 0.875rem;
   padding: 0.625rem 1.25rem;
-  border-radius: 9999px;
-  border: 2px solid var(--shadow-ink);
-  box-shadow: 3px 3px 0px 0px var(--shadow-ink);
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 0.75rem;
+  border: 1px solid #0F172A;
+  box-shadow: 2px 2px 0px 0px rgba(15, 23, 42, 0.15);
+  transition: all 0.15s ease;
   cursor: pointer;
   user-select: none;
   text-decoration: none;
 }
 
 .btn-candy:hover:not(:disabled) {
-  transform: translate(-1.5px, -1.5px);
-  box-shadow: 5px 5px 0px 0px var(--shadow-ink);
-  filter: brightness(1.05);
+  background-color: #1E293B;
+  transform: translateY(-1px);
+  box-shadow: 3px 3px 0px 0px rgba(15, 23, 42, 0.2);
 }
 
 .btn-candy:active:not(:disabled) {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0px 0px var(--shadow-ink);
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0px 0px rgba(15, 23, 42, 0.1);
 }
 
-.btn-candy-pink {
-  background-color: rgb(var(--color-accent-pink));
+.btn-candy-violet {
+  background-color: #4F46E5;
+  border-color: #4338CA;
   color: #FFFFFF;
 }
 
-.btn-candy-amber {
-  background-color: rgb(var(--color-accent-amber));
-  color: #FFFFFF;
-}
-
-.btn-candy-mint {
-  background-color: rgb(var(--color-accent-mint));
-  color: #FFFFFF;
+.btn-candy-violet:hover:not(:disabled) {
+  background-color: #4338CA;
 }
 
 .btn-candy-secondary {
-  background-color: rgb(var(--color-card));
-  color: rgb(var(--color-ink));
-  border: 2px solid var(--shadow-ink);
-  box-shadow: 3px 3px 0px 0px var(--shadow-ink);
+  background-color: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #E2E8F0;
+  box-shadow: 2px 2px 0px 0px rgba(15, 23, 42, 0.04);
 }
 
 .btn-candy-secondary:hover:not(:disabled) {
-  background-color: rgb(var(--color-card-subtle));
-  color: rgb(var(--color-accent-violet));
-  border-color: rgb(var(--color-accent-violet));
-  transform: translate(-1.5px, -1.5px);
-  box-shadow: 5px 5px 0px 0px var(--shadow-ink);
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #4F46E5;
+  transform: translateY(-1px);
 }
 
 .btn-candy-sm {
   padding: 0.375rem 0.875rem;
   font-size: 0.8125rem;
-  box-shadow: 2px 2px 0px 0px var(--shadow-ink);
-}
-
-.btn-candy-sm:hover:not(:disabled) {
-  box-shadow: 3.5px 3.5px 0px 0px var(--shadow-ink);
+  border-radius: 0.5rem;
 }
 
 /* =========================================================================
-   CARDS: THE STICKER CARD (MINIMALIST & CLEAN)
+   CARDS: MINIMALIST GEOMETRIC CARDS
    ========================================================================= */
 .card-sticker {
-  background-color: rgb(var(--color-card));
-  border: 2px solid var(--shadow-ink);
-  border-radius: 1.25rem;
-  box-shadow: 4px 4px 0px 0px var(--shadow-ink);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 2px 2px 0px 0px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
   position: relative;
 }
 
 .card-sticker:hover {
   transform: translateY(-2px);
-  box-shadow: 6px 6px 0px 0px var(--shadow-ink);
-}
-
-.card-sticker-pink:hover {
-  box-shadow: 6px 6px 0px 0px var(--shadow-pink);
-}
-
-.card-sticker-amber:hover {
-  box-shadow: 6px 6px 0px 0px var(--shadow-amber);
-}
-
-.card-sticker-mint:hover {
-  box-shadow: 6px 6px 0px 0px var(--shadow-mint);
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 3px 3px 0px 0px rgba(15, 23, 42, 0.06);
 }
 
 /* =========================================================================
-   INPUTS: MINIMALIST GEOMETRIC FORM CONTROLS
+   INPUTS: MINIMALIST FORM CONTROLS
    ========================================================================= */
 .input-playful {
-  background-color: rgb(var(--color-card));
-  color: rgb(var(--color-ink));
-  border: 2px solid var(--shadow-ink);
-  border-radius: 0.875rem;
-  padding: 0.625rem 1rem;
+  background-color: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #CBD5E1;
+  border-radius: 0.625rem;
+  padding: 0.625rem 0.875rem;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.15s ease;
   outline: none;
 }
 
 .input-playful:focus {
-  border-color: rgb(var(--color-accent-violet));
-  box-shadow: 3px 3px 0px 0px rgb(var(--color-accent-violet));
-  transform: translate(-1px, -1px);
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
 }
 
 /* =========================================================================
@@ -252,77 +192,64 @@ html.dark .bg-dot-grid {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.25rem 0.625rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 9999px;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  border: 1.5px solid var(--shadow-ink);
-  box-shadow: 2px 2px 0px 0px var(--shadow-ink);
+  border: 1px solid transparent;
   user-select: none;
 }
 
-.badge-sticker-violet {
+.badge-violet {
   background-color: #EEF2FF;
   color: #4F46E5;
+  border-color: #E0E7FF;
 }
 
-.badge-sticker-pink {
+.badge-pink {
   background-color: #FFF1F2;
   color: #E11D48;
+  border-color: #FFE4E6;
 }
 
-.badge-sticker-amber {
+.badge-amber {
   background-color: #FEF3C7;
   color: #B45309;
+  border-color: #FDE68A;
 }
 
-.badge-sticker-mint {
+.badge-mint {
   background-color: #ECFDF5;
   color: #059669;
+  border-color: #D1FAE5;
 }
 
-.badge-sticker-cyan {
+.badge-cyan {
   background-color: #F0F9FF;
   color: #0284C7;
-}
-
-/* Sticker rotations */
-.tilt-left {
-  transform: rotate(-1.5deg);
-}
-
-.tilt-right {
-  transform: rotate(1.5deg);
-}
-
-.tilt-left-sm {
-  transform: rotate(-0.75deg);
-}
-
-.tilt-right-sm {
-  transform: rotate(0.75deg);
+  border-color: #E0F2FE;
 }
 
 /* View Sections visibility */
 .view-section {
   display: none;
-  animation: playfulPopIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: fadeIn 0.15s ease forwards;
 }
 
 .view-section.active {
   display: block;
 }
 
-@keyframes playfulPopIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: scale(0.985) translateY(4px);
+    transform: translateY(3px);
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0);
   }
 }
 
@@ -343,5 +270,5 @@ html.dark .bg-dot-grid {
 }
 
 .progress-ring-circle {
-  transition: stroke-dasharray 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: stroke-dasharray 0.6s ease;
 }
