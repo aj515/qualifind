@@ -1,5 +1,5 @@
 // QualiFind - AI-Powered Student Assistance Navigator (Philippine Higher Education Setting)
-// Minimalist Geometric Design System (Clean, Anti-Glare & Minimalist Palette)
+// Playful Geometric Design System Integration
 
 const INITIAL_OPPORTUNITIES = [
   {
@@ -25,7 +25,7 @@ const INITIAL_OPPORTUNITIES = [
     leadProf: "Mayor's Scholarship Office",
     teamCount: 4,
     icon: "location_city",
-    colorTheme: "emerald",
+    colorTheme: "mint",
     summary: "Financial aid and tuition assistance program for qualified resident tertiary students enrolled in accredited colleges and universities across Cebu.",
     whyStrongMatch: [
       "Your current 82% GPA exceeds the 80% minimum requirement for Cebu City tertiary aid.",
@@ -64,7 +64,7 @@ const INITIAL_OPPORTUNITIES = [
     leadProf: "Prof. Alan Turing / Head of IT Lab",
     teamCount: 8,
     icon: "laptop_chromebook",
-    colorTheme: "indigo",
+    colorTheme: "violet",
     summary: "Work-study employment for computing students to assist in university computer labs, software maintenance, and student helpdesk support while earning tuition credits.",
     whyStrongMatch: [
       "Perfect fit for 2nd-year B.S. IT students looking to offset transport expenses through campus hours.",
@@ -139,7 +139,7 @@ const INITIAL_OPPORTUNITIES = [
     leadProf: "DICT Regional Cluster - Visayas",
     teamCount: 5,
     icon: "terminal",
-    colorTheme: "emerald",
+    colorTheme: "mint",
     summary: "Free industry-recognized tech certification vouchers (AWS, Google Cloud, Python, Web Dev) sponsored by DICT to boost employment prospects for tech students.",
     whyStrongMatch: [
       "Directly complements your B.S. Information Technology coursework with zero out-of-pocket costs.",
@@ -175,7 +175,7 @@ const INITIAL_OPPORTUNITIES = [
     leadProf: "DSWD Field Office VII",
     teamCount: 2,
     icon: "handshake",
-    colorTheme: "violet",
+    colorTheme: "pink",
     summary: "Assistance to Individuals in Crisis Situations (AICS) providing immediate cash grants for low-income students needing direct assistance for tuition and daily commuting fare.",
     whyStrongMatch: [
       "Directly addresses your urgent need for daily transportation expenses and school fees.",
@@ -212,7 +212,7 @@ const INITIAL_OPPORTUNITIES = [
     leadProf: "Dr. Josette T. Biyo / SEI Director",
     teamCount: 4,
     icon: "biotech",
-    colorTheme: "rose",
+    colorTheme: "pink",
     summary: "Competitive national scholarship awarded to students with high aptitude in science and mathematics pursuing priority degree programs.",
     whyStrongMatch: [
       "Your B.S. Information Technology degree is an accredited DOST Priority STEM course.",
@@ -293,7 +293,7 @@ const INITIAL_OPPORTUNITIES = [
     leadProf: "Dr. Jaime C. Montoya",
     teamCount: 4,
     icon: "school",
-    colorTheme: "rose",
+    colorTheme: "pink",
     summary: "Graduate fellowship for Master's and Ph.D. students conducting advanced technological and scientific research.",
     whyStrongMatch: ["Requires graduate enrollment (M.S./Ph.D.). Shown for historical registry reference."],
     requirements: [],
@@ -459,9 +459,11 @@ function navigateTo(viewId, payload = null) {
   document.querySelectorAll("[data-nav-view]").forEach(link => {
     const linkView = link.getAttribute("data-nav-view");
     if (linkView === viewId) {
-      link.className = "flex items-center px-4 py-2.5 rounded-xl font-heading font-bold text-sm transition-all group bg-accent-violet text-white shadow-sm";
+      link.classList.add("bg-accent-violet", "text-white", "border-ink", "shadow-pop");
+      link.classList.remove("text-ink", "border-transparent");
     } else {
-      link.className = "flex items-center px-4 py-2.5 rounded-xl text-ink-muted hover:text-ink hover:bg-card-subtle transition-all font-heading font-bold text-sm";
+      link.classList.remove("bg-accent-violet", "text-white", "shadow-pop");
+      link.classList.add("text-ink", "border-transparent");
     }
   });
 
@@ -572,7 +574,7 @@ function updateThemeToggleUI(isDark) {
   if (icon) icon.textContent = isDark ? "light_mode" : "dark_mode";
 }
 
-// Toast System (Clean Style)
+// Toast System (Sticker Style)
 function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
   const toastMsg = document.getElementById("toast-message");
@@ -582,13 +584,13 @@ function showToast(message, type = "success") {
   toastMsg.textContent = message;
   if (type === "success") {
     toastIcon.textContent = "check_circle";
-    toastIcon.className = "material-symbols-outlined text-emerald-600 text-[20px]";
+    toastIcon.className = "material-symbols-outlined text-accent-mint text-[22px]";
   } else if (type === "warning") {
     toastIcon.textContent = "warning";
-    toastIcon.className = "material-symbols-outlined text-amber-500 text-[20px]";
+    toastIcon.className = "material-symbols-outlined text-accent-amber text-[22px]";
   } else {
     toastIcon.textContent = "info";
-    toastIcon.className = "material-symbols-outlined text-accent-violet text-[20px]";
+    toastIcon.className = "material-symbols-outlined text-accent-violet text-[22px]";
   }
 
   toast.classList.remove("translate-y-20", "opacity-0", "pointer-events-none");
@@ -729,44 +731,44 @@ function renderDashboard() {
 
   recContainer.innerHTML = topMatches.map(opp => {
     const isSaved = AppState.savedOpportunities.includes(opp.id);
-    const scoreColorClass = opp.matchScore >= 80 ? "text-emerald-600" : (opp.matchScore >= 60 ? "text-amber-500" : "text-ink-muted");
+    const scoreColorClass = opp.matchScore >= 80 ? "text-accent-mint" : (opp.matchScore >= 60 ? "text-accent-amber" : "text-ink-muted");
     
-    // Category Badge
+    // Playful Category Badge
     let badgeClass = "badge-violet";
     if (opp.type === "Educational Assistance") badgeClass = "badge-pink";
     if (opp.type === "Student Employment") badgeClass = "badge-amber";
     if (opp.type === "Training & Certification") badgeClass = "badge-mint";
 
     return `
-      <div class="p-5 hover:bg-paper transition-colors group flex flex-col lg:flex-row gap-5 items-start justify-between relative cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
+      <div class="p-6 hover:bg-paper transition-colors group flex flex-col lg:flex-row gap-6 items-start justify-between relative cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
         <div class="flex items-start gap-4 flex-1 min-w-0">
-          <div class="w-11 h-11 rounded-xl bg-paper border border-border-subtle flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform text-accent-violet">
-            <span class="material-symbols-outlined text-[24px]">${opp.icon || 'school'}</span>
+          <div class="w-14 h-14 rounded-2xl bg-paper border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+            <span class="material-symbols-outlined text-[28px] text-ink">${opp.icon || 'school'}</span>
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-1.5 flex-wrap">
               <span class="badge-sticker ${badgeClass} text-[10px]">${opp.type}</span>
               <span class="text-xs font-heading font-bold text-ink-muted">${opp.duration} &bull; ${opp.funding}</span>
             </div>
-            <h3 class="text-base font-extrabold font-heading text-ink truncate group-hover:text-accent-violet transition-colors">
+            <h3 class="text-lg font-extrabold font-heading text-ink truncate group-hover:text-accent-violet transition-colors">
               ${opp.title}
             </h3>
-            <p class="text-xs text-ink-muted line-clamp-2 mt-0.5 font-medium max-w-2xl">
+            <p class="text-xs text-ink-muted line-clamp-2 mt-1 font-medium max-w-2xl">
               ${opp.summary}
             </p>
           </div>
         </div>
 
-        <div class="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto gap-3 mt-2 lg:mt-0" onclick="event.stopPropagation()">
+        <div class="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto gap-4 mt-2 lg:mt-0" onclick="event.stopPropagation()">
           <div class="flex flex-col items-start lg:items-end">
             <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase tracking-wider">AI Match</span>
             <span class="text-2xl font-extrabold font-heading ${scoreColorClass}">${opp.matchScore}%</span>
           </div>
           <div class="flex gap-2">
-            <button class="w-8 h-8 rounded-lg bg-card hover:bg-card-subtle border border-border-subtle flex items-center justify-center text-ink transition-colors shadow-sm" onclick="toggleBookmark('${opp.id}', event)">
-              <span class="material-symbols-outlined text-[16px] ${isSaved ? 'fill text-accent-violet' : ''}">bookmark</span>
+            <button class="w-9 h-9 rounded-full bg-card hover:bg-accent-amber border-2 border-ink flex items-center justify-center text-ink transition-colors shadow-pop-sm" onclick="toggleBookmark('${opp.id}', event)">
+              <span class="material-symbols-outlined text-[18px] ${isSaved ? 'fill text-accent-pink' : ''}">bookmark</span>
             </button>
-            <button class="btn-candy btn-candy-sm text-xs" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
+            <button class="btn-candy btn-candy-sm" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
               Review Match
             </button>
           </div>
@@ -788,7 +790,7 @@ function renderMatcher() {
       if (textarea) {
         textarea.value = chip.getAttribute("data-prompt") || chip.textContent.trim();
         textarea.focus();
-        chip.style.transform = "scale(0.98)";
+        chip.style.transform = "scale(0.95)";
         setTimeout(() => chip.style.transform = "scale(1)", 120);
       }
     };
@@ -803,7 +805,7 @@ function renderMatcherProfileChips() {
 
   container.innerHTML = MATCHER_PROFILE_TAGS.map(tag => {
     const isSelected = AppState.matcherProfileTags.includes(tag.id);
-    const badgeStyle = isSelected ? "bg-accent-violet text-white border-accent-violet shadow-sm scale-105" : "bg-card text-ink border border-border-subtle hover:bg-card-subtle";
+    const badgeStyle = isSelected ? "badge-violet shadow-pop-sm scale-105" : "bg-card text-ink border-2 border-ink hover:bg-card-subtle";
 
     return `
       <button type="button" onclick="toggleMatcherTag('${tag.id}')" class="badge-sticker ${badgeStyle} cursor-pointer transition-all flex items-center gap-1.5 py-1.5 px-3 text-xs">
@@ -913,7 +915,7 @@ function handleFindMatches() {
   let step = 0;
   const setStep = () => {
     if (matchBtn) {
-      matchBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[16px]">sync</span> Analyzing...`;
+      matchBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[18px]">sync</span> Analyzing...`;
     }
     if (statusEl) {
       statusEl.textContent = MATCHER_LOADING_STEPS[step];
@@ -933,7 +935,7 @@ function handleFindMatches() {
     clearInterval(stepInterval);
 
     if (matchBtn) {
-      matchBtn.innerHTML = `<span class="material-symbols-outlined text-[16px]">auto_awesome</span> Find Assistance`;
+      matchBtn.innerHTML = `<span class="material-symbols-outlined text-[18px]">auto_awesome</span> Find Assistance`;
       matchBtn.disabled = false;
     }
     if (textarea) textarea.disabled = false;
@@ -1006,10 +1008,10 @@ function renderOpportunitiesList() {
   if (filtered.length === 0) {
     container.innerHTML = `
       <div class="col-span-12 card-sticker p-12 text-center flex flex-col items-center justify-center">
-        <span class="material-symbols-outlined text-5xl text-ink-muted mb-4">search_off</span>
-        <h3 class="text-lg font-bold font-heading text-ink mb-1">No programs match your filters</h3>
-        <p class="text-xs text-ink-muted max-w-md mb-6 font-medium">Try broadening your search or resetting category filters.</p>
-        <button class="btn-candy btn-candy-sm" onclick="resetFilters()">Reset Filters</button>
+        <span class="material-symbols-outlined text-6xl text-ink-muted mb-4">search_off</span>
+        <h3 class="text-xl font-bold font-heading text-ink mb-1">No programs match your filters</h3>
+        <p class="text-sm text-ink-muted max-w-md mb-6 font-medium">Try broadening your search or resetting category filters.</p>
+        <button class="btn-candy" onclick="resetFilters()">Reset Filters</button>
       </div>
     `;
     return;
@@ -1017,9 +1019,9 @@ function renderOpportunitiesList() {
 
   container.innerHTML = filtered.map(opp => {
     const isSaved = AppState.savedOpportunities.includes(opp.id);
-    const scoreColor = opp.matchScore >= 80 ? "text-emerald-600" : (opp.matchScore >= 60 ? "text-amber-500" : "text-ink-muted");
+    const scoreColor = opp.matchScore >= 80 ? "text-accent-mint" : (opp.matchScore >= 60 ? "text-accent-amber" : "text-ink-muted");
     
-    // 3-Tier Status Badge
+    // 3-Tier Status Badge (Eligible / Potentially Eligible / Not Eligible)
     let statusBadge = `<span class="badge-sticker badge-mint text-[9px]"><span class="material-symbols-outlined text-[13px]">check_circle</span> Eligible</span>`;
     if (opp.eligibilityStatus === "Potentially Eligible") {
       statusBadge = `<span class="badge-sticker badge-amber text-[9px]"><span class="material-symbols-outlined text-[13px]">pending</span> Potentially Eligible</span>`;
@@ -1033,40 +1035,40 @@ function renderOpportunitiesList() {
     if (opp.type === "Training & Certification") typeBadge = "badge-mint";
 
     return `
-      <div class="card-sticker p-5 flex flex-col justify-between group cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
+      <div class="card-sticker p-6 flex flex-col justify-between group cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
         <div>
           <div class="flex justify-between items-start mb-3">
             <span class="badge-sticker ${typeBadge} text-[10px]">
               ${opp.type}
             </span>
-            <button class="w-8 h-8 rounded-lg bg-paper hover:bg-card-subtle border border-border-subtle flex items-center justify-center text-ink transition-colors shadow-sm" onclick="toggleBookmark('${opp.id}', event)">
-              <span class="material-symbols-outlined text-[16px] ${isSaved ? 'fill text-accent-violet' : ''}">bookmark</span>
+            <button class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-amber transition-colors shadow-pop-sm" onclick="toggleBookmark('${opp.id}', event)">
+              <span class="material-symbols-outlined text-[18px] ${isSaved ? 'fill text-accent-pink' : ''}">bookmark</span>
             </button>
           </div>
 
-          <h3 class="text-base font-extrabold font-heading text-ink mb-1 group-hover:text-accent-violet transition-colors">
+          <h3 class="text-lg font-extrabold font-heading text-ink mb-1 group-hover:text-accent-violet transition-colors">
             ${opp.title}
           </h3>
-          <p class="text-xs text-ink-muted mb-4 font-medium">${opp.provider}</p>
+          <p class="text-xs font-semibold text-ink-muted mb-4">${opp.provider}</p>
 
-          <div class="grid grid-cols-2 gap-3 p-3 bg-paper rounded-xl border border-border-subtle mb-4">
+          <div class="grid grid-cols-2 gap-3 p-3 bg-paper rounded-2xl border-2 border-ink mb-4">
             <div>
-              <span class="text-[10px] font-bold font-heading text-ink-muted uppercase">Stipend / Value</span>
-              <p class="text-xs font-bold text-ink mt-0.5">${opp.funding}</p>
+              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase">Stipend / Value</span>
+              <p class="text-xs font-extrabold font-heading text-ink">${opp.funding}</p>
             </div>
             <div>
-              <span class="text-[10px] font-bold font-heading text-ink-muted uppercase">Deadline</span>
-              <p class="text-xs font-bold text-ink mt-0.5">${opp.deadlineFormatted}</p>
+              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase">Deadline</span>
+              <p class="text-xs font-extrabold font-heading text-ink">${opp.deadlineFormatted}</p>
             </div>
           </div>
         </div>
 
-        <div class="pt-3 border-t border-border-subtle flex items-center justify-between">
+        <div class="pt-3 border-t-2 border-ink flex items-center justify-between">
           <div class="flex items-center gap-2">
             ${statusBadge}
           </div>
           <div class="flex items-center gap-1">
-            <span class="text-[10px] font-bold font-heading text-ink-muted uppercase">Score</span>
+            <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase">Score</span>
             <span class="text-sm font-extrabold font-heading ${scoreColor}">${opp.matchScore}%</span>
           </div>
         </div>
@@ -1104,13 +1106,13 @@ function renderSavedApplicationsView() {
   if (savedList.length === 0) {
     container.innerHTML = `
       <div class="col-span-12 card-sticker p-12 text-center flex flex-col items-center justify-center">
-        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-4">
-          <span class="material-symbols-outlined text-2xl">bookmark_border</span>
+        <div class="w-16 h-16 rounded-3xl bg-accent-amber border-2 border-ink text-ink flex items-center justify-center mb-4 shadow-pop-sm">
+          <span class="material-symbols-outlined text-4xl">bookmark_border</span>
         </div>
-        <h3 class="text-lg font-bold font-heading text-ink mb-1">No Saved Applications Yet</h3>
+        <h3 class="text-xl font-extrabold font-heading text-ink mb-2">No Saved Applications Yet</h3>
         <p class="text-xs text-ink-muted max-w-md mb-6 font-medium">Explore scholarships, LGU assistance, and campus assistantships, and bookmark them for fast access.</p>
-        <button onclick="navigateTo('opportunities')" class="btn-candy btn-candy-violet btn-candy-sm">
-          <span class="material-symbols-outlined text-[16px]">search_insights</span> Explore Opportunities
+        <button onclick="navigateTo('opportunities')" class="btn-candy">
+          <span class="material-symbols-outlined text-[18px]">search_insights</span> Explore Opportunities
         </button>
       </div>
     `;
@@ -1118,42 +1120,42 @@ function renderSavedApplicationsView() {
   }
 
   container.innerHTML = savedList.map(opp => {
-    const scoreColor = opp.matchScore >= 80 ? "text-emerald-600" : (opp.matchScore >= 60 ? "text-amber-500" : "text-ink-muted");
+    const scoreColor = opp.matchScore >= 80 ? "text-accent-mint" : (opp.matchScore >= 60 ? "text-accent-amber" : "text-ink-muted");
 
     return `
-      <div class="card-sticker p-5 flex flex-col justify-between group">
+      <div class="card-sticker p-6 flex flex-col justify-between group">
         <div>
           <div class="flex justify-between items-start mb-3">
             <span class="badge-sticker badge-violet text-[10px]">
               ${opp.type}
             </span>
-            <button class="w-8 h-8 rounded-lg bg-paper hover:bg-rose-50 border border-border-subtle flex items-center justify-center text-accent-violet hover:text-error transition-colors shadow-sm" title="Remove from saved" onclick="toggleBookmark('${opp.id}', event)">
-              <span class="material-symbols-outlined text-[16px] fill">bookmark</span>
+            <button class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-colors shadow-pop-sm" title="Remove from saved" onclick="toggleBookmark('${opp.id}', event)">
+              <span class="material-symbols-outlined text-[18px] fill">bookmark</span>
             </button>
           </div>
 
-          <h3 class="text-base font-extrabold font-heading text-ink mb-1 group-hover:text-accent-violet transition-colors">
+          <h3 class="text-lg font-extrabold font-heading text-ink mb-1 group-hover:text-accent-violet transition-colors">
             ${opp.title}
           </h3>
-          <p class="text-xs text-ink-muted mb-4 font-medium">${opp.provider}</p>
+          <p class="text-xs font-semibold text-ink-muted mb-4">${opp.provider}</p>
 
-          <div class="p-3 bg-paper rounded-xl border border-border-subtle flex items-center justify-between mb-4">
+          <div class="p-3 bg-paper rounded-2xl border-2 border-ink flex items-center justify-between mb-4">
             <div>
-              <span class="text-[10px] font-bold font-heading text-ink-muted uppercase block">Value</span>
-              <span class="text-xs font-bold text-ink">${opp.funding}</span>
+              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase block">Value</span>
+              <span class="text-xs font-extrabold font-heading text-ink">${opp.funding}</span>
             </div>
             <div class="text-right">
-              <span class="text-[10px] font-bold font-heading text-ink-muted uppercase block">AI Match</span>
+              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase block">AI Match</span>
               <span class="text-sm font-extrabold font-heading ${scoreColor}">${opp.matchScore}%</span>
             </div>
           </div>
         </div>
 
-        <div class="flex items-center gap-2 pt-3 border-t border-border-subtle">
-          <button onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })" class="btn-candy btn-candy-violet btn-candy-sm text-xs flex-1">
+        <div class="flex items-center gap-2 pt-3 border-t-2 border-ink">
+          <button onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })" class="btn-candy btn-candy-sm flex-1">
             Review Match
           </button>
-          <button onclick="navigateTo('action-plan', { opportunityId: '${opp.id}' })" class="btn-candy btn-candy-secondary btn-candy-sm text-xs flex-1">
+          <button onclick="navigateTo('action-plan', { opportunityId: '${opp.id}' })" class="btn-candy btn-candy-secondary btn-candy-sm flex-1">
             Action Plan
           </button>
         </div>
@@ -1209,17 +1211,17 @@ function renderEligibilityDetails(oppId) {
       statusBadge.textContent = "Status: Eligible (Requirements Met)";
       statusBadge.className = "badge-sticker badge-mint text-xs";
       statusIcon.textContent = "check_circle";
-      statusIcon.className = "material-symbols-outlined text-2xl text-emerald-600";
+      statusIcon.className = "material-symbols-outlined text-2xl text-accent-mint";
     } else if (opp.eligibilityStatus === "Potentially Eligible") {
       statusBadge.textContent = "Status: Potentially Eligible (Verification Needed)";
       statusBadge.className = "badge-sticker badge-amber text-xs";
       statusIcon.textContent = "pending";
-      statusIcon.className = "material-symbols-outlined text-2xl text-amber-500";
+      statusIcon.className = "material-symbols-outlined text-2xl text-accent-amber";
     } else {
       statusBadge.textContent = "Status: Not Eligible (Unmet Requirement)";
       statusBadge.className = "badge-sticker badge-pink text-xs";
       statusIcon.textContent = "cancel";
-      statusIcon.className = "material-symbols-outlined text-2xl text-rose-500";
+      statusIcon.className = "material-symbols-outlined text-2xl text-accent-pink";
     }
   }
 
@@ -1249,10 +1251,10 @@ function renderEligibilityDetails(oppId) {
     reasonsContainer.innerHTML = reasons.map(r => `
       <div class="card-sticker p-5 bg-card flex flex-col justify-between">
         <div class="flex items-center gap-3 mb-2">
-          <div class="w-7 h-7 rounded-lg ${r.ok ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'} flex items-center justify-center shrink-0">
+          <div class="w-8 h-8 rounded-full ${r.ok ? 'bg-accent-mint text-ink' : 'bg-accent-pink text-white'} border-2 border-ink flex items-center justify-center shrink-0 shadow-pop-sm">
             <span class="material-symbols-outlined text-[16px]">${r.ok ? 'check' : 'warning'}</span>
           </div>
-          <h3 class="text-xs font-bold font-heading text-ink">${r.title}</h3>
+          <h3 class="text-sm font-extrabold font-heading text-ink">${r.title}</h3>
         </div>
         <p class="text-xs text-ink-muted leading-relaxed font-medium">
           ${r.text}
@@ -1270,15 +1272,15 @@ function renderEligibilityDetails(oppId) {
       
       const altOpportunities = AppState.opportunities.filter(o => o.id !== opp.id && o.eligible).slice(0, 3);
       altList.innerHTML = altOpportunities.map(alt => `
-        <div class="p-3.5 rounded-xl border border-border-subtle bg-card flex items-center justify-between hover:bg-paper transition-colors cursor-pointer shadow-sm" onclick="navigateTo('eligibility', { opportunityId: '${alt.id}' })">
+        <div class="p-4 rounded-2xl border-2 border-ink bg-paper flex items-center justify-between hover:bg-card transition-colors cursor-pointer shadow-pop-sm" onclick="navigateTo('eligibility', { opportunityId: '${alt.id}' })">
           <div class="flex items-center gap-3">
             <span class="badge-sticker badge-mint text-[9px]">Potential Match</span>
             <div>
-              <h4 class="text-xs font-bold font-heading text-ink">${alt.title}</h4>
+              <h4 class="text-xs font-extrabold font-heading text-ink">${alt.title}</h4>
               <p class="text-[11px] text-ink-muted font-medium">${alt.type} • ${alt.funding}</p>
             </div>
           </div>
-          <button class="btn-candy btn-candy-secondary btn-candy-sm text-[11px] py-1 px-3">
+          <button class="btn-candy btn-candy-sm text-[11px] py-1 px-3">
             View Alternative &rarr;
           </button>
         </div>
@@ -1292,12 +1294,12 @@ function renderEligibilityDetails(oppId) {
   const checklistContainer = document.getElementById("eligibility-checklist-items");
   if (checklistContainer) {
     checklistContainer.innerHTML = (opp.requirements || []).map(req => {
-      let iconColor = "bg-emerald-50 text-emerald-600";
+      let iconColor = "bg-accent-mint text-ink";
       let iconSymbol = "check";
       let badgeClass = "badge-mint";
 
       if (req.status === "action") {
-        iconColor = "bg-amber-50 text-amber-600";
+        iconColor = "bg-accent-amber text-ink";
         iconSymbol = "priority_high";
         badgeClass = "badge-amber";
       } else if (req.status === "pending") {
@@ -1308,11 +1310,11 @@ function renderEligibilityDetails(oppId) {
 
       return `
         <div class="flex items-start gap-3">
-          <div class="w-6 h-6 rounded-md ${iconColor} flex items-center justify-center shrink-0 mt-0.5">
+          <div class="w-6 h-6 rounded-full ${iconColor} border-2 border-ink flex items-center justify-center shrink-0 mt-0.5 shadow-pop-sm">
             <span class="material-symbols-outlined text-[14px] font-bold">${iconSymbol}</span>
           </div>
           <div class="flex-1">
-            <h4 class="text-xs font-bold font-heading text-ink">${req.title}</h4>
+            <h4 class="text-xs font-extrabold font-heading text-ink">${req.title}</h4>
             <p class="text-[11px] text-ink-muted mt-0.5 font-medium">${req.desc}</p>
             <span class="badge-sticker ${badgeClass} text-[9px] mt-1">
               ${req.note}
@@ -1320,14 +1322,14 @@ function renderEligibilityDetails(oppId) {
           </div>
         </div>
       `;
-    }).join(`<div class="w-full h-px bg-border-subtle"></div>`);
+    }).join(`<div class="w-full h-0.5 bg-ink/15"></div>`);
   }
 
   const bookmarkBtn = document.getElementById("eligibility-bookmark-btn");
   if (bookmarkBtn) {
     const isSaved = AppState.savedOpportunities.includes(opp.id);
     bookmarkBtn.innerHTML = `
-      <span class="material-symbols-outlined text-[16px] ${isSaved ? 'fill text-accent-violet' : ''}">bookmark</span>
+      <span class="material-symbols-outlined text-[18px] ${isSaved ? 'fill text-accent-pink' : ''}">bookmark</span>
       ${isSaved ? 'Saved in Drafts' : 'Save for Later'}
     `;
     bookmarkBtn.onclick = (e) => {
@@ -1375,11 +1377,11 @@ function renderActionPlan(oppId) {
   if (stepsContainer) {
     stepsContainer.innerHTML = `
       <div class="card-sticker p-5 bg-card flex gap-4 items-start">
-        <div class="w-8 h-8 rounded-lg bg-indigo-50 text-accent-violet font-extrabold font-heading text-xs flex items-center justify-center shrink-0">
+        <div class="w-10 h-10 rounded-2xl bg-accent-violet text-white border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm">
           01
         </div>
         <div class="flex-1">
-          <h4 class="text-sm font-bold font-heading text-ink">Download and Prepare Required Documents</h4>
+          <h4 class="text-sm font-extrabold font-heading text-ink">Download and Prepare Required Documents</h4>
           <p class="text-xs text-ink-muted mt-1 font-medium">Obtain Certificate of Enrollment (COE) and official True Copy of Grades from university registrar.</p>
           <div class="mt-2 inline-flex items-center gap-1 badge-sticker badge-mint text-[9px]">
             <span class="material-symbols-outlined text-[13px]">check</span> In Progress
@@ -1388,11 +1390,11 @@ function renderActionPlan(oppId) {
       </div>
 
       <div class="card-sticker p-5 bg-card flex gap-4 items-start">
-        <div class="w-8 h-8 rounded-lg bg-indigo-50 text-accent-violet font-extrabold font-heading text-xs flex items-center justify-center shrink-0">
+        <div class="w-10 h-10 rounded-2xl bg-accent-pink text-white border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm">
           02
         </div>
         <div class="flex-1">
-          <h4 class="text-sm font-bold font-heading text-ink">Fill Out Official Application Form</h4>
+          <h4 class="text-sm font-extrabold font-heading text-ink">Fill Out Official Application Form</h4>
           <p class="text-xs text-ink-muted mt-1 font-medium">Complete the online registry submission at ${opp.provider} portal.</p>
           <div class="mt-2 inline-flex items-center gap-1 badge-sticker badge-amber text-[9px]">
             <span class="material-symbols-outlined text-[13px]">schedule</span> Due ${opp.deadlineFormatted}
@@ -1401,11 +1403,11 @@ function renderActionPlan(oppId) {
       </div>
 
       <div class="card-sticker p-5 bg-card flex gap-4 items-start">
-        <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 font-extrabold font-heading text-xs flex items-center justify-center shrink-0">
+        <div class="w-10 h-10 rounded-2xl bg-accent-mint text-ink border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm">
           03
         </div>
         <div class="flex-1">
-          <h4 class="text-sm font-bold font-heading text-ink">Confirmation &amp; Document Endorsement</h4>
+          <h4 class="text-sm font-extrabold font-heading text-ink">Confirmation &amp; Document Endorsement</h4>
           <p class="text-xs text-ink-muted mt-1 font-medium">Receive application reference number and retain receipt for university financial clearance.</p>
           <div class="mt-2 inline-flex items-center gap-1 badge-sticker badge-violet text-[9px]">
             Final Step
@@ -1440,9 +1442,9 @@ function renderProfile() {
         <button type="button" onclick="removeSkill(${idx})" class="hover:text-error text-[16px] leading-none font-bold ml-1">&times;</button>
       </span>
     `).join("") + `
-      <span class="inline-flex items-center gap-1 rounded-lg border border-dashed border-border-subtle focus-within:border-accent-violet">
-        <input type="text" id="new-skill-input" placeholder="Add a skill..." onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill();}" class="bg-transparent px-3 py-1 text-xs font-semibold text-ink placeholder:text-ink-muted focus:outline-none w-28"/>
-        <button type="button" onclick="addSkill()" class="pr-2 text-accent-violet">
+      <span class="inline-flex items-center gap-1 rounded-full border-2 border-dashed border-ink focus-within:border-accent-violet">
+        <input type="text" id="new-skill-input" placeholder="Add a skill..." onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill();}" class="bg-transparent px-3 py-1 text-xs font-heading font-bold text-ink placeholder:text-ink-muted focus:outline-none w-28"/>
+        <button type="button" onclick="addSkill()" class="pr-2.5 text-accent-violet">
           <span class="material-symbols-outlined text-[16px]">add_circle</span>
         </button>
       </span>
@@ -1520,15 +1522,15 @@ function renderAdminDashboard() {
     return `
       <tr class="hover:bg-paper transition-colors">
         <td class="py-3 px-6">
-          <div class="font-extrabold font-heading text-xs text-ink">${opp.title}</div>
+          <div class="font-heading font-bold text-xs text-ink">${opp.title}</div>
           <div class="text-ink-muted text-[10px]">Ref: ${opp.id}</div>
         </td>
         <td class="py-3 px-4 text-xs font-semibold text-ink">${opp.type}</td>
         <td class="py-3 px-4">${statusBadge}</td>
-        <td class="py-3 px-4 text-xs text-ink-muted">${opp.deadlineFormatted}</td>
+        <td class="py-3 px-4 text-xs font-semibold text-ink-muted">${opp.deadlineFormatted}</td>
         <td class="py-3 px-6 text-right">
-          <button class="w-7 h-7 rounded-lg bg-card border border-border-subtle inline-flex items-center justify-center text-ink-muted hover:text-accent-violet transition-colors shadow-sm" onclick="openEditProgramModal('${opp.id}')">
-            <span class="material-symbols-outlined text-[14px]">edit</span>
+          <button class="w-8 h-8 rounded-full bg-paper border-2 border-ink inline-flex items-center justify-center text-ink hover:bg-accent-violet hover:text-white transition-colors shadow-pop-sm" onclick="openEditProgramModal('${opp.id}')">
+            <span class="material-symbols-outlined text-[16px]">edit</span>
           </button>
         </td>
       </tr>
@@ -1567,22 +1569,22 @@ function renderAdminPrograms() {
     return `
       <tr class="hover:bg-paper transition-colors group">
         <td class="px-6 py-3.5">
-          <div class="w-3.5 h-3.5 rounded border border-border-subtle bg-paper"></div>
+          <div class="w-4 h-4 rounded border-2 border-ink bg-card"></div>
         </td>
-        <td class="px-6 py-3.5 font-extrabold font-heading text-xs text-ink">${opp.title}</td>
-        <td class="px-6 py-3.5 text-xs text-ink-muted">${opp.provider}</td>
+        <td class="px-6 py-3.5 font-heading font-bold text-xs text-ink">${opp.title}</td>
+        <td class="px-6 py-3.5 text-xs font-semibold text-ink-muted">${opp.provider}</td>
         <td class="px-6 py-3.5 text-xs font-bold text-ink">${opp.type}</td>
-        <td class="px-6 py-3.5 text-xs text-ink-muted">${opp.deadlineFormatted}</td>
+        <td class="px-6 py-3.5 text-xs font-semibold text-ink-muted">${opp.deadlineFormatted}</td>
         <td class="px-6 py-3.5">${statusBadge}</td>
         <td class="px-6 py-3.5 text-right">
           <div class="flex items-center justify-end gap-1.5">
-            <button class="w-7 h-7 rounded-lg bg-card border border-border-subtle flex items-center justify-center text-ink-muted hover:text-accent-violet transition-colors shadow-sm" title="Edit" onclick="openEditProgramModal('${opp.id}')">
+            <button class="w-7 h-7 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-violet hover:text-white transition-colors shadow-pop-sm" title="Edit" onclick="openEditProgramModal('${opp.id}')">
               <span class="material-symbols-outlined text-[14px]">edit</span>
             </button>
-            <button class="w-7 h-7 rounded-lg bg-card border border-border-subtle flex items-center justify-center text-ink-muted hover:text-amber-600 transition-colors shadow-sm" title="Duplicate" onclick="duplicateProgram('${opp.id}')">
+            <button class="w-7 h-7 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-amber transition-colors shadow-pop-sm" title="Duplicate" onclick="duplicateProgram('${opp.id}')">
               <span class="material-symbols-outlined text-[14px]">content_copy</span>
             </button>
-            <button class="w-7 h-7 rounded-lg bg-card border border-border-subtle flex items-center justify-center text-ink-muted hover:text-error transition-colors shadow-sm" title="Delete" onclick="deleteProgram('${opp.id}')">
+            <button class="w-7 h-7 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-pink hover:text-white transition-colors shadow-pop-sm" title="Delete" onclick="deleteProgram('${opp.id}')">
               <span class="material-symbols-outlined text-[14px]">delete</span>
             </button>
           </div>
@@ -1674,7 +1676,7 @@ function handleSaveProgram(event) {
       eligibilityStatus: "Eligible",
       eligibilityNotes: "New Registered Program",
       icon: "school",
-      colorTheme: "indigo",
+      colorTheme: "violet",
       requirements: [
         { id: "req-1", title: "General Eligibility", desc: "Criteria verified.", status: "satisfied", note: "Satisfied" }
       ],
@@ -1756,18 +1758,18 @@ function selectLoginRole(role) {
 
   if (role === "student") {
     if (studentBtn) {
-      studentBtn.className = "flex-1 py-2 px-3 rounded-lg text-xs font-extrabold font-heading transition-all flex items-center justify-center gap-1.5 bg-card text-accent-violet shadow-sm";
+      studentBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 bg-accent-violet text-white border-2 border-ink shadow-pop-sm";
     }
     if (adminBtn) {
-      adminBtn.className = "flex-1 py-2 px-3 rounded-lg text-xs font-extrabold font-heading transition-all flex items-center justify-center gap-1.5 text-ink-muted hover:text-ink";
+      adminBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 text-ink hover:bg-card-subtle";
     }
     if (emailInput && !emailInput.value.includes("ernesto")) emailInput.value = "maria.santos@student.cebu.edu.ph";
   } else {
     if (adminBtn) {
-      adminBtn.className = "flex-1 py-2 px-3 rounded-lg text-xs font-extrabold font-heading transition-all flex items-center justify-center gap-1.5 bg-card text-accent-violet shadow-sm";
+      adminBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 bg-accent-amber text-ink border-2 border-ink shadow-pop-sm";
     }
     if (studentBtn) {
-      studentBtn.className = "flex-1 py-2 px-3 rounded-lg text-xs font-extrabold font-heading transition-all flex items-center justify-center gap-1.5 text-ink-muted hover:text-ink";
+      studentBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 text-ink hover:bg-card-subtle";
     }
     if (emailInput && !emailInput.value.includes("maria")) emailInput.value = "ernesto.ramos@ched.gov.ph";
   }
@@ -1831,7 +1833,7 @@ function updateRoleUI() {
   const headerAvatar = document.getElementById("header-user-avatar");
   if (headerAvatar) {
     headerAvatar.textContent = AppState.currentUser.avatar || (isStudent ? "MS" : "ER");
-    headerAvatar.className = `w-7 h-7 rounded-lg bg-accent-violet text-white flex items-center justify-center text-[10px] font-heading font-extrabold`;
+    headerAvatar.className = `w-7 h-7 rounded-full ${isStudent ? 'bg-accent-violet' : 'bg-accent-amber'} text-ink border border-ink flex items-center justify-center text-[10px] font-heading font-extrabold`;
   }
 
   const sidebarName = document.getElementById("sidebar-user-name");
@@ -1840,13 +1842,13 @@ function updateRoleUI() {
   const sidebarBadge = document.getElementById("sidebar-user-badge");
   if (sidebarBadge) {
     sidebarBadge.textContent = isStudent ? "Student • Cebu" : "Admin • Workstation";
-    sidebarBadge.className = `badge-sticker ${isStudent ? 'badge-violet' : 'badge-amber'} text-[10px] py-0.5 px-2 mt-0.5`;
+    sidebarBadge.className = `badge-sticker ${isStudent ? 'badge-violet' : 'badge-amber'} text-[10px] py-0.5 px-2`;
   }
 
   const sidebarAvatar = document.getElementById("sidebar-user-avatar");
   if (sidebarAvatar) {
     sidebarAvatar.textContent = AppState.currentUser.avatar || (isStudent ? "MS" : "ER");
-    sidebarAvatar.className = `w-9 h-9 rounded-lg bg-accent-violet text-white flex items-center justify-center font-heading font-extrabold text-xs shrink-0 shadow-sm`;
+    sidebarAvatar.className = `w-10 h-10 rounded-full ${isStudent ? 'bg-accent-violet' : 'bg-accent-amber'} text-white border-2 border-ink flex items-center justify-center font-heading font-extrabold text-sm shrink-0 shadow-pop-sm`;
   }
 }
 
