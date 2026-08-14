@@ -169,15 +169,15 @@
       </div>
     </nav>
 
-    <!-- Bottom Role Switcher & Login Button -->
+    <!-- Bottom Role Switcher & Log Out -->
     <div class="p-4 border-t border-outline-variant/30 bg-surface-container-low/40 flex flex-col gap-2">
-      <button onclick="navigateTo('login')" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary text-xs font-semibold transition-all">
-        <span class="material-symbols-outlined text-[18px]">login</span>
-        Sign In / Change User
-      </button>
       <button onclick="openUserSwitchModal()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold transition-all">
         <span class="material-symbols-outlined text-[18px]">switch_account</span>
         Switch Role Profile
+      </button>
+      <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-surface-container hover:bg-error-container/30 hover:text-error text-on-surface-variant text-xs font-semibold transition-all">
+        <span class="material-symbols-outlined text-[18px]">logout</span>
+        Log Out
       </button>
     </div>
   </aside>
@@ -209,9 +209,9 @@
           <span class="material-symbols-outlined text-[16px] text-outline">expand_more</span>
         </button>
 
-        <button onclick="navigateTo('login')" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary/20 text-primary font-bold text-xs transition-colors" title="Sign In">
-          <span class="material-symbols-outlined text-[16px]">login</span>
-          Sign In
+        <button onclick="handleLogout()" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container hover:bg-error-container/30 hover:text-error text-on-surface-variant font-bold text-xs transition-colors" title="Log Out">
+          <span class="material-symbols-outlined text-[16px]">logout</span>
+          Log Out
         </button>
 
         <button onclick="navigateTo('saved-applications')" class="relative w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" title="Saved Applications">

@@ -1771,6 +1771,11 @@ function quickLoginAs(roleName) {
   showToast(`Welcome back, ${profileName}!`);
 }
 
+function handleLogout() {
+  navigateTo("login");
+  showToast("Signed out of QualiFind.", "info");
+}
+
 function renderLogin() {
   const role = AppState.currentUser.role || "student";
   selectLoginRole(role);
@@ -1912,6 +1917,7 @@ window.removeMatcherDocument = removeMatcherDocument;
 window.selectLoginRole = selectLoginRole;
 window.togglePasswordVisibility = togglePasswordVisibility;
 window.handleLoginFormSubmit = handleLoginFormSubmit;
+window.handleLogout = handleLogout;
 window.quickLoginAs = quickLoginAs;
 window.renderLogin = renderLogin;
 window.toggleBookmark = toggleBookmark;
