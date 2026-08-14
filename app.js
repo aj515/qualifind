@@ -607,13 +607,25 @@ function renderDashboard() {
   const dateEl = document.getElementById("dash-current-date");
   if (dateEl) dateEl.textContent = todayStr;
 
-  // Profile strength widget
-  const strengthEl = document.getElementById("dash-profile-strength-num");
-  if (strengthEl) strengthEl.textContent = `${AppState.currentUser.profileStrength}%`;
-  
-  const circleEl = document.getElementById("dash-profile-strength-circle");
-  if (circleEl) {
-    circleEl.style.strokeDasharray = `${AppState.currentUser.profileStrength}, 100`;
+  // Closing-soonest deadline callout
+  const deadlineCard = document.getElementById("dash-next-deadline-card");
+  const deadlineTitle = document.getElementById("dash-next-deadline-title");
+  const deadlineDays = document.getElementById("dash-next-deadline-days");
+  if (deadlineCard && deadlineTitle && deadlineDays) {
+    const soonest = AppState.opportunities
+      .filter(o => o.status === "Active" && o.deadlineDays >= 0)
+      .sort((a, b) => a.deadlineDays - b.deadlineDays)[0];
+
+    if (soonest) {
+      deadlineTitle.textContent = soonest.title;
+      deadlineDays.textContent = soonest.deadlineDays === 0 ? "Closes today" : `${soonest.deadlineDays} day${soonest.deadlineDays === 1 ? "" : "s"} left`;
+      deadlineCard.onclick = () => navigateTo("eligibility", { opportunityId: soonest.id });
+      deadlineCard.classList.add("cursor-pointer", "hover:shadow-md", "hover:border-primary/40", "transition-all");
+    } else {
+      deadlineTitle.textContent = "No upcoming deadlines";
+      deadlineDays.textContent = "—";
+      deadlineCard.onclick = null;
+    }
   }
 
   // Recommended cards container
