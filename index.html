@@ -72,7 +72,7 @@
 <body class="bg-paper font-sans text-ink antialiased bg-dot-grid min-h-screen">
 
   <!-- Desktop Sidebar Navigation (Playful Geometric Sticker Style) -->
-  <aside class="hidden lg:flex fixed left-0 top-0 h-full w-72 bg-card z-50 flex-col border-r-2 border-ink">
+  <aside id="app-sidebar" class="hidden lg:flex fixed left-0 top-0 h-full w-72 bg-card z-50 flex-col border-r-2 border-ink">
     <div class="h-20 flex items-center px-6 border-b-2 border-ink">
       <div class="flex items-center gap-3 cursor-pointer group" onclick="handleBrandClick()">
         <div class="w-11 h-11 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center group-hover:rotate-6 transition-transform">
@@ -163,19 +163,23 @@
       </div>
     </nav>
 
-    <!-- Bottom Role Switcher Button -->
+    <!-- Bottom Role Switcher & Log Out Buttons -->
     <div class="p-4 border-t-2 border-ink bg-paper flex flex-col gap-2">
-      <button onclick="openUserSwitchModal()" class="btn-candy btn-candy-secondary w-full py-2.5 text-xs">
+      <button onclick="openUserSwitchModal()" class="btn-candy btn-candy-secondary w-full py-2 text-xs">
         <span class="material-symbols-outlined text-[18px]">switch_account</span>
-        Switch Role / Profile
+        Switch Role Profile
+      </button>
+      <button onclick="handleLogout()" class="btn-candy btn-candy-secondary w-full py-2 text-xs hover:bg-accent-pink hover:text-white">
+        <span class="material-symbols-outlined text-[18px]">logout</span>
+        Sign Out
       </button>
     </div>
   </aside>
 
   <!-- Main Container -->
-  <div class="lg:pl-72 flex flex-col min-h-screen">
+  <div id="main-layout-wrapper" class="lg:pl-72 flex flex-col min-h-screen">
     <!-- Top Header -->
-    <header class="fixed top-0 left-0 lg:left-72 right-0 h-20 bg-paper/95 backdrop-blur-md z-40 border-b-2 border-ink flex items-center justify-between px-4 lg:px-8">
+    <header id="app-header" class="fixed top-0 left-0 lg:left-72 right-0 h-20 bg-paper/95 backdrop-blur-md z-40 border-b-2 border-ink flex items-center justify-between px-4 lg:px-8">
       <!-- Search Bar -->
       <div class="flex-1 max-w-xl">
         <div class="relative flex items-center">
@@ -199,6 +203,11 @@
           <span class="material-symbols-outlined text-[16px] text-ink">expand_more</span>
         </button>
 
+        <button onclick="handleLogout()" class="hidden sm:flex btn-candy btn-candy-secondary btn-candy-sm text-xs py-1.5 px-3" title="Sign Out">
+          <span class="material-symbols-outlined text-[16px]">logout</span>
+          Sign Out
+        </button>
+
         <button onclick="navigateTo('saved-applications')" class="relative w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all" title="Saved Applications">
           <span class="material-symbols-outlined text-[20px] text-ink">bookmark</span>
           <span id="header-saved-badge" class="absolute -top-1.5 -right-1.5 bg-accent-pink text-white text-[10px] font-heading font-extrabold w-5 h-5 rounded-full flex items-center justify-center border border-ink shadow-pop-sm">3</span>
@@ -213,6 +222,158 @@
     <!-- Main Content Area -->
     <main class="relative pt-20 flex-1 px-4 lg:px-8 py-8 pb-24 lg:pb-12 max-w-7xl w-full mx-auto">
       
+      <!-- ================= VIEW: LOGIN PAGE (AUTHENTICATION PORTAL) ================= -->
+      <section id="view-login" class="view-section">
+        <div class="min-h-screen flex items-center justify-center py-10 px-4">
+          <div class="w-full max-w-4xl card-sticker bg-card shadow-pop-lg p-0 overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+            
+            <!-- Left Panel: Playful Geometric Branding (5 Cols) -->
+            <div class="lg:col-span-5 bg-accent-violet p-8 lg:p-10 text-white flex flex-col justify-between relative overflow-hidden border-b-2 lg:border-b-0 lg:border-r-2 border-ink">
+              <div class="absolute -right-8 -top-8 w-40 h-40 bg-accent-amber rounded-full opacity-30 pointer-events-none"></div>
+              <div class="absolute right-8 bottom-8 w-20 h-20 bg-accent-pink rounded-2xl rotate-12 opacity-30 pointer-events-none"></div>
+
+              <div class="relative z-10 space-y-6">
+                <!-- App Brand Badge -->
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-paper text-ink rounded-2xl border-2 border-ink flex items-center justify-center shadow-pop-sm font-bold">
+                    <span class="material-symbols-outlined text-accent-violet text-[26px]">verified</span>
+                  </div>
+                  <div>
+                    <h2 class="font-extrabold text-2xl tracking-tight leading-none text-white font-heading">QualiFind</h2>
+                    <span class="badge-sticker badge-amber text-[9px] mt-1">PH Student Portal</span>
+                  </div>
+                </div>
+
+                <div class="space-y-2 pt-2">
+                  <h1 class="text-2xl lg:text-3xl font-extrabold font-heading text-white tracking-tight leading-snug">
+                    AI Student Assistance Navigator
+                  </h1>
+                  <p class="text-xs text-white/90 leading-relaxed font-medium">
+                    Evaluates your profile across scholarships, educational grants, LGU assistance, campus work-study, and student loans.
+                  </p>
+                </div>
+
+                <!-- Feature Badges -->
+                <div class="space-y-2.5 pt-2">
+                  <div class="flex items-center gap-3 text-xs font-bold bg-white/10 p-3 rounded-2xl border border-white/20">
+                    <span class="material-symbols-outlined text-accent-amber text-[20px]">school</span>
+                    <span>Philippine GPA &amp; GWA Calibrated</span>
+                  </div>
+                  <div class="flex items-center gap-3 text-xs font-bold bg-white/10 p-3 rounded-2xl border border-white/20">
+                    <span class="material-symbols-outlined text-accent-pink text-[20px]">auto_awesome</span>
+                    <span>3-Tier Eligibility &amp; Gap Diagnosis</span>
+                  </div>
+                  <div class="flex items-center gap-3 text-xs font-bold bg-white/10 p-3 rounded-2xl border border-white/20">
+                    <span class="material-symbols-outlined text-accent-mint text-[20px]">checklist</span>
+                    <span>5-Point Action Roadmap</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Footer note -->
+              <div class="relative z-10 pt-6 mt-6 border-t border-white/20 text-xs text-white/80 flex items-center justify-between font-heading font-bold">
+                <span>DOST-SEI &amp; CHED Aligned</span>
+                <span>v1.0.0</span>
+              </div>
+            </div>
+
+            <!-- Right Panel: Interactive Sign-In Form (7 Cols) -->
+            <div class="lg:col-span-7 p-8 lg:p-10 flex flex-col justify-center bg-card">
+              
+              <div class="mb-5">
+                <h2 class="text-2xl font-extrabold font-heading text-ink tracking-tight mb-1">Sign In to QualiFind</h2>
+                <p class="text-xs text-ink-muted font-medium">Select your portal role or enter your credentials below.</p>
+              </div>
+
+              <!-- Role Switcher Tabs (Playful Candy Style) -->
+              <div class="flex p-1 bg-paper rounded-2xl mb-5 border-2 border-ink shadow-pop-sm">
+                <button type="button" id="login-role-student-btn" onclick="selectLoginRole('student')" class="flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 bg-accent-violet text-white border-2 border-ink shadow-pop-sm">
+                  <span class="material-symbols-outlined text-[16px]">school</span>
+                  Student Seeker
+                </button>
+                <button type="button" id="login-role-admin-btn" onclick="selectLoginRole('admin')" class="flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 text-ink hover:bg-card-subtle">
+                  <span class="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+                  DOST / CHED Admin
+                </button>
+              </div>
+
+              <!-- Standard Login Form -->
+              <form id="login-form" onsubmit="handleLoginFormSubmit(event)" class="space-y-4">
+                <input type="hidden" id="login-selected-role" value="student"/>
+
+                <!-- Email Input -->
+                <div class="space-y-1">
+                  <label for="login-email-input" class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Institutional Email</label>
+                  <div class="relative flex items-center">
+                    <span class="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px]">mail</span>
+                    <input id="login-email-input" type="email" required value="maria.santos@student.cebu.edu.ph" placeholder="e.g. maria.santos@student.cebu.edu.ph" class="w-full input-playful py-2.5 pl-10 pr-4 text-xs font-semibold"/>
+                  </div>
+                </div>
+
+                <!-- Password Input -->
+                <div class="space-y-1">
+                  <div class="flex justify-between items-center">
+                    <label for="login-password-input" class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Password</label>
+                    <a href="#" onclick="showToast('Password reset link sent to your institutional email.', 'info'); return false;" class="text-xs font-bold font-heading text-accent-violet hover:underline">Forgot password?</a>
+                  </div>
+                  <div class="relative flex items-center">
+                    <span class="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px]">lock</span>
+                    <input id="login-password-input" type="password" required value="qualifind2026" placeholder="Enter your password" class="w-full input-playful py-2.5 pl-10 pr-10 text-xs font-semibold"/>
+                    <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 text-ink-muted hover:text-ink p-1">
+                      <span id="password-toggle-icon" class="material-symbols-outlined text-[18px]">visibility</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Remember Me Checkbox -->
+                <div class="flex items-center justify-between pt-0.5">
+                  <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">
+                    <input type="checkbox" checked class="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"/>
+                    <span>Remember this device</span>
+                  </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="btn-login-submit" class="btn-candy w-full py-3 text-sm">
+                  <span>Sign In to QualiFind</span>
+                  <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </button>
+              </form>
+
+              <!-- Divider -->
+              <div class="relative my-5 flex items-center justify-center">
+                <div class="w-full border-t-2 border-ink"></div>
+                <span class="absolute bg-card px-3 text-[10px] font-extrabold font-heading uppercase tracking-wider text-ink-muted">Quick Demo Sign In</span>
+              </div>
+
+              <!-- Quick Demo Login Action Cards -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button type="button" onclick="quickLoginAs('student')" class="p-3 rounded-2xl bg-paper border-2 border-ink hover:bg-accent-violet/10 transition-all flex items-center gap-3 group text-left shadow-pop-sm">
+                  <div class="w-9 h-9 rounded-full bg-accent-violet text-white border-2 border-ink font-heading font-extrabold text-xs flex items-center justify-center shrink-0">
+                    MS
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs font-extrabold font-heading text-ink truncate group-hover:text-accent-violet">Maria Clara Santos</p>
+                    <span class="text-[10px] text-ink-muted block font-medium">Student (Cebu 2nd-Yr IT)</span>
+                  </div>
+                </button>
+
+                <button type="button" onclick="quickLoginAs('admin')" class="p-3 rounded-2xl bg-paper border-2 border-ink hover:bg-accent-amber/10 transition-all flex items-center gap-3 group text-left shadow-pop-sm">
+                  <div class="w-9 h-9 rounded-full bg-accent-amber text-ink border-2 border-ink font-heading font-extrabold text-xs flex items-center justify-center shrink-0">
+                    ER
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-xs font-extrabold font-heading text-ink truncate group-hover:text-accent-amber">Dr. Ernesto Ramos</p>
+                    <span class="text-[10px] text-ink-muted block font-medium">Admin (DOST/CHED)</span>
+                  </div>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ================= VIEW 1: STUDENT DASHBOARD (STUDENT ONLY) ================= -->
       <section id="view-dashboard" class="view-section active">
         <div class="flex flex-col w-full gap-8">
@@ -407,16 +568,24 @@
               <div class="badge-sticker badge-violet mb-2">
                 <span class="material-symbols-outlined text-[16px]">neurology</span> QualiFind Natural Language AI
               </div>
-              <h1 class="text-3xl lg:text-4xl font-extrabold font-heading text-ink tracking-tight">Describe your situation in plain words</h1>
+              <h1 class="text-3xl lg:text-4xl font-extrabold font-heading text-ink tracking-tight">Describe your situation or select quick tags</h1>
               <p class="text-sm md:text-base text-ink-muted max-w-2xl mx-auto leading-relaxed font-medium">
-                Tell us about your year, degree, GPA, location, and the financial help you need. QualiFind AI parses your details and matches you to government aid, scholarships, tuition discounts, or student jobs.
+                Tap tags that apply to you or type freely. QualiFind AI parses your details across scholarships, tuition grants, LGU assistance, campus jobs, and student loans.
               </p>
+            </div>
+
+            <!-- Quick Profile Tags (Multi-Select Memphis Chips) -->
+            <div class="w-full flex flex-col items-center space-y-2">
+              <span class="text-xs font-heading font-extrabold uppercase text-ink-muted tracking-wider">Tap what applies to you (Multi-Select)</span>
+              <div id="matcher-profile-chips" class="flex flex-wrap justify-center gap-2">
+                <!-- Dynamically rendered via renderMatcherProfileChips() -->
+              </div>
             </div>
 
             <!-- AI Prompt Input Box (Playful Sticker Container) -->
             <div class="w-full text-left">
               <div class="card-sticker p-0 overflow-hidden">
-                <textarea id="ai-prompt-input" class="w-full h-44 bg-transparent p-5 text-base text-ink placeholder:text-ink-muted/60 resize-none focus:outline-none font-medium" placeholder="E.g., I'm Maria, 20 years old, a 2nd-year IT student in Cebu with an 82% GPA. My family has limited income, and I'm looking for assistance to cover my tuition fees and daily transportation expenses..."></textarea>
+                <textarea id="ai-prompt-input" class="w-full h-40 bg-transparent p-5 text-base text-ink placeholder:text-ink-muted/60 resize-none focus:outline-none font-medium" placeholder="E.g., I'm Maria, 20 years old, a 2nd-year IT student in Cebu with an 82% GPA. My family has limited income, and I'm looking for assistance to cover tuition and transportation expenses..."></textarea>
 
                 <div id="matcher-doc-chips" class="hidden flex-wrap gap-2 px-5 pb-4"></div>
 
@@ -444,7 +613,7 @@
 
             <!-- Starting Points Chips -->
             <div class="w-full flex flex-col items-center space-y-3 pt-2">
-              <span class="text-xs font-heading font-bold uppercase text-ink-muted tracking-wider">Demo Presets &amp; Starting Points</span>
+              <span class="text-xs font-heading font-bold uppercase text-ink-muted tracking-wider">Demo Presets &amp; Starting Stories</span>
               <div id="matcher-chips" class="flex flex-wrap justify-center gap-2">
                 <button data-prompt="I'm Maria, 20 years old, a 2nd-year IT student in Cebu with an 82% GPA. My family has limited income, and I'm looking for assistance to cover my tuition fees and daily transportation expenses." class="badge-sticker badge-pink hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3">
                   🌟 Maria's Demo Story (Cebu 2nd-Yr IT, 82% GPA)
@@ -1065,7 +1234,7 @@
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Official Agency Email</label>
-                <input type="email" readonly value="ernesto.ramos@up.edu.ph" class="input-playful text-sm font-bold bg-paper"/>
+                <input type="email" readonly value="ernesto.ramos@ched.gov.ph" class="input-playful text-sm font-bold bg-paper"/>
               </div>
 
               <div class="flex flex-col gap-1.5">

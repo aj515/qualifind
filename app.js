@@ -302,7 +302,20 @@ const INITIAL_OPPORTUNITIES = [
   }
 ];
 
-// App State: Calibrated for Maria (Cebu, 20yo, 2nd-year IT, 82% GPA)
+// Quick-suggestion profile tags for AI Matcher
+const MATCHER_PROFILE_TAGS = [
+  { id: "college-student", label: "College Student", icon: "school" },
+  { id: "it-student", label: "IT / Computing Major", icon: "terminal" },
+  { id: "cebu-resident", label: "Cebu / Region VII", icon: "location_city" },
+  { id: "working-student", label: "Working Student", icon: "work_history" },
+  { id: "scholarship", label: "Looking for Scholarship", icon: "workspace_premium" },
+  { id: "financial-aid", label: "Tuition / Cash Grant", icon: "payments" },
+  { id: "assistantship", label: "Campus Assistantship", icon: "laptop_chromebook" },
+  { id: "certification", label: "Free Tech Certification", icon: "model_training" },
+  { id: "low-income", label: "Low-Income Household", icon: "home" }
+];
+
+// User Profiles: Calibrated for Maria (Cebu, 20yo, 2nd-year IT, 82% GPA)
 const USER_PROFILES = {
   student: {
     name: "Maria Clara Santos",
@@ -353,6 +366,7 @@ const AppState = {
   currentView: "dashboard",
   selectedOpportunityId: "CEBU-LGU-SCHOLARSHIP-2024",
   matcherDocuments: [],
+  matcherProfileTags: [],
   opportunities: [...INITIAL_OPPORTUNITIES],
   savedOpportunities: ["CEBU-LGU-SCHOLARSHIP-2024", "CIT-STUDENT-ASSISTANT-2024", "CHED-TULONG-DUNONG-2024"],
   activeFilters: {
@@ -399,6 +413,7 @@ const STUDENT_VIEWS = ["dashboard", "matcher", "opportunities", "saved-applicati
 const ADMIN_VIEWS = ["admin-dashboard", "admin-programs", "admin-profile"];
 
 function handleBrandClick() {
+  if (AppState.currentView === "login") return;
   if (AppState.currentUser.role === "admin") {
     navigateTo("admin-dashboard");
   } else {
@@ -410,13 +425,15 @@ function handleBrandClick() {
 function navigateTo(viewId, payload = null) {
   const currentRole = AppState.currentUser.role || "student";
 
-  // Strict Role Guard
-  if (currentRole === "student" && ADMIN_VIEWS.includes(viewId)) {
-    showToast("Access Restricted: Admin privileges required.", "warning");
-    viewId = "dashboard";
-  } else if (currentRole === "admin" && STUDENT_VIEWS.includes(viewId)) {
-    showToast("Access Restricted: Switch to Student profile to view opportunity seeker views.", "warning");
-    viewId = "admin-dashboard";
+  // Strict Role Guard (unless navigating to login)
+  if (viewId !== "login") {
+    if (currentRole === "student" && ADMIN_VIEWS.includes(viewId)) {
+      showToast("Access Restricted: Admin privileges required.", "warning");
+      viewId = "dashboard";
+    } else if (currentRole === "admin" && STUDENT_VIEWS.includes(viewId)) {
+      showToast("Access Restricted: Switch to Student profile to view opportunity seeker views.", "warning");
+      viewId = "admin-dashboard";
+    }
   }
 
   AppState.currentView = viewId;
@@ -453,8 +470,56 @@ function navigateTo(viewId, payload = null) {
   renderCurrentView();
 }
 
+function updateLayoutForView(viewId) {
+  const sidebar = document.getElementById("app-sidebar") || document.querySelector("aside");
+  const header = document.getElementById("app-header") || document.querySelector("header");
+  const mainWrapper = document.getElementById("main-layout-wrapper");
+  const mainEl = document.querySelector("main");
+
+  if (viewId === "login") {
+    if (sidebar) {
+      sidebar.style.display = "none";
+      sidebar.classList.remove("lg:flex");
+      sidebar.classList.add("hidden");
+    }
+    if (header) {
+      header.style.display = "none";
+      header.classList.add("hidden");
+    }
+    if (mainWrapper) {
+      mainWrapper.classList.remove("lg:pl-72");
+      mainWrapper.classList.add("lg:pl-0");
+    }
+    if (mainEl) {
+      mainEl.classList.remove("pt-20");
+      mainEl.classList.add("pt-0");
+    }
+  } else {
+    if (sidebar) {
+      sidebar.style.display = "";
+      sidebar.classList.remove("hidden");
+      sidebar.classList.add("lg:flex");
+    }
+    if (header) {
+      header.style.display = "";
+      header.classList.remove("hidden");
+    }
+    if (mainWrapper) {
+      mainWrapper.classList.add("lg:pl-72");
+      mainWrapper.classList.remove("lg:pl-0");
+    }
+    if (mainEl) {
+      mainEl.classList.add("pt-20");
+      mainEl.classList.remove("pt-0");
+    }
+  }
+}
+
 function renderCurrentView() {
   switch (AppState.currentView) {
+    case "login":
+      renderLogin();
+      break;
     case "dashboard":
       renderDashboard();
       break;
@@ -485,6 +550,7 @@ function renderCurrentView() {
     default:
       renderDashboard();
   }
+  updateLayoutForView(AppState.currentView);
   updateGlobalBadges();
 }
 
@@ -712,8 +778,10 @@ function renderDashboard() {
   }).join("");
 }
 
-// Render AI Matcher Screen
+// Render AI Matcher Screen & Quick Profile Chips
 function renderMatcher() {
+  renderMatcherProfileChips();
+
   const chips = document.querySelectorAll("#matcher-chips button");
   const textarea = document.getElementById("ai-prompt-input");
 
@@ -729,6 +797,49 @@ function renderMatcher() {
   });
 
   renderMatcherDocChips();
+}
+
+function renderMatcherProfileChips() {
+  const container = document.getElementById("matcher-profile-chips");
+  if (!container) return;
+
+  container.innerHTML = MATCHER_PROFILE_TAGS.map(tag => {
+    const isSelected = AppState.matcherProfileTags.includes(tag.id);
+    const badgeStyle = isSelected ? "badge-violet shadow-pop-sm scale-105" : "bg-card text-ink border-2 border-ink hover:bg-card-subtle";
+
+    return `
+      <button type="button" onclick="toggleMatcherTag('${tag.id}')" class="badge-sticker ${badgeStyle} cursor-pointer transition-all flex items-center gap-1.5 py-1.5 px-3 text-xs">
+        <span class="material-symbols-outlined text-[16px]">${tag.icon}</span>
+        <span>${tag.label}</span>
+        ${isSelected ? '<span class="material-symbols-outlined text-[14px]">check</span>' : ''}
+      </button>
+    `;
+  }).join("");
+}
+
+function toggleMatcherTag(tagId) {
+  const idx = AppState.matcherProfileTags.indexOf(tagId);
+  if (idx > -1) {
+    AppState.matcherProfileTags.splice(idx, 1);
+  } else {
+    AppState.matcherProfileTags.push(tagId);
+  }
+  renderMatcherProfileChips();
+}
+
+function buildMatcherPrompt() {
+  const textarea = document.getElementById("ai-prompt-input");
+  const freeText = textarea ? textarea.value.trim() : "";
+  const tagLabels = AppState.matcherProfileTags
+    .map(tid => MATCHER_PROFILE_TAGS.find(t => t.id === tid)?.label)
+    .filter(Boolean);
+
+  if (tagLabels.length > 0 && freeText) {
+    return `${tagLabels.join(", ")}. Additional details: ${freeText}`;
+  } else if (tagLabels.length > 0) {
+    return tagLabels.join(", ");
+  }
+  return freeText;
 }
 
 function formatFileSize(bytes) {
@@ -786,14 +897,14 @@ const MATCHER_LOADING_STEPS = [
 ];
 
 function handleFindMatches() {
-  const textarea = document.getElementById("ai-prompt-input");
-  const promptText = textarea ? textarea.value.trim() : "";
+  const promptText = buildMatcherPrompt();
 
   if (!promptText) {
-    showToast("Please enter your situation or click Maria's demo preset.", "warning");
+    showToast("Please enter your situation or select quick tags.", "warning");
     return;
   }
 
+  const textarea = document.getElementById("ai-prompt-input");
   const matchBtn = document.getElementById("btn-find-matches");
   const statusEl = document.getElementById("matcher-loading-status");
 
@@ -1636,6 +1747,70 @@ function setRole(roleName) {
   }
 }
 
+// Login Page Handlers
+function selectLoginRole(role) {
+  const roleInput = document.getElementById("login-selected-role");
+  const studentBtn = document.getElementById("login-role-student-btn");
+  const adminBtn = document.getElementById("login-role-admin-btn");
+  const emailInput = document.getElementById("login-email-input");
+
+  if (roleInput) roleInput.value = role;
+
+  if (role === "student") {
+    if (studentBtn) {
+      studentBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 bg-accent-violet text-white border-2 border-ink shadow-pop-sm";
+    }
+    if (adminBtn) {
+      adminBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 text-ink hover:bg-card-subtle";
+    }
+    if (emailInput && !emailInput.value.includes("ernesto")) emailInput.value = "maria.santos@student.cebu.edu.ph";
+  } else {
+    if (adminBtn) {
+      adminBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 bg-accent-amber text-ink border-2 border-ink shadow-pop-sm";
+    }
+    if (studentBtn) {
+      studentBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 text-ink hover:bg-card-subtle";
+    }
+    if (emailInput && !emailInput.value.includes("maria")) emailInput.value = "ernesto.ramos@ched.gov.ph";
+  }
+}
+
+function togglePasswordVisibility() {
+  const pwdInput = document.getElementById("login-password-input");
+  const toggleIcon = document.getElementById("password-toggle-icon");
+  if (!pwdInput) return;
+
+  if (pwdInput.type === "password") {
+    pwdInput.type = "text";
+    if (toggleIcon) toggleIcon.textContent = "visibility_off";
+  } else {
+    pwdInput.type = "password";
+    if (toggleIcon) toggleIcon.textContent = "visibility";
+  }
+}
+
+function handleLoginFormSubmit(event) {
+  if (event) event.preventDefault();
+  const selectedRole = document.getElementById("login-selected-role")?.value || "student";
+  quickLoginAs(selectedRole);
+}
+
+function quickLoginAs(roleName) {
+  setRole(roleName);
+  const profileName = USER_PROFILES[roleName]?.name || "User";
+  showToast(`Welcome back, ${profileName}!`);
+}
+
+function handleLogout() {
+  navigateTo("login");
+  showToast("Signed out of QualiFind.", "info");
+}
+
+function renderLogin() {
+  const role = AppState.currentUser.role || "student";
+  selectLoginRole(role);
+}
+
 function updateRoleUI() {
   const isStudent = AppState.currentUser.role === "student";
   
@@ -1770,6 +1945,12 @@ window.openUserSwitchModal = openUserSwitchModal;
 window.closeUserSwitchModal = closeUserSwitchModal;
 window.showToast = showToast;
 window.toggleDarkMode = toggleDarkMode;
+window.selectLoginRole = selectLoginRole;
+window.togglePasswordVisibility = togglePasswordVisibility;
+window.handleLoginFormSubmit = handleLoginFormSubmit;
+window.quickLoginAs = quickLoginAs;
+window.handleLogout = handleLogout;
+window.toggleMatcherTag = toggleMatcherTag;
 
 // App Initialization
 function initApp() {
