@@ -141,15 +141,15 @@ export default function DashboardPage() {
 
       {/* Top Recommended */}
       <div className="card-sticker bg-card overflow-hidden">
-        <div className="p-6 flex items-center justify-between border-b-2 border-ink">
+        <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-ink">
           <div>
-            <h2 className="text-xl font-extrabold font-heading text-ink flex items-center gap-2">
+            <h2 className="text-xl font-extrabold font-heading text-ink flex items-center gap-2 flex-wrap">
               Top Recommended Philippine Programs
               <span className="badge-sticker badge-violet">AI CALIBRATED</span>
             </h2>
             <p className="text-xs text-ink-muted font-medium mt-1">Ranked by eligibility and financial assistance category.</p>
           </div>
-          <Link to="/opportunities" className="btn-candy btn-candy-sm">
+          <Link to="/opportunities" className="btn-candy btn-candy-sm self-start sm:self-auto">
             View All Programs <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
           </Link>
         </div>
