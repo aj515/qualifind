@@ -66,7 +66,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="flex flex-col w-full max-w-3xl gap-6">
+    <div className="flex flex-col w-full gap-6">
       <div>
         <h1 className="text-3xl font-extrabold font-heading text-ink tracking-tight">Student Profile</h1>
         <p className="text-sm text-ink-muted max-w-2xl mt-1 font-medium">
@@ -74,108 +74,138 @@ export default function ProfilePage() {
         </p>
       </div>
 
-      <form onSubmit={handleSave} className="card-sticker p-6 bg-card flex flex-col gap-5">
-        {savedMsg && (
-          <div className="p-3 rounded-2xl bg-accent-mint/10 border-2 border-accent-mint text-xs font-semibold text-ink">{savedMsg}</div>
-        )}
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Full Name</label>
-            <input value={name} onChange={(e) => setName(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
+      <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6 items-start">
+        {/* Sidebar: identity summary */}
+        <div className="card-sticker p-6 bg-card flex flex-col items-center text-center gap-3 lg:sticky lg:top-28">
+          <div className="w-20 h-20 rounded-full bg-accent-violet text-white border-2 border-ink flex items-center justify-center text-2xl font-heading font-extrabold shadow-pop-sm">
+            {profile?.avatar || 'QF'}
           </div>
-          <div className="space-y-1">
-            <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Email (read-only)</label>
-            <input value={user?.email || ''} disabled className="w-full input-playful py-2.5 px-4 text-xs font-semibold opacity-60" />
+          <div>
+            <p className="font-heading font-extrabold text-ink text-lg leading-tight">{name || 'Your Name'}</p>
+            <p className="text-xs text-ink-muted font-medium mt-0.5 break-all">{user?.email}</p>
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Institution</label>
-            <input value={institution} onChange={(e) => setInstitution(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Course / Program</label>
-            <input value={course} onChange={(e) => setCourse(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
-          </div>
-        </div>
-
-        <div className="space-y-1 max-w-xs">
-          <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Current GWA / GPA (%)</label>
-          <input
-            type="number"
-            min="0"
-            max="100"
-            step="0.1"
-            value={gpa}
-            onChange={(e) => setGpa(e.target.value)}
-            className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-          />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Date of Birth</label>
-            <input
-              type="date"
-              value={birthdate}
-              onChange={(e) => setBirthdate(e.target.value)}
-              className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Location</label>
-            <input
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="e.g. Cebu City"
-              className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-            />
+          {isFinanciallyDisadvantaged && (
+            <span className="badge-sticker badge-pink text-[10px] py-1 px-3">Low-Income / Indigent</span>
+          )}
+          <div className="w-full pt-3 mt-1 border-t-2 border-ink/10 text-left space-y-1">
+            <div className="flex items-center justify-between text-xs font-heading font-extrabold text-ink">
+              <span>Profile Strength</span>
+              <span>{profile?.profile_strength ?? 0}%</span>
+            </div>
+            <div className="w-full h-2 rounded-full bg-ink/10 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-accent-mint transition-all"
+                style={{ width: `${profile?.profile_strength ?? 0}%` }}
+              />
+            </div>
           </div>
         </div>
 
-        <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">
-          <input
-            type="checkbox"
-            checked={isFinanciallyDisadvantaged}
-            onChange={(e) => setIsFinanciallyDisadvantaged(e.target.checked)}
-            className="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"
-          />
-          <span>I qualify as low-income / indigent (unlocks need-based assistance matching)</span>
-        </label>
+        {/* Main: editable fields */}
+        <div className="flex flex-col gap-6">
+          {savedMsg && (
+            <div className="p-3 rounded-2xl bg-accent-mint/10 border-2 border-accent-mint text-xs font-semibold text-ink">{savedMsg}</div>
+          )}
 
-        <div className="space-y-1">
-          <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Bio</label>
-          <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} className="w-full input-playful py-2.5 px-4 text-xs font-semibold resize-none" />
-        </div>
+          <div className="card-sticker p-6 bg-card flex flex-col gap-5">
+            <h2 className="font-heading font-extrabold text-sm uppercase tracking-wider text-ink-muted">Personal & Academic Info</h2>
 
-        <div className="space-y-2">
-          <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Skills</label>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {skills.map((skill) => (
-              <span key={skill} className="badge-sticker badge-violet text-xs py-1 px-3">
-                {skill}
-                <button type="button" onClick={() => removeSkill(skill)} className="ml-1">
-                  <span className="material-symbols-outlined text-[14px]">close</span>
-                </button>
-              </span>
-            ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Full Name</label>
+                <input value={name} onChange={(e) => setName(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Email (read-only)</label>
+                <input value={user?.email || ''} disabled className="w-full input-playful py-2.5 px-4 text-xs font-semibold opacity-60" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Institution</label>
+                <input value={institution} onChange={(e) => setInstitution(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Course / Program</label>
+                <input value={course} onChange={(e) => setCourse(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Current GWA / GPA (%)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value={gpa}
+                  onChange={(e) => setGpa(e.target.value)}
+                  className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Date of Birth</label>
+                <input
+                  type="date"
+                  value={birthdate}
+                  onChange={(e) => setBirthdate(e.target.value)}
+                  className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Location</label>
+                <input
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="e.g. Cebu City"
+                  className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
+                />
+              </div>
+            </div>
+
+            <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">
+              <input
+                type="checkbox"
+                checked={isFinanciallyDisadvantaged}
+                onChange={(e) => setIsFinanciallyDisadvantaged(e.target.checked)}
+                className="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"
+              />
+              <span>I qualify as low-income / indigent (unlocks need-based assistance matching)</span>
+            </label>
           </div>
-          <div className="flex gap-2">
-            <input
-              value={newSkill}
-              onChange={(e) => setNewSkill(e.target.value)}
-              placeholder="Add a skill..."
-              className="input-playful py-2 px-3 text-xs font-semibold flex-1"
-            />
-            <button onClick={addSkill} className="btn-candy btn-candy-secondary btn-candy-sm">Add</button>
-          </div>
-        </div>
 
-        <button type="submit" disabled={saving} className="btn-candy self-start px-6 disabled:opacity-60">
-          {saving ? 'Saving…' : 'Save Profile'}
-        </button>
+          <div className="card-sticker p-6 bg-card flex flex-col gap-5">
+            <h2 className="font-heading font-extrabold text-sm uppercase tracking-wider text-ink-muted">Bio & Skills</h2>
+
+            <div className="space-y-1">
+              <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Bio</label>
+              <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} className="w-full input-playful py-2.5 px-4 text-xs font-semibold resize-none" />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Skills</label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {skills.map((skill) => (
+                  <span key={skill} className="badge-sticker badge-violet text-xs py-1 px-3">
+                    {skill}
+                    <button type="button" onClick={() => removeSkill(skill)} className="ml-1">
+                      <span className="material-symbols-outlined text-[14px]">close</span>
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="flex gap-2 max-w-md">
+                <input
+                  value={newSkill}
+                  onChange={(e) => setNewSkill(e.target.value)}
+                  placeholder="Add a skill..."
+                  className="input-playful py-2 px-3 text-xs font-semibold flex-1"
+                />
+                <button onClick={addSkill} className="btn-candy btn-candy-secondary btn-candy-sm">Add</button>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" disabled={saving} className="btn-candy self-start px-6 disabled:opacity-60">
+            {saving ? 'Saving…' : 'Save Profile'}
+          </button>
+        </div>
       </form>
     </div>
   );

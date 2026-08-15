@@ -227,22 +227,27 @@ html.dark .bg-dot-grid {
 /* =========================================================================
    INPUTS: PLAYFUL FORM CONTROLS
    ========================================================================= */
-.input-playful {
-  background-color: rgb(var(--color-card));
-  color: rgb(var(--color-ink));
-  border: 1.5px solid rgb(var(--color-ink) / 0.25);
-  border-radius: 0.875rem;
-  padding: 0.625rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  outline: none;
-}
+/* Layered as a Tailwind component so utility classes (pl-10, pl-11, etc. on
+   icon-prefixed inputs) reliably win the cascade instead of losing to this
+   rule's own `padding` on specificity ties. */
+@layer components {
+  .input-playful {
+    background-color: rgb(var(--color-card));
+    color: rgb(var(--color-ink));
+    border: 1.5px solid rgb(var(--color-ink) / 0.25);
+    border-radius: 0.875rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    outline: none;
+  }
 
-.input-playful:focus {
-  border-color: rgb(var(--color-accent-violet));
-  box-shadow: 3px 3px 0px 0px rgb(var(--color-accent-violet));
-  transform: translate(-1px, -1px);
+  .input-playful:focus {
+    border-color: rgb(var(--color-accent-violet));
+    box-shadow: 3px 3px 0px 0px rgb(var(--color-accent-violet));
+    transform: translate(-1px, -1px);
+  }
 }
 
 /* =========================================================================
