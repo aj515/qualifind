@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useData } from '../../context/DataContext.jsx';
-import { calculateMatchForPrompt, MATCHER_DEMO_PRESETS, MATCHER_PROFILE_TAGS } from '../../lib/matcher.js';
+import { getAIMatches, calculateMatchForPrompt, MATCHER_DEMO_PRESETS, MATCHER_PROFILE_TAGS } from '../../lib/matcher.js';
 
 export default function MatcherPage() {
   const { profile } = useAuth();
@@ -18,17 +18,25 @@ export default function MatcherPage() {
     setPrompt((prev) => (prev ? `${prev} ${tag.label}` : tag.label));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!prompt.trim() || isMatching) return;
 
     setIsMatching(true);
-    setTimeout(() => {
-      const scored = calculateMatchForPrompt(prompt, programs, profile?.gpa ?? 75);
-      applyMatcherScores(scored);
-      setIsMatching(false);
-      navigate('/opportunities');
-    }, 1200);
+
+    let scored;
+    let usedFallback = false;
+    try {
+      scored = await getAIMatches(prompt, programs, profile);
+    } catch (err) {
+      console.warn('AI matching failed, falling back to offline ranking:', err);
+      usedFallback = true;
+      scored = calculateMatchForPrompt(prompt, programs, profile?.gpa ?? 75);
+    }
+
+    applyMatcherScores(scored);
+    setIsMatching(false);
+    navigate(usedFallback ? '/opportunities?ai=fallback' : '/opportunities');
   }
 
   return (

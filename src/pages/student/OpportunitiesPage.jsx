@@ -13,9 +13,10 @@ const ELIGIBILITY_OPTIONS = [
 const ALL_ELIGIBILITY = ELIGIBILITY_OPTIONS.map((o) => o.value);
 
 export default function OpportunitiesPage() {
-  const { programs, savedIds, toggleSaved, matcherScores, eligibilityByProgramId } = useData();
+  const { programs, savedIds, toggleSaved, matcherScores, matcherReasons, eligibilityByProgramId } = useData();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const usedFallbackMatcher = searchParams.get('ai') === 'fallback';
 
   const [query, setQuery] = useState(searchParams.get('q') || '');
   const [activeTypes, setActiveTypes] = useState(ALL_TYPES);
@@ -76,6 +77,13 @@ export default function OpportunitiesPage() {
           Browse Philippine scholarships, grants, assistantships, and loans, filtered to your profile.
         </p>
       </div>
+
+      {usedFallbackMatcher && (
+        <div className="p-3 rounded-2xl bg-accent-amber/20 border-2 border-ink flex items-center gap-2.5 shadow-pop-sm">
+          <span className="material-symbols-outlined text-ink text-[18px] shrink-0">warning</span>
+          <p className="text-xs font-semibold text-ink">AI matching was unavailable, so these results use the offline keyword ranking instead.</p>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
         {/* Filters */}
@@ -180,7 +188,13 @@ export default function OpportunitiesPage() {
                       <h3 className="text-lg font-extrabold font-heading text-ink mb-1 group-hover:text-accent-violet transition-colors">
                         {opp.title}
                       </h3>
-                      <p className="text-xs font-semibold text-ink-muted mb-4">{opp.providers?.name}</p>
+                      <p className="text-xs font-semibold text-ink-muted mb-2">{opp.providers?.name}</p>
+                      {matcherReasons[opp.id] && (
+                        <p className="text-[11px] text-accent-violet font-medium leading-snug mb-2 flex items-start gap-1">
+                          <span className="material-symbols-outlined text-[13px] mt-0.5 shrink-0">auto_awesome</span>
+                          {matcherReasons[opp.id]}
+                        </p>
+                      )}
 
                       <div className="grid grid-cols-2 gap-3 p-3 bg-paper rounded-2xl border-2 border-ink mb-4">
                         <div>

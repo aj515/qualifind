@@ -12,9 +12,11 @@ export function DataProvider({ children }) {
   const [savedStatusByProgramId, setSavedStatusByProgramId] = useState({});
   const [eligibilityByProgramId, setEligibilityByProgramId] = useState({});
   const [loading, setLoading] = useState(true);
-  // Session-only relevance scores from the free-text AI Matcher (never persisted to the DB —
-  // matches the old app's behavior where matchScore was purely a client-side heuristic).
+  // Session-only relevance scores (+ optional AI reasoning text) from the free-text
+  // AI Matcher. Never persisted to the DB — matches the old app's behavior where
+  // matchScore was purely a client-side/session concern.
   const [matcherScores, setMatcherScores] = useState({});
+  const [matcherReasons, setMatcherReasons] = useState({});
 
   const loadPrograms = useCallback(async () => {
     const { data, error } = await supabase
@@ -159,11 +161,14 @@ export function DataProvider({ children }) {
   );
 
   const applyMatcherScores = useCallback((scoredPrograms) => {
-    const map = {};
+    const scoreMap = {};
+    const reasonMap = {};
     scoredPrograms.forEach((p) => {
-      map[p.id] = p.calculatedScore;
+      scoreMap[p.id] = p.calculatedScore;
+      if (p.aiMatchReason) reasonMap[p.id] = p.aiMatchReason;
     });
-    setMatcherScores(map);
+    setMatcherScores(scoreMap);
+    setMatcherReasons(reasonMap);
   }, []);
 
   const value = {
@@ -173,6 +178,7 @@ export function DataProvider({ children }) {
     eligibilityByProgramId,
     loading,
     matcherScores,
+    matcherReasons,
     refreshPrograms: loadPrograms,
     toggleSaved,
     setProgramStatus,

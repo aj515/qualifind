@@ -1,7 +1,34 @@
-// Ported from the old app.js's calculateMatchForPrompt — client-side keyword + GWA
-// relevance heuristic for the free-text AI Matcher search. Not persisted to the DB,
-// same as before; just computed on the fly for the current session.
+// Calls the dev-server /api/match endpoint (see vite.config.js + server/aiMatcher.js),
+// which forwards to Claude for real semantic relevance scoring against the free-text
+// situation. Throws on failure — callers should fall back to calculateMatchForPrompt.
+export async function getAIMatches(situationText, programs, profile) {
+  const response = await fetch('/api/match', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ situationText, profile, programs })
+  });
 
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new Error(body.error || `AI matching request failed (${response.status})`);
+  }
+
+  const { results = [] } = await response.json();
+
+  return programs.map((program) => {
+    const match = results.find((r) => r.id === program.id);
+    return {
+      ...program,
+      calculatedScore: match ? match.matchScore : 50,
+      aiMatchReason: match ? match.reason : ''
+    };
+  });
+}
+
+// Offline fallback (also the original implementation, ported from the old app.js's
+// calculateMatchForPrompt) — client-side keyword + GWA relevance heuristic, used
+// when the AI call fails (no API key, network issue, rate limit). Not persisted to
+// the DB; just computed on the fly for the current session.
 export function calculateMatchForPrompt(userPrompt, programs, userGpa) {
   const query = userPrompt.toLowerCase();
   const keywords = query.split(/\s+/).filter((w) => w.length > 2);

@@ -179,7 +179,7 @@ export default function RegisterPage() {
                     First Name
                   </label>
                   <div className="relative flex items-center">
-                    <span className="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px]">person</span>
+                    <span className="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px] pointer-events-none">person</span>
                     <input
                       id="reg-first-name"
                       type="text"
@@ -212,7 +212,7 @@ export default function RegisterPage() {
                   Institutional Email
                 </label>
                 <div className="relative flex items-center">
-                  <span className="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px]">mail</span>
+                  <span className="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px] pointer-events-none">mail</span>
                   <input
                     id="reg-email"
                     type="email"
