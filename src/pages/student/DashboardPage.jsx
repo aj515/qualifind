@@ -161,7 +161,7 @@ export default function DashboardPage() {
               onClick={() => navigate(`/opportunities/${opp.id}/eligibility`)}
               className="p-6 hover:bg-paper transition-colors group flex flex-col lg:flex-row gap-6 items-start justify-between relative cursor-pointer"
             >
-              <div className="flex items-start gap-4 flex-1 min-w-0">
+              <div className="flex items-start gap-4 flex-1 min-w-0 w-full lg:w-auto">
                 <div className="w-14 h-14 rounded-2xl bg-paper border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
                   <span className="material-symbols-outlined text-[28px] text-ink">{opp.icon || 'school'}</span>
                 </div>
