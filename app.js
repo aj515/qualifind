@@ -371,7 +371,7 @@ const AppState = {
   savedOpportunities: ["CEBU-LGU-SCHOLARSHIP-2024", "CIT-STUDENT-ASSISTANT-2024", "CHED-TULONG-DUNONG-2024"],
   activeFilters: {
     types: ["Scholarship", "Educational Assistance", "Student Employment", "Training & Certification"],
-    matchQuality: ["high", "good"],
+    eligibility: ["Eligible", "Potentially Eligible", "Not Eligible"],
     searchQuery: "",
     savedOnly: false
   },
@@ -667,8 +667,8 @@ function calculateMatchForPrompt(userPrompt) {
 // Render Dashboard View
 function renderDashboard() {
   const foundCount = AppState.opportunities.filter(o => o.status === "Active").length;
-  const strongCount = AppState.opportunities.filter(o => o.status === "Active" && o.matchScore >= 80).length;
-  const potentialCount = AppState.opportunities.filter(o => o.status === "Active" && o.matchScore >= 60 && o.matchScore < 80).length;
+  const strongCount = AppState.opportunities.filter(o => o.status === "Active" && o.eligibilityStatus === "Eligible").length;
+  const potentialCount = AppState.opportunities.filter(o => o.status === "Active" && o.eligibilityStatus === "Potentially Eligible").length;
   const savedCount = AppState.savedOpportunities.length;
 
   const foundEl = document.getElementById("dash-stat-found");
@@ -723,20 +723,19 @@ function renderDashboard() {
   const recContainer = document.getElementById("dash-recommended-list");
   if (!recContainer) return;
 
+  const eligibilityRank = { "Eligible": 0, "Potentially Eligible": 1, "Not Eligible": 2 };
   const topMatches = AppState.opportunities
     .filter(o => o.status === "Active")
-    .sort((a, b) => b.matchScore - a.matchScore)
+    .sort((a, b) => (eligibilityRank[a.eligibilityStatus] ?? 3) - (eligibilityRank[b.eligibilityStatus] ?? 3) || b.matchScore - a.matchScore)
     .slice(0, 3);
 
   recContainer.innerHTML = topMatches.map(opp => {
     const isSaved = AppState.savedOpportunities.includes(opp.id);
-    const scoreColorClass = opp.matchScore >= 80 ? "text-accent-mint" : (opp.matchScore >= 60 ? "text-accent-amber" : "text-ink-muted");
-    
-    // Playful Category Badge
-    let badgeClass = "badge-violet";
-    if (opp.type === "Educational Assistance") badgeClass = "badge-pink";
-    if (opp.type === "Student Employment") badgeClass = "badge-amber";
-    if (opp.type === "Training & Certification") badgeClass = "badge-mint";
+    const statusBadge = getEligibilityBadgeHtml(opp);
+
+    // Category badge uses a neutral color so it never collides with the mint/amber/pink
+    // eligibility-status semantics shown alongside it.
+    const badgeClass = "badge-cyan";
 
     return `
       <div class="p-6 hover:bg-paper transition-colors group flex flex-col lg:flex-row gap-6 items-start justify-between relative cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
@@ -760,8 +759,7 @@ function renderDashboard() {
 
         <div class="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto gap-4 mt-2 lg:mt-0" onclick="event.stopPropagation()">
           <div class="flex flex-col items-start lg:items-end">
-            <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase tracking-wider">Match Score</span>
-            <span class="text-2xl font-extrabold font-heading ${scoreColorClass}">${opp.matchScore}%</span>
+            ${statusBadge}
           </div>
           <div class="flex gap-2">
             <button class="w-9 h-9 rounded-full bg-card hover:bg-accent-amber border-2 border-ink flex items-center justify-center text-ink transition-colors shadow-pop-sm" onclick="toggleBookmark('${opp.id}', event)">
@@ -955,8 +953,8 @@ function handleFindMatches() {
     const filterInput = document.getElementById("search-opportunities-input");
     if (filterInput) filterInput.value = "";
 
-    AppState.activeFilters.matchQuality = ["high", "good"];
-    document.querySelectorAll(".filter-match-checkbox").forEach(cb => cb.checked = true);
+    AppState.activeFilters.eligibility = ["Eligible", "Potentially Eligible", "Not Eligible"];
+    document.querySelectorAll(".filter-eligibility-checkbox").forEach(cb => cb.checked = true);
 
     navigateTo("opportunities");
     showToast(`QualiFind AI Match Complete: Ranked ${scored.length} student assistance programs!`);
@@ -978,17 +976,9 @@ function renderOpportunitiesList() {
       return false;
     }
 
-    const isHigh = opp.matchScore >= 80;
-    const isGood = opp.matchScore >= 60 && opp.matchScore < 80;
-    const isLow = opp.matchScore < 60;
-
-    const allowsHigh = AppState.activeFilters.matchQuality.includes("high");
-    const allowsGood = AppState.activeFilters.matchQuality.includes("good");
-    const allowsLow = AppState.activeFilters.matchQuality.includes("low");
-
-    if (isHigh && !allowsHigh) return false;
-    if (isGood && !allowsGood) return false;
-    if (isLow && !allowsLow) return false;
+    if (AppState.activeFilters.eligibility.length > 0 && !AppState.activeFilters.eligibility.includes(opp.eligibilityStatus)) {
+      return false;
+    }
 
     if (AppState.activeFilters.searchQuery) {
       const q = AppState.activeFilters.searchQuery.toLowerCase();
@@ -1018,20 +1008,11 @@ function renderOpportunitiesList() {
 
   container.innerHTML = filtered.map(opp => {
     const isSaved = AppState.savedOpportunities.includes(opp.id);
-    const scoreColor = opp.matchScore >= 80 ? "text-accent-mint" : (opp.matchScore >= 60 ? "text-accent-amber" : "text-ink-muted");
-    
-    // 3-Tier Status Badge (Eligible / Potentially Eligible / Not Eligible)
-    let statusBadge = `<span class="badge-sticker badge-mint text-[9px]"><span class="material-symbols-outlined text-[13px]">check_circle</span> Eligible</span>`;
-    if (opp.eligibilityStatus === "Potentially Eligible") {
-      statusBadge = `<span class="badge-sticker badge-amber text-[9px]"><span class="material-symbols-outlined text-[13px]">pending</span> Potentially Eligible</span>`;
-    } else if (opp.eligibilityStatus === "Not Eligible" || !opp.eligible) {
-      statusBadge = `<span class="badge-sticker badge-pink text-[9px]"><span class="material-symbols-outlined text-[13px]">cancel</span> Not Eligible</span>`;
-    }
+    const statusBadge = getEligibilityBadgeHtml(opp);
 
-    let typeBadge = "badge-violet";
-    if (opp.type === "Educational Assistance") typeBadge = "badge-pink";
-    if (opp.type === "Student Employment") typeBadge = "badge-amber";
-    if (opp.type === "Training & Certification") typeBadge = "badge-mint";
+    // Category badge stays neutral (cyan) so it doesn't collide with the status badge's
+    // mint/amber/pink meaning above.
+    const typeBadge = "badge-cyan";
 
     return `
       <div class="card-sticker p-6 flex flex-col justify-between group cursor-pointer" onclick="navigateTo('eligibility', { opportunityId: '${opp.id}' })">
@@ -1065,10 +1046,6 @@ function renderOpportunitiesList() {
         <div class="pt-3 border-t-2 border-ink flex items-center justify-between">
           <div class="flex items-center gap-2">
             ${statusBadge}
-          </div>
-          <div class="flex items-center gap-1">
-            <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase">Score</span>
-            <span class="text-sm font-extrabold font-heading ${scoreColor}">${opp.matchScore}%</span>
           </div>
         </div>
       </div>
@@ -1119,7 +1096,7 @@ function renderSavedApplicationsView() {
   }
 
   container.innerHTML = savedList.map(opp => {
-    const scoreColor = opp.matchScore >= 80 ? "text-accent-mint" : (opp.matchScore >= 60 ? "text-accent-amber" : "text-ink-muted");
+    const statusBadge = getEligibilityBadgeHtml(opp);
 
     return `
       <div class="card-sticker p-6 flex flex-col justify-between group">
@@ -1144,8 +1121,7 @@ function renderSavedApplicationsView() {
               <span class="text-xs font-extrabold font-heading text-ink">${opp.funding}</span>
             </div>
             <div class="text-right">
-              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase block">Match Score</span>
-              <span class="text-sm font-extrabold font-heading ${scoreColor}">${opp.matchScore}%</span>
+              ${statusBadge}
             </div>
           </div>
         </div>
@@ -1166,7 +1142,7 @@ function renderSavedApplicationsView() {
 function resetFilters() {
   AppState.activeFilters = {
     types: ["Scholarship", "Educational Assistance", "Student Employment", "Training & Certification"],
-    matchQuality: ["high", "good", "low"],
+    eligibility: ["Eligible", "Potentially Eligible", "Not Eligible"],
     searchQuery: "",
     savedOnly: false
   };
@@ -1178,6 +1154,18 @@ function resetFilters() {
   if (savedCb) savedCb.checked = false;
 
   renderOpportunitiesList();
+}
+
+// Shared 3-tier eligibility status badge (Eligible / Potentially Eligible / Not Eligible)
+// used across opportunity cards so status color-coding stays consistent everywhere.
+function getEligibilityBadgeHtml(opp) {
+  if (opp.eligibilityStatus === "Potentially Eligible") {
+    return `<span class="badge-sticker badge-amber text-[9px]"><span class="material-symbols-outlined text-[13px]">pending</span> Potentially Eligible</span>`;
+  }
+  if (opp.eligibilityStatus === "Not Eligible" || !opp.eligible) {
+    return `<span class="badge-sticker badge-pink text-[9px]"><span class="material-symbols-outlined text-[13px]">cancel</span> Not Eligible</span>`;
+  }
+  return `<span class="badge-sticker badge-mint text-[9px]"><span class="material-symbols-outlined text-[13px]">check_circle</span> Eligible</span>`;
 }
 
 // Derives a plain-language requirement gap summary from an opportunity's requirement
@@ -1234,7 +1222,6 @@ function renderEligibilityDetails(oppId) {
   document.getElementById("eligibility-title").textContent = opp.title;
   document.getElementById("eligibility-provider").textContent = opp.provider;
   document.getElementById("eligibility-summary").textContent = opp.summary;
-  document.getElementById("eligibility-score").textContent = `${opp.matchScore}%`;
   document.getElementById("eligibility-funding").textContent = opp.funding;
   document.getElementById("eligibility-deadline").textContent = opp.deadlineFormatted;
 
@@ -1958,14 +1945,14 @@ function setupFilterListeners() {
     };
   });
 
-  const matchCheckboxes = document.querySelectorAll(".filter-match-checkbox");
-  matchCheckboxes.forEach(cb => {
+  const eligibilityCheckboxes = document.querySelectorAll(".filter-eligibility-checkbox");
+  eligibilityCheckboxes.forEach(cb => {
     cb.onchange = () => {
-      const activeMatch = [];
-      matchCheckboxes.forEach(c => {
-        if (c.checked) activeMatch.push(c.value);
+      const activeEligibility = [];
+      eligibilityCheckboxes.forEach(c => {
+        if (c.checked) activeEligibility.push(c.value);
       });
-      AppState.activeFilters.matchQuality = activeMatch;
+      AppState.activeFilters.eligibility = activeEligibility;
       renderOpportunitiesList();
     };
   });
