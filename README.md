@@ -79,6 +79,7 @@ by whoever sets the project up; everyone else starts from step 2.
 
 **1. Create the shared Supabase project (once per team, not once per person)**
 
+<<<<<<< HEAD
 - Create a project at [supabase.com](https://supabase.com).
 - Open its SQL Editor and run `supabase/migrations/0001_init.sql`. This creates the
   full schema, RLS policies, the signup trigger, and seeds the program catalog.
@@ -91,6 +92,11 @@ by whoever sets the project up; everyone else starts from step 2.
   RLS. **Never share the `service_role` key** — that one bypasses RLS entirely.
 
 **2. Each person sets up their local copy**
+=======
+   **Everyone (including whoever just created the project)**:
+   - Copy `.env.local.example` to `.env.local` and fill in the shared Project URL and
+     anon key. Never commit `.env.local`.
+>>>>>>> 0f71235a67baaf16aa1ec1b6f06d536c1ef3c827
 
 ```bash
 npm install
