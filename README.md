@@ -68,34 +68,43 @@ src/
   pages/student/    Dashboard, Matcher, Opportunities, Eligibility, Action Plan, Saved, Profile
   pages/admin/      Admin views (placeholder — full Programs CRUD dashboard is in progress)
 supabase/
-  migrations/       SQL schema, RLS policies, and seed data — run in order (0001, 0002, ...)
+  migrations/       0001_init.sql — full schema, RLS policies, signup trigger, seed data
 ```
 
 ## Running Locally
+
+Supabase is a **hosted** backend, not something each developer runs locally — the
+whole team shares **one** Supabase project, not one each. Only do step 2 once, as a
+team; everyone else skips straight to "join an existing project" below.
 
 1. **Install dependencies**:
    ```bash
    npm install
    ```
 
-2. **Connect a Supabase project**:
+2. **First time only — one teammate creates the shared Supabase project**:
    - Create a project at [supabase.com](https://supabase.com).
-   - Open its SQL Editor and run every file in `supabase/migrations/` **in order**
-     (0001 → 0002 → 0003 → 0004). This creates the schema, RLS policies, the
-     signup trigger, and seeds the program catalog.
-   - Copy `.env.local.example` to `.env.local` and fill in your Project URL and anon
-     public key (Project Settings → API). Never commit `.env.local` or use the
-     `service_role` key here.
+   - Open its SQL Editor and run `supabase/migrations/0001_init.sql`. This creates
+     the full schema, RLS policies, the signup trigger, and seeds the program catalog.
    - For faster local testing, consider turning off **Confirm email** under
      Authentication → Providers → Email, so signup logs you in immediately instead of
      requiring an email click-through.
+   - Share the Project URL and anon public key (Project Settings → API) with the rest
+     of the team directly (Slack/DM) — not via a commit. The anon key is the public
+     client-side key, safe to share with trusted teammates since it's gated by RLS.
+     **Never share the `service_role` key** — that one bypasses RLS entirely.
+
+   **Everyone (including whoever just created the project)**:
+   - Copy `.env.local.example` to `.env.local` and fill in the shared Project URL and
+     anon key. Never commit `.env.local`.
 
 3. **Start the dev server**:
    ```bash
    npm run dev
    ```
-   Open `http://localhost:8080`. If Supabase isn't connected yet, the app shows setup
-   instructions instead of a broken auth flow.
+   Open `http://localhost:8080`. Everyone's local frontend talks to the same remote
+   Supabase project, so you'll see each other's test accounts and data. If Supabase
+   isn't connected yet, the app shows setup instructions instead of a broken auth flow.
 
 ### Creating an admin account
 
