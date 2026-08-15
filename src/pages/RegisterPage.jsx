@@ -114,7 +114,6 @@ export default function RegisterPage() {
       // null and just mean "needs verification" rather than an eligibility failure
       // (see computeEligibility in src/lib/eligibility.js). Fillable later from Profile.
       gpa: gwa ? parseFloat(gwa) : null,
-      gpa_formatted: gwa ? `${parseFloat(gwa).toFixed(1)}% GWA` : null,
       birthdate: birthdate || null,
       location: location.trim() || null,
       is_financially_disadvantaged: isFinanciallyDisadvantaged
