@@ -7,7 +7,7 @@ const NAV_LINKS = [
   { to: '/dashboard', icon: 'dashboard', label: 'Student Dashboard' },
   { to: '/matcher', icon: 'auto_awesome', label: 'AI Profile Matcher' },
   { to: '/opportunities', icon: 'search', label: 'Assistance Programs' },
-  { to: '/saved-applications', icon: 'bookmark', label: 'Saved Drafts' },
+  { to: '/saved-applications', icon: 'bookmark', label: 'Applications' },
   { to: '/profile', icon: 'person', label: 'Student Profile' }
 ];
 
@@ -81,7 +81,7 @@ export default function StudentLayout() {
         <header className="fixed top-0 left-0 lg:left-72 right-0 h-20 bg-paper/95 backdrop-blur-md z-40 border-b-2 border-ink flex items-center justify-between px-4 lg:px-8">
           <form onSubmit={handleSearchSubmit} className="flex-1 max-w-xl">
             <div className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-4 text-ink-muted text-[20px]">search</span>
+              <span className="material-symbols-outlined absolute left-4 text-ink-muted text-[20px] pointer-events-none">search</span>
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -104,19 +104,6 @@ export default function StudentLayout() {
                 </span>
               </div>
             </div>
-
-            <button
-              onClick={() => navigate('/saved-applications')}
-              className="relative w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all"
-              title="Saved Applications"
-            >
-              <span className="material-symbols-outlined text-[20px] text-ink">bookmark</span>
-              {savedIds.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-accent-pink text-white text-[10px] font-heading font-extrabold w-5 h-5 rounded-full flex items-center justify-center border border-ink shadow-pop-sm">
-                  {savedIds.length}
-                </span>
-              )}
-            </button>
 
             <button
               onClick={() => setIsDark((d) => !d)}

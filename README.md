@@ -68,34 +68,52 @@ src/
   pages/student/    Dashboard, Matcher, Opportunities, Eligibility, Action Plan, Saved, Profile
   pages/admin/      Admin views (placeholder — full Programs CRUD dashboard is in progress)
 supabase/
-  migrations/       SQL schema, RLS policies, and seed data — run in order (0001, 0002, ...)
+  migrations/       0001_init.sql — full schema, RLS policies, signup trigger, seed data
 ```
 
 ## Running Locally
 
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+Supabase is a **hosted** backend, not something each developer runs locally — the
+whole team shares **one** Supabase project. Only the first step below happens once,
+by whoever sets the project up; everyone else starts from step 2.
 
-2. **Connect a Supabase project**:
-   - Create a project at [supabase.com](https://supabase.com).
-   - Open its SQL Editor and run every file in `supabase/migrations/` **in order**
-     (0001 → 0002 → 0003 → 0004). This creates the schema, RLS policies, the
-     signup trigger, and seeds the program catalog.
-   - Copy `.env.local.example` to `.env.local` and fill in your Project URL and anon
-     public key (Project Settings → API). Never commit `.env.local` or use the
-     `service_role` key here.
-   - For faster local testing, consider turning off **Confirm email** under
-     Authentication → Providers → Email, so signup logs you in immediately instead of
-     requiring an email click-through.
+**1. Create the shared Supabase project (once per team, not once per person)**
 
-3. **Start the dev server**:
-   ```bash
-   npm run dev
-   ```
-   Open `http://localhost:8080`. If Supabase isn't connected yet, the app shows setup
-   instructions instead of a broken auth flow.
+<<<<<<< HEAD
+- Create a project at [supabase.com](https://supabase.com).
+- Open its SQL Editor and run `supabase/migrations/0001_init.sql`. This creates the
+  full schema, RLS policies, the signup trigger, and seeds the program catalog.
+- Optional, for faster local testing: turn off **Confirm email** under Authentication
+  → Providers → Email, so signup logs you in immediately instead of requiring an
+  email click-through.
+- Share the Project URL and anon public key (Project Settings → API) with the rest of
+  the team directly — Slack, DM, whatever — never via a commit. The anon key is the
+  public client-side key, safe to share with trusted teammates since it's gated by
+  RLS. **Never share the `service_role` key** — that one bypasses RLS entirely.
+
+**2. Each person sets up their local copy**
+=======
+   **Everyone (including whoever just created the project)**:
+   - Copy `.env.local.example` to `.env.local` and fill in the shared Project URL and
+     anon key. Never commit `.env.local`.
+>>>>>>> 0f71235a67baaf16aa1ec1b6f06d536c1ef3c827
+
+```bash
+npm install
+```
+
+Copy `.env.local.example` to `.env.local` and fill in the **shared** Project URL and
+anon key from step 1. Never commit `.env.local`.
+
+**3. Start the dev server**
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:8080`. Everyone's local frontend talks to the same remote
+Supabase project, so you'll see each other's test accounts and data. If Supabase
+isn't connected yet, the app shows setup instructions instead of a broken auth flow.
 
 ### Creating an admin account
 

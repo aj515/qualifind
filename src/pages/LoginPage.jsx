@@ -77,7 +77,7 @@ export default function LoginPage() {
                 Email
               </label>
               <div className="relative flex items-center">
-                <span className="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px]">mail</span>
+                <span className="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px] pointer-events-none">mail</span>
                 <input
                   id="login-email"
                   type="email"
@@ -95,7 +95,7 @@ export default function LoginPage() {
                 Password
               </label>
               <div className="relative flex items-center">
-                <span className="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px]">lock</span>
+                <span className="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px] pointer-events-none">lock</span>
                 <input
                   id="login-password"
                   type={showPassword ? 'text' : 'password'}
