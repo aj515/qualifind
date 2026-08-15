@@ -226,7 +226,7 @@ const INITIAL_OPPORTUNITIES = [
       alternativeCategories: ["Educational Assistance", "Student Employment", "Training & Certification"]
     },
     requirements: [
-      { id: "req-1", title: "Academic GPA Standing (Min 90%)", desc: "Must maintain a minimum General Weighted Average of 90.0%.", status: "action", note: "Unmet: Your GPA is 82.0%" },
+      { id: "req-1", title: "Academic GPA Standing (Min 90%)", desc: "Must maintain a minimum General Weighted Average of 90.0%.", status: "unmet", note: "Unmet: Your GPA is 82.0%" },
       { id: "req-2", title: "Enrolled in DOST Priority S&T Course", desc: "BS IT / Computer Science / Engineering.", status: "satisfied", note: "Satisfied: BS IT" },
       { id: "req-3", title: "Natural-Born Filipino Citizen", desc: "PSA Birth Certificate verified.", status: "satisfied", note: "Satisfied" },
       { id: "req-4", title: "Good Moral Character", desc: "Certificate of good moral standing from dean.", status: "satisfied", note: "Satisfied" }
@@ -491,14 +491,13 @@ function updateLayoutForView(viewId) {
       mainWrapper.classList.add("lg:pl-0");
     }
     if (mainEl) {
-      mainEl.classList.remove("pt-20");
+      mainEl.classList.remove("pt-28");
       mainEl.classList.add("pt-0");
     }
   } else {
     if (sidebar) {
       sidebar.style.display = "";
-      sidebar.classList.remove("hidden");
-      sidebar.classList.add("lg:flex");
+      sidebar.classList.add("hidden", "lg:flex");
     }
     if (header) {
       header.style.display = "";
@@ -509,7 +508,7 @@ function updateLayoutForView(viewId) {
       mainWrapper.classList.remove("lg:pl-0");
     }
     if (mainEl) {
-      mainEl.classList.add("pt-20");
+      mainEl.classList.add("pt-28");
       mainEl.classList.remove("pt-0");
     }
   }
@@ -761,7 +760,7 @@ function renderDashboard() {
 
         <div class="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto gap-4 mt-2 lg:mt-0" onclick="event.stopPropagation()">
           <div class="flex flex-col items-start lg:items-end">
-            <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase tracking-wider">AI Match</span>
+            <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase tracking-wider">Match Score</span>
             <span class="text-2xl font-extrabold font-heading ${scoreColorClass}">${opp.matchScore}%</span>
           </div>
           <div class="flex gap-2">
@@ -1145,7 +1144,7 @@ function renderSavedApplicationsView() {
               <span class="text-xs font-extrabold font-heading text-ink">${opp.funding}</span>
             </div>
             <div class="text-right">
-              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase block">AI Match</span>
+              <span class="text-[10px] font-heading font-extrabold text-ink-muted uppercase block">Match Score</span>
               <span class="text-sm font-extrabold font-heading ${scoreColor}">${opp.matchScore}%</span>
             </div>
           </div>
@@ -1179,6 +1178,43 @@ function resetFilters() {
   if (savedCb) savedCb.checked = false;
 
   renderOpportunitiesList();
+}
+
+// Derives a plain-language requirement gap summary from an opportunity's requirement
+// checklist (spec section D). Falls back to any hand-authored opp.gapAnalysis first.
+function getGapAnalysis(opp) {
+  if (opp.gapAnalysis) return opp.gapAnalysis;
+
+  const reqs = opp.requirements || [];
+  const metCount = reqs.filter(r => r.status === "satisfied").length;
+  const totalCount = reqs.length;
+  if (totalCount === 0) return null;
+
+  const blocking = reqs.find(r => r.status === "unmet");
+  if (blocking) {
+    const lowerDesc = blocking.desc.charAt(0).toLowerCase() + blocking.desc.slice(1);
+    const currentStanding = blocking.note.replace(/^(Unmet|Not Met):\s*/i, "");
+    return {
+      type: "blocked",
+      metCount,
+      totalCount,
+      gapSummary: `You meet ${metCount} of ${totalCount} requirements. The program requires ${lowerDesc}, while your current standing is: ${currentStanding}.`,
+      missingRequirement: blocking.title
+    };
+  }
+
+  const needsVerification = reqs.filter(r => r.status === "action" || r.status === "pending");
+  if (needsVerification.length > 0) {
+    return {
+      type: "verification",
+      metCount,
+      totalCount,
+      gapSummary: `You meet ${metCount} of ${totalCount} requirements. The remaining ${needsVerification.length} need${needsVerification.length === 1 ? "s" : ""} verification: ${needsVerification.map(r => r.title).join(", ")}.`,
+      missingRequirement: needsVerification.map(r => r.title).join(", ")
+    };
+  }
+
+  return null;
 }
 
 // Render Eligibility Detail View with 3-Tier Status, Gap Diagnosis, & Alternatives
@@ -1229,13 +1265,22 @@ function renderEligibilityDetails(oppId) {
   const reasonsContainer = document.getElementById("eligibility-reasons-grid");
   if (reasonsContainer) {
     const reasons = [];
+    const gap = getGapAnalysis(opp);
 
-    if (opp.gapAnalysis) {
-      reasons.push({
-        title: "Requirement Gap Identified",
-        text: opp.gapAnalysis.gapSummary,
-        ok: false
-      });
+    if (opp.eligibilityStatus !== "Eligible") {
+      if (gap) {
+        reasons.push({
+          title: gap.type === "blocked" ? "Requirement Gap Identified" : "Verification Needed",
+          text: gap.gapSummary,
+          ok: false
+        });
+      } else if (opp.eligibilityNotes) {
+        reasons.push({
+          title: "Why This Isn't a Match",
+          text: opp.eligibilityNotes,
+          ok: false
+        });
+      }
     } else {
       reasons.push({
         title: "Academic Standing Match",
@@ -1270,7 +1315,9 @@ function renderEligibilityDetails(oppId) {
     if (opp.eligibilityStatus === "Not Eligible" || !opp.eligible) {
       altContainer.classList.remove("hidden");
       
-      const altOpportunities = AppState.opportunities.filter(o => o.id !== opp.id && o.eligible).slice(0, 3);
+      const otherCategoryMatches = AppState.opportunities.filter(o => o.id !== opp.id && o.eligible && o.type !== opp.type);
+      const sameCategoryMatches = AppState.opportunities.filter(o => o.id !== opp.id && o.eligible && o.type === opp.type);
+      const altOpportunities = [...otherCategoryMatches, ...sameCategoryMatches].slice(0, 3);
       altList.innerHTML = altOpportunities.map(alt => `
         <div class="p-4 rounded-2xl border-2 border-ink bg-paper flex items-center justify-between hover:bg-card transition-colors cursor-pointer shadow-pop-sm" onclick="navigateTo('eligibility', { opportunityId: '${alt.id}' })">
           <div class="flex items-center gap-3">
@@ -1306,6 +1353,10 @@ function renderEligibilityDetails(oppId) {
         iconColor = "bg-paper text-ink-muted";
         iconSymbol = "schedule";
         badgeClass = "badge-violet";
+      } else if (req.status === "unmet") {
+        iconColor = "bg-accent-pink text-white";
+        iconSymbol = "close";
+        badgeClass = "badge-pink";
       }
 
       return `
@@ -1357,64 +1408,90 @@ function renderActionPlan(oppId) {
   const portalName = document.getElementById("action-plan-portal-name");
   if (portalName) portalName.textContent = `${opp.provider} Application Desk`;
 
+  const requirements = opp.requirements || [];
+  const outstanding = requirements.filter(r => r.status !== "satisfied");
+
+  // Required Documents (spec F): reflect this program's actual requirement checklist
+  const docsList = document.getElementById("action-plan-docs-list");
+  if (docsList) {
+    if (requirements.length > 0) {
+      docsList.innerHTML = requirements.map(req => {
+        const isSatisfied = req.status === "satisfied";
+        const icon = isSatisfied ? "check_circle" : (req.status === "unmet" ? "cancel" : "pending");
+        const iconColor = isSatisfied ? "text-accent-mint" : (req.status === "unmet" ? "text-accent-pink" : "text-accent-amber");
+        return `
+          <li class="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30">
+            <span class="material-symbols-outlined ${iconColor} text-[18px]">${icon}</span>
+            ${req.title}
+          </li>
+        `;
+      }).join("");
+    } else {
+      docsList.innerHTML = `<li class="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30 text-ink-muted">No document checklist available for this program yet.</li>`;
+    }
+  }
+
   const nextStepEl = document.getElementById("action-plan-next-step-title");
   const planDescEl = document.getElementById("action-plan-recommendation-text");
-  
+
   if (nextStepEl && planDescEl) {
-    if (opp.type === "Student Employment") {
-      nextStepEl.textContent = "Your Next Step: Submit your 2nd Year class timetable to the IT lab supervisor";
-      planDescEl.textContent = `Based on your 82% GPA and IT skills, secure your lab shift slot before the ${opp.deadlineFormatted} cutoff.`;
-    } else if (opp.type === "Educational Assistance") {
-      nextStepEl.textContent = "Your Next Step: Secure your Barangay Certificate of Indigency and 2nd Year COE";
-      planDescEl.textContent = `Gather your municipal certification slips to finalize your tuition grant application for ${opp.provider}.`;
+    // Prioritize the most urgent outstanding requirement: hard blockers, then actionable docs, then pending verification
+    const priority = { unmet: 0, action: 1, pending: 2 };
+    const nextReq = [...outstanding].sort((a, b) => (priority[a.status] ?? 3) - (priority[b.status] ?? 3))[0];
+
+    if (nextReq) {
+      nextStepEl.textContent = `Your Next Step: ${nextReq.note || nextReq.title}`;
+      planDescEl.textContent = `${nextReq.desc} Complete this before the ${opp.deadlineFormatted} deadline to keep your application on track.`;
     } else {
-      nextStepEl.textContent = "Your Next Step: Prepare your Certificate of Enrollment and latest grades";
-      planDescEl.textContent = `Download your latest registrar grade report before launching the online submission portal.`;
+      nextStepEl.textContent = "Your Next Step: Submit your completed application";
+      planDescEl.textContent = `All requirements are satisfied — head to the ${opp.provider} portal to finish your submission before ${opp.deadlineFormatted}.`;
     }
   }
 
   const stepsContainer = document.getElementById("action-plan-steps-container");
   if (stepsContainer) {
-    stepsContainer.innerHTML = `
-      <div class="card-sticker p-5 bg-card flex gap-4 items-start">
-        <div class="w-10 h-10 rounded-2xl bg-accent-violet text-white border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm">
-          01
-        </div>
-        <div class="flex-1">
-          <h4 class="text-sm font-extrabold font-heading text-ink">Download and Prepare Required Documents</h4>
-          <p class="text-xs text-ink-muted mt-1 font-medium">Obtain Certificate of Enrollment (COE) and official True Copy of Grades from university registrar.</p>
-          <div class="mt-2 inline-flex items-center gap-1 badge-sticker badge-mint text-[9px]">
-            <span class="material-symbols-outlined text-[13px]">check</span> In Progress
-          </div>
-        </div>
-      </div>
+    const steps = [
+      {
+        title: "Prepare Required Documents",
+        desc: requirements.length > 0
+          ? `Gather: ${requirements.map(r => r.title).join(", ")}.`
+          : "Gather the standard documents this provider requests (enrollment proof, grades, ID).",
+        badge: outstanding.length > 0
+          ? `<span class="material-symbols-outlined text-[13px]">pending</span> ${outstanding.length} Outstanding`
+          : `<span class="material-symbols-outlined text-[13px]">check</span> All Ready`,
+        badgeClass: outstanding.length > 0 ? "badge-amber" : "badge-mint",
+        numColor: "bg-accent-violet text-white"
+      },
+      {
+        title: "Fill Out Official Application Form",
+        desc: `Complete the online or in-person submission at the ${opp.provider} application desk.`,
+        badge: `<span class="material-symbols-outlined text-[13px]">schedule</span> Due ${opp.deadlineFormatted}`,
+        badgeClass: "badge-amber",
+        numColor: "bg-accent-pink text-white"
+      },
+      {
+        title: "Confirmation & Document Endorsement",
+        desc: "Receive your application reference number and retain the receipt for university financial clearance.",
+        badge: "Final Step",
+        badgeClass: "badge-violet",
+        numColor: "bg-accent-mint text-ink"
+      }
+    ];
 
+    stepsContainer.innerHTML = steps.map((step, i) => `
       <div class="card-sticker p-5 bg-card flex gap-4 items-start">
-        <div class="w-10 h-10 rounded-2xl bg-accent-pink text-white border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm">
-          02
+        <div class="w-10 h-10 rounded-2xl ${step.numColor} border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm">
+          ${String(i + 1).padStart(2, "0")}
         </div>
         <div class="flex-1">
-          <h4 class="text-sm font-extrabold font-heading text-ink">Fill Out Official Application Form</h4>
-          <p class="text-xs text-ink-muted mt-1 font-medium">Complete the online registry submission at ${opp.provider} portal.</p>
-          <div class="mt-2 inline-flex items-center gap-1 badge-sticker badge-amber text-[9px]">
-            <span class="material-symbols-outlined text-[13px]">schedule</span> Due ${opp.deadlineFormatted}
+          <h4 class="text-sm font-extrabold font-heading text-ink">${step.title}</h4>
+          <p class="text-xs text-ink-muted mt-1 font-medium">${step.desc}</p>
+          <div class="mt-2 inline-flex items-center gap-1 badge-sticker ${step.badgeClass} text-[9px]">
+            ${step.badge}
           </div>
         </div>
       </div>
-
-      <div class="card-sticker p-5 bg-card flex gap-4 items-start">
-        <div class="w-10 h-10 rounded-2xl bg-accent-mint text-ink border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm">
-          03
-        </div>
-        <div class="flex-1">
-          <h4 class="text-sm font-extrabold font-heading text-ink">Confirmation &amp; Document Endorsement</h4>
-          <p class="text-xs text-ink-muted mt-1 font-medium">Receive application reference number and retain receipt for university financial clearance.</p>
-          <div class="mt-2 inline-flex items-center gap-1 badge-sticker badge-violet text-[9px]">
-            Final Step
-          </div>
-        </div>
-      </div>
-    `;
+    `).join("");
   }
 }
 

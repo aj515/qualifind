@@ -85,24 +85,6 @@
       </div>
     </div>
 
-    <!-- Active User Card in Sidebar -->
-    <div class="mx-4 my-4 p-3.5 bg-paper rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-between">
-      <div class="flex items-center gap-3 min-w-0">
-        <div id="sidebar-user-avatar" class="w-10 h-10 rounded-full bg-accent-violet text-white border-2 border-ink flex items-center justify-center font-heading font-extrabold text-sm shrink-0 shadow-pop-sm">
-          MS
-        </div>
-        <div class="min-w-0">
-          <p id="sidebar-user-name" class="text-sm font-extrabold font-heading text-ink truncate">Maria Clara Santos</p>
-          <span id="sidebar-user-badge" class="badge-sticker badge-violet text-[10px] py-0.5 px-2">
-            Student • Cebu
-          </span>
-        </div>
-      </div>
-      <button onclick="openUserSwitchModal()" class="w-8 h-8 rounded-full bg-card hover:bg-accent-amber border-2 border-ink flex items-center justify-center text-ink transition-colors shadow-pop-sm" title="Switch User Role">
-        <span class="material-symbols-outlined text-[18px]">swap_horiz</span>
-      </button>
-    </div>
-
     <!-- Nav Links: STRICT ROLE SEPARATION -->
     <nav class="flex-1 px-4 flex flex-col gap-2 overflow-y-auto py-2">
       
@@ -220,7 +202,7 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="relative pt-20 flex-1 px-4 lg:px-8 py-8 pb-24 lg:pb-12 max-w-7xl w-full mx-auto">
+    <main class="relative pt-28 flex-1 px-4 lg:px-8 py-8 pb-24 lg:pb-12 max-w-7xl w-full mx-auto">
       
       <!-- ================= VIEW: LOGIN PAGE (AUTHENTICATION PORTAL) ================= -->
       <section id="view-login" class="view-section">
@@ -381,7 +363,7 @@
           <!-- Welcome Hero Banner with Memphis Decorative Elements -->
           <div class="grid grid-cols-12 gap-6 w-full mt-2">
             <!-- Left Banner -->
-            <div class="col-span-12 xl:col-span-8 flex flex-col justify-center bg-card rounded-3xl p-6 lg:p-8 relative overflow-hidden border-2 border-ink shadow-pop-lg">
+            <div class="col-span-12 flex flex-col justify-center bg-card rounded-3xl p-6 lg:p-8 relative overflow-hidden border-2 border-ink shadow-pop-lg">
               <!-- Decorative background circle -->
               <div class="absolute -right-12 -top-12 w-64 h-64 bg-amber-200/50 rounded-full opacity-60 pointer-events-none blur-sm"></div>
               <div class="absolute right-32 bottom-2 w-16 h-16 bg-pink-200/50 rounded-2xl rotate-12 opacity-60 pointer-events-none"></div>
@@ -420,47 +402,6 @@
                     <span class="text-[10px] font-heading font-bold text-ink-muted uppercase">Time Left:</span>
                     <span id="dash-next-deadline-days" class="text-xs font-extrabold font-heading text-accent-pink">45 days left</span>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Profile Strength Card -->
-            <div class="col-span-12 xl:col-span-4 flex flex-col">
-              <div class="card-sticker p-6 flex flex-col h-full relative overflow-hidden bg-card">
-                <div class="flex justify-between items-start mb-4 relative z-10">
-                  <div>
-                    <h3 class="text-lg font-extrabold font-heading text-ink">Match Strength</h3>
-                    <p class="text-xs text-ink-muted font-medium">Philippine Criteria Verified</p>
-                  </div>
-                  <button onclick="navigateTo('profile')" class="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center hover:bg-accent-amber transition-colors shadow-pop-sm">
-                    <span class="material-symbols-outlined text-[18px]">edit</span>
-                  </button>
-                </div>
-
-                <div class="flex items-center gap-4 mb-4 relative z-10">
-                  <div class="relative w-16 h-16 rounded-full bg-paper border-2 border-ink flex items-center justify-center shadow-pop-sm shrink-0">
-                    <svg class="w-full h-full radial-progress p-1" viewBox="0 0 36 36">
-                      <path class="text-border-subtle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="4"></path>
-                      <path id="dash-profile-strength-circle" class="text-accent-violet progress-ring-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="88, 100" stroke-linecap="round" stroke-width="4"></path>
-                    </svg>
-                    <span id="dash-profile-strength-num" class="absolute text-sm font-heading font-extrabold text-accent-violet">88%</span>
-                  </div>
-                  <div>
-                    <p class="text-xs font-bold text-success mb-0.5">Profile Complete</p>
-                    <p class="text-xs font-semibold text-ink leading-snug">2nd-Year IT Student • Cebu Region VII • 82% GPA</p>
-                  </div>
-                </div>
-
-                <div class="mt-auto relative z-10 flex flex-wrap gap-1.5">
-                  <span class="badge-sticker badge-violet text-[10px]">
-                    <span class="material-symbols-outlined text-[13px]">school</span> Tuition Aid
-                  </span>
-                  <span class="badge-sticker badge-pink text-[10px]">
-                    <span class="material-symbols-outlined text-[13px]">directions_bus</span> Transport
-                  </span>
-                  <span class="badge-sticker badge-mint text-[10px]">
-                    <span class="material-symbols-outlined text-[13px]">badge</span> Assistantship
-                  </span>
                 </div>
               </div>
             </div>
