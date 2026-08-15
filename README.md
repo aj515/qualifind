@@ -74,37 +74,40 @@ supabase/
 ## Running Locally
 
 Supabase is a **hosted** backend, not something each developer runs locally — the
-whole team shares **one** Supabase project, not one each. Only do step 2 once, as a
-team; everyone else skips straight to "join an existing project" below.
+whole team shares **one** Supabase project. Only the first step below happens once,
+by whoever sets the project up; everyone else starts from step 2.
 
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+**1. Create the shared Supabase project (once per team, not once per person)**
 
-2. **First time only — one teammate creates the shared Supabase project**:
-   - Create a project at [supabase.com](https://supabase.com).
-   - Open its SQL Editor and run `supabase/migrations/0001_init.sql`. This creates
-     the full schema, RLS policies, the signup trigger, and seeds the program catalog.
-   - For faster local testing, consider turning off **Confirm email** under
-     Authentication → Providers → Email, so signup logs you in immediately instead of
-     requiring an email click-through.
-   - Share the Project URL and anon public key (Project Settings → API) with the rest
-     of the team directly (Slack/DM) — not via a commit. The anon key is the public
-     client-side key, safe to share with trusted teammates since it's gated by RLS.
-     **Never share the `service_role` key** — that one bypasses RLS entirely.
+- Create a project at [supabase.com](https://supabase.com).
+- Open its SQL Editor and run `supabase/migrations/0001_init.sql`. This creates the
+  full schema, RLS policies, the signup trigger, and seeds the program catalog.
+- Optional, for faster local testing: turn off **Confirm email** under Authentication
+  → Providers → Email, so signup logs you in immediately instead of requiring an
+  email click-through.
+- Share the Project URL and anon public key (Project Settings → API) with the rest of
+  the team directly — Slack, DM, whatever — never via a commit. The anon key is the
+  public client-side key, safe to share with trusted teammates since it's gated by
+  RLS. **Never share the `service_role` key** — that one bypasses RLS entirely.
 
-   **Everyone (including whoever just created the project)**:
-   - Copy `.env.local.example` to `.env.local` and fill in the shared Project URL and
-     anon key. Never commit `.env.local`.
+**2. Each person sets up their local copy**
 
-3. **Start the dev server**:
-   ```bash
-   npm run dev
-   ```
-   Open `http://localhost:8080`. Everyone's local frontend talks to the same remote
-   Supabase project, so you'll see each other's test accounts and data. If Supabase
-   isn't connected yet, the app shows setup instructions instead of a broken auth flow.
+```bash
+npm install
+```
+
+Copy `.env.local.example` to `.env.local` and fill in the **shared** Project URL and
+anon key from step 1. Never commit `.env.local`.
+
+**3. Start the dev server**
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:8080`. Everyone's local frontend talks to the same remote
+Supabase project, so you'll see each other's test accounts and data. If Supabase
+isn't connected yet, the app shows setup instructions instead of a broken auth flow.
 
 ### Creating an admin account
 
