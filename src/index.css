@@ -1,6 +1,8 @@
-/* QualiFind - Playful Geometric Design System (Lighter, Fresh & Luminous Color Scheme) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap');
+/* QualiFind - Playful Geometric Design System (Lighter, Fresh & Luminous Color Scheme) */
 
 :root {
   /* Lighter Fresh & Crisp Light Palette */
@@ -312,20 +314,8 @@ html.dark .badge-cyan {
 }
 
 /* =========================================================================
-   VIEW TRANSITIONS & UTILITIES
+   UTILITIES
    ========================================================================= */
-.view-section {
-  display: none;
-  opacity: 0;
-  transform: translateY(8px) scale(0.995);
-  transition: opacity 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.view-section.active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {

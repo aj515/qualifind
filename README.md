@@ -1,67 +1,65 @@
 # QualiFind 🇵🇭
-### AI-Powered Academic & Research Opportunity Matching Platform (Philippine Higher Education Setting)
 
-QualiFind connects Filipino undergraduate, graduate, and post-doctoral researchers with national and international funding opportunities, fellowships, scholarships, and grants calibrated for Philippine higher education institutions (DOST-SEI, CHED, Philippine Genome Center, DOST-ASTI, SUC Consortiums, and philanthropic foundations).
+AI-powered assistance matching platform connecting Filipino students with scholarships,
+educational grants, LGU/government assistance, campus assistantships, training
+certifications, and student loans — calibrated for Philippine higher education
+(DOST-SEI, CHED, LGU, and partner programs).
 
----
+## Key Features
 
-## 🌟 Key Features
+- **Dual-role accounts**: Student Seeker and DOST/CHED Admin, role set at signup and
+  enforced by Postgres Row-Level Security — not just client-side routing.
+- **Natural Language AI Matcher**: free-text profile description, matched against the
+  program catalog with a keyword + GWA relevance heuristic.
+- **3-Tier Eligibility Assessment**: Eligible / Potentially Eligible / Not Eligible per
+  program, with a plain-language requirement gap diagnosis and alternative-category
+  suggestions when a program isn't a fit.
+- **Personalized Action Plans**: required documents, next step, and a step-by-step
+  application flow generated from each program's real requirement checklist.
+- **Saved Applications**: bookmark programs, persisted server-side per account.
 
-### 👤 1. Strict Dual-User Role-Based Architecture
-- **Student / Opportunity Seeker** (*Maria Clara Santos* - Graduate Researcher, UP Diliman):
-  - **Multi-Device Support**: Optimized for both **Mobile Browsers** and **Desktop Web**.
-  - **Natural Language AI Matcher**: Evaluates research interests, GWA, and target stipend to rank relevant opportunities with explainable match metrics.
-  - **Eligibility Verification**: Automatic evaluation against Philippine General Weighted Average (GWA) scales and national consortium criteria.
-  - **Customized Action Plan**: Actionable milestone roadmap for letters of endorsement, NHRDA concept notes, and clearances.
-  - **Academic Profile Management**: Editable skills, transcript records, and Philippine research goals.
-- **Administrator / Evaluator** (*Dr. Ernesto Ramos* - Director, Office of Research & Fellowships / DOST-CHED Liaison):
-  - **Workstation Access**: Exclusively designed for **Desktop Web** workstations with mobile protective guards.
-  - **Registry Analytics**: High-level telemetry on student matching volume and national grant disbursements.
-  - **Program Management CRUD**: Add, edit, duplicate, and archive Philippine scholarship/grant registries with line-item funding and deadlines.
-  - **Strict Two-Way Access Isolation**: Students cannot access administrative controls or datasets, and administrators work inside an isolated workstation portal.
+## Tech Stack
 
-### 🇵🇭 2. Philippine Higher Education Calibration
-- **Philippine Peso (₱ / PHP)** currency representation.
-- Realistically modeled Philippine research programs:
-  - **DOST-SEI ASTHRDP** (Accelerated Science and Technology Human Resource Development Program)
-  - **DOST-ERDT** (Engineering Research and Development for Technology)
-  - **Philippine Genome Center (PGC)** Computational Genomics Research Fellowship
-  - **DOST-ASTI** AI & Quantum Computing R&D Practicum Grant (COARE Supercomputer access)
-  - **CHED SUC** Faculty & Graduate Research Development Grant
-  - **Gokongwei Brothers Foundation (GBF)** STEM Leaders Fellowship
-  - **Ayala Foundation** Sustainability & Climate Research Grant
-  - **DOST-PCHRD** Health Innovation & Tropical Disease Modeling Grant
+- **Frontend**: React (Vite) + React Router, Tailwind CSS.
+- **Backend**: Supabase — Postgres, Auth, and Row-Level Security (no separate API server).
+- **Design System**: Playful Geometric design tokens in `src/index.css`, shared
+  `btn-candy`/`card-sticker`/`badge-sticker` component classes.
 
----
+## Project Structure
 
-## 🚀 Tech Stack
+```
+src/
+  components/       Shared UI: layout shell, route guard, badges
+  context/          AuthContext (session/profile) and DataContext (programs/saved apps)
+  lib/              Pure helper logic: eligibility/gap-analysis, AI matcher scoring
+  pages/            Login, Register, setup placeholder
+  pages/student/    Dashboard, Matcher, Opportunities, Eligibility, Action Plan, Profile
+  pages/admin/      Admin views (placeholder — full CRUD dashboard is in progress)
+supabase/
+  migrations/       SQL schema, RLS policies, and seed data
+```
 
-- **Frontend**: Single-Page Application (SPA) with Vanilla JavaScript, HTML5, and CSS3.
-- **Design System & Styling**: Academic Nexus Design System with custom HSL tokens, Tailwind CSS, Google Fonts (*Inter*), and Google Material Symbols.
-- **State Management & Persistence**: Client-side reactive router, filter engine, dynamic scoring weighting, and `LocalStorage` sync.
+## Running Locally
 
----
-
-## 💻 Running Locally
-
-1. **Clone the repository**:
+1. **Install dependencies**:
    ```bash
-   git clone https://github.com/aj515/qualifind.git
-   cd qualifind
+   npm install
    ```
 
-2. **Serve the application**:
+2. **Connect a Supabase project**:
+   - Create a project at [supabase.com](https://supabase.com).
+   - Open its SQL Editor and run `supabase/migrations/0001_init.sql` — this creates the
+     schema, RLS policies, and seeds the program catalog.
+   - Copy `.env.local.example` to `.env.local` and fill in your Project URL and anon
+     public key (Project Settings → API). Never commit `.env.local` or use the
+     `service_role` key here.
+
+3. **Start the dev server**:
    ```bash
-   # Using Python 3:
-   python -m http.server 3000
-   
-   # Or using Node.js / npx:
-   npx serve .
+   npm run dev
    ```
+   Open `http://localhost:8080`. If Supabase isn't connected yet, the app shows setup
+   instructions instead of a broken auth flow.
 
-3. Open your browser at `http://localhost:3000`.
-
----
-
-## 📄 License
-MIT License. Developed for Philippine Higher Education Innovation.
+## License
+MIT License.

@@ -1,0 +1,209 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useData } from '../../context/DataContext.jsx';
+import { formatDeadline } from '../../lib/eligibility.js';
+import EligibilityBadge from '../../components/EligibilityBadge.jsx';
+
+const ALL_TYPES = ['Scholarship', 'Educational Assistance', 'Student Employment', 'Student Loan', 'Training & Certification'];
+const ALL_ELIGIBILITY = ['Eligible', 'Potentially Eligible', 'Not Eligible'];
+
+export default function OpportunitiesPage() {
+  const { programs, savedIds, toggleSaved, matcherScores } = useData();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [query, setQuery] = useState(searchParams.get('q') || '');
+  const [activeTypes, setActiveTypes] = useState(ALL_TYPES);
+  const [activeEligibility, setActiveEligibility] = useState(ALL_ELIGIBILITY);
+  const [savedOnly, setSavedOnly] = useState(false);
+
+  useEffect(() => {
+    const q = searchParams.get('q');
+    if (q !== null) setQuery(q);
+  }, [searchParams]);
+
+  const hasMatcherScores = Object.keys(matcherScores).length > 0;
+
+  const filtered = useMemo(() => {
+    const results = programs.filter((p) => {
+      if (savedOnly && !savedIds.includes(p.id)) return false;
+      if (activeTypes.length > 0 && !activeTypes.includes(p.type)) return false;
+      if (activeEligibility.length > 0 && !activeEligibility.includes(p.eligibility_status)) return false;
+      if (query) {
+        const q = query.toLowerCase();
+        const hit =
+          p.title.toLowerCase().includes(q) ||
+          (p.provider || '').toLowerCase().includes(q) ||
+          (p.dept || '').toLowerCase().includes(q) ||
+          (p.keywords || []).some((k) => k.toLowerCase().includes(q));
+        if (!hit) return false;
+      }
+      return true;
+    });
+
+    if (hasMatcherScores) {
+      results.sort((a, b) => (matcherScores[b.id] ?? 0) - (matcherScores[a.id] ?? 0));
+    }
+    return results;
+  }, [programs, savedOnly, activeTypes, activeEligibility, query, savedIds, matcherScores, hasMatcherScores]);
+
+  function toggleType(type) {
+    setActiveTypes((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]));
+  }
+
+  function toggleEligibility(status) {
+    setActiveEligibility((prev) => (prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]));
+  }
+
+  function resetFilters() {
+    setActiveTypes(ALL_TYPES);
+    setActiveEligibility(ALL_ELIGIBILITY);
+    setSavedOnly(false);
+    setQuery('');
+    setSearchParams({});
+  }
+
+  return (
+    <div className="flex flex-col w-full gap-6">
+      <div>
+        <h1 className="text-3xl font-extrabold font-heading text-ink tracking-tight">Assistance Programs</h1>
+        <p className="text-sm text-ink-muted max-w-2xl mt-1 font-medium">
+          Browse Philippine scholarships, grants, assistantships, and loans, filtered to your profile.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+        {/* Filters */}
+        <div className="card-sticker p-5 bg-card flex flex-col gap-6 lg:sticky lg:top-28">
+          <div>
+            <h4 className="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2.5">Category</h4>
+            <div className="flex flex-col gap-2">
+              {ALL_TYPES.map((type) => (
+                <label key={type} className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
+                  <input
+                    type="checkbox"
+                    checked={activeTypes.includes(type)}
+                    onChange={() => toggleType(type)}
+                    className="w-4 h-4 rounded border-2 border-ink text-accent-violet"
+                  />
+                  <span>{type}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2.5">Eligibility</h4>
+            <div className="flex flex-col gap-2">
+              {ALL_ELIGIBILITY.map((status) => (
+                <label key={status} className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
+                  <input
+                    type="checkbox"
+                    checked={activeEligibility.includes(status)}
+                    onChange={() => toggleEligibility(status)}
+                    className="w-4 h-4 rounded border-2 border-ink text-accent-violet"
+                  />
+                  <span className="flex items-center gap-1.5">
+                    <span
+                      className={`w-2.5 h-2.5 rounded-full border border-ink ${
+                        status === 'Eligible' ? 'bg-accent-mint' : status === 'Potentially Eligible' ? 'bg-accent-amber' : 'bg-accent-pink'
+                      }`}
+                    ></span>{' '}
+                    {status}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
+            <input
+              type="checkbox"
+              checked={savedOnly}
+              onChange={(e) => setSavedOnly(e.target.checked)}
+              className="w-4 h-4 rounded border-2 border-ink text-accent-violet"
+            />
+            <span>Saved Applications Only</span>
+          </label>
+
+          <button onClick={resetFilters} className="btn-candy btn-candy-secondary btn-candy-sm">
+            Reset Filters
+          </button>
+        </div>
+
+        {/* Results */}
+        <div className="lg:col-span-3 flex flex-col gap-5">
+          <div className="card-sticker p-4 flex items-center justify-between bg-card">
+            <span className="text-sm font-heading font-bold text-ink">
+              <span className="text-accent-violet font-extrabold">{filtered.length}</span> opportunities in the Philippines
+            </span>
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Filter by keyword..."
+              className="input-playful py-1.5 px-3 text-xs w-48"
+            />
+          </div>
+
+          {filtered.length === 0 ? (
+            <div className="card-sticker p-12 text-center flex flex-col items-center justify-center">
+              <span className="material-symbols-outlined text-6xl text-ink-muted mb-4">search_off</span>
+              <h3 className="text-xl font-bold font-heading text-ink mb-1">No programs match your filters</h3>
+              <p className="text-sm text-ink-muted max-w-md mb-6 font-medium">Try broadening your search or resetting category filters.</p>
+              <button className="btn-candy" onClick={resetFilters}>Reset Filters</button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map((opp) => {
+                const { formatted } = formatDeadline(opp.deadline);
+                const isSaved = savedIds.includes(opp.id);
+                return (
+                  <div
+                    key={opp.id}
+                    onClick={() => navigate(`/opportunities/${opp.id}/eligibility`)}
+                    className="card-sticker p-6 flex flex-col justify-between group cursor-pointer"
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-3">
+                        <span className="badge-sticker badge-cyan text-[10px]">{opp.type}</span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleSaved(opp.id);
+                          }}
+                          className="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-ink hover:bg-accent-amber transition-colors shadow-pop-sm"
+                        >
+                          <span className={`material-symbols-outlined text-[18px] ${isSaved ? 'fill text-accent-pink' : ''}`}>bookmark</span>
+                        </button>
+                      </div>
+
+                      <h3 className="text-lg font-extrabold font-heading text-ink mb-1 group-hover:text-accent-violet transition-colors">
+                        {opp.title}
+                      </h3>
+                      <p className="text-xs font-semibold text-ink-muted mb-4">{opp.provider}</p>
+
+                      <div className="grid grid-cols-2 gap-3 p-3 bg-paper rounded-2xl border-2 border-ink mb-4">
+                        <div>
+                          <span className="text-[10px] font-heading font-extrabold text-ink-muted uppercase">Stipend / Value</span>
+                          <p className="text-xs font-extrabold font-heading text-ink">{opp.funding}</p>
+                        </div>
+                        <div>
+                          <span className="text-[10px] font-heading font-extrabold text-ink-muted uppercase">Deadline</span>
+                          <p className="text-xs font-extrabold font-heading text-ink">{formatted}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-3 border-t-2 border-ink flex items-center justify-between">
+                      <EligibilityBadge program={opp} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
