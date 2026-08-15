@@ -425,8 +425,8 @@ function handleBrandClick() {
 function navigateTo(viewId, payload = null) {
   const currentRole = AppState.currentUser.role || "student";
 
-  // Strict Role Guard (unless navigating to login)
-  if (viewId !== "login") {
+  // Strict Role Guard (unless navigating to login/register, which are pre-auth views)
+  if (viewId !== "login" && viewId !== "register") {
     if (currentRole === "student" && ADMIN_VIEWS.includes(viewId)) {
       showToast("Access Restricted: Admin privileges required.", "warning");
       viewId = "dashboard";
@@ -476,7 +476,7 @@ function updateLayoutForView(viewId) {
   const mainWrapper = document.getElementById("main-layout-wrapper");
   const mainEl = document.querySelector("main");
 
-  if (viewId === "login") {
+  if (viewId === "login" || viewId === "register") {
     if (sidebar) {
       sidebar.style.display = "none";
       sidebar.classList.remove("lg:flex");
@@ -518,6 +518,9 @@ function renderCurrentView() {
   switch (AppState.currentView) {
     case "login":
       renderLogin();
+      break;
+    case "register":
+      renderRegister();
       break;
     case "dashboard":
       renderDashboard();
@@ -1875,6 +1878,117 @@ function renderLogin() {
   selectLoginRole(role);
 }
 
+// Registration Page Handlers
+function selectRegisterRole(role) {
+  const roleInput = document.getElementById("register-selected-role");
+  const studentBtn = document.getElementById("register-role-student-btn");
+  const adminBtn = document.getElementById("register-role-admin-btn");
+  const studentFields = document.getElementById("register-student-fields");
+  const adminFields = document.getElementById("register-admin-fields");
+
+  if (roleInput) roleInput.value = role;
+
+  if (role === "student") {
+    if (studentBtn) {
+      studentBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 bg-accent-violet text-white border-2 border-ink shadow-pop-sm";
+    }
+    if (adminBtn) {
+      adminBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 text-ink hover:bg-card-subtle";
+    }
+    if (studentFields) studentFields.classList.remove("hidden");
+    if (adminFields) adminFields.classList.add("hidden");
+  } else {
+    if (adminBtn) {
+      adminBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 bg-accent-amber text-ink border-2 border-ink shadow-pop-sm";
+    }
+    if (studentBtn) {
+      studentBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 text-ink hover:bg-card-subtle";
+    }
+    if (adminFields) adminFields.classList.remove("hidden");
+    if (studentFields) studentFields.classList.add("hidden");
+  }
+}
+
+function getInitials(fullName) {
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "QF";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function handleRegisterFormSubmit(event) {
+  if (event) event.preventDefault();
+
+  const role = document.getElementById("register-selected-role")?.value || "student";
+  const name = document.getElementById("register-name-input")?.value.trim();
+  const email = document.getElementById("register-email-input")?.value.trim();
+  const password = document.getElementById("register-password-input")?.value || "";
+  const confirmPassword = document.getElementById("register-confirm-password-input")?.value || "";
+  const termsAccepted = document.getElementById("register-terms-checkbox")?.checked;
+
+  if (!name || !email) {
+    showToast("Please fill in your name and email.", "warning");
+    return;
+  }
+  if (password.length < 8) {
+    showToast("Password must be at least 8 characters.", "warning");
+    return;
+  }
+  if (password !== confirmPassword) {
+    showToast("Passwords don't match. Please try again.", "warning");
+    return;
+  }
+  if (!termsAccepted) {
+    showToast("Please agree to the Terms of Service to continue.", "warning");
+    return;
+  }
+
+  const baseProfile = { ...USER_PROFILES[role] };
+  const newUser = {
+    ...baseProfile,
+    name,
+    email,
+    avatar: getInitials(name),
+    profileStrength: 40 // Freshly registered profile, not yet filled out
+  };
+
+  if (role === "student") {
+    const institution = document.getElementById("register-institution-input")?.value.trim();
+    const course = document.getElementById("register-course-input")?.value.trim();
+    const yearLevel = document.getElementById("register-year-level-select")?.value;
+    const gwaRaw = document.getElementById("register-gwa-input")?.value;
+    const gwa = gwaRaw ? parseFloat(gwaRaw) : null;
+
+    if (institution) newUser.institution = institution;
+    if (course) newUser.course = course;
+    if (yearLevel) newUser.educationLevel = `Undergraduate (${yearLevel})`;
+    if (gwa !== null && !Number.isNaN(gwa)) {
+      newUser.gpa = gwa;
+      newUser.gpaFormatted = `${gwa.toFixed(1)}% GWA`;
+    }
+    newUser.badge = "Student • New Registrant";
+  } else {
+    const agency = document.getElementById("register-agency-input")?.value.trim();
+    const position = document.getElementById("register-position-input")?.value.trim();
+
+    if (agency) newUser.institution = agency;
+    if (position) newUser.title = position;
+    newUser.badge = "Admin • Newly Registered";
+  }
+
+  AppState.currentUser = newUser;
+  saveState();
+  updateRoleUI();
+
+  showToast(`Welcome to QualiFind, ${name}! Your account has been created.`);
+  navigateTo(role === "admin" ? "admin-dashboard" : "dashboard");
+}
+
+function renderRegister() {
+  const role = document.getElementById("register-selected-role")?.value || "student";
+  selectRegisterRole(role);
+}
+
 function updateRoleUI() {
   const isStudent = AppState.currentUser.role === "student";
   
@@ -2014,6 +2128,8 @@ window.togglePasswordVisibility = togglePasswordVisibility;
 window.handleLoginFormSubmit = handleLoginFormSubmit;
 window.quickLoginAs = quickLoginAs;
 window.handleLogout = handleLogout;
+window.selectRegisterRole = selectRegisterRole;
+window.handleRegisterFormSubmit = handleRegisterFormSubmit;
 window.toggleMatcherTag = toggleMatcherTag;
 
 // App Initialization
