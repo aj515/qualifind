@@ -81,7 +81,7 @@ export default function StudentLayout() {
         <header className="fixed top-0 left-0 lg:left-72 right-0 h-20 bg-paper/95 backdrop-blur-md z-40 border-b-2 border-ink flex items-center justify-between px-4 lg:px-8">
           <form onSubmit={handleSearchSubmit} className="flex-1 max-w-xl">
             <div className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-4 text-ink-muted text-[20px] pointer-events-none">search</span>
+              <span className="material-symbols-outlined absolute left-4 z-10 text-ink-muted text-[20px] pointer-events-none">search</span>
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}

@@ -77,7 +77,7 @@ export default function LoginPage() {
                 Email
               </label>
               <div className="relative flex items-center">
-                <span className="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px] pointer-events-none">mail</span>
+                <span className="material-symbols-outlined absolute left-3.5 z-10 text-ink-muted text-[18px] pointer-events-none">mail</span>
                 <input
                   id="login-email"
                   type="email"
@@ -95,7 +95,7 @@ export default function LoginPage() {
                 Password
               </label>
               <div className="relative flex items-center">
-                <span className="material-symbols-outlined absolute left-3.5 text-ink-muted text-[18px] pointer-events-none">lock</span>
+                <span className="material-symbols-outlined absolute left-3.5 z-10 text-ink-muted text-[18px] pointer-events-none">lock</span>
                 <input
                   id="login-password"
                   type={showPassword ? 'text' : 'password'}
@@ -108,7 +108,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((s) => !s)}
-                  className="absolute right-3.5 text-ink-muted hover:text-ink p-1"
+                  className="absolute right-3.5 z-10 text-ink-muted hover:text-ink p-1"
                 >
                   <span className="material-symbols-outlined text-[18px]">
                     {showPassword ? 'visibility_off' : 'visibility'}
