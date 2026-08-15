@@ -1,37 +1,92 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext.jsx';
 import { useData } from '../../context/DataContext.jsx';
 import { supabase } from '../../lib/supabaseClient.js';
 import { formatDeadline, formatVerifiedDate } from '../../lib/eligibility.js';
 
+const STATUS_LABELS = {
+  saved: 'Saved',
+  in_progress: 'In Progress',
+  applied: 'Submitted',
+  withdrawn: 'Withdrawn'
+};
+
 export default function ActionPlanPage() {
   const { id } = useParams();
-  const { programs, eligibilityByProgramId } = useData();
+  const { user } = useAuth();
+  const { programs, eligibilityByProgramId, savedStatusByProgramId, setProgramStatus } = useData();
   const navigate = useNavigate();
   const [documents, setDocuments] = useState([]);
   const [steps, setSteps] = useState([]);
+  const [completedStepIds, setCompletedStepIds] = useState(new Set());
   const [loadingExtras, setLoadingExtras] = useState(true);
 
   const opp = programs.find((p) => p.id === id);
 
-  // Required documents and application steps are real per-program rows now
-  // (program_documents/documents, application_steps) instead of hardcoded client text.
+  // Required documents, application steps, and this student's completed-step
+  // records are real per-program/per-student rows now (program_documents/documents,
+  // application_steps, student_step_progress) instead of hardcoded client text.
   useEffect(() => {
-    if (!id) return;
+    if (!id || !user?.id) return;
     setLoadingExtras(true);
     Promise.all([
       supabase.from('program_documents').select('documents(id, name)').eq('program_id', id),
       supabase.from('application_steps').select('*').eq('program_id', id).order('step_number', { ascending: true })
-    ]).then(([docsRes, stepsRes]) => {
+    ]).then(async ([docsRes, stepsRes]) => {
       if (docsRes.error) console.warn('Failed to load documents:', docsRes.error.message);
       else setDocuments(docsRes.data.map((row) => row.documents));
 
-      if (stepsRes.error) console.warn('Failed to load application steps:', stepsRes.error.message);
-      else setSteps(stepsRes.data);
+      if (stepsRes.error) {
+        console.warn('Failed to load application steps:', stepsRes.error.message);
+        setSteps([]);
+        setCompletedStepIds(new Set());
+      } else {
+        setSteps(stepsRes.data);
+        const stepIds = stepsRes.data.map((s) => s.id);
+        if (stepIds.length > 0) {
+          const { data: progress, error: progressError } = await supabase
+            .from('student_step_progress')
+            .select('step_id')
+            .eq('student_id', user.id)
+            .in('step_id', stepIds);
+          if (progressError) console.warn('Failed to load step progress:', progressError.message);
+          setCompletedStepIds(new Set((progress || []).map((p) => p.step_id)));
+        } else {
+          setCompletedStepIds(new Set());
+        }
+      }
 
       setLoadingExtras(false);
     });
-  }, [id]);
+  }, [id, user?.id]);
+
+  async function toggleStep(stepId) {
+    if (!user?.id) return;
+    const isDone = completedStepIds.has(stepId);
+    const next = new Set(completedStepIds);
+    if (isDone) next.delete(stepId);
+    else next.add(stepId);
+    setCompletedStepIds(next);
+
+    if (isDone) {
+      const { error } = await supabase.from('student_step_progress').delete().eq('student_id', user.id).eq('step_id', stepId);
+      if (error) console.warn('Failed to uncheck step:', error.message);
+    } else {
+      const { error } = await supabase.from('student_step_progress').insert({ student_id: user.id, step_id: stepId });
+      if (error) console.warn('Failed to check step:', error.message);
+    }
+
+    // Status auto-derives from step completion: none checked -> saved, some ->
+    // in_progress, all -> applied (submitted). Checking a step also implicitly
+    // bookmarks the program if it wasn't already.
+    if (steps.length > 0) {
+      const allDone = steps.every((s) => next.has(s.id));
+      const anyDone = steps.some((s) => next.has(s.id));
+      const derivedStatus = allDone ? 'applied' : anyDone ? 'in_progress' : 'saved';
+      await setProgramStatus(id, derivedStatus);
+    }
+  }
 
   if (!opp) {
     return (
@@ -45,7 +100,9 @@ export default function ActionPlanPage() {
 
   const { formatted } = formatDeadline(opp.deadline);
   const eligibility = eligibilityByProgramId[opp.id];
-  const badgeColors = ['bg-accent-violet text-white', 'bg-accent-pink text-white', 'bg-accent-mint text-ink'];
+  const currentStatus = savedStatusByProgramId[opp.id];
+  const completedCount = steps.filter((s) => completedStepIds.has(s.id)).length;
+  const progressPct = steps.length > 0 ? Math.round((completedCount / steps.length) * 100) : 0;
 
   return (
     <div className="flex flex-col w-full max-w-4xl mx-auto gap-6">
@@ -56,12 +113,42 @@ export default function ActionPlanPage() {
         <span className="material-symbols-outlined text-[18px]">arrow_back</span> Back to Program Details
       </div>
 
-      <div>
-        <h1 className="text-3xl font-extrabold font-heading text-ink tracking-tight">Personalized Action Plan</h1>
-        <p className="text-sm text-ink-muted mt-1 font-medium">
-          Step-by-step roadmap to submit your application for <strong className="text-accent-violet">{opp.title}</strong>.
-        </p>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold font-heading text-ink tracking-tight">Personalized Action Plan</h1>
+          <p className="text-sm text-ink-muted mt-1 font-medium">
+            Step-by-step roadmap to submit your application for <strong className="text-accent-violet">{opp.title}</strong>.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-heading font-bold text-ink-muted">Status:</span>
+          <select
+            value={currentStatus || 'saved'}
+            onChange={(e) => setProgramStatus(opp.id, e.target.value)}
+            className="input-playful py-1.5 px-3 text-xs font-extrabold"
+          >
+            {Object.entries(STATUS_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+        </div>
       </div>
+
+      {steps.length > 0 && (
+        <div className="card-sticker p-5 bg-card flex flex-col gap-2">
+          <div className="flex items-center justify-between text-xs font-heading font-bold text-ink-muted">
+            <span>Application Progress</span>
+            <span>{completedCount} of {steps.length} steps complete</span>
+          </div>
+          <div className="w-full h-3 rounded-full bg-paper border-2 border-ink overflow-hidden">
+            <div
+              className="h-full bg-accent-mint transition-all duration-300"
+              style={{ width: `${progressPct}%` }}
+            ></div>
+          </div>
+        </div>
+      )}
 
       <div className="card-sticker card-sticker-amber p-6 bg-card relative overflow-hidden">
         <div className="relative z-10 flex flex-col gap-2">
@@ -143,23 +230,36 @@ export default function ActionPlanPage() {
 
       <div className="flex flex-col gap-4">
         <h3 className="text-lg font-extrabold font-heading text-ink">Step-by-Step Application Flow</h3>
+        <p className="text-xs text-ink-muted font-medium -mt-2">Check off each step as you complete it to track your progress.</p>
         <div className="space-y-3">
           {loadingExtras && <p className="text-sm text-ink-muted font-medium">Loading…</p>}
           {!loadingExtras && steps.length === 0 && (
             <p className="text-sm text-ink-muted font-medium">No application steps have been added for this program yet.</p>
           )}
           {!loadingExtras &&
-            steps.map((step, i) => (
-              <div key={step.id} className="card-sticker p-5 bg-card flex gap-4 items-start">
-                <div className={`w-10 h-10 rounded-2xl ${badgeColors[i % badgeColors.length]} border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm`}>
-                  {String(step.step_number).padStart(2, '0')}
-                </div>
-                <div className="flex-1">
-                  <h4 className="text-sm font-extrabold font-heading text-ink">{step.title}</h4>
-                  <p className="text-xs text-ink-muted mt-1 font-medium">{step.description}</p>
-                </div>
-              </div>
-            ))}
+            steps.map((step) => {
+              const done = completedStepIds.has(step.id);
+              return (
+                <button
+                  key={step.id}
+                  type="button"
+                  onClick={() => toggleStep(step.id)}
+                  className={`w-full text-left card-sticker p-5 flex gap-4 items-start transition-colors ${done ? 'bg-accent-mint/10' : 'bg-card'}`}
+                >
+                  <div
+                    className={`w-10 h-10 rounded-2xl border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm ${
+                      done ? 'bg-accent-mint text-ink' : 'bg-paper text-ink-muted'
+                    }`}
+                  >
+                    {done ? <span className="material-symbols-outlined text-[20px]">check</span> : String(step.step_number).padStart(2, '0')}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className={`text-sm font-extrabold font-heading ${done ? 'text-ink line-through decoration-2' : 'text-ink'}`}>{step.title}</h4>
+                    <p className="text-xs text-ink-muted mt-1 font-medium">{step.description}</p>
+                  </div>
+                </button>
+              );
+            })}
         </div>
       </div>
 

@@ -8,7 +8,8 @@ const DataContext = createContext(null);
 export function DataProvider({ children }) {
   const { user, profile, role } = useAuth();
   const [programs, setPrograms] = useState([]);
-  const [savedIds, setSavedIds] = useState([]);
+  // Keyed by program_id -> 'saved' | 'in_progress' | 'applied' | 'withdrawn'.
+  const [savedStatusByProgramId, setSavedStatusByProgramId] = useState({});
   const [eligibilityByProgramId, setEligibilityByProgramId] = useState({});
   const [loading, setLoading] = useState(true);
   // Session-only relevance scores from the free-text AI Matcher (never persisted to the DB —
@@ -31,15 +32,19 @@ export function DataProvider({ children }) {
 
   const loadSaved = useCallback(async (userId) => {
     if (!userId) {
-      setSavedIds([]);
+      setSavedStatusByProgramId({});
       return;
     }
-    const { data, error } = await supabase.from('saved_programs').select('program_id').eq('student_id', userId);
+    const { data, error } = await supabase.from('saved_programs').select('program_id, status').eq('student_id', userId);
     if (error) {
       console.warn('Failed to load saved programs:', error.message);
-      setSavedIds([]);
+      setSavedStatusByProgramId({});
     } else {
-      setSavedIds(data.map((row) => row.program_id));
+      const map = {};
+      data.forEach((row) => {
+        map[row.program_id] = row.status;
+      });
+      setSavedStatusByProgramId(map);
     }
   }, []);
 
@@ -92,10 +97,14 @@ export function DataProvider({ children }) {
   const toggleSaved = useCallback(
     async (programId) => {
       if (!user?.id) return;
-      const isSaved = savedIds.includes(programId);
+      const isSaved = programId in savedStatusByProgramId;
 
       if (isSaved) {
-        setSavedIds((prev) => prev.filter((id) => id !== programId));
+        setSavedStatusByProgramId((prev) => {
+          const next = { ...prev };
+          delete next[programId];
+          return next;
+        });
         const { error } = await supabase
           .from('saved_programs')
           .delete()
@@ -103,18 +112,50 @@ export function DataProvider({ children }) {
           .eq('program_id', programId);
         if (error) {
           console.warn('Failed to unsave:', error.message);
-          setSavedIds((prev) => [...prev, programId]);
+          setSavedStatusByProgramId((prev) => ({ ...prev, [programId]: 'saved' }));
         }
       } else {
-        setSavedIds((prev) => [...prev, programId]);
-        const { error } = await supabase.from('saved_programs').insert({ student_id: user.id, program_id: programId });
+        setSavedStatusByProgramId((prev) => ({ ...prev, [programId]: 'saved' }));
+        const { error } = await supabase.from('saved_programs').insert({ student_id: user.id, program_id: programId, status: 'saved' });
         if (error) {
           console.warn('Failed to save:', error.message);
-          setSavedIds((prev) => prev.filter((id) => id !== programId));
+          setSavedStatusByProgramId((prev) => {
+            const next = { ...prev };
+            delete next[programId];
+            return next;
+          });
         }
       }
     },
-    [user, savedIds]
+    [user, savedStatusByProgramId]
+  );
+
+  // Sets (or creates, via upsert) a saved program's status directly — used both for
+  // the manual status selector and for auto-advancing status as Action Plan steps
+  // get checked off (see ActionPlanPage.jsx).
+  const setProgramStatus = useCallback(
+    async (programId, status) => {
+      if (!user?.id) return;
+      const previous = savedStatusByProgramId[programId];
+      setSavedStatusByProgramId((prev) => ({ ...prev, [programId]: status }));
+
+      const { error } = await supabase
+        .from('saved_programs')
+        .upsert({ student_id: user.id, program_id: programId, status }, { onConflict: 'student_id,program_id' });
+
+      if (error) {
+        console.warn('Failed to update program status:', error.message);
+        setSavedStatusByProgramId((prev) => {
+          if (previous === undefined) {
+            const next = { ...prev };
+            delete next[programId];
+            return next;
+          }
+          return { ...prev, [programId]: previous };
+        });
+      }
+    },
+    [user, savedStatusByProgramId]
   );
 
   const applyMatcherScores = useCallback((scoredPrograms) => {
@@ -127,12 +168,14 @@ export function DataProvider({ children }) {
 
   const value = {
     programs,
-    savedIds,
+    savedIds: Object.keys(savedStatusByProgramId),
+    savedStatusByProgramId,
     eligibilityByProgramId,
     loading,
     matcherScores,
     refreshPrograms: loadPrograms,
     toggleSaved,
+    setProgramStatus,
     applyMatcherScores
   };
 
