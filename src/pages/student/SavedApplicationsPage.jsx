@@ -3,7 +3,7 @@ import { useData } from '../../context/DataContext.jsx';
 import EligibilityBadge from '../../components/EligibilityBadge.jsx';
 
 export default function SavedApplicationsPage() {
-  const { programs, savedIds, toggleSaved } = useData();
+  const { programs, savedIds, toggleSaved, eligibilityByProgramId } = useData();
   const navigate = useNavigate();
 
   const savedList = programs.filter((p) => savedIds.includes(p.id));
@@ -59,7 +59,7 @@ export default function SavedApplicationsPage() {
                 <h3 className="text-lg font-extrabold font-heading text-ink mb-1 group-hover:text-accent-violet transition-colors">
                   {opp.title}
                 </h3>
-                <p className="text-xs font-semibold text-ink-muted mb-4">{opp.provider}</p>
+                <p className="text-xs font-semibold text-ink-muted mb-4">{opp.providers?.name}</p>
 
                 <div className="p-3 bg-paper rounded-2xl border-2 border-ink flex items-center justify-between mb-4">
                   <div>
@@ -67,7 +67,7 @@ export default function SavedApplicationsPage() {
                     <span className="text-xs font-extrabold font-heading text-ink">{opp.funding}</span>
                   </div>
                   <div className="text-right">
-                    <EligibilityBadge program={opp} />
+                    <EligibilityBadge result={eligibilityByProgramId[opp.id]?.result} />
                   </div>
                 </div>
               </div>

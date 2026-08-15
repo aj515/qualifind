@@ -15,11 +15,14 @@ const COURSE_OPTIONS = [
   'Other'
 ];
 
+// Public registration is student-only. Admin accounts are never self-service —
+// anyone could otherwise grant themselves write access to the programs database
+// via RLS. Promote an account to admin manually (see README) after verifying who
+// they are.
 export default function RegisterPage() {
   const { session, role: currentRole, loading, signUp } = useAuth();
   const navigate = useNavigate();
 
-  const [selectedRole, setSelectedRole] = useState('student');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -27,16 +30,14 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  // Student-only fields
   const [institution, setInstitution] = useState('');
   const [course, setCourse] = useState(COURSE_OPTIONS[0]);
   const [customCourse, setCustomCourse] = useState('');
   const [yearLevel, setYearLevel] = useState('2nd Year');
   const [gwa, setGwa] = useState('');
-
-  // Admin-only fields
-  const [agency, setAgency] = useState('');
-  const [position, setPosition] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [location, setLocation] = useState('');
+  const [isFinanciallyDisadvantaged, setIsFinanciallyDisadvantaged] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -79,7 +80,7 @@ export default function RegisterPage() {
 
     setSubmitting(true);
     const { data, error } = await signUp(email.trim(), password, {
-      role: selectedRole,
+      role: 'student',
       name
     });
 
@@ -97,32 +98,30 @@ export default function RegisterPage() {
     }
 
     // Session exists immediately (email confirmation disabled) — fill in the
-    // role-specific profile fields the signup trigger doesn't know about.
-    const extraFields =
-      selectedRole === 'student'
-        ? {
-            avatar: getInitials(firstName.trim(), lastName.trim()),
-            institution: institution.trim() || null,
-            course: resolvedCourse || null,
-            education_level: `Undergraduate (${yearLevel})`,
-            // GWA is optional at signup — a student may not have one yet (new enrollee,
-            // hasn't received grades, etc.). Left blank, it stays null and can be filled
-            // in later from the Profile page.
-            gpa: gwa ? parseFloat(gwa) : null,
-            gpa_formatted: gwa ? `${parseFloat(gwa).toFixed(1)}% GWA` : null,
-            badge: 'Student • New Registrant'
-          }
-        : {
-            avatar: getInitials(firstName.trim(), lastName.trim()),
-            institution: agency.trim() || null,
-            title: position.trim() || null,
-            badge: 'Admin • Newly Registered'
-          };
+    // avatar on `profiles`, and the role-specific fields on `students`/`admins`
+    // (the signup trigger already created a blank row in the right table).
+    const userId = data.session.user.id;
+    await supabase.from('profiles').update({ avatar: getInitials(firstName.trim(), lastName.trim()) }).eq('user_id', userId);
 
-    await supabase.from('profiles').update(extraFields).eq('user_id', data.session.user.id);
+    const isGraduate = yearLevel === 'Graduate';
+    await supabase.from('students').update({
+      institution: institution.trim() || null,
+      course: resolvedCourse || null,
+      education_level: isGraduate ? 'Graduate' : 'College',
+      year_level: isGraduate ? null : parseInt(yearLevel, 10),
+      // GWA/birthdate/location are optional at signup — a new student may not have
+      // grades yet, or may not want to share these immediately. Left blank, they stay
+      // null and just mean "needs verification" rather than an eligibility failure
+      // (see computeEligibility in src/lib/eligibility.js). Fillable later from Profile.
+      gpa: gwa ? parseFloat(gwa) : null,
+      gpa_formatted: gwa ? `${parseFloat(gwa).toFixed(1)}% GWA` : null,
+      birthdate: birthdate || null,
+      location: location.trim() || null,
+      is_financially_disadvantaged: isFinanciallyDisadvantaged
+    }).eq('user_id', userId);
 
     setSubmitting(false);
-    navigate(selectedRole === 'admin' ? '/admin-dashboard' : '/dashboard', { replace: true });
+    navigate('/dashboard', { replace: true });
   }
 
   return (
@@ -149,7 +148,7 @@ export default function RegisterPage() {
                 Create Your Account
               </h1>
               <p className="text-xs text-white/90 leading-relaxed font-medium">
-                Set up your Student Seeker or DOST/CHED Admin profile to start matching against Philippine assistance programs.
+                Set up your Student Seeker profile to start matching against Philippine assistance programs.
               </p>
             </div>
           </div>
@@ -164,34 +163,7 @@ export default function RegisterPage() {
         <div className="lg:col-span-7 p-8 lg:p-10 flex flex-col justify-center bg-card">
           <div className="mb-5">
             <h2 className="text-2xl font-extrabold font-heading text-ink tracking-tight mb-1">Sign Up for QualiFind</h2>
-            <p className="text-xs text-ink-muted font-medium">Select your portal role and fill in your details.</p>
-          </div>
-
-          <div className="flex p-1 bg-paper rounded-2xl mb-5 border-2 border-ink shadow-pop-sm">
-            <button
-              type="button"
-              onClick={() => setSelectedRole('student')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 border-2 ${
-                selectedRole === 'student'
-                  ? 'bg-accent-violet text-white border-ink shadow-pop-sm'
-                  : 'text-ink border-transparent hover:bg-card-subtle'
-              }`}
-            >
-              <span className="material-symbols-outlined text-[16px]">school</span>
-              Student Seeker
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedRole('admin')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center justify-center gap-1.5 border-2 ${
-                selectedRole === 'admin'
-                  ? 'bg-accent-amber text-ink border-ink shadow-pop-sm'
-                  : 'text-ink border-transparent hover:bg-card-subtle'
-              }`}
-            >
-              <span className="material-symbols-outlined text-[16px]">admin_panel_settings</span>
-              DOST / CHED Admin
-            </button>
+            <p className="text-xs text-ink-muted font-medium">Create your Student Seeker account.</p>
           </div>
 
           {checkEmailMsg ? (
@@ -292,8 +264,7 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {selectedRole === 'student' ? (
-                <div className="space-y-4 pt-1 border-t-2 border-ink/10">
+              <div className="space-y-4 pt-1 border-t-2 border-ink/10">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3">
                     <div className="space-y-1">
                       <label htmlFor="reg-institution" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
@@ -368,39 +339,43 @@ export default function RegisterPage() {
                       />
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div className="space-y-4 pt-1 border-t-2 border-ink/10">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label htmlFor="reg-agency" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                        Agency / Office
+                      <label htmlFor="reg-birthdate" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
+                        Date of Birth <span className="text-ink-muted normal-case font-semibold">— optional</span>
                       </label>
                       <input
-                        id="reg-agency"
-                        type="text"
-                        value={agency}
-                        onChange={(e) => setAgency(e.target.value)}
-                        placeholder="e.g. DOST-SEI Regional Office"
+                        id="reg-birthdate"
+                        type="date"
+                        value={birthdate}
+                        onChange={(e) => setBirthdate(e.target.value)}
                         className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label htmlFor="reg-position" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                        Position / Title
+                      <label htmlFor="reg-location" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
+                        Location <span className="text-ink-muted normal-case font-semibold">— optional</span>
                       </label>
                       <input
-                        id="reg-position"
+                        id="reg-location"
                         type="text"
-                        value={position}
-                        onChange={(e) => setPosition(e.target.value)}
-                        placeholder="e.g. Program Evaluator"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        placeholder="e.g. Cebu City"
                         className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
                       />
                     </div>
                   </div>
-                </div>
-              )}
+                  <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">
+                    <input
+                      type="checkbox"
+                      checked={isFinanciallyDisadvantaged}
+                      onChange={(e) => setIsFinanciallyDisadvantaged(e.target.checked)}
+                      className="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"
+                    />
+                    <span>I qualify as low-income / indigent (unlocks need-based assistance matching)</span>
+                  </label>
+              </div>
 
               <div className="flex items-center justify-between pt-0.5">
                 <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">

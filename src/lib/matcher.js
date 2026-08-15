@@ -13,7 +13,7 @@ export function calculateMatchForPrompt(userPrompt, programs, userGpa) {
       (program.title || '').toLowerCase(),
       (program.dept || '').toLowerCase(),
       (program.type || '').toLowerCase(),
-      (program.provider || '').toLowerCase()
+      (program.providers?.name || '').toLowerCase()
     ]);
 
     let matchedKeywordsCount = 0;

@@ -1,13 +1,37 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useData } from '../../context/DataContext.jsx';
-import { getEligibilityStyle, getGapAnalysis, getRequirementStyle, formatDeadline } from '../../lib/eligibility.js';
+import { supabase } from '../../lib/supabaseClient.js';
+import { getEligibilityStyle, formatDeadline, formatVerifiedDate, withAlternativeSuggestion } from '../../lib/eligibility.js';
 
 export default function EligibilityDetailPage() {
   const { id } = useParams();
-  const { programs, savedIds, toggleSaved } = useData();
+  const { programs, savedIds, toggleSaved, eligibilityByProgramId } = useData();
   const navigate = useNavigate();
+  const [documents, setDocuments] = useState([]);
+  const [docsLoading, setDocsLoading] = useState(true);
 
   const opp = programs.find((p) => p.id === id);
+
+  // Required documents are fetched per-program on demand (program_documents -> documents
+  // join) rather than globally in DataContext, to keep the list/dashboard queries light.
+  useEffect(() => {
+    if (!id) return;
+    setDocsLoading(true);
+    supabase
+      .from('program_documents')
+      .select('is_required, documents(id, name, description)')
+      .eq('program_id', id)
+      .then(({ data, error }) => {
+        if (error) {
+          console.warn('Failed to load required documents:', error.message);
+          setDocuments([]);
+        } else {
+          setDocuments(data.map((row) => ({ ...row.documents, is_required: row.is_required })));
+        }
+        setDocsLoading(false);
+      });
+  }, [id]);
 
   if (!opp) {
     return (
@@ -20,30 +44,31 @@ export default function EligibilityDetailPage() {
     );
   }
 
-  const style = getEligibilityStyle(opp);
-  const gap = getGapAnalysis(opp);
+  const eligibility = eligibilityByProgramId[opp.id];
+  const result = eligibility?.result;
+  const style = getEligibilityStyle(result);
   const { formatted } = formatDeadline(opp.deadline);
+  const lastVerified = formatVerifiedDate(opp.last_verified_at);
   const isSaved = savedIds.includes(opp.id);
 
+  const otherCategoryMatches = programs.filter(
+    (o) => o.id !== opp.id && eligibilityByProgramId[o.id]?.result !== 'not_eligible' && o.type !== opp.type
+  );
+  const sameCategoryMatches = programs.filter(
+    (o) => o.id !== opp.id && eligibilityByProgramId[o.id]?.result !== 'not_eligible' && o.type === opp.type
+  );
+  const alternatives = [...otherCategoryMatches, ...sameCategoryMatches].slice(0, 3);
+  const alternativeTypes = [...new Set(otherCategoryMatches.map((o) => o.type))];
+
   const reasons = [];
-  if (opp.eligibility_status !== 'Eligible') {
-    if (gap) {
-      reasons.push({ title: gap.type === 'blocked' ? 'Requirement Gap Identified' : 'Verification Needed', text: gap.gapSummary, ok: false });
-    } else if (opp.eligibility_notes) {
-      reasons.push({ title: "Why This Isn't a Match", text: opp.eligibility_notes, ok: false });
-    }
-  } else {
+  if (eligibility) {
     reasons.push({
-      title: 'Academic Standing Match',
-      text: `Your current GPA satisfies the program requirement (minimum ${opp.min_gpa || 75}%).`,
-      ok: true
+      title: result === 'eligible' ? 'Eligibility Match' : result === 'potentially_eligible' ? 'Verification Needed' : 'Why This Isn\'t a Match',
+      text: result === 'not_eligible' ? withAlternativeSuggestion(eligibility.explanation, alternativeTypes) : eligibility.explanation,
+      ok: result === 'eligible'
     });
   }
   (opp.why_strong_match || []).forEach((r) => reasons.push({ title: 'Profile Alignment', text: r, ok: true }));
-
-  const otherCategoryMatches = programs.filter((o) => o.id !== opp.id && o.eligibility_status !== 'Not Eligible' && o.type !== opp.type);
-  const sameCategoryMatches = programs.filter((o) => o.id !== opp.id && o.eligibility_status !== 'Not Eligible' && o.type === opp.type);
-  const alternatives = [...otherCategoryMatches, ...sameCategoryMatches].slice(0, 3);
 
   return (
     <div className="flex flex-col w-full gap-6">
@@ -66,7 +91,7 @@ export default function EligibilityDetailPage() {
                 <span className={`badge-sticker ${style.badgeClass} text-xs`}>Status: {style.label}</span>
               </div>
               <h1 className="text-2xl lg:text-3xl font-extrabold font-heading text-ink mb-2 leading-snug">{opp.title}</h1>
-              <p className="text-sm font-bold font-heading text-accent-violet mb-3">{opp.provider}</p>
+              <p className="text-sm font-bold font-heading text-accent-violet mb-3">{opp.providers?.name}</p>
               <p className="text-sm text-ink-muted max-w-2xl leading-relaxed font-medium">{opp.summary}</p>
             </div>
 
@@ -112,7 +137,7 @@ export default function EligibilityDetailPage() {
             </div>
           </div>
 
-          {opp.eligibility_status === 'Not Eligible' && alternatives.length > 0 && (
+          {result === 'not_eligible' && alternatives.length > 0 && (
             <div className="flex flex-col gap-4">
               <h2 className="text-xl font-extrabold font-heading text-ink flex items-center gap-2">
                 <span className="material-symbols-outlined text-accent-mint">explore</span> Alternative Assistance
@@ -145,26 +170,24 @@ export default function EligibilityDetailPage() {
         <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
           <div className="card-sticker p-6 bg-card flex flex-col gap-4">
             <h3 className="text-base font-extrabold font-heading text-ink flex items-center gap-2">
-              <span className="material-symbols-outlined text-accent-violet">checklist</span> Requirement Checklist
+              <span className="material-symbols-outlined text-accent-violet">checklist</span> Required Documents
             </h3>
             <div className="space-y-3">
-              {(opp.requirements || []).map((req, i) => {
-                const reqStyle = getRequirementStyle(req.status);
-                return (
-                  <div key={req.id || i} className="flex items-start gap-3">
-                    <div className={`w-6 h-6 rounded-full ${reqStyle.iconColor} border-2 border-ink flex items-center justify-center shrink-0 mt-0.5 shadow-pop-sm`}>
-                      <span className="material-symbols-outlined text-[14px] font-bold">{reqStyle.icon}</span>
+              {docsLoading && <p className="text-xs text-ink-muted font-medium">Loading…</p>}
+              {!docsLoading &&
+                documents.map((doc) => (
+                  <div key={doc.id} className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-paper text-ink-muted border-2 border-ink flex items-center justify-center shrink-0 mt-0.5 shadow-pop-sm">
+                      <span className="material-symbols-outlined text-[14px] font-bold">description</span>
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-xs font-extrabold font-heading text-ink">{req.title}</h4>
-                      <p className="text-[11px] text-ink-muted mt-0.5 font-medium">{req.desc}</p>
-                      <span className={`badge-sticker ${reqStyle.badgeClass} text-[9px] mt-1`}>{req.note}</span>
+                      <h4 className="text-xs font-extrabold font-heading text-ink">{doc.name}</h4>
+                      {doc.description && <p className="text-[11px] text-ink-muted mt-0.5 font-medium">{doc.description}</p>}
                     </div>
                   </div>
-                );
-              })}
-              {(!opp.requirements || opp.requirements.length === 0) && (
-                <p className="text-xs text-ink-muted font-medium">No requirement checklist available for this program.</p>
+                ))}
+              {!docsLoading && documents.length === 0 && (
+                <p className="text-xs text-ink-muted font-medium">No document checklist available for this program.</p>
               )}
             </div>
           </div>
@@ -176,6 +199,28 @@ export default function EligibilityDetailPage() {
               <p><span className="text-ink-muted">Deadline:</span> {formatted}</p>
               <p><span className="text-ink-muted">Degree Required:</span> {opp.degree_required}</p>
               <p><span className="text-ink-muted">Citizenship:</span> {opp.citizenship}</p>
+            </div>
+
+            <div className="pt-3 mt-1 border-t-2 border-ink/10 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-heading font-bold text-ink-muted">Verified Source:</span>
+                {opp.source_url ? (
+                  <a
+                    href={opp.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-extrabold text-accent-violet hover:underline flex items-center gap-1"
+                  >
+                    Official Site <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+                  </a>
+                ) : (
+                  <span className="text-ink-muted font-medium">Contact provider directly</span>
+                )}
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-heading font-bold text-ink-muted">Last Verified:</span>
+                <span className="font-extrabold text-ink">{lastVerified || 'Not yet verified'}</span>
+              </div>
             </div>
           </div>
         </div>

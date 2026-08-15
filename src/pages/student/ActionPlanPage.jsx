@@ -1,15 +1,37 @@
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useData } from '../../context/DataContext.jsx';
-import { formatDeadline, getRequirementStyle } from '../../lib/eligibility.js';
-
-const PRIORITY = { unmet: 0, action: 1, pending: 2 };
+import { supabase } from '../../lib/supabaseClient.js';
+import { formatDeadline, formatVerifiedDate } from '../../lib/eligibility.js';
 
 export default function ActionPlanPage() {
   const { id } = useParams();
-  const { programs } = useData();
+  const { programs, eligibilityByProgramId } = useData();
   const navigate = useNavigate();
+  const [documents, setDocuments] = useState([]);
+  const [steps, setSteps] = useState([]);
+  const [loadingExtras, setLoadingExtras] = useState(true);
 
   const opp = programs.find((p) => p.id === id);
+
+  // Required documents and application steps are real per-program rows now
+  // (program_documents/documents, application_steps) instead of hardcoded client text.
+  useEffect(() => {
+    if (!id) return;
+    setLoadingExtras(true);
+    Promise.all([
+      supabase.from('program_documents').select('documents(id, name)').eq('program_id', id),
+      supabase.from('application_steps').select('*').eq('program_id', id).order('step_number', { ascending: true })
+    ]).then(([docsRes, stepsRes]) => {
+      if (docsRes.error) console.warn('Failed to load documents:', docsRes.error.message);
+      else setDocuments(docsRes.data.map((row) => row.documents));
+
+      if (stepsRes.error) console.warn('Failed to load application steps:', stepsRes.error.message);
+      else setSteps(stepsRes.data);
+
+      setLoadingExtras(false);
+    });
+  }, [id]);
 
   if (!opp) {
     return (
@@ -21,38 +43,9 @@ export default function ActionPlanPage() {
     );
   }
 
-  const requirements = opp.requirements || [];
-  const outstanding = requirements.filter((r) => r.status !== 'satisfied');
   const { formatted } = formatDeadline(opp.deadline);
-
-  const nextReq = [...outstanding].sort((a, b) => (PRIORITY[a.status] ?? 3) - (PRIORITY[b.status] ?? 3))[0];
-
-  const steps = [
-    {
-      title: 'Prepare Required Documents',
-      desc:
-        requirements.length > 0
-          ? `Gather: ${requirements.map((r) => r.title).join(', ')}.`
-          : 'Gather the standard documents this provider requests (enrollment proof, grades, ID).',
-      badge: outstanding.length > 0 ? `${outstanding.length} Outstanding` : 'All Ready',
-      badgeClass: outstanding.length > 0 ? 'badge-amber' : 'badge-mint',
-      numColor: 'bg-accent-violet text-white'
-    },
-    {
-      title: 'Fill Out Official Application Form',
-      desc: `Complete the online or in-person submission at the ${opp.provider} application desk.`,
-      badge: `Due ${formatted}`,
-      badgeClass: 'badge-amber',
-      numColor: 'bg-accent-pink text-white'
-    },
-    {
-      title: 'Confirmation & Document Endorsement',
-      desc: 'Receive your application reference number and retain the receipt for university financial clearance.',
-      badge: 'Final Step',
-      badgeClass: 'badge-violet',
-      numColor: 'bg-accent-mint text-ink'
-    }
-  ];
+  const eligibility = eligibilityByProgramId[opp.id];
+  const badgeColors = ['bg-accent-violet text-white', 'bg-accent-pink text-white', 'bg-accent-mint text-ink'];
 
   return (
     <div className="flex flex-col w-full max-w-4xl mx-auto gap-6">
@@ -76,12 +69,14 @@ export default function ActionPlanPage() {
             <span className="material-symbols-outlined text-[15px]">flag</span> RECOMMENDED NEXT ACTION
           </span>
           <h3 className="text-lg font-extrabold font-heading text-ink mt-1">
-            {nextReq ? `Your Next Step: ${nextReq.note || nextReq.title}` : 'Your Next Step: Submit your completed application'}
+            {eligibility?.result === 'eligible'
+              ? 'Your Next Step: Submit your completed application'
+              : `Your Next Step: ${eligibility?.explanation || 'Review the requirements below'}`}
           </h3>
           <p className="text-sm text-ink-muted leading-relaxed font-medium">
-            {nextReq
-              ? `${nextReq.desc} Complete this before the ${formatted} deadline to keep your application on track.`
-              : `All requirements are satisfied — head to the ${opp.provider} portal to finish your submission before ${formatted}.`}
+            {eligibility?.result === 'eligible'
+              ? `All requirements are satisfied — head to the ${opp.providers?.name || 'provider'}'s official channel to finish your submission before ${formatted}.`
+              : `Resolving this before ${formatted} keeps your application on track.`}
           </p>
         </div>
       </div>
@@ -92,20 +87,15 @@ export default function ActionPlanPage() {
             <span className="material-symbols-outlined text-accent-violet">description</span> Required Documents
           </h3>
           <ul className="flex flex-col gap-2 text-xs font-semibold text-ink">
-            {requirements.length > 0 ? (
-              requirements.map((req, i) => {
-                const style = getRequirementStyle(req.status);
-                const icon = req.status === 'satisfied' ? 'check_circle' : req.status === 'unmet' ? 'cancel' : 'pending';
-                return (
-                  <li key={req.id || i} className="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30">
-                    <span className={`material-symbols-outlined text-[18px] ${style.iconColor.includes('mint') ? 'text-accent-mint' : style.iconColor.includes('pink') ? 'text-accent-pink' : 'text-accent-amber'}`}>
-                      {icon}
-                    </span>
-                    {req.title}
-                  </li>
-                );
-              })
-            ) : (
+            {loadingExtras && <li className="text-ink-muted">Loading…</li>}
+            {!loadingExtras && documents.length > 0 &&
+              documents.map((doc) => (
+                <li key={doc.id} className="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30">
+                  <span className="material-symbols-outlined text-accent-violet text-[18px]">description</span>
+                  {doc.name}
+                </li>
+              ))}
+            {!loadingExtras && documents.length === 0 && (
               <li className="flex items-center gap-2 p-2 rounded-xl bg-paper border border-ink/30 text-ink-muted">
                 No document checklist available for this program yet.
               </li>
@@ -118,15 +108,35 @@ export default function ActionPlanPage() {
             <h3 className="text-base font-extrabold font-heading text-ink flex items-center gap-2 mb-3">
               <span className="material-symbols-outlined text-accent-pink">link</span> Official Application Source
             </h3>
-            <p className="text-xs text-ink-muted font-medium mb-3">Submit your forms directly to the verified provider:</p>
-            <div className="p-3 rounded-xl bg-paper border-2 border-ink flex items-center justify-between">
-              <span className="text-xs font-extrabold font-heading text-ink">{opp.provider} Application Desk</span>
-              <span className="material-symbols-outlined text-accent-violet text-[18px]">open_in_new</span>
-            </div>
+            <p className="text-xs text-ink-muted font-medium mb-3">
+              {opp.source_url ? 'Submit your forms directly to the verified provider:' : 'No verified official link on file — contact the provider directly:'}
+            </p>
+            {opp.source_url ? (
+              <a
+                href={opp.source_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-xl bg-paper border-2 border-ink flex items-center justify-between hover:bg-card-subtle transition-colors"
+              >
+                <span className="text-xs font-extrabold font-heading text-ink">{opp.providers?.name}</span>
+                <span className="material-symbols-outlined text-accent-violet text-[18px]">open_in_new</span>
+              </a>
+            ) : (
+              <div className="p-3 rounded-xl bg-paper border-2 border-ink flex items-center justify-between">
+                <span className="text-xs font-extrabold font-heading text-ink">{opp.providers?.name}</span>
+                <span className="material-symbols-outlined text-ink-muted text-[18px]">info</span>
+              </div>
+            )}
           </div>
-          <div className="mt-4 pt-3 border-t border-ink/20 flex justify-between items-center text-xs">
-            <span className="font-heading font-bold text-ink-muted">Deadline:</span>
-            <span className="badge-sticker badge-pink text-[10px]">{formatted}</span>
+          <div className="mt-4 pt-3 border-t border-ink/20 flex flex-col gap-2 text-xs">
+            <div className="flex justify-between items-center">
+              <span className="font-heading font-bold text-ink-muted">Deadline:</span>
+              <span className="badge-sticker badge-pink text-[10px]">{formatted}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="font-heading font-bold text-ink-muted">Last Verified:</span>
+              <span className="font-extrabold text-ink">{formatVerifiedDate(opp.last_verified_at) || 'Not yet verified'}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -134,18 +144,22 @@ export default function ActionPlanPage() {
       <div className="flex flex-col gap-4">
         <h3 className="text-lg font-extrabold font-heading text-ink">Step-by-Step Application Flow</h3>
         <div className="space-y-3">
-          {steps.map((step, i) => (
-            <div key={i} className="card-sticker p-5 bg-card flex gap-4 items-start">
-              <div className={`w-10 h-10 rounded-2xl ${step.numColor} border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm`}>
-                {String(i + 1).padStart(2, '0')}
+          {loadingExtras && <p className="text-sm text-ink-muted font-medium">Loading…</p>}
+          {!loadingExtras && steps.length === 0 && (
+            <p className="text-sm text-ink-muted font-medium">No application steps have been added for this program yet.</p>
+          )}
+          {!loadingExtras &&
+            steps.map((step, i) => (
+              <div key={step.id} className="card-sticker p-5 bg-card flex gap-4 items-start">
+                <div className={`w-10 h-10 rounded-2xl ${badgeColors[i % badgeColors.length]} border-2 border-ink font-heading font-extrabold flex items-center justify-center shrink-0 shadow-pop-sm`}>
+                  {String(step.step_number).padStart(2, '0')}
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-sm font-extrabold font-heading text-ink">{step.title}</h4>
+                  <p className="text-xs text-ink-muted mt-1 font-medium">{step.description}</p>
+                </div>
               </div>
-              <div className="flex-1">
-                <h4 className="text-sm font-extrabold font-heading text-ink">{step.title}</h4>
-                <p className="text-xs text-ink-muted mt-1 font-medium">{step.desc}</p>
-                <div className={`mt-2 inline-flex items-center gap-1 badge-sticker ${step.badgeClass} text-[9px]`}>{step.badge}</div>
-              </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
 

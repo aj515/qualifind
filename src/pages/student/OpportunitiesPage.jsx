@@ -5,10 +5,15 @@ import { formatDeadline } from '../../lib/eligibility.js';
 import EligibilityBadge from '../../components/EligibilityBadge.jsx';
 
 const ALL_TYPES = ['Scholarship', 'Educational Assistance', 'Student Employment', 'Student Loan', 'Training & Certification'];
-const ALL_ELIGIBILITY = ['Eligible', 'Potentially Eligible', 'Not Eligible'];
+const ELIGIBILITY_OPTIONS = [
+  { value: 'eligible', label: 'Eligible', dot: 'bg-accent-mint' },
+  { value: 'potentially_eligible', label: 'Potentially Eligible', dot: 'bg-accent-amber' },
+  { value: 'not_eligible', label: 'Not Eligible', dot: 'bg-accent-pink' }
+];
+const ALL_ELIGIBILITY = ELIGIBILITY_OPTIONS.map((o) => o.value);
 
 export default function OpportunitiesPage() {
-  const { programs, savedIds, toggleSaved, matcherScores } = useData();
+  const { programs, savedIds, toggleSaved, matcherScores, eligibilityByProgramId } = useData();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -28,12 +33,12 @@ export default function OpportunitiesPage() {
     const results = programs.filter((p) => {
       if (savedOnly && !savedIds.includes(p.id)) return false;
       if (activeTypes.length > 0 && !activeTypes.includes(p.type)) return false;
-      if (activeEligibility.length > 0 && !activeEligibility.includes(p.eligibility_status)) return false;
+      if (activeEligibility.length > 0 && !activeEligibility.includes(eligibilityByProgramId[p.id]?.result)) return false;
       if (query) {
         const q = query.toLowerCase();
         const hit =
           p.title.toLowerCase().includes(q) ||
-          (p.provider || '').toLowerCase().includes(q) ||
+          (p.providers?.name || '').toLowerCase().includes(q) ||
           (p.dept || '').toLowerCase().includes(q) ||
           (p.keywords || []).some((k) => k.toLowerCase().includes(q));
         if (!hit) return false;
@@ -45,7 +50,7 @@ export default function OpportunitiesPage() {
       results.sort((a, b) => (matcherScores[b.id] ?? 0) - (matcherScores[a.id] ?? 0));
     }
     return results;
-  }, [programs, savedOnly, activeTypes, activeEligibility, query, savedIds, matcherScores, hasMatcherScores]);
+  }, [programs, savedOnly, activeTypes, activeEligibility, query, savedIds, matcherScores, hasMatcherScores, eligibilityByProgramId]);
 
   function toggleType(type) {
     setActiveTypes((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]));
@@ -95,21 +100,16 @@ export default function OpportunitiesPage() {
           <div>
             <h4 className="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2.5">Eligibility</h4>
             <div className="flex flex-col gap-2">
-              {ALL_ELIGIBILITY.map((status) => (
-                <label key={status} className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
+              {ELIGIBILITY_OPTIONS.map((option) => (
+                <label key={option.value} className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
                   <input
                     type="checkbox"
-                    checked={activeEligibility.includes(status)}
-                    onChange={() => toggleEligibility(status)}
+                    checked={activeEligibility.includes(option.value)}
+                    onChange={() => toggleEligibility(option.value)}
                     className="w-4 h-4 rounded border-2 border-ink text-accent-violet"
                   />
                   <span className="flex items-center gap-1.5">
-                    <span
-                      className={`w-2.5 h-2.5 rounded-full border border-ink ${
-                        status === 'Eligible' ? 'bg-accent-mint' : status === 'Potentially Eligible' ? 'bg-accent-amber' : 'bg-accent-pink'
-                      }`}
-                    ></span>{' '}
-                    {status}
+                    <span className={`w-2.5 h-2.5 rounded-full border border-ink ${option.dot}`}></span> {option.label}
                   </span>
                 </label>
               ))}
@@ -180,7 +180,7 @@ export default function OpportunitiesPage() {
                       <h3 className="text-lg font-extrabold font-heading text-ink mb-1 group-hover:text-accent-violet transition-colors">
                         {opp.title}
                       </h3>
-                      <p className="text-xs font-semibold text-ink-muted mb-4">{opp.provider}</p>
+                      <p className="text-xs font-semibold text-ink-muted mb-4">{opp.providers?.name}</p>
 
                       <div className="grid grid-cols-2 gap-3 p-3 bg-paper rounded-2xl border-2 border-ink mb-4">
                         <div>
@@ -195,7 +195,7 @@ export default function OpportunitiesPage() {
                     </div>
 
                     <div className="pt-3 border-t-2 border-ink flex items-center justify-between">
-                      <EligibilityBadge program={opp} />
+                      <EligibilityBadge result={eligibilityByProgramId[opp.id]?.result} />
                     </div>
                   </div>
                 );

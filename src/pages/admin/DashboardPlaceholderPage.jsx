@@ -23,7 +23,8 @@ export default function DashboardPlaceholderPage() {
           <p><span className="text-ink-muted">Email:</span> {user?.email}</p>
           <p><span className="text-ink-muted">Name:</span> {profile?.name ?? '—'}</p>
           <p><span className="text-ink-muted">Role:</span> {profile?.role ?? '—'}</p>
-          <p><span className="text-ink-muted">Badge:</span> {profile?.badge ?? '—'}</p>
+          <p><span className="text-ink-muted">Agency:</span> {profile?.agency ?? '—'}</p>
+          <p><span className="text-ink-muted">Position:</span> {profile?.position ?? '—'}</p>
         </div>
 
         <button onClick={signOut} className="btn-candy btn-candy-secondary w-full py-2.5 text-sm">

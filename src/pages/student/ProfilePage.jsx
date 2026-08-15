@@ -9,6 +9,9 @@ export default function ProfilePage() {
   const [institution, setInstitution] = useState('');
   const [course, setCourse] = useState('');
   const [bio, setBio] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [location, setLocation] = useState('');
+  const [isFinanciallyDisadvantaged, setIsFinanciallyDisadvantaged] = useState(false);
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState('');
   const [saving, setSaving] = useState(false);
@@ -21,6 +24,9 @@ export default function ProfilePage() {
     setInstitution(profile.institution || '');
     setCourse(profile.course || '');
     setBio(profile.bio || '');
+    setBirthdate(profile.birthdate || '');
+    setLocation(profile.location || '');
+    setIsFinanciallyDisadvantaged(profile.is_financially_disadvantaged || false);
     setSkills(profile.skills || []);
   }, [profile]);
 
@@ -49,6 +55,9 @@ export default function ProfilePage() {
       institution: institution.trim() || null,
       course: course.trim() || null,
       bio: bio.trim() || null,
+      birthdate: birthdate || null,
+      location: location.trim() || null,
+      is_financially_disadvantaged: isFinanciallyDisadvantaged,
       skills
     });
 
@@ -104,6 +113,37 @@ export default function ProfilePage() {
             className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
           />
         </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Date of Birth</label>
+            <input
+              type="date"
+              value={birthdate}
+              onChange={(e) => setBirthdate(e.target.value)}
+              className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Location</label>
+            <input
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="e.g. Cebu City"
+              className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
+            />
+          </div>
+        </div>
+
+        <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">
+          <input
+            type="checkbox"
+            checked={isFinanciallyDisadvantaged}
+            onChange={(e) => setIsFinanciallyDisadvantaged(e.target.checked)}
+            className="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"
+          />
+          <span>I qualify as low-income / indigent (unlocks need-based assistance matching)</span>
+        </label>
 
         <div className="space-y-1">
           <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Bio</label>

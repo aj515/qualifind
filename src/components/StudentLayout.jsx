@@ -99,7 +99,9 @@ export default function StudentLayout() {
               </div>
               <div>
                 <span className="text-xs font-heading font-extrabold text-ink block leading-tight">{profile?.name}</span>
-                <span className="text-[10px] text-ink-muted block leading-tight font-medium">{profile?.badge}</span>
+                <span className="text-[10px] text-ink-muted block leading-tight font-medium">
+                  Student{profile?.location ? ` • ${profile.location}` : ''}
+                </span>
               </div>
             </div>
 

@@ -6,12 +6,12 @@ import EligibilityBadge from '../../components/EligibilityBadge.jsx';
 
 export default function DashboardPage() {
   const { profile } = useAuth();
-  const { programs, savedIds, matcherScores, toggleSaved } = useData();
+  const { programs, savedIds, matcherScores, toggleSaved, eligibilityByProgramId } = useData();
   const navigate = useNavigate();
 
   const active = programs.filter((p) => p.status === 'Active');
-  const strongCount = active.filter((p) => p.eligibility_status === 'Eligible').length;
-  const potentialCount = active.filter((p) => p.eligibility_status === 'Potentially Eligible').length;
+  const strongCount = active.filter((p) => eligibilityByProgramId[p.id]?.result === 'eligible').length;
+  const potentialCount = active.filter((p) => eligibilityByProgramId[p.id]?.result === 'potentially_eligible').length;
 
   const soonest = [...active]
     .map((p) => ({ ...p, ...formatDeadline(p.deadline) }))
@@ -19,11 +19,11 @@ export default function DashboardPage() {
     .sort((a, b) => a.daysLeft - b.daysLeft)[0];
 
   const topMatches = [...active]
-    .sort(
-      (a, b) =>
-        (ELIGIBILITY_RANK[a.eligibility_status] ?? 3) - (ELIGIBILITY_RANK[b.eligibility_status] ?? 3) ||
-        (matcherScores[b.id] ?? 0) - (matcherScores[a.id] ?? 0)
-    )
+    .sort((a, b) => {
+      const rankA = ELIGIBILITY_RANK[eligibilityByProgramId[a.id]?.result] ?? 3;
+      const rankB = ELIGIBILITY_RANK[eligibilityByProgramId[b.id]?.result] ?? 3;
+      return rankA - rankB || (matcherScores[b.id] ?? 0) - (matcherScores[a.id] ?? 0);
+    })
     .slice(0, 3);
 
   const firstName = profile?.name?.split(' ')[0] || 'there';
@@ -184,7 +184,7 @@ export default function DashboardPage() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex flex-col items-start lg:items-end">
-                  <EligibilityBadge program={opp} />
+                  <EligibilityBadge result={eligibilityByProgramId[opp.id]?.result} />
                 </div>
                 <div className="flex gap-2">
                   <button
