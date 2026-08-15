@@ -7,7 +7,7 @@ const NAV_LINKS = [
   { to: '/dashboard', icon: 'dashboard', label: 'Student Dashboard' },
   { to: '/matcher', icon: 'auto_awesome', label: 'AI Profile Matcher' },
   { to: '/opportunities', icon: 'search', label: 'Assistance Programs' },
-  { to: '/saved-applications', icon: 'bookmark', label: 'Saved Drafts' },
+  { to: '/saved-applications', icon: 'bookmark', label: 'Applications' },
   { to: '/profile', icon: 'person', label: 'Student Profile' }
 ];
 
@@ -104,19 +104,6 @@ export default function StudentLayout() {
                 </span>
               </div>
             </div>
-
-            <button
-              onClick={() => navigate('/saved-applications')}
-              className="relative w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all"
-              title="Saved Applications"
-            >
-              <span className="material-symbols-outlined text-[20px] text-ink">bookmark</span>
-              {savedIds.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-accent-pink text-white text-[10px] font-heading font-extrabold w-5 h-5 rounded-full flex items-center justify-center border border-ink shadow-pop-sm">
-                  {savedIds.length}
-                </span>
-              )}
-            </button>
 
             <button
               onClick={() => setIsDark((d) => !d)}

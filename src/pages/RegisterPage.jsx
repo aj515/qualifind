@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
-import { supabase } from '../lib/supabaseClient.js';
 
 const COURSE_OPTIONS = [
   'B.S. Information Technology',
@@ -79,9 +78,27 @@ export default function RegisterPage() {
     }
 
     setSubmitting(true);
+    const isGraduate = yearLevel === 'Graduate';
+    // All of this rides along as auth metadata — the handle_new_user DB trigger
+    // (supabase/migrations/0002_signup_metadata_fields.sql) writes it into
+    // profiles/students at insert time, so it lands whether or not Supabase
+    // requires email confirmation before a session exists.
     const { data, error } = await signUp(email.trim(), password, {
       role: 'student',
-      name
+      name,
+      avatar: getInitials(firstName.trim(), lastName.trim()),
+      institution: institution.trim(),
+      course: resolvedCourse,
+      education_level: isGraduate ? 'Graduate' : 'College',
+      year_level: isGraduate ? '' : parseInt(yearLevel, 10),
+      // GWA/birthdate/location are optional at signup — a new student may not have
+      // grades yet, or may not want to share these immediately. Left blank, they stay
+      // null and just mean "needs verification" rather than an eligibility failure
+      // (see computeEligibility in src/lib/eligibility.js). Fillable later from Profile.
+      gpa: gwa ? parseFloat(gwa) : '',
+      birthdate,
+      location: location.trim(),
+      is_financially_disadvantaged: isFinanciallyDisadvantaged
     });
 
     if (error) {
@@ -90,37 +107,14 @@ export default function RegisterPage() {
       return;
     }
 
+    setSubmitting(false);
+
     // No session yet means Supabase is requiring email confirmation before login.
     if (!data.session) {
-      setSubmitting(false);
       setCheckEmailMsg('Account created! Check your email to confirm it, then sign in.');
       return;
     }
 
-    // Session exists immediately (email confirmation disabled) — fill in the
-    // avatar on `profiles`, and the role-specific fields on `students`/`admins`
-    // (the signup trigger already created a blank row in the right table).
-    const userId = data.session.user.id;
-    await supabase.from('profiles').update({ avatar: getInitials(firstName.trim(), lastName.trim()) }).eq('user_id', userId);
-
-    const isGraduate = yearLevel === 'Graduate';
-    await supabase.from('students').update({
-      institution: institution.trim() || null,
-      course: resolvedCourse || null,
-      education_level: isGraduate ? 'Graduate' : 'College',
-      year_level: isGraduate ? null : parseInt(yearLevel, 10),
-      // GWA/birthdate/location are optional at signup — a new student may not have
-      // grades yet, or may not want to share these immediately. Left blank, they stay
-      // null and just mean "needs verification" rather than an eligibility failure
-      // (see computeEligibility in src/lib/eligibility.js). Fillable later from Profile.
-      gpa: gwa ? parseFloat(gwa) : null,
-      gpa_formatted: gwa ? `${parseFloat(gwa).toFixed(1)}% GWA` : null,
-      birthdate: birthdate || null,
-      location: location.trim() || null,
-      is_financially_disadvantaged: isFinanciallyDisadvantaged
-    }).eq('user_id', userId);
-
-    setSubmitting(false);
     navigate('/dashboard', { replace: true });
   }
 

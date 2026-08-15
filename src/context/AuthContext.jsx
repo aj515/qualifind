@@ -81,14 +81,16 @@ export function AuthProvider({ children }) {
     return { data, error };
   }, []);
 
-  // role/name are passed as auth metadata; the `handle_new_user` DB trigger
-  // (see supabase/migrations/0003_normalize_schema.sql) reads them to create the
-  // profiles row plus a blank students/admins row.
-  const signUp = useCallback(async (email, password, { role, name }) => {
+  // Everything in `metadata` is passed as auth metadata; the `handle_new_user`
+  // DB trigger (see supabase/migrations/0002_signup_metadata_fields.sql) reads it
+  // to populate profiles + students/admins in one shot at insert time. This runs
+  // server-side regardless of whether email confirmation delays the session, so
+  // registration data is never silently dropped.
+  const signUp = useCallback(async (email, password, metadata) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { role, name } }
+      options: { data: metadata }
     });
     return { data, error };
   }, []);
