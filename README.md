@@ -82,18 +82,6 @@ team; everyone else skips straight to "join an existing project" below.
    npm install
    ```
 
-2. **First time only — one teammate creates the shared Supabase project**:
-   - Create a project at [supabase.com](https://supabase.com).
-   - Open its SQL Editor and run `supabase/migrations/0001_init.sql`. This creates
-     the full schema, RLS policies, the signup trigger, and seeds the program catalog.
-   - For faster local testing, consider turning off **Confirm email** under
-     Authentication → Providers → Email, so signup logs you in immediately instead of
-     requiring an email click-through.
-   - Share the Project URL and anon public key (Project Settings → API) with the rest
-     of the team directly (Slack/DM) — not via a commit. The anon key is the public
-     client-side key, safe to share with trusted teammates since it's gated by RLS.
-     **Never share the `service_role` key** — that one bypasses RLS entirely.
-
    **Everyone (including whoever just created the project)**:
    - Copy `.env.local.example` to `.env.local` and fill in the shared Project URL and
      anon key. Never commit `.env.local`.
