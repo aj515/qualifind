@@ -3,11 +3,13 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import { DataProvider } from './context/DataContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import StudentLayout from './components/StudentLayout.jsx';
+import AdminLayout from './components/AdminLayout.jsx';
 import { isSupabaseConfigured } from './lib/supabaseClient.js';
 import SetupStatusPage from './pages/SetupStatusPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
-import AdminDashboardPlaceholderPage from './pages/admin/DashboardPlaceholderPage.jsx';
+import AdminProgramsPage from './pages/admin/AdminProgramsPage.jsx';
+import AdminProgramFormPage from './pages/admin/AdminProgramFormPage.jsx';
 import DashboardPage from './pages/student/DashboardPage.jsx';
 import MatcherPage from './pages/student/MatcherPage.jsx';
 import OpportunitiesPage from './pages/student/OpportunitiesPage.jsx';
@@ -50,15 +52,17 @@ export default function App() {
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
 
-          {/* Admin views land in Phase 4 — placeholder proves auth/role-routing works */}
           <Route
-            path="/admin-dashboard"
             element={
               <ProtectedRoute role="admin">
-                <AdminDashboardPlaceholderPage />
+                <AdminLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="/admin-dashboard" element={<AdminProgramsPage />} />
+            <Route path="/admin-dashboard/programs/new" element={<AdminProgramFormPage />} />
+            <Route path="/admin-dashboard/programs/:id" element={<AdminProgramFormPage />} />
+          </Route>
 
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>

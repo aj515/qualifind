@@ -5,13 +5,15 @@
 /* QualiFind - Playful Geometric Design System (Lighter, Fresh & Luminous Color Scheme) */
 
 :root {
-  /* Lighter Fresh & Crisp Light Palette */
-  --color-paper: 250 252 255;          /* #FAFCFF - Crisp Airy Sky White */
+  /* Lighter Fresh & Crisp Light Palette — dialed back from pure white/near-white,
+     which read as glare (screens at demo brightness, long review sessions). Same
+     airy feel, lower ceiling brightness, more contrast between the three layers. */
+  --color-paper: 242 243 248;          /* #F2F3F8 - Soft Sky Gray */
   --color-ink: 30 41 59;               /* #1E293B - Slate 800 */
   --color-ink-muted: 100 116 139;      /* #64748B - Slate 500 */
   --color-border-subtle: 226 232 240;  /* #E2E8F0 - Slate 200 */
-  --color-card: 255 255 255;           /* #FFFFFF - Pure White */
-  --color-card-subtle: 248 250 252;    /* #F8FAFC */
+  --color-card: 250 250 253;           /* #FAFAFD - Off White */
+  --color-card-subtle: 233 234 241;    /* #E9EAF1 */
 
   /* Lighter Vibrant Accents */
   --color-accent-violet: 99 102 241;   /* #6366F1 - Soft Indigo / Periwinkle */
