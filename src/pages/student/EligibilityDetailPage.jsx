@@ -68,7 +68,16 @@ export default function EligibilityDetailPage() {
       ok: result === 'eligible'
     });
   }
-  (opp.why_strong_match || []).forEach((r) => reasons.push({ title: 'Profile Alignment', text: r, ok: true }));
+  // why_strong_match is static, admin-authored copy written for an idealized
+  // "good fit" student (e.g. "Your GPA exceeds the 80% minimum") — it's never
+  // checked against the actual viewer. Only surface it once eligibility is
+  // actually confirmed (result === 'eligible'); showing it for
+  // potentially_eligible/not_eligible asserts things as fact (like a GPA
+  // "exceeding" a minimum) that may directly contradict the real, computed
+  // reason sitting right next to it — e.g. "your GPA hasn't been added yet".
+  if (result === 'eligible') {
+    (opp.why_strong_match || []).forEach((r) => reasons.push({ title: 'Profile Alignment', text: r, ok: true }));
+  }
 
   return (
     <div className="flex flex-col w-full gap-6">

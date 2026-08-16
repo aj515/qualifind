@@ -6,6 +6,7 @@ import StudentLayout from './components/StudentLayout.jsx';
 import AdminLayout from './components/AdminLayout.jsx';
 import { isSupabaseConfigured } from './lib/supabaseClient.js';
 import SetupStatusPage from './pages/SetupStatusPage.jsx';
+import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import AdminProgramsPage from './pages/admin/AdminProgramsPage.jsx';
@@ -32,7 +33,7 @@ export default function App() {
     <AuthProvider>
       <DataProvider>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
@@ -64,7 +65,7 @@ export default function App() {
             <Route path="/admin-dashboard/programs/:id" element={<AdminProgramFormPage />} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </DataProvider>
     </AuthProvider>
