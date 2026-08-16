@@ -115,7 +115,11 @@ export default function MatcherPage() {
     setSaveToProfile(true);
 
     try {
-      const { summary, fields } = await extractDocument(file);
+      const { hasContent, summary, fields } = await extractDocument(file);
+      if (!hasContent) {
+        setUploadError(summary || "That document doesn't seem to contain any relevant information. Try a different file, or describe your situation manually.");
+        return;
+      }
       setDraft({ summary, fields });
     } catch (err) {
       console.warn('Document extraction failed:', err);

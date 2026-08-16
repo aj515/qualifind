@@ -1,26 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext.jsx';
 
-// Curated so Skills stays a pick-list instead of free text (keeps the data
-// clean/consistent for matching, rather than a pile of one-off spellings).
-const SKILL_OPTIONS = [
-  { id: 'programming', label: 'Programming / Coding', icon: 'code' },
-  { id: 'web-dev', label: 'Web Development', icon: 'web' },
-  { id: 'graphic-design', label: 'Graphic Design', icon: 'palette' },
-  { id: 'video-editing', label: 'Video Editing', icon: 'movie' },
-  { id: 'data-analysis', label: 'Data Analysis', icon: 'analytics' },
-  { id: 'public-speaking', label: 'Public Speaking', icon: 'campaign' },
-  { id: 'research-writing', label: 'Research & Writing', icon: 'edit_note' },
-  { id: 'leadership', label: 'Leadership', icon: 'groups' },
-  { id: 'customer-service', label: 'Customer Service', icon: 'support_agent' },
-  { id: 'tutoring', label: 'Teaching / Tutoring', icon: 'school' },
-  { id: 'accounting', label: 'Accounting / Bookkeeping', icon: 'calculate' },
-  { id: 'social-media', label: 'Social Media Management', icon: 'share' },
-  { id: 'photography', label: 'Photography', icon: 'photo_camera' },
-  { id: 'event-planning', label: 'Event Planning', icon: 'event' },
-  { id: 'foreign-language', label: 'Foreign Language', icon: 'translate' },
-  { id: 'project-management', label: 'Project Management', icon: 'assignment_turned_in' }
-];
+// Fields that make a student profile actually useful for eligibility matching.
+// Completeness is derived live from these instead of a stored counter, so it
+// always reflects what's really been filled in.
+const COMPLETENESS_FIELDS = ['institution', 'course', 'gpa', 'birthdate', 'location'];
+
+function computeProfileCompleteness(profile) {
+  if (!profile) return 0;
+  const filled = COMPLETENESS_FIELDS.filter((key) => profile[key] !== null && profile[key] !== undefined && profile[key] !== '').length;
+  return Math.round((filled / COMPLETENESS_FIELDS.length) * 100);
+}
 
 // Approximate scale <-> percentage table (Philippine 1.0-5.0 GWA scale isn't
 // standardized across schools, so this is illustrative, not authoritative —
@@ -58,11 +48,9 @@ export default function ProfilePage() {
   const [gwaInput, setGwaInput] = useState('');
   const [institution, setInstitution] = useState('');
   const [course, setCourse] = useState('');
-  const [bio, setBio] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [location, setLocation] = useState('');
   const [isFinanciallyDisadvantaged, setIsFinanciallyDisadvantaged] = useState(false);
-  const [skills, setSkills] = useState([]);
   const [saving, setSaving] = useState(false);
   const [savedMsg, setSavedMsg] = useState('');
 
@@ -72,16 +60,10 @@ export default function ProfilePage() {
     setGwaInput(profile.gpa != null ? String(profile.gpa) : '');
     setInstitution(profile.institution || '');
     setCourse(profile.course || '');
-    setBio(profile.bio || '');
     setBirthdate(profile.birthdate || '');
     setLocation(profile.location || '');
     setIsFinanciallyDisadvantaged(profile.is_financially_disadvantaged || false);
-    setSkills(profile.skills || []);
   }, [profile]);
-
-  function toggleSkill(id) {
-    setSkills((prev) => (prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]));
-  }
 
   // Switching scale converts whatever's currently typed so the number stays
   // meaningful instead of just clearing the field.
@@ -108,11 +90,9 @@ export default function ProfilePage() {
         gpaNum === null ? null : gwaScale === '1.0-5.0' ? `${rawGwa.toFixed(2)} (~${gpaNum.toFixed(0)}%)` : `${gpaNum.toFixed(1)}% GWA`,
       institution: institution.trim() || null,
       course: course.trim() || null,
-      bio: bio.trim() || null,
       birthdate: birthdate || null,
       location: location.trim() || null,
-      is_financially_disadvantaged: isFinanciallyDisadvantaged,
-      skills
+      is_financially_disadvantaged: isFinanciallyDisadvantaged
     });
 
     setSaving(false);
@@ -155,15 +135,16 @@ export default function ProfilePage() {
           )}
           <div className="w-full pt-3 mt-1 border-t-2 border-ink/10 text-left space-y-1">
             <div className="flex items-center justify-between text-xs font-heading font-extrabold text-ink">
-              <span>Profile Strength</span>
-              <span>{profile?.profile_strength ?? 0}%</span>
+              <span>Profile Completeness</span>
+              <span>{computeProfileCompleteness(profile)}%</span>
             </div>
             <div className="w-full h-2 rounded-full bg-ink/10 overflow-hidden">
               <div
                 className="h-full rounded-full bg-accent-mint transition-all"
-                style={{ width: `${profile?.profile_strength ?? 0}%` }}
+                style={{ width: `${computeProfileCompleteness(profile)}%` }}
               />
             </div>
+            <p className="text-[10px] text-ink-muted font-medium pt-0.5">Based on the academic fields filled in below.</p>
           </div>
         </div>
 
@@ -254,34 +235,6 @@ export default function ProfilePage() {
               />
               <span>I qualify as low-income / indigent (unlocks need-based assistance matching)</span>
             </label>
-          </div>
-
-          <div className="card-sticker p-6 bg-card flex flex-col gap-5">
-            <h2 className="font-heading font-extrabold text-sm uppercase tracking-wider text-ink-muted">Bio & Skills</h2>
-
-            <div className="space-y-1">
-              <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Bio</label>
-              <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} className="w-full input-playful py-2.5 px-4 text-xs font-semibold resize-none" />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Skills</label>
-              <p className="text-[11px] text-ink-muted font-medium -mt-0.5">Select what applies — keeps matching consistent instead of free-typed spellings.</p>
-              <div className="flex flex-wrap gap-2">
-                {SKILL_OPTIONS.map((skill) => (
-                  <button
-                    key={skill.id}
-                    type="button"
-                    onClick={() => toggleSkill(skill.id)}
-                    className={`badge-sticker text-xs py-1.5 px-3 transition-transform hover:scale-105 ${
-                      skills.includes(skill.id) ? 'badge-violet shadow-pop-sm scale-105' : 'bg-card text-ink border-2 border-ink'
-                    }`}
-                  >
-                    <span className="material-symbols-outlined text-[14px]">{skill.icon}</span> {skill.label}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
 
           <button type="submit" disabled={saving} className="btn-candy self-start px-6 disabled:opacity-60">

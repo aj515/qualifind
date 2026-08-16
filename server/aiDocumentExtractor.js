@@ -7,11 +7,17 @@ import Anthropic from "@anthropic-ai/sdk";
 const EXTRACT_SCHEMA = {
   type: "object",
   properties: {
+    hasContent: {
+      type: "boolean",
+      description:
+        "False if the document/text contains no meaningful information about a student's education, finances, or scholarship eligibility " +
+        "(e.g. blank, gibberish, keyboard-mash, or entirely unrelated content). True only if there is at least one real, usable detail."
+    },
     summary: {
       type: "string",
       description:
         "A first-person paragraph (as if the student wrote it) describing their situation using only facts found in the document, " +
-        "suitable for pasting directly into the AI matcher's free-text prompt box. If the document has too little relevant info, say so briefly."
+        "suitable for pasting directly into the AI matcher's free-text prompt box. If hasContent is false, explain briefly why nothing usable was found instead."
     },
     fields: {
       type: "object",
@@ -32,7 +38,7 @@ const EXTRACT_SCHEMA = {
       additionalProperties: false
     }
   },
-  required: ["summary", "fields"],
+  required: ["hasContent", "summary", "fields"],
   additionalProperties: false
 };
 
