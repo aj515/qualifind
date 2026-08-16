@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useData } from '../../context/DataContext.jsx';
 import { supabase } from '../../lib/supabaseClient.js';
+import { extractProgramListing } from '../../lib/adminExtractor.js';
 
 const TYPE_OPTIONS = ['Scholarship', 'Educational Assistance', 'Student Employment', 'Student Loan', 'Training & Certification'];
 const STATUS_OPTIONS = ['Active', 'In Review', 'Draft', 'Expired'];
@@ -78,6 +79,11 @@ export default function AdminProgramFormPage() {
   const [saving, setSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  const [importText, setImportText] = useState('');
+  const [importing, setImporting] = useState(false);
+  const [importMsg, setImportMsg] = useState('');
+  const [suggestedDocs, setSuggestedDocs] = useState([]);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -145,6 +151,89 @@ export default function AdminProgramFormPage() {
 
   function setField(key, value) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  // Bulk import: paste a raw announcement, AI drafts the fields below instead
+  // of an admin typing every program by hand. Never saves anything itself —
+  // it only pre-fills the same form fields the admin would fill manually, all
+  // still editable and still gated behind the normal Create Program submit.
+  async function handleImport() {
+    if (!importText.trim() || importing) return;
+    setImporting(true);
+    setImportMsg('');
+    setErrorMsg('');
+
+    try {
+      const fields = await extractProgramListing(importText);
+
+      let matchedProviderId = '';
+      if (fields.providerName) {
+        const match = providers.find((p) => p.name.toLowerCase() === fields.providerName.toLowerCase());
+        if (match) {
+          matchedProviderId = match.id;
+          setAddingProvider(false);
+        } else {
+          setAddingProvider(true);
+          setNewProvider((prev) => ({ ...prev, name: fields.providerName }));
+        }
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        title: fields.title || prev.title,
+        type: TYPE_OPTIONS.includes(fields.type) ? fields.type : prev.type,
+        provider_id: matchedProviderId || prev.provider_id,
+        dept: fields.dept || prev.dept,
+        duration: fields.duration || prev.duration,
+        summary: fields.summary || prev.summary,
+        funding: fields.funding || prev.funding,
+        annual_value: fields.annualValue > 0 ? String(fields.annualValue) : prev.annual_value,
+        deadline: fields.deadline || prev.deadline,
+        min_gpa: fields.minGpa > 0 ? String(fields.minGpa) : prev.min_gpa,
+        education_req: EDUCATION_OPTIONS.includes(fields.educationReq) ? fields.educationReq : prev.education_req,
+        min_year_level: fields.minYearLevel > 0 ? String(fields.minYearLevel) : prev.min_year_level,
+        max_year_level: fields.maxYearLevel > 0 ? String(fields.maxYearLevel) : prev.max_year_level,
+        age_min: fields.ageMin > 0 ? String(fields.ageMin) : prev.age_min,
+        age_max: fields.ageMax > 0 ? String(fields.ageMax) : prev.age_max,
+        // Sentinel default is false either way, so this only ever promotes to
+        // true (a genuine extracted requirement) and never demotes an already
+        // manually-checked box back to false.
+        financial_req: fields.financialReq || prev.financial_req,
+        // computeEligibility() splits alternative acceptable courses on "/" (see
+        // the field's own placeholder below) — normalize comma-separated lists
+        // the AI might still return despite the schema instructing "/", so a
+        // multi-course requirement never silently degrades into one big
+        // must-match-everything blob.
+        course_req: fields.courseReq ? fields.courseReq.replace(/,\s*/g, ' / ') : prev.course_req,
+        location: fields.location || prev.location,
+        degree_required: fields.degreeRequired || prev.degree_required,
+        citizenship: fields.citizenship || prev.citizenship,
+        source_url: fields.sourceUrl || prev.source_url,
+        why_strong_match: fields.whyStrongMatch?.length ? arrayToLines(fields.whyStrongMatch) : prev.why_strong_match,
+        tags: fields.tags?.length ? arrayToCsv(fields.tags) : prev.tags,
+        keywords: fields.keywords?.length ? arrayToCsv(fields.keywords) : prev.keywords
+      }));
+
+      if (fields.suggestedDocuments?.length) {
+        setSuggestedDocs(fields.suggestedDocuments);
+        // Auto-check only documents that already exist in the catalog by exact
+        // name match — never silently creates new catalog entries from AI text.
+        setSelectedDocIds((prev) => {
+          const next = new Set(prev);
+          fields.suggestedDocuments.forEach((name) => {
+            const match = documentsCatalog.find((d) => d.name.toLowerCase() === name.toLowerCase());
+            if (match) next.add(match.id);
+          });
+          return next;
+        });
+      }
+
+      setImportMsg('Draft filled in below — review and correct anything before saving.');
+    } catch (err) {
+      setErrorMsg(err.message || 'Program extraction failed.');
+    } finally {
+      setImporting(false);
+    }
   }
 
   function toggleDoc(docId) {
@@ -304,6 +393,56 @@ export default function AdminProgramFormPage() {
       </h1>
 
       {errorMsg && <div className="p-3 rounded-2xl bg-accent-pink/10 border-2 border-accent-pink text-xs font-semibold text-ink">{errorMsg}</div>}
+
+      {/* Bulk import — new programs only; editing an existing one already has its data. */}
+      {!isEditing && (
+        <div className="card-sticker p-6 bg-accent-violet/5 border-accent-violet flex flex-col gap-3">
+          <h2 className="text-sm font-heading font-extrabold uppercase tracking-wider text-accent-violet flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-[18px]">auto_awesome</span> Import from an Announcement
+          </h2>
+          <p className="text-[11px] text-ink-muted font-medium -mt-1">
+            Paste a scholarship/program announcement (press release, Facebook post, flyer text) and AI drafts the fields
+            below — nothing is saved until you review it and click Create Program.
+          </p>
+          <textarea
+            value={importText}
+            onChange={(e) => setImportText(e.target.value)}
+            rows={4}
+            placeholder="Paste the announcement text here…"
+            className="w-full input-playful py-2.5 px-4 text-xs font-semibold resize-none"
+          />
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleImport}
+              disabled={!importText.trim() || importing}
+              className="btn-candy btn-candy-sm disabled:opacity-50"
+            >
+              <span className="material-symbols-outlined text-[16px]">{importing ? 'progress_activity' : 'bolt'}</span>
+              {importing ? 'Reading announcement…' : 'Extract with AI'}
+            </button>
+            {importMsg && (
+              <span className="text-xs font-semibold text-ink flex items-center gap-1">
+                <span className="material-symbols-outlined text-[15px] text-accent-mint">check_circle</span> {importMsg}
+              </span>
+            )}
+          </div>
+          {suggestedDocs.length > 0 && (
+            <div className="pt-2 border-t border-accent-violet/20">
+              <p className="text-[11px] font-heading font-extrabold uppercase tracking-wider text-ink-muted mb-1.5">
+                Suggested documents (checked below if already in the catalog):
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {suggestedDocs.map((name) => (
+                  <span key={name} className="text-[11px] font-semibold px-2 py-1 rounded-full bg-accent-violet/10 text-accent-violet">
+                    {name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Basics */}
       <div className="card-sticker p-6 bg-card flex flex-col gap-4">
