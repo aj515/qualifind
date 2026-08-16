@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import { useData } from '../../context/DataContext.jsx';
 import { supabase } from '../../lib/supabaseClient.js';
 import { formatDeadline, formatVerifiedDate } from '../../lib/eligibility.js';
+import { getPersonalizedNextAction } from '../../lib/actionPlanNarrator.js';
 
 const STATUS_LABELS = {
   saved: 'Saved',
@@ -21,6 +22,11 @@ export default function ActionPlanPage() {
   const [steps, setSteps] = useState([]);
   const [completedStepIds, setCompletedStepIds] = useState(new Set());
   const [loadingExtras, setLoadingExtras] = useState(true);
+  // AI-personalized "what to prioritize" text — replaces the generic
+  // eligibility-explanation fallback once it loads. Never blocks the page;
+  // falls back silently to the generic text if the call fails.
+  const [aiRecommendedAction, setAiRecommendedAction] = useState('');
+  const [aiActionLoading, setAiActionLoading] = useState(false);
 
   const opp = programs.find((p) => p.id === id);
 
@@ -60,6 +66,32 @@ export default function ActionPlanPage() {
       setLoadingExtras(false);
     });
   }, [id, user?.id]);
+
+  // Personalizes the "recommended next action" callout once documents/steps have
+  // loaded. Fires once per program visit, not on every checkbox click — re-running
+  // it per click would add latency/cost without much benefit. Silently falls back
+  // to the generic eligibility-based text on failure (see the render below).
+  useEffect(() => {
+    setAiRecommendedAction('');
+    if (loadingExtras || !id) return;
+    const programObj = programs.find((p) => p.id === id);
+    if (!programObj) return;
+
+    setAiActionLoading(true);
+    getPersonalizedNextAction({
+      program: programObj,
+      eligibility: eligibilityByProgramId[id],
+      documents,
+      steps,
+      completedStepNumbers: steps.filter((s) => completedStepIds.has(s.id)).map((s) => s.step_number)
+    })
+      .then(setAiRecommendedAction)
+      .catch((err) => console.warn('Personalized action plan narration failed, using generic text:', err))
+      .finally(() => setAiActionLoading(false));
+    // Deliberately excludes completedStepIds/documents/steps from deps — this
+    // should reflect state as of page load, not refetch on every interaction.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, loadingExtras]);
 
   async function toggleStep(stepId) {
     if (!user?.id) return;
@@ -152,19 +184,40 @@ export default function ActionPlanPage() {
 
       <div className="card-sticker card-sticker-amber p-6 bg-card relative overflow-hidden">
         <div className="relative z-10 flex flex-col gap-2">
-          <span className="badge-sticker badge-amber w-fit">
-            <span className="material-symbols-outlined text-[15px]">flag</span> RECOMMENDED NEXT ACTION
-          </span>
-          <h3 className="text-lg font-extrabold font-heading text-ink mt-1">
-            {eligibility?.result === 'eligible'
-              ? 'Your Next Step: Submit your completed application'
-              : `Your Next Step: ${eligibility?.explanation || 'Review the requirements below'}`}
-          </h3>
-          <p className="text-sm text-ink-muted leading-relaxed font-medium">
-            {eligibility?.result === 'eligible'
-              ? `All requirements are satisfied — head to the ${opp.providers?.name || 'provider'}'s official channel to finish your submission before ${formatted}.`
-              : `Resolving this before ${formatted} keeps your application on track.`}
-          </p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="badge-sticker badge-amber w-fit">
+              <span className="material-symbols-outlined text-[15px]">flag</span> RECOMMENDED NEXT ACTION
+            </span>
+            {aiRecommendedAction && (
+              <span className="badge-sticker badge-violet w-fit text-[9px]">
+                <span className="material-symbols-outlined text-[12px]">auto_awesome</span> AI Personalized
+              </span>
+            )}
+          </div>
+
+          {aiActionLoading && !aiRecommendedAction ? (
+            <p className="text-sm text-ink-muted leading-relaxed font-medium flex items-center gap-2 mt-1">
+              <span className="material-symbols-outlined text-[16px] animate-spin">progress_activity</span>
+              Personalizing your next step…
+            </p>
+          ) : (
+            <>
+              <h3 className="text-lg font-extrabold font-heading text-ink mt-1">
+                {aiRecommendedAction
+                  ? 'Your Next Step'
+                  : eligibility?.result === 'eligible'
+                    ? 'Your Next Step: Submit your completed application'
+                    : `Your Next Step: ${eligibility?.explanation || 'Review the requirements below'}`}
+              </h3>
+              <p className="text-sm text-ink-muted leading-relaxed font-medium">
+                {aiRecommendedAction
+                  ? aiRecommendedAction
+                  : eligibility?.result === 'eligible'
+                    ? `All requirements are satisfied — head to the ${opp.providers?.name || 'provider'}'s official channel to finish your submission before ${formatted}.`
+                    : `Resolving this before ${formatted} keeps your application on track.`}
+              </p>
+            </>
+          )}
         </div>
       </div>
 

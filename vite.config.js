@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { scorePrograms } from './server/aiMatcher.js';
 import { extractFromDocument } from './server/aiDocumentExtractor.js';
+import { narrateActionPlan } from './server/aiActionPlan.js';
 
 // Dev-only /api/match endpoint, served from inside the Vite dev server process
 // (no separate backend to run) — forwards free-text matcher requests to Claude.
@@ -83,11 +84,45 @@ function aiExtractApiPlugin(env) {
   };
 }
 
+// Dev-only /api/action-plan endpoint — personalizes the Action Plan page's
+// "recommended next action" callout given the program, eligibility gap,
+// required documents, and step-completion state. Same production caveat as
+// the other two dev-only AI endpoints above.
+function aiActionPlanApiPlugin(env) {
+  return {
+    name: 'qualifind-ai-action-plan-api',
+    configureServer(server) {
+      server.middlewares.use('/api/action-plan', (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.end();
+          return;
+        }
+
+        let body = '';
+        req.on('data', (chunk) => { body += chunk; });
+        req.on('end', async () => {
+          res.setHeader('Content-Type', 'application/json');
+          try {
+            const { program, eligibility, documents, steps, completedStepNumbers } = JSON.parse(body || '{}');
+            const result = await narrateActionPlan({ apiKey: env.ANTHROPIC_API_KEY, program, eligibility, documents, steps, completedStepNumbers });
+            res.end(JSON.stringify(result));
+          } catch (err) {
+            console.error('[qualifind] /api/action-plan error:', err?.message || err);
+            res.statusCode = err?.message?.includes('required') ? 400 : 500;
+            res.end(JSON.stringify({ error: err?.message || 'Action plan narration failed.' }));
+          }
+        });
+      });
+    }
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    plugins: [react(), aiMatchApiPlugin(env), aiExtractApiPlugin(env)],
+    plugins: [react(), aiMatchApiPlugin(env), aiExtractApiPlugin(env), aiActionPlanApiPlugin(env)],
     server: {
       port: 8080,
       strictPort: true,
