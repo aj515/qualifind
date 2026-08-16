@@ -93,8 +93,11 @@ export default function OpportunitiesPage() {
   const filtered = useMemo(() => {
     const results = programs.filter((p) => {
       if (savedOnly && !savedIds.includes(p.id)) return false;
-      if (activeTypes.length > 0 && !activeTypes.includes(p.type)) return false;
-      if (activeEligibility.length > 0 && !activeEligibility.includes(eligibilityByProgramId[p.id]?.result)) return false;
+      // No "empty means show all" special-casing — a checkbox list should mean
+      // what it visually shows, so zero boxes checked correctly means zero
+      // results (the empty state below points the student at Reset Filters).
+      if (!activeTypes.includes(p.type)) return false;
+      if (!activeEligibility.includes(eligibilityByProgramId[p.id]?.result)) return false;
       if (query) {
         const q = query.toLowerCase();
         const hit =
