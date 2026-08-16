@@ -48,6 +48,37 @@ function parseYearLevel(value) {
   return match ? match[0] : null;
 }
 
+function ordinalYear(level) {
+  const s = String(level);
+  return s.endsWith('1') ? 'st' : s.endsWith('2') ? 'nd' : s.endsWith('3') ? 'rd' : 'th';
+}
+
+// One-line reminder that the Matcher already reads the saved profile — so the
+// prompt only needs to cover what's different or missing, not everything again.
+function summarizeProfile(profile) {
+  if (!profile) return '';
+  const who = [profile.year_level ? `${profile.year_level}${ordinalYear(profile.year_level)}-year` : '', profile.course].filter(Boolean).join(' ');
+  const parts = [];
+  if (who) parts.push(who);
+  if (profile.location) parts.push(profile.location);
+  if (profile.gpa != null && profile.gpa !== '') parts.push(`${profile.gpa} GWA`);
+  if (profile.is_financially_disadvantaged) parts.push('low-income');
+  return parts.join(' · ');
+}
+
+// Only the fields that would actually change — so a prompt that just restates
+// what's already on file doesn't trigger a review prompt for nothing.
+function diffProfileUpdates(profile, updates) {
+  const diff = {};
+  for (const [key, value] of Object.entries(updates)) {
+    const current = profile?.[key];
+    if (typeof value === 'number' ? current !== value : String(current ?? '') !== String(value)) {
+      diff[key] = value;
+    }
+  }
+  return diff;
+}
+
 function buildProfileUpdates(fields) {
   const updates = {};
   for (const cfg of PROFILE_FIELD_CONFIG) {
@@ -79,8 +110,10 @@ export default function MatcherPage() {
   const [draftDone, setDraftDone] = useState(false);
   const [draftMsg, setDraftMsg] = useState('');
   const [showBuilder, setShowBuilder] = useState(false);
+  const [pendingUpdate, setPendingUpdate] = useState(null); // { updates, labels, scored, prompt, builderFields, usedFallback } awaiting review
+  const [isResolvingPending, setIsResolvingPending] = useState(false);
   const [builder, setBuilder] = useState({
-    yearLevel: profile?.year_level ? `${profile.year_level}${String(profile.year_level).endsWith('1') ? 'st' : String(profile.year_level).endsWith('2') ? 'nd' : String(profile.year_level).endsWith('3') ? 'rd' : 'th'}-year` : '',
+    yearLevel: profile?.year_level ? `${profile.year_level}${ordinalYear(profile.year_level)}-year` : '',
     course: profile?.course || '',
     location: profile?.location || '',
     gpa: profile?.gpa || '',
@@ -205,28 +238,49 @@ export default function MatcherPage() {
     }
 
     // Best-effort: break the free text into structured fields so Opportunities can
-    // show/edit them individually, and use those same fields to keep the saved
-    // profile in sync with whatever the student just described. Never blocks
-    // navigation if this extraction call fails.
+    // show/edit them individually. Never blocks navigation if this extraction call fails.
     let builderFields = null;
-    let updateNote = '';
+    let profileUpdates = {};
     if (situationResult.status === 'fulfilled') {
       builderFields = mapExtractedFieldsToBuilder(situationResult.value.fields);
-      const profileUpdates = buildProfileUpdatesFromBuilder(builderFields);
-      if (Object.keys(profileUpdates).length > 0) {
-        const { error } = await updateProfile(profileUpdates);
-        if (!error) {
-          const labels = Object.keys(profileUpdates).map((k) => PROFILE_UPDATE_LABELS[k] || k);
-          updateNote = `We also updated your profile from this: ${labels.join(', ')}.`;
-        }
-      }
+      profileUpdates = diffProfileUpdates(profile, buildProfileUpdatesFromBuilder(builderFields));
     } else {
-      console.warn('Situation parsing failed, skipping profile auto-update:', situationResult.reason);
+      console.warn('Situation parsing failed, skipping profile field extraction:', situationResult.reason);
     }
 
-    applyMatcherScores(scored, prompt, builderFields, updateNote);
+    const destination = usedFallback ? '/opportunities?ai=fallback' : '/opportunities';
+
+    // Only actual changes to the saved profile need a look before they're written —
+    // never save silently. If nothing would change, go straight to results.
+    if (Object.keys(profileUpdates).length > 0) {
+      const labels = Object.keys(profileUpdates).map((k) => PROFILE_UPDATE_LABELS[k] || k);
+      setPendingUpdate({ updates: profileUpdates, labels, scored, prompt, builderFields, destination });
+      setIsMatching(false);
+      return;
+    }
+
+    applyMatcherScores(scored, prompt, builderFields, '');
     setIsMatching(false);
-    navigate(usedFallback ? '/opportunities?ai=fallback' : '/opportunities');
+    navigate(destination);
+  }
+
+  async function resolvePendingUpdate(apply) {
+    if (!pendingUpdate) return;
+    setIsResolvingPending(true);
+
+    let updateNote = '';
+    if (apply) {
+      const { error } = await updateProfile(pendingUpdate.updates);
+      updateNote = error
+        ? `Couldn't update your profile (${error.message}).`
+        : `Updated your profile: ${pendingUpdate.labels.join(', ')}.`;
+    }
+
+    applyMatcherScores(pendingUpdate.scored, pendingUpdate.prompt, pendingUpdate.builderFields, updateNote);
+    const destination = pendingUpdate.destination;
+    setIsResolvingPending(false);
+    setPendingUpdate(null);
+    navigate(destination);
   }
 
   return (
@@ -241,6 +295,12 @@ export default function MatcherPage() {
         Mention your education, location, financial need, and what kind of help you're looking for — the AI matches
         you across every category of Philippine student assistance.
       </p>
+
+      {summarizeProfile(profile) && (
+        <p className="text-xs text-ink-muted font-medium -mt-2">
+          Matching as: <span className="font-semibold text-ink">{summarizeProfile(profile)}</span> — just describe what's different or what help you need.
+        </p>
+      )}
 
       <form onSubmit={handleSubmit} className="w-full card-sticker p-6 bg-card flex flex-col gap-4">
         <textarea
@@ -382,7 +442,40 @@ export default function MatcherPage() {
           </div>
         )}
 
-        <button type="submit" disabled={!prompt.trim() || isMatching} className="btn-candy self-center px-8 disabled:opacity-60">
+        {pendingUpdate && (
+          <div className="w-full rounded-2xl border-2 border-accent-violet/40 bg-accent-violet/5 p-4 text-left flex flex-col gap-3">
+            <div>
+              <p className="text-xs font-heading font-extrabold uppercase text-ink tracking-wider mb-1 flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[16px] text-accent-violet">sync_alt</span>
+                Update your saved profile too?
+              </p>
+              <p className="text-[11px] text-ink-muted font-medium">
+                What you described changes: <span className="font-semibold text-ink">{pendingUpdate.labels.join(', ')}</span>. This is saved to your
+                profile and used for eligibility everywhere, not just this search.
+              </p>
+            </div>
+            <div className="flex gap-2 justify-center">
+              <button
+                type="button"
+                onClick={() => resolvePendingUpdate(true)}
+                disabled={isResolvingPending}
+                className="badge-sticker badge-violet hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3 disabled:opacity-50"
+              >
+                <span className="material-symbols-outlined text-[14px]">check</span> {isResolvingPending ? 'Working…' : 'Update profile & continue'}
+              </button>
+              <button
+                type="button"
+                onClick={() => resolvePendingUpdate(false)}
+                disabled={isResolvingPending}
+                className="badge-sticker bg-card text-ink border-2 border-ink hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3 disabled:opacity-50"
+              >
+                Just this search, don't save
+              </button>
+            </div>
+          </div>
+        )}
+
+        <button type="submit" disabled={!prompt.trim() || isMatching || !!pendingUpdate} className="btn-candy self-center px-8 disabled:opacity-60">
           <span className="material-symbols-outlined text-[20px]">auto_awesome</span>
           {isMatching ? 'Analyzing your profile requirements...' : 'Find Assistance'}
         </button>

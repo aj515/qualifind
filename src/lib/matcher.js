@@ -211,9 +211,8 @@ export function calculateMatchForPrompt(userPrompt, programs, userGpa) {
 
 export const MATCHER_DEMO_PRESETS = [
   {
-    label: "🌟 Maria's Demo Story (Cebu 2nd-Yr IT, 82% GPA)",
-    prompt:
-      "I'm Maria, 20 years old, a 2nd-year IT student in Cebu with an 82% GPA. My family has limited income, and I'm looking for assistance to cover my tuition fees and daily transportation expenses."
+    label: 'Indigent Nursing Student Scholarships (Davao)',
+    prompt: 'Looking for scholarship assistance for a 4th-year Nursing student in Davao City classified as indigent, to cover remaining tuition and board exam review fees.'
   },
   {
     label: 'DOST-SEI ASTHRDP & ERDT Scholarships',
