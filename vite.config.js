@@ -23,8 +23,8 @@ function aiMatchApiPlugin(env) {
         req.on('end', async () => {
           res.setHeader('Content-Type', 'application/json');
           try {
-            const { situationText, profile, programs } = JSON.parse(body || '{}');
-            const results = await scorePrograms({ apiKey: env.ANTHROPIC_API_KEY, situationText, profile, programs });
+            const { situationText, profile, programs, eligibilityByProgramId } = JSON.parse(body || '{}');
+            const results = await scorePrograms({ apiKey: env.ANTHROPIC_API_KEY, situationText, profile, programs, eligibilityByProgramId });
             res.end(JSON.stringify({ results }));
           } catch (err) {
             console.error('[qualifind] /api/match error:', err?.message || err);

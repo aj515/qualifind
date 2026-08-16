@@ -6,7 +6,7 @@ import { getEligibilityStyle, formatDeadline, formatVerifiedDate, withAlternativ
 
 export default function EligibilityDetailPage() {
   const { id } = useParams();
-  const { programs, savedIds, toggleSaved, eligibilityByProgramId } = useData();
+  const { programs, savedIds, toggleSaved, eligibilityByProgramId, matcherReasons } = useData();
   const navigate = useNavigate();
   const [documents, setDocuments] = useState([]);
   const [docsLoading, setDocsLoading] = useState(true);
@@ -113,6 +113,18 @@ export default function EligibilityDetailPage() {
               requirements, deadlines, and submission procedures directly with the official program provider or university financial aid office.
             </p>
           </div>
+
+          {matcherReasons[opp.id] && (
+            <div className="card-sticker p-5 bg-accent-violet/5 border-accent-violet flex items-start gap-3">
+              <div className="w-9 h-9 rounded-full bg-accent-violet text-white border-2 border-ink flex items-center justify-center shrink-0 shadow-pop-sm">
+                <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
+              </div>
+              <div>
+                <h3 className="text-xs font-heading font-extrabold uppercase tracking-wider text-accent-violet mb-1">AI Summary — Relevance &amp; Eligibility</h3>
+                <p className="text-sm text-ink leading-relaxed font-medium">{matcherReasons[opp.id]}</p>
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-extrabold font-heading text-ink flex items-center gap-2">

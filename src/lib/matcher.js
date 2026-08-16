@@ -1,11 +1,12 @@
 // Calls the dev-server /api/match endpoint (see vite.config.js + server/aiMatcher.js),
 // which forwards to Claude for real semantic relevance scoring against the free-text
-// situation. Throws on failure — callers should fall back to calculateMatchForPrompt.
-export async function getAIMatches(situationText, programs, profile) {
+// situation, synthesized together with each program's already-computed eligibility
+// result. Throws on failure — callers should fall back to calculateMatchForPrompt.
+export async function getAIMatches(situationText, programs, profile, eligibilityByProgramId) {
   const response = await fetch('/api/match', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ situationText, profile, programs })
+    body: JSON.stringify({ situationText, profile, programs, eligibilityByProgramId })
   });
 
   if (!response.ok) {

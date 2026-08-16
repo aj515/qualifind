@@ -6,7 +6,7 @@ import { getAIMatches, calculateMatchForPrompt, MATCHER_DEMO_PRESETS, MATCHER_PR
 
 export default function MatcherPage() {
   const { profile } = useAuth();
-  const { programs, applyMatcherScores } = useData();
+  const { programs, eligibilityByProgramId, applyMatcherScores } = useData();
   const navigate = useNavigate();
 
   const [prompt, setPrompt] = useState('');
@@ -27,7 +27,7 @@ export default function MatcherPage() {
     let scored;
     let usedFallback = false;
     try {
-      scored = await getAIMatches(prompt, programs, profile);
+      scored = await getAIMatches(prompt, programs, profile, eligibilityByProgramId);
     } catch (err) {
       console.warn('AI matching failed, falling back to offline ranking:', err);
       usedFallback = true;
