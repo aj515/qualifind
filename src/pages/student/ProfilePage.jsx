@@ -1,12 +1,61 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext.jsx';
 
+// Curated so Skills stays a pick-list instead of free text (keeps the data
+// clean/consistent for matching, rather than a pile of one-off spellings).
+const SKILL_OPTIONS = [
+  { id: 'programming', label: 'Programming / Coding', icon: 'code' },
+  { id: 'web-dev', label: 'Web Development', icon: 'web' },
+  { id: 'graphic-design', label: 'Graphic Design', icon: 'palette' },
+  { id: 'video-editing', label: 'Video Editing', icon: 'movie' },
+  { id: 'data-analysis', label: 'Data Analysis', icon: 'analytics' },
+  { id: 'public-speaking', label: 'Public Speaking', icon: 'campaign' },
+  { id: 'research-writing', label: 'Research & Writing', icon: 'edit_note' },
+  { id: 'leadership', label: 'Leadership', icon: 'groups' },
+  { id: 'customer-service', label: 'Customer Service', icon: 'support_agent' },
+  { id: 'tutoring', label: 'Teaching / Tutoring', icon: 'school' },
+  { id: 'accounting', label: 'Accounting / Bookkeeping', icon: 'calculate' },
+  { id: 'social-media', label: 'Social Media Management', icon: 'share' },
+  { id: 'photography', label: 'Photography', icon: 'photo_camera' },
+  { id: 'event-planning', label: 'Event Planning', icon: 'event' },
+  { id: 'foreign-language', label: 'Foreign Language', icon: 'translate' },
+  { id: 'project-management', label: 'Project Management', icon: 'assignment_turned_in' }
+];
+
+// Approximate scale <-> percentage table (Philippine 1.0-5.0 GWA scale isn't
+// standardized across schools, so this is illustrative, not authoritative —
+// the UI says so). Interpolated linearly between points.
+const GWA_SCALE_TABLE = [
+  [1.0, 99], [1.25, 96], [1.5, 93], [1.75, 90], [2.0, 87], [2.25, 84],
+  [2.5, 81], [2.75, 78], [3.0, 75], [3.5, 69], [4.0, 63], [5.0, 50]
+];
+
+function interpolate(table, x) {
+  if (x <= table[0][0]) return table[0][1];
+  if (x >= table[table.length - 1][0]) return table[table.length - 1][1];
+  for (let i = 0; i < table.length - 1; i++) {
+    const [x1, y1] = table[i];
+    const [x2, y2] = table[i + 1];
+    if (x >= x1 && x <= x2) return y1 + ((x - x1) / (x2 - x1)) * (y2 - y1);
+  }
+  return table[table.length - 1][1];
+}
+
+function scaleToPercentage(scale) {
+  return interpolate(GWA_SCALE_TABLE, scale);
+}
+
+function percentageToScale(pct) {
+  const reversed = [...GWA_SCALE_TABLE].map(([s, p]) => [p, s]).sort((a, b) => a[0] - b[0]);
+  return interpolate(reversed, pct);
+}
+
 export default function ProfilePage() {
   const { user, profile, updateProfile } = useAuth();
   const savedMsgRef = useRef(null);
 
-  const [name, setName] = useState('');
-  const [gpa, setGpa] = useState('');
+  const [gwaScale, setGwaScale] = useState('percentage'); // 'percentage' | '1.0-5.0'
+  const [gwaInput, setGwaInput] = useState('');
   const [institution, setInstitution] = useState('');
   const [course, setCourse] = useState('');
   const [bio, setBio] = useState('');
@@ -14,14 +63,13 @@ export default function ProfilePage() {
   const [location, setLocation] = useState('');
   const [isFinanciallyDisadvantaged, setIsFinanciallyDisadvantaged] = useState(false);
   const [skills, setSkills] = useState([]);
-  const [newSkill, setNewSkill] = useState('');
   const [saving, setSaving] = useState(false);
   const [savedMsg, setSavedMsg] = useState('');
 
   useEffect(() => {
     if (!profile) return;
-    setName(profile.name || '');
-    setGpa(profile.gpa ?? '');
+    setGwaScale('percentage');
+    setGwaInput(profile.gpa != null ? String(profile.gpa) : '');
     setInstitution(profile.institution || '');
     setCourse(profile.course || '');
     setBio(profile.bio || '');
@@ -31,16 +79,20 @@ export default function ProfilePage() {
     setSkills(profile.skills || []);
   }, [profile]);
 
-  function addSkill(e) {
-    e.preventDefault();
-    const trimmed = newSkill.trim();
-    if (!trimmed || skills.includes(trimmed)) return;
-    setSkills((prev) => [...prev, trimmed]);
-    setNewSkill('');
+  function toggleSkill(id) {
+    setSkills((prev) => (prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]));
   }
 
-  function removeSkill(skill) {
-    setSkills((prev) => prev.filter((s) => s !== skill));
+  // Switching scale converts whatever's currently typed so the number stays
+  // meaningful instead of just clearing the field.
+  function handleScaleChange(nextScale) {
+    if (nextScale === gwaScale) return;
+    const current = parseFloat(gwaInput);
+    if (!Number.isNaN(current)) {
+      const converted = nextScale === '1.0-5.0' ? percentageToScale(current) : scaleToPercentage(current);
+      setGwaInput(converted.toFixed(2).replace(/\.?0+$/, ''));
+    }
+    setGwaScale(nextScale);
   }
 
   async function handleSave(e) {
@@ -48,11 +100,12 @@ export default function ProfilePage() {
     setSaving(true);
     setSavedMsg('');
 
-    const gpaNum = gpa === '' ? null : parseFloat(gpa);
+    const rawGwa = gwaInput === '' ? null : parseFloat(gwaInput);
+    const gpaNum = rawGwa === null ? null : gwaScale === '1.0-5.0' ? Math.round(scaleToPercentage(rawGwa) * 10) / 10 : rawGwa;
     const { error } = await updateProfile({
-      name: name.trim(),
       gpa: gpaNum,
-      gpa_formatted: gpaNum !== null ? `${gpaNum.toFixed(1)}% GWA` : null,
+      gpa_formatted:
+        gpaNum === null ? null : gwaScale === '1.0-5.0' ? `${rawGwa.toFixed(2)} (~${gpaNum.toFixed(0)}%)` : `${gpaNum.toFixed(1)}% GWA`,
       institution: institution.trim() || null,
       course: course.trim() || null,
       bio: bio.trim() || null,
@@ -94,7 +147,7 @@ export default function ProfilePage() {
             {profile?.avatar || 'QF'}
           </div>
           <div>
-            <p className="font-heading font-extrabold text-ink text-lg leading-tight">{name || 'Your Name'}</p>
+            <p className="font-heading font-extrabold text-ink text-lg leading-tight">{profile?.name || 'Your Name'}</p>
             <p className="text-xs text-ink-muted font-medium mt-0.5 break-all">{user?.email}</p>
           </div>
           {isFinanciallyDisadvantaged && (
@@ -125,10 +178,6 @@ export default function ProfilePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Full Name</label>
-                <input value={name} onChange={(e) => setName(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
-              </div>
-              <div className="space-y-1">
                 <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Email (read-only)</label>
                 <input value={user?.email || ''} disabled className="w-full input-playful py-2.5 px-4 text-xs font-semibold opacity-60" />
               </div>
@@ -141,18 +190,6 @@ export default function ProfilePage() {
                 <input value={course} onChange={(e) => setCourse(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Current GWA / GPA (%)</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="0.1"
-                  value={gpa}
-                  onChange={(e) => setGpa(e.target.value)}
-                  className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-                />
-              </div>
-              <div className="space-y-1">
                 <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Date of Birth</label>
                 <input
                   type="date"
@@ -161,7 +198,43 @@ export default function ProfilePage() {
                   className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
                 />
               </div>
-              <div className="space-y-1">
+              <div className="space-y-1 sm:col-span-2">
+                <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Current GWA / GPA</label>
+                <div className="flex gap-2">
+                  <div className="flex rounded-full border-2 border-ink overflow-hidden shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => handleScaleChange('percentage')}
+                      className={`px-3 py-2 text-[11px] font-heading font-extrabold ${gwaScale === 'percentage' ? 'bg-accent-violet text-white' : 'bg-card text-ink'}`}
+                    >
+                      Percent (%)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleScaleChange('1.0-5.0')}
+                      className={`px-3 py-2 text-[11px] font-heading font-extrabold border-l-2 border-ink ${gwaScale === '1.0-5.0' ? 'bg-accent-violet text-white' : 'bg-card text-ink'}`}
+                    >
+                      1.0–5.0
+                    </button>
+                  </div>
+                  <input
+                    type="number"
+                    min={gwaScale === 'percentage' ? 0 : 1}
+                    max={gwaScale === 'percentage' ? 100 : 5}
+                    step={gwaScale === 'percentage' ? 0.1 : 0.01}
+                    value={gwaInput}
+                    onChange={(e) => setGwaInput(e.target.value)}
+                    placeholder={gwaScale === 'percentage' ? 'e.g. 87' : 'e.g. 1.40'}
+                    className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
+                  />
+                </div>
+                {gwaScale === '1.0-5.0' && gwaInput !== '' && !Number.isNaN(parseFloat(gwaInput)) && (
+                  <p className="text-[11px] text-ink-muted font-medium">
+                    ≈ {scaleToPercentage(parseFloat(gwaInput)).toFixed(0)}% equivalent — approximate, exact conversion varies by school.
+                  </p>
+                )}
+              </div>
+              <div className="space-y-1 sm:col-span-2">
                 <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Location</label>
                 <input
                   value={location}
@@ -193,24 +266,20 @@ export default function ProfilePage() {
 
             <div className="space-y-2">
               <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Skills</label>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {skills.map((skill) => (
-                  <span key={skill} className="badge-sticker badge-violet text-xs py-1 px-3">
-                    {skill}
-                    <button type="button" onClick={() => removeSkill(skill)} className="ml-1">
-                      <span className="material-symbols-outlined text-[14px]">close</span>
-                    </button>
-                  </span>
+              <p className="text-[11px] text-ink-muted font-medium -mt-0.5">Select what applies — keeps matching consistent instead of free-typed spellings.</p>
+              <div className="flex flex-wrap gap-2">
+                {SKILL_OPTIONS.map((skill) => (
+                  <button
+                    key={skill.id}
+                    type="button"
+                    onClick={() => toggleSkill(skill.id)}
+                    className={`badge-sticker text-xs py-1.5 px-3 transition-transform hover:scale-105 ${
+                      skills.includes(skill.id) ? 'badge-violet shadow-pop-sm scale-105' : 'bg-card text-ink border-2 border-ink'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[14px]">{skill.icon}</span> {skill.label}
+                  </button>
                 ))}
-              </div>
-              <div className="flex gap-2 max-w-md">
-                <input
-                  value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-                  placeholder="Add a skill..."
-                  className="input-playful py-2 px-3 text-xs font-semibold flex-1"
-                />
-                <button onClick={addSkill} className="btn-candy btn-candy-secondary btn-candy-sm">Add</button>
               </div>
             </div>
           </div>
