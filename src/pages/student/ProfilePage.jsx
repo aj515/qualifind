@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext.jsx';
 
 export default function ProfilePage() {
   const { user, profile, updateProfile } = useAuth();
+  const savedMsgRef = useRef(null);
 
   const [name, setName] = useState('');
   const [gpa, setGpa] = useState('');
@@ -65,6 +66,18 @@ export default function ProfilePage() {
     setSavedMsg(error ? `Failed to save: ${error.message}` : 'Profile updated.');
   }
 
+  // The Save button sits at the bottom of a long form, but the confirmation
+  // renders at the top — without this, it appears off-screen above wherever the
+  // user was scrolled to when they clicked Save. Runs after render (via effect,
+  // not inline in handleSave) so the message element actually exists in the DOM
+  // to scroll to. block: 'center', not 'start' — StudentLayout's header is
+  // `fixed`, so scrolling the message's top edge to y=0 lands it directly
+  // underneath the header bar (still technically "in the viewport" but visually
+  // hidden). Centering keeps it clear of the header at any viewport height.
+  useEffect(() => {
+    if (savedMsg) savedMsgRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [savedMsg]);
+
   return (
     <div className="flex flex-col w-full gap-6">
       <div>
@@ -104,7 +117,7 @@ export default function ProfilePage() {
         {/* Main: editable fields */}
         <div className="flex flex-col gap-6">
           {savedMsg && (
-            <div className="p-3 rounded-2xl bg-accent-mint/10 border-2 border-accent-mint text-xs font-semibold text-ink">{savedMsg}</div>
+            <div ref={savedMsgRef} className="p-3 rounded-2xl bg-accent-mint/10 border-2 border-accent-mint text-xs font-semibold text-ink">{savedMsg}</div>
           )}
 
           <div className="card-sticker p-6 bg-card flex flex-col gap-5">

@@ -10,6 +10,7 @@ import {
   mapExtractedFieldsToBuilder,
   composeBuilderSentence,
   buildProfileUpdatesFromBuilder,
+  looksLikeRealDescription,
   PROFILE_UPDATE_LABELS,
   MATCHER_DEMO_PRESETS
 } from '../../lib/matcher.js';
@@ -68,6 +69,7 @@ export default function MatcherPage() {
 
   const [prompt, setPrompt] = useState(matcherQuery || '');
   const [isMatching, setIsMatching] = useState(false);
+  const [clarificationNeeded, setClarificationNeeded] = useState('');
   const [isExtracting, setIsExtracting] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [draft, setDraft] = useState(null); // { summary, fields } pending user review
@@ -162,6 +164,15 @@ export default function MatcherPage() {
     e.preventDefault();
     if (!prompt.trim() || isMatching) return;
 
+    setClarificationNeeded('');
+
+    // Cheap client-side gate — catches trivial junk (empty-ish, single "word",
+    // keyboard-mash) before spending an API call on it at all.
+    if (!looksLikeRealDescription(prompt)) {
+      setClarificationNeeded("That doesn't look like a real description yet — try mentioning your course, year level, location, or what kind of help you need.");
+      return;
+    }
+
     setIsMatching(true);
 
     const [matchResult, situationResult] = await Promise.allSettled([
@@ -169,10 +180,20 @@ export default function MatcherPage() {
       extractSituation(prompt)
     ]);
 
+    // Subtler junk (real-looking words strung together meaninglessly) passes the
+    // cheap check above but gets caught here — the AI itself judges whether the
+    // text said anything real, instead of silently faking plausible-looking
+    // relevance scores for gibberish.
+    if (matchResult.status === 'fulfilled' && !matchResult.value.inputUnderstood) {
+      setClarificationNeeded(matchResult.value.clarificationMessage || "We couldn't quite understand that — try describing your actual situation (course, year level, location, what kind of help you need).");
+      setIsMatching(false);
+      return;
+    }
+
     let scored;
     let usedFallback = false;
     if (matchResult.status === 'fulfilled') {
-      scored = matchResult.value;
+      scored = matchResult.value.scoredPrograms;
     } else {
       console.warn('AI matching failed, falling back to offline ranking:', matchResult.reason);
       usedFallback = true;
@@ -347,6 +368,13 @@ export default function MatcherPage() {
                 </button>
               </div>
             )}
+          </div>
+        )}
+
+        {clarificationNeeded && (
+          <div className="w-full p-3 rounded-2xl bg-accent-amber/20 border-2 border-ink flex items-start gap-2.5 shadow-pop-sm text-left">
+            <span className="material-symbols-outlined text-ink text-[18px] shrink-0 mt-0.5">help</span>
+            <p className="text-xs font-semibold text-ink leading-relaxed">{clarificationNeeded}</p>
           </div>
         )}
 

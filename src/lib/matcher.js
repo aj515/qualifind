@@ -1,7 +1,29 @@
+// Cheap, instant, client-side gate against the most trivial junk (empty-ish,
+// single "word", keyboard-mash-repeated-char strings) so those never spend an
+// API call at all. Deliberately lenient — anything that could plausibly be a
+// real short description passes through to the AI, which has the actual
+// semantic judgment call (see inputUnderstood below) for subtler nonsense like
+// grammatically real-looking words strung together meaninglessly.
+export function looksLikeRealDescription(text) {
+  const trimmed = (text || '').trim();
+  if (trimmed.length < 8) return false;
+  const words = trimmed.split(/\s+/).filter((w) => w.length >= 2);
+  if (words.length < 2) return false;
+  const mostCommonCharRatio = Math.max(...Object.values(
+    trimmed.toLowerCase().replace(/\s/g, '').split('').reduce((counts, ch) => {
+      counts[ch] = (counts[ch] || 0) + 1;
+      return counts;
+    }, {})
+  )) / Math.max(1, trimmed.replace(/\s/g, '').length);
+  if (mostCommonCharRatio > 0.5) return false; // e.g. "aaaaaaaa", "........"
+  return true;
+}
+
 // Calls the dev-server /api/match endpoint (see vite.config.js + server/aiMatcher.js),
 // which forwards to Claude for real semantic relevance scoring against the free-text
 // situation, synthesized together with each program's already-computed eligibility
-// result. Throws on failure — callers should fall back to calculateMatchForPrompt.
+// result, and judges whether the input said anything real in the first place.
+// Throws on failure — callers should fall back to calculateMatchForPrompt.
 export async function getAIMatches(situationText, programs, profile, eligibilityByProgramId) {
   const response = await fetch('/api/match', {
     method: 'POST',
@@ -14,9 +36,9 @@ export async function getAIMatches(situationText, programs, profile, eligibility
     throw new Error(body.error || `AI matching request failed (${response.status})`);
   }
 
-  const { results = [] } = await response.json();
+  const { results = [], inputUnderstood = true, clarificationMessage = null } = await response.json();
 
-  return programs.map((program) => {
+  const scoredPrograms = programs.map((program) => {
     const match = results.find((r) => r.id === program.id);
     return {
       ...program,
@@ -24,6 +46,8 @@ export async function getAIMatches(situationText, programs, profile, eligibility
       aiMatchReason: match ? match.reason : ''
     };
   });
+
+  return { scoredPrograms, inputUnderstood, clarificationMessage };
 }
 
 // Calls the dev-server /api/extract-document endpoint (see vite.config.js +

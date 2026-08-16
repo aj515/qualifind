@@ -19,6 +19,60 @@ export function formatVerifiedDate(dateStr) {
   return new Date(`${dateStr}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+// Common Philippine course abbreviation <-> full-name pairs. Plain substring
+// matching (the old approach) fails on exactly these pairs — e.g. a program
+// listed as "BS IT" never literally appears inside a student's "B.S.
+// Information Technology", and vice versa, even though they mean the same
+// course. Both directions are expanded into a shared token set before
+// comparing, so either form matches the other.
+const COURSE_ABBREVIATIONS = [
+  ['it', 'information technology'],
+  ['cs', 'computer science'],
+  ['is', 'information systems'],
+  ['coe', 'computer engineering'],
+  ['ce', 'civil engineering'],
+  ['ee', 'electrical engineering'],
+  ['ece', 'electronics engineering'],
+  ['me', 'mechanical engineering'],
+  ['ba', 'business administration'],
+  ['acctg', 'accountancy'],
+  ['hrm', 'hospitality management']
+];
+
+function courseTokens(text) {
+  const normalized = text
+    .toLowerCase()
+    .replace(/^b\.?\s?s\.?\s?/i, '') // strip a leading "B.S."/"BS " degree prefix
+    .replace(/[.,]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const tokens = new Set(normalized.split(' ').filter(Boolean));
+  for (const [abbr, full] of COURSE_ABBREVIATIONS) {
+    const fullWords = full.split(' ');
+    if (tokens.has(abbr)) fullWords.forEach((w) => tokens.add(w));
+    else if (fullWords.every((w) => tokens.has(w))) tokens.add(abbr);
+  }
+  return tokens;
+}
+
+// True if studentCourse and one of the "/"-separated accepted courses in
+// requiredCourse share the same meaningful words, in either abbreviation or
+// full-name form.
+function coursesMatch(studentCourse, requiredCourse) {
+  const studentTokens = [...courseTokens(studentCourse)].filter((t) => t.length > 1);
+  return requiredCourse
+    .split('/')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .some((phrase) => {
+      const phraseTokens = [...courseTokens(phrase)].filter((t) => t.length > 1);
+      if (phraseTokens.length === 0 || studentTokens.length === 0) return false;
+      const phraseCoveredByStudent = phraseTokens.every((t) => studentTokens.includes(t));
+      const studentCoveredByPhrase = studentTokens.every((t) => phraseTokens.includes(t));
+      return phraseCoveredByStudent || studentCoveredByPhrase;
+    });
+}
+
 function calcAge(birthdate) {
   if (!birthdate) return null;
   const dob = new Date(`${birthdate}T00:00:00`);
@@ -78,13 +132,8 @@ export function computeEligibility(student, program) {
   if (program.course_req) {
     if (!student?.course) {
       needsVerification.push(`your course/program hasn't been added to your profile yet (this program requires ${program.course_req})`);
-    } else {
-      const studentCourse = student.course.toLowerCase();
-      const required = program.course_req.toLowerCase();
-      const matches = required.split('/').some((part) => studentCourse.includes(part.trim()) || part.trim().includes(studentCourse));
-      if (!matches) {
-        reasons.push(`this program is limited to ${program.course_req} students`);
-      }
+    } else if (!coursesMatch(student.course, program.course_req)) {
+      reasons.push(`this program is limited to ${program.course_req} students`);
     }
   }
 

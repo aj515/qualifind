@@ -13,6 +13,19 @@ import Anthropic from "@anthropic-ai/sdk";
 const MATCH_SCHEMA = {
   type: "object",
   properties: {
+    inputUnderstood: {
+      type: "boolean",
+      description:
+        "False if situationText contains no real, usable information about the student's situation or needs — e.g. it's " +
+        "gibberish, keyboard-mash, random unrelated words, or otherwise too vague/meaningless to judge relevance from. " +
+        "True otherwise, even if the description is short, as long as it says something real."
+    },
+    clarificationMessage: {
+      type: ["string", "null"],
+      description:
+        "Only set when inputUnderstood is false: one short, friendly sentence asking the student to describe their situation " +
+        "in real terms (e.g. course, year level, location, what kind of help they need). Null when inputUnderstood is true."
+    },
     results: {
       type: "array",
       items: {
@@ -33,16 +46,21 @@ const MATCH_SCHEMA = {
       }
     }
   },
-  required: ["results"],
+  required: ["inputUnderstood", "clarificationMessage", "results"],
   additionalProperties: false
 };
 
 const SYSTEM_PROMPT = `You help Philippine students understand Philippine student financial-assistance programs (scholarships, government/LGU aid, campus assistantships, training grants, student loans) in response to their free-text description of their situation and needs.
 
+First, judge whether situationText actually says anything real about the student (inputUnderstood). Gibberish, keyboard-mash, or content unrelated to a student's situation should be marked not understood, with a short clarificationMessage asking for a real description — do not try to force a plausible-sounding relevance judgment out of meaningless text. A short but genuine description (even a single real sentence) counts as understood.
+
 For each program you are given its ALREADY-COMPUTED eligibility status and explanation (eligible / potentially_eligible / not_eligible, from a deterministic rules check) — treat this as ground truth. Never contradict it, soften it, or imply a different outcome.
 
 Your job for each program:
-- matchScore (0-100): purely topical/practical relevance between the student's free-text situation and the program (field of study, location, funding need, keywords) — independent of eligibility.
+- matchScore (0-100): how well the program's actual PURPOSE matches what the student specifically asked for — independent of eligibility. Weight this by specificity, not just topic overlap:
+  - If the student names a distinct, concrete need (a laptop/device, transportation, tuition, housing, a certification, etc.), a program whose funding/purpose DIRECTLY addresses that specific need should score much higher (80-100) than a program that's merely in the same general field (e.g. same course/institution) but doesn't actually address it (which should score in the 30-55 range even if broadly on-topic) — being "for IT students" is not enough to score highly against "I need a laptop" if the program isn't actually about devices.
+  - If the student's description is broad/general (no specific need named), general topical/field/location fit is the right signal to score on.
+  - Do not let field-of-study keyword overlap alone inflate a score for a program that ignores the specific thing the student asked for.
 - reason: one to two sentences, in the student's own terms, that read as ONE cohesive explanation combining (1) why this program is or isn't relevant to what they described, and (2) what their given eligibility status concretely means for them (e.g. cite the specific gap from the eligibility explanation if not_eligible, or confirm they're clear to proceed if eligible). Do not use the words "eligible"/"not eligible" as a bare label — explain the substance instead, naturally.
 
 Rules:
@@ -105,5 +123,9 @@ export async function scorePrograms({ apiKey, situationText, profile, programs, 
   }
 
   const parsed = JSON.parse(textBlock.text);
-  return parsed.results || [];
+  return {
+    results: parsed.results || [],
+    inputUnderstood: parsed.inputUnderstood !== false,
+    clarificationMessage: parsed.clarificationMessage || null
+  };
 }

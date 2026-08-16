@@ -108,7 +108,19 @@ export default function OpportunitiesPage() {
     });
 
     if (hasMatcherScores) {
-      results.sort((a, b) => (matcherScores[b.id] ?? 0) - (matcherScores[a.id] ?? 0));
+      // Only demote programs you genuinely can't apply to (not_eligible) below
+      // everything else — a program that's merely "potentially eligible" (some
+      // profile field just hasn't been filled in yet) isn't actually worse than
+      // a fully "eligible" one, so it shouldn't be artificially outranked by it.
+      // Within that not-excluded set, sort purely by relevance to what was
+      // actually asked for, so a highly relevant program isn't buried under an
+      // unrelated one that just happens to sit in a "higher" eligibility tier.
+      results.sort((a, b) => {
+        const aExcluded = eligibilityByProgramId[a.id]?.result === 'not_eligible';
+        const bExcluded = eligibilityByProgramId[b.id]?.result === 'not_eligible';
+        if (aExcluded !== bExcluded) return aExcluded ? 1 : -1;
+        return (matcherScores[b.id] ?? 0) - (matcherScores[a.id] ?? 0);
+      });
     }
     return results;
   }, [programs, savedOnly, activeTypes, activeEligibility, query, savedIds, matcherScores, hasMatcherScores, eligibilityByProgramId]);
