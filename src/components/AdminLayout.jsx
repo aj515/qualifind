@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
-const NAV_LINKS = [{ to: '/admin-dashboard', icon: 'checklist', label: 'Programs Registry' }];
+const NAV_LINKS = [
+  { to: '/admin-dashboard', icon: 'checklist', label: 'Programs Registry' },
+  { to: '/admin-dashboard/analytics', icon: 'monitoring', label: 'Analytics' }
+];
 
 function navLinkClass({ isActive }) {
   return `flex items-center px-4 py-3 rounded-2xl transition-all group border-2 font-heading font-bold text-sm ${

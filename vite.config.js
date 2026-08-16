@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import { scorePrograms } from './server/aiMatcher.js';
 import { extractFromDocument } from './server/aiDocumentExtractor.js';
 import { narrateActionPlan } from './server/aiActionPlan.js';
+import { extractProgramFromText } from './server/aiProgramExtractor.js';
 
 // Dev-only /api/match endpoint, served from inside the Vite dev server process
 // (no separate backend to run) — forwards free-text matcher requests to Claude.
@@ -118,11 +119,45 @@ function aiActionPlanApiPlugin(env) {
   };
 }
 
+// Dev-only /api/extract-program endpoint — admin-side bulk import. Reads a
+// pasted scholarship/program announcement and returns draft form fields for
+// the Programs Registry form, so admins don't have to hand-type every
+// program. Same production caveat as the other dev-only AI endpoints above.
+function aiExtractProgramApiPlugin(env) {
+  return {
+    name: 'qualifind-ai-extract-program-api',
+    configureServer(server) {
+      server.middlewares.use('/api/extract-program', (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.end();
+          return;
+        }
+
+        let body = '';
+        req.on('data', (chunk) => { body += chunk; });
+        req.on('end', async () => {
+          res.setHeader('Content-Type', 'application/json');
+          try {
+            const { rawText } = JSON.parse(body || '{}');
+            const fields = await extractProgramFromText({ apiKey: env.ANTHROPIC_API_KEY, rawText });
+            res.end(JSON.stringify({ fields }));
+          } catch (err) {
+            console.error('[qualifind] /api/extract-program error:', err?.message || err);
+            res.statusCode = err?.message?.includes('required') ? 400 : 500;
+            res.end(JSON.stringify({ error: err?.message || 'Program extraction failed.' }));
+          }
+        });
+      });
+    }
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    plugins: [react(), aiMatchApiPlugin(env), aiExtractApiPlugin(env), aiActionPlanApiPlugin(env)],
+    plugins: [react(), aiMatchApiPlugin(env), aiExtractApiPlugin(env), aiActionPlanApiPlugin(env), aiExtractProgramApiPlugin(env)],
     server: {
       port: 8080,
       strictPort: true,
