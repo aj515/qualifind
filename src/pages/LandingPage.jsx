@@ -147,7 +147,7 @@ export default function LandingPage() {
         </section>
 
         {/* Features */}
-        <section className="py-12">
+        <section id="features" className="py-12 scroll-mt-24">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <h2 className="text-2xl lg:text-3xl font-extrabold font-heading text-ink tracking-tight">
               Not just a list — a system that checks your work
@@ -172,7 +172,7 @@ export default function LandingPage() {
         </section>
 
         {/* How it works */}
-        <section className="py-12">
+        <section id="how-it-works" className="py-12 scroll-mt-24">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <h2 className="text-2xl lg:text-3xl font-extrabold font-heading text-ink tracking-tight">How it works</h2>
           </div>
@@ -221,15 +221,66 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t-2 border-ink py-8">
-        <div className="max-w-6xl mx-auto px-4 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-accent-violet rounded-xl border-2 border-ink flex items-center justify-center">
-              <span className="material-symbols-outlined text-white text-[16px]">verified</span>
+      <footer className="border-t-2 border-ink bg-card-subtle">
+        <div className="max-w-6xl mx-auto px-4 lg:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Brand */}
+          <div className="flex flex-col gap-3 sm:col-span-2 lg:col-span-1">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 bg-accent-violet rounded-xl border-2 border-ink flex items-center justify-center shadow-pop-sm">
+                <span className="material-symbols-outlined text-white text-[18px]">verified</span>
+              </div>
+              <span className="font-heading font-extrabold text-base text-ink">QualiFind</span>
             </div>
-            <span className="font-heading font-extrabold text-sm text-ink">QualiFind</span>
+            <p className="text-xs text-ink-muted font-medium leading-relaxed max-w-xs">
+              AI-matched, eligibility-checked student assistance for the Philippines — scholarships, grants,
+              assistantships, loans, and training, in one place.
+            </p>
           </div>
-          <p className="text-[11px] text-ink-muted font-medium">AI-matched student assistance for the Philippines.</p>
+
+          {/* Product */}
+          <div className="flex flex-col gap-2.5">
+            <h4 className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Product</h4>
+            <a href="#features" className="text-xs text-ink-muted font-medium hover:text-accent-violet w-fit">Features</a>
+            <a href="#how-it-works" className="text-xs text-ink-muted font-medium hover:text-accent-violet w-fit">How It Works</a>
+            <Link to="/register" className="text-xs text-ink-muted font-medium hover:text-accent-violet w-fit">Create an Account</Link>
+            <Link to="/login" className="text-xs text-ink-muted font-medium hover:text-accent-violet w-fit">Sign In</Link>
+          </div>
+
+          {/* Coverage */}
+          <div className="flex flex-col gap-2.5">
+            <h4 className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">What's Covered</h4>
+            <span className="text-xs text-ink-muted font-medium">Scholarships</span>
+            <span className="text-xs text-ink-muted font-medium">Educational Assistance</span>
+            <span className="text-xs text-ink-muted font-medium">Student Employment</span>
+            <span className="text-xs text-ink-muted font-medium">Student Loans</span>
+            <span className="text-xs text-ink-muted font-medium">Training &amp; Certification</span>
+          </div>
+
+          {/* Sources */}
+          <div className="flex flex-col gap-2.5">
+            <h4 className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink">Program Sources</h4>
+            <span className="text-xs text-ink-muted font-medium">DOST-SEI &amp; CHED / UniFAST</span>
+            <span className="text-xs text-ink-muted font-medium">DSWD &amp; DICT</span>
+            <span className="text-xs text-ink-muted font-medium">Local Government Units</span>
+            <span className="text-xs text-ink-muted font-medium">Partner Universities &amp; Banks</span>
+          </div>
+        </div>
+
+        <div className="border-t-2 border-ink">
+          <div className="max-w-6xl mx-auto px-4 lg:px-8 py-4">
+            <p className="text-[10px] text-ink-muted font-medium leading-relaxed max-w-3xl">
+              <strong className="text-ink">Official Verification Disclaimer:</strong> AI eligibility assessments are
+              provided for guidance purposes. Always verify requirements, deadlines, and submission procedures
+              directly with the official program provider or your university's financial aid office.
+            </p>
+          </div>
+        </div>
+
+        <div className="border-t-2 border-ink">
+          <div className="max-w-6xl mx-auto px-4 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p className="text-[11px] text-ink-muted font-medium">© 2026 QualiFind. Built for Philippine students.</p>
+            <p className="text-[11px] text-ink-muted font-medium">DOST-SEI &amp; CHED Aligned · v2.0.0</p>
+          </div>
         </div>
       </footer>
     </div>
