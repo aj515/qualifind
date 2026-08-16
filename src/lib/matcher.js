@@ -36,6 +36,19 @@ export async function extractDocument(file) {
     ? { fileName: file.name, textContent: await file.text() }
     : { fileName: file.name, mediaType: file.type, base64Data: await fileToBase64(file) };
 
+  return postExtract(payload);
+}
+
+// Same endpoint/model as extractDocument, but for the free text a student types
+// directly into the matcher prompt instead of an uploaded file — lets typed
+// descriptions populate structured fields (course/GPA/location/etc.) the same
+// way an uploaded transcript does, so "what I write in the matcher" can also
+// drive the saved profile and the editable field view on Opportunities.
+export async function extractSituation(situationText) {
+  return postExtract({ fileName: 'Situation description', textContent: situationText });
+}
+
+async function postExtract(payload) {
   const response = await fetch('/api/extract-document', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -44,7 +57,7 @@ export async function extractDocument(file) {
 
   if (!response.ok) {
     const body = await response.json().catch(() => ({}));
-    throw new Error(body.error || `Document extraction failed (${response.status})`);
+    throw new Error(body.error || `Extraction request failed (${response.status})`);
   }
 
   return response.json();
@@ -57,6 +70,73 @@ function fileToBase64(file) {
     reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(file);
   });
+}
+
+// Shared "builder" shape used both by the Matcher page's guided form and by the
+// editable field view on Opportunities: { yearLevel, course, location, gpa,
+// financialNeed, interests }. mapExtractedFieldsToBuilder() converts an
+// extraction result's `fields` (see aiDocumentExtractor.js) into that shape.
+export function mapExtractedFieldsToBuilder(fields) {
+  return {
+    yearLevel: fields?.yearLevel || '',
+    course: fields?.course || '',
+    location: fields?.location || '',
+    gpa: fields?.gpa != null ? String(fields.gpa) : '',
+    financialNeed: !!fields?.financialNeedMentioned,
+    interests: fields?.assistanceNeeds || ''
+  };
+}
+
+export function composeBuilderSentence(builder) {
+  const parts = [];
+
+  const who = [builder.yearLevel, builder.course].filter(Boolean).join(' ');
+  if (who) {
+    parts.push(`I'm a ${who} student${builder.location ? ` in ${builder.location}` : ''}${builder.gpa ? ` with a ${builder.gpa}% GWA` : ''}.`);
+  } else if (builder.location) {
+    parts.push(`I'm based in ${builder.location}.`);
+  }
+
+  if (builder.financialNeed) {
+    parts.push("My family has limited income and I need financial assistance.");
+  }
+
+  if (builder.interests) {
+    parts.push(`I'm looking for help with ${builder.interests}.`);
+  }
+
+  return parts.join(' ');
+}
+
+function parseBuilderYearLevel(value) {
+  const match = String(value).match(/\d+/);
+  return match ? parseInt(match[0], 10) : null;
+}
+
+export const PROFILE_UPDATE_LABELS = {
+  course: 'Course',
+  location: 'Location',
+  gpa: 'GWA/GPA',
+  year_level: 'Year level',
+  is_financially_disadvantaged: 'Financial need'
+};
+
+// Maps the shared builder shape onto the saved-profile fields eligibility checks
+// actually compare against (see AuthContext's STUDENTS_FIELDS).
+export function buildProfileUpdatesFromBuilder(builder) {
+  const updates = {};
+  if (builder.course) updates.course = builder.course;
+  if (builder.location) updates.location = builder.location;
+  if (builder.gpa) {
+    const gpaNum = parseFloat(builder.gpa);
+    if (!Number.isNaN(gpaNum)) updates.gpa = gpaNum;
+  }
+  if (builder.yearLevel) {
+    const year = parseBuilderYearLevel(builder.yearLevel);
+    if (year) updates.year_level = year;
+  }
+  if (builder.financialNeed) updates.is_financially_disadvantaged = true;
+  return updates;
 }
 
 // Offline fallback (also the original implementation, ported from the old app.js's
@@ -104,18 +184,6 @@ export function calculateMatchForPrompt(userPrompt, programs, userGpa) {
   results.sort((a, b) => b.calculatedScore - a.calculatedScore);
   return results;
 }
-
-export const MATCHER_PROFILE_TAGS = [
-  { id: 'college-student', label: 'College Student', icon: 'school' },
-  { id: 'it-student', label: 'IT / Computing Major', icon: 'terminal' },
-  { id: 'cebu-resident', label: 'Cebu / Region VII', icon: 'location_city' },
-  { id: 'working-student', label: 'Working Student', icon: 'work_history' },
-  { id: 'scholarship', label: 'Looking for Scholarship', icon: 'workspace_premium' },
-  { id: 'financial-aid', label: 'Tuition / Cash Grant', icon: 'payments' },
-  { id: 'assistantship', label: 'Campus Assistantship', icon: 'laptop_chromebook' },
-  { id: 'certification', label: 'Free Tech Certification', icon: 'model_training' },
-  { id: 'low-income', label: 'Low-Income Household', icon: 'home' }
-];
 
 export const MATCHER_DEMO_PRESETS = [
   {

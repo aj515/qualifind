@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext.jsx';
 import { useData } from '../../context/DataContext.jsx';
 import { formatDeadline } from '../../lib/eligibility.js';
+import {
+  getAIMatches,
+  calculateMatchForPrompt,
+  composeBuilderSentence,
+  buildProfileUpdatesFromBuilder,
+  PROFILE_UPDATE_LABELS
+} from '../../lib/matcher.js';
 import EligibilityBadge from '../../components/EligibilityBadge.jsx';
 
 const ALL_TYPES = ['Scholarship', 'Educational Assistance', 'Student Employment', 'Student Loan', 'Training & Certification'];
@@ -12,8 +20,11 @@ const ELIGIBILITY_OPTIONS = [
 ];
 const ALL_ELIGIBILITY = ELIGIBILITY_OPTIONS.map((o) => o.value);
 
+const EMPTY_BUILDER = { yearLevel: '', course: '', location: '', gpa: '', financialNeed: false, interests: '' };
+
 export default function OpportunitiesPage() {
-  const { programs, savedIds, toggleSaved, matcherScores, matcherReasons, eligibilityByProgramId } = useData();
+  const { profile, updateProfile } = useAuth();
+  const { programs, savedIds, toggleSaved, matcherScores, matcherReasons, matcherQuery, matcherFields, profileUpdateNote, eligibilityByProgramId, applyMatcherScores } = useData();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const usedFallbackMatcher = searchParams.get('ai') === 'fallback';
@@ -22,11 +33,60 @@ export default function OpportunitiesPage() {
   const [activeTypes, setActiveTypes] = useState(ALL_TYPES);
   const [activeEligibility, setActiveEligibility] = useState(ALL_ELIGIBILITY);
   const [savedOnly, setSavedOnly] = useState(false);
+  const [showMatcherQuery, setShowMatcherQuery] = useState(false);
+  const [editFields, setEditFields] = useState(matcherFields || EMPTY_BUILDER);
+  const [isReSearching, setIsReSearching] = useState(false);
+  const [reSearchMsg, setReSearchMsg] = useState('');
 
   useEffect(() => {
     const q = searchParams.get('q');
     if (q !== null) setQuery(q);
   }, [searchParams]);
+
+  // Keeps the editable fields in sync with the active search. Deliberately does NOT
+  // reset reSearchMsg here — handleReSearch sets that message right after it updates
+  // matcherFields/matcherQuery itself, so clearing it in this effect would immediately
+  // wipe out the confirmation it just set.
+  useEffect(() => {
+    setEditFields(matcherFields || EMPTY_BUILDER);
+  }, [matcherQuery, matcherFields]);
+
+  function updateEditField(field, value) {
+    setEditFields((prev) => ({ ...prev, [field]: value }));
+  }
+
+  async function handleReSearch() {
+    const newQuery = composeBuilderSentence(editFields);
+    if (!newQuery.trim() || isReSearching) return;
+
+    setIsReSearching(true);
+    setReSearchMsg('');
+
+    let scored;
+    let usedFallback = false;
+    try {
+      scored = await getAIMatches(newQuery, programs, profile, eligibilityByProgramId);
+    } catch (err) {
+      console.warn('AI matching failed, falling back to offline ranking:', err);
+      usedFallback = true;
+      scored = calculateMatchForPrompt(newQuery, programs, profile?.gpa ?? 75);
+    }
+
+    const profileUpdates = buildProfileUpdatesFromBuilder(editFields);
+    let updateNote = '';
+    if (Object.keys(profileUpdates).length > 0) {
+      const { error } = await updateProfile(profileUpdates);
+      if (!error) {
+        const labels = Object.keys(profileUpdates).map((k) => PROFILE_UPDATE_LABELS[k] || k);
+        updateNote = `Your profile was also updated: ${labels.join(', ')}.`;
+      }
+    }
+
+    applyMatcherScores(scored, newQuery, editFields, updateNote);
+    setSearchParams(usedFallback ? { ai: 'fallback' } : {});
+    setIsReSearching(false);
+    setReSearchMsg('Results updated.');
+  }
 
   const hasMatcherScores = Object.keys(matcherScores).length > 0;
 
@@ -77,6 +137,58 @@ export default function OpportunitiesPage() {
           Browse Philippine scholarships, grants, assistantships, and loans, filtered to your profile.
         </p>
       </div>
+
+      {hasMatcherScores && matcherQuery && (
+        <div className="card-sticker p-4 bg-accent-violet/5 border-accent-violet/40 flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => setShowMatcherQuery((v) => !v)}
+            className="flex items-center justify-between gap-2 text-left"
+          >
+            <span className="text-xs font-heading font-extrabold text-accent-violet flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[16px]">auto_awesome</span>
+              These results are matched to what you told the AI Matcher
+            </span>
+            <span className="material-symbols-outlined text-[18px] text-ink-muted shrink-0">{showMatcherQuery ? 'expand_less' : 'expand_more'}</span>
+          </button>
+
+          {profileUpdateNote && (
+            <p className="text-[11px] text-ink-muted font-medium flex items-center gap-1">
+              <span className="material-symbols-outlined text-[13px] text-accent-mint">check_circle</span>
+              {profileUpdateNote}
+            </p>
+          )}
+
+          {showMatcherQuery && (
+            <div className="flex flex-col gap-3 pt-1">
+              <p className="text-[11px] text-ink-muted font-medium">Edit any of these and re-search — no need to go back to the matcher.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <input type="text" value={editFields.yearLevel} onChange={(e) => updateEditField('yearLevel', e.target.value)} placeholder="Year level (e.g. 2nd-year)" className="input-playful py-2 px-3 text-xs" />
+                <input type="text" value={editFields.course} onChange={(e) => updateEditField('course', e.target.value)} placeholder="Course (e.g. BS IT)" className="input-playful py-2 px-3 text-xs" />
+                <input type="text" value={editFields.location} onChange={(e) => updateEditField('location', e.target.value)} placeholder="Location (e.g. Cebu City)" className="input-playful py-2 px-3 text-xs" />
+                <input type="text" value={editFields.gpa} onChange={(e) => updateEditField('gpa', e.target.value)} placeholder="GWA/GPA (e.g. 82)" className="input-playful py-2 px-3 text-xs" />
+                <input type="text" value={editFields.interests} onChange={(e) => updateEditField('interests', e.target.value)} placeholder="What you need (e.g. tuition, transportation)" className="input-playful py-2 px-3 text-xs sm:col-span-2" />
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink sm:col-span-2">
+                  <input type="checkbox" checked={editFields.financialNeed} onChange={(e) => updateEditField('financialNeed', e.target.checked)} className="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0" />
+                  My family has limited income
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleReSearch}
+                  disabled={isReSearching || !composeBuilderSentence(editFields).trim()}
+                  className="btn-candy btn-candy-secondary btn-candy-sm self-start text-[11px] py-1 px-3 disabled:opacity-60"
+                >
+                  <span className="material-symbols-outlined text-[14px]">{isReSearching ? 'progress_activity' : 'refresh'}</span>
+                  {isReSearching ? 'Searching…' : 'Update & Re-search'}
+                </button>
+                {reSearchMsg && <span className="text-[11px] font-semibold text-ink-muted">{reSearchMsg}</span>}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {usedFallbackMatcher && (
         <div className="p-3 rounded-2xl bg-accent-amber/20 border-2 border-ink flex items-center gap-2.5 shadow-pop-sm">

@@ -24,9 +24,11 @@ const EXTRACT_SCHEMA = {
         gpa: { type: ["number", "null"], description: "GPA/GWA as a number on whatever scale the document uses." },
         location: { type: ["string", "null"], description: "City/province/region." },
         householdIncome: { type: ["string", "null"], description: "Household income or indigency status, if stated." },
+        financialNeedMentioned: { type: ["boolean", "null"], description: "True only if the text explicitly says the student/family has limited income, is indigent, or otherwise needs financial assistance." },
+        assistanceNeeds: { type: ["string", "null"], description: "Short comma-separated list of the kind of help mentioned (e.g. 'tuition assistance, transportation support'). Null if not mentioned." },
         otherNotes: { type: ["string", "null"], description: "Any other detail relevant to scholarship/aid eligibility." }
       },
-      required: ["fullName", "educationLevel", "course", "yearLevel", "institution", "gpa", "location", "householdIncome", "otherNotes"],
+      required: ["fullName", "educationLevel", "course", "yearLevel", "institution", "gpa", "location", "householdIncome", "financialNeedMentioned", "assistanceNeeds", "otherNotes"],
       additionalProperties: false
     }
   },
@@ -34,9 +36,9 @@ const EXTRACT_SCHEMA = {
   additionalProperties: false
 };
 
-const SYSTEM_PROMPT = `You extract information from documents Philippine students upload when looking for financial-assistance / scholarship programs (e.g. certificate of registration, transcript of records, certificate of indigency, barangay certificate).
+const SYSTEM_PROMPT = `You extract information from text Philippine students provide when looking for financial-assistance / scholarship programs — either an uploaded document (certificate of registration, transcript of records, certificate of indigency, barangay certificate) or a free-text description of their own situation.
 
-Only report facts actually present in the document. Use null for anything not stated — never guess or invent values. Keep the summary grounded strictly in the document content.`;
+Only report facts actually stated in the text. Use null for anything not mentioned — never guess or invent values. Keep the summary grounded strictly in the given text.`;
 
 export async function extractFromDocument({ apiKey, fileName, mediaType, base64Data, textContent }) {
   if (!apiKey) {

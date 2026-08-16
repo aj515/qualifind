@@ -17,6 +17,15 @@ export function DataProvider({ children }) {
   // matchScore was purely a client-side/session concern.
   const [matcherScores, setMatcherScores] = useState({});
   const [matcherReasons, setMatcherReasons] = useState({});
+  // The free-text situation description that produced the current matcherScores —
+  // kept around so Opportunities can remind the student what they searched with,
+  // and so they can jump back to Matcher with it pre-filled to tweak it.
+  const [matcherQuery, setMatcherQuery] = useState('');
+  // The same query, broken into separate fields (yearLevel/course/location/gpa/
+  // financialNeed/interests — see matcher.js's builder shape) so Opportunities
+  // can show/edit it as distinct inputs instead of one prose blob.
+  const [matcherFields, setMatcherFields] = useState(null);
+  const [profileUpdateNote, setProfileUpdateNote] = useState('');
 
   const loadPrograms = useCallback(async () => {
     const { data, error } = await supabase
@@ -160,7 +169,7 @@ export function DataProvider({ children }) {
     [user, savedStatusByProgramId]
   );
 
-  const applyMatcherScores = useCallback((scoredPrograms) => {
+  const applyMatcherScores = useCallback((scoredPrograms, situationText = '', fields = null, updateNote = '') => {
     const scoreMap = {};
     const reasonMap = {};
     scoredPrograms.forEach((p) => {
@@ -169,6 +178,9 @@ export function DataProvider({ children }) {
     });
     setMatcherScores(scoreMap);
     setMatcherReasons(reasonMap);
+    setMatcherQuery(situationText);
+    setMatcherFields(fields);
+    setProfileUpdateNote(updateNote);
   }, []);
 
   const value = {
@@ -179,6 +191,9 @@ export function DataProvider({ children }) {
     loading,
     matcherScores,
     matcherReasons,
+    matcherQuery,
+    matcherFields,
+    profileUpdateNote,
     refreshPrograms: loadPrograms,
     toggleSaved,
     setProgramStatus,
