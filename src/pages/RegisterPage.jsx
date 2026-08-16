@@ -14,6 +14,13 @@ const COURSE_OPTIONS = [
   'Other'
 ];
 
+const PERKS = [
+  { icon: 'auto_awesome', color: '#FBBF24', bg: 'rgba(251,191,36,0.18)', text: 'AI ranks every PH scholarship by your personal fit' },
+  { icon: 'task_alt',     color: '#34D399', bg: 'rgba(52,211,153,0.18)',  text: 'Step-by-step action plans per application' },
+  { icon: 'folder_open',  color: '#38BDF8', bg: 'rgba(56,189,248,0.18)',  text: 'Track documents and deadlines in one place' },
+  { icon: 'volunteer_activism', color: '#F472B6', bg: 'rgba(244,114,182,0.18)', text: 'Need-based & merit-based — always free' },
+];
+
 // Public registration is student-only. Admin accounts are never self-service —
 // anyone could otherwise grant themselves write access to the programs database
 // via RLS. Promote an account to admin manually (see README) after verifying who
@@ -118,197 +125,229 @@ export default function RegisterPage() {
     navigate('/dashboard', { replace: true });
   }
 
+  const initials = getInitials(firstName.trim(), lastName.trim());
+
   return (
-    <div className="h-screen overflow-hidden flex items-center justify-center px-4 bg-paper">
-      <div className="w-full max-w-4xl card-sticker bg-card shadow-pop-lg p-0 overflow-hidden grid grid-cols-1 lg:grid-cols-12" style={{ maxHeight: 'calc(100vh - 2rem)' }}>
-        {/* Left Panel: Branding */}
-        <div className="lg:col-span-5 bg-accent-violet p-6 lg:p-8 text-white flex flex-col justify-between relative overflow-hidden border-b-2 lg:border-b-0 lg:border-r-2 border-ink">
-          <div className="absolute -right-8 -top-8 w-40 h-40 bg-accent-amber rounded-full opacity-30 pointer-events-none"></div>
-          <div className="absolute right-8 bottom-8 w-20 h-20 bg-accent-pink rounded-2xl rotate-12 opacity-30 pointer-events-none"></div>
+    <div className="h-screen overflow-hidden flex bg-paper">
 
-          <div className="relative z-10 space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-paper text-ink rounded-2xl border-2 border-ink flex items-center justify-center shadow-pop-sm font-bold">
-                <span className="material-symbols-outlined text-accent-violet text-[26px]">verified</span>
-              </div>
-              <div>
-                <h2 className="font-extrabold text-2xl tracking-tight leading-none text-white font-heading">QualiFind</h2>
-                <span className="badge-sticker badge-amber text-[9px] mt-1">PH Student Portal</span>
-              </div>
+      {/* ── LEFT BRANDING PANEL ───────────────────────────────────────── */}
+      <div className="hidden lg:flex w-[42%] flex-shrink-0 bg-accent-violet flex-col justify-between p-10 relative overflow-hidden border-r-2 border-ink">
+
+        {/* Decorative blobs */}
+        <div className="absolute -right-12 -top-12 w-52 h-52 rounded-full bg-white/10 border-2 border-white/20 pointer-events-none" />
+        <div className="absolute -left-8 bottom-16 w-36 h-36 rounded-full bg-accent-amber/20 border-2 border-accent-amber/30 pointer-events-none" />
+        <div className="absolute right-10 bottom-10 w-20 h-20 rounded-2xl rotate-12 bg-white/10 border-2 border-white/20 pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.15) 1.5px,transparent 1.5px)', backgroundSize: '24px 24px' }} />
+
+        {/* Logo */}
+        <div className="relative z-10">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-card rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0">
+              <span className="material-symbols-outlined text-accent-violet text-[26px]">verified</span>
             </div>
-
-            <div className="space-y-2 pt-2">
-              <h1 className="text-2xl lg:text-3xl font-extrabold font-heading text-white tracking-tight leading-snug">
-                Create Your Account
-              </h1>
-              <p className="text-xs text-white/90 leading-relaxed font-medium">
-                Set up your Student Seeker profile to start matching against Philippine assistance programs.
-              </p>
+            <div>
+              <h2 className="font-heading font-extrabold text-2xl text-white leading-none tracking-tight">QualiFind</h2>
+              <span className="badge-sticker badge-amber mt-1 text-[9px]">PH Student Portal</span>
             </div>
           </div>
-
-          <div className="relative z-10 pt-6 mt-6 border-t border-white/20 text-xs text-white/80 flex items-center justify-between font-heading font-bold">
-            <span>DOST-SEI &amp; CHED Aligned</span>
-            <span>v2.0.0</span>
+          <div className="mt-5 bg-white/10 border border-white/20 rounded-2xl p-4">
+            <p className="font-heading font-extrabold text-lg text-white leading-snug mb-1">
+              Join 10,000+ Philippine students finding scholarships faster.
+            </p>
+            <p className="text-xs text-white/80 leading-relaxed font-medium">
+              Set up your free profile in under 2 minutes and let our AI do the matching.
+            </p>
           </div>
         </div>
 
-        {/* Right Panel: Registration Form */}
-        <div className="lg:col-span-7 p-5 lg:p-7 flex flex-col justify-center bg-card overflow-y-auto">
-          <div className="mb-3">
-            <h2 className="text-xl font-extrabold font-heading text-ink tracking-tight mb-0.5">Sign Up for QualiFind</h2>
-            <p className="text-xs text-ink-muted font-medium">Create your Student Seeker account.</p>
+        {/* Perks */}
+        <div className="relative z-10 flex flex-col gap-2.5">
+          <p className="font-heading font-bold text-[10px] uppercase tracking-widest text-white/55 mb-0.5">What you unlock</p>
+          {PERKS.map((p) => (
+            <div key={p.text} className="flex items-center gap-3 bg-white/10 border border-white/20 rounded-2xl px-3.5 py-2.5">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: p.bg, border: `1.5px solid ${p.color}50` }}>
+                <span className="material-symbols-outlined fill" style={{ color: p.color, fontSize: '16px' }}>{p.icon}</span>
+              </div>
+              <p className="text-xs text-white/85 font-medium leading-snug m-0">{p.text}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div className="relative z-10 flex items-center justify-between border-t border-white/20 pt-4">
+          <span className="font-heading font-bold text-xs text-white/60">DOST-SEI &amp; CHED Aligned</span>
+          <span className="text-xs font-semibold text-white/45">v2.0.0</span>
+        </div>
+      </div>
+
+      {/* ── RIGHT FORM PANEL ──────────────────────────────────────────── */}
+      <div className="flex-1 flex flex-col items-center justify-center px-8 relative overflow-hidden">
+
+        <div className="absolute inset-0 bg-dot-grid pointer-events-none opacity-60" />
+
+        {/* Decorative SVG */}
+        <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+          <circle cx="88%" cy="8%"  r="70" fill="none" stroke="rgba(99,102,241,0.1)"  strokeWidth="1.5"/>
+          <circle cx="88%" cy="8%"  r="42" fill="none" stroke="rgba(99,102,241,0.07)" strokeWidth="1"/>
+          <circle cx="12%" cy="92%" r="60" fill="none" stroke="rgba(99,102,241,0.08)" strokeWidth="1.5"/>
+          <circle cx="82%" cy="88%" r="30" fill="none" stroke="rgba(251,191,36,0.15)"  strokeWidth="1.5"/>
+          {[0,1,2,3].map(c => [0,1,2].map(r => (
+            <circle key={`d-${c}-${r}`} cx={`${80+c*2}%`} cy={`${18+r*2}%`} r="1.8" fill="rgba(99,102,241,0.18)" />
+          )))}
+          <line x1="14%" y1="20%" x2="14%" y2="26%" stroke="rgba(244,114,182,0.2)" strokeWidth="1.5"/>
+          <line x1="11%" y1="23%" x2="17%" y2="23%" stroke="rgba(244,114,182,0.2)" strokeWidth="1.5"/>
+          <line x1="87%" y1="72%" x2="87%" y2="78%" stroke="rgba(99,102,241,0.18)" strokeWidth="1.5"/>
+          <line x1="84%" y1="75%" x2="90%" y2="75%" stroke="rgba(99,102,241,0.18)" strokeWidth="1.5"/>
+        </svg>
+
+        <div className="relative z-10 w-full max-w-xl">
+
+          {/* Mobile logo */}
+          <div className="lg:hidden flex items-center gap-3 mb-5">
+            <div className="w-10 h-10 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center">
+              <span className="material-symbols-outlined text-white text-[22px]">verified</span>
+            </div>
+            <div>
+              <h2 className="font-heading font-extrabold text-xl text-ink leading-none">QualiFind</h2>
+              <span className="badge-sticker badge-violet text-[9px] mt-0.5">PH Student Portal</span>
+            </div>
           </div>
 
-          {checkEmailMsg ? (
-            <div className="p-4 rounded-2xl bg-accent-mint/10 border-2 border-accent-mint text-sm font-semibold text-ink flex items-start gap-2">
-              <span className="material-symbols-outlined text-accent-mint">mark_email_read</span>
-              <span>{checkEmailMsg}</span>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-2.5">
-              {errorMsg && (
-                <div className="p-3 rounded-2xl bg-accent-pink/10 border-2 border-accent-pink text-xs font-semibold text-ink">
-                  {errorMsg}
-                </div>
-              )}
+          {/* Card */}
+          <div className="card-sticker bg-card shadow-pop-lg p-7">
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label htmlFor="reg-first-name" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                    First Name
-                  </label>
-                  <div className="relative flex items-center">
-                    <span className="material-symbols-outlined absolute left-3.5 z-10 text-ink-muted text-[18px] pointer-events-none">person</span>
-                    <input
-                      id="reg-first-name"
-                      type="text"
-                      required
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="Juan"
-                      className="w-full input-playful py-2.5 pl-10 pr-4 text-xs font-semibold"
-                    />
+            {checkEmailMsg ? (
+              <div className="text-center py-6">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-2xl border-2 border-accent-mint bg-accent-mint/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined fill text-accent-mint text-[28px]">mark_email_read</span>
+                </div>
+                <h2 className="font-heading font-extrabold text-xl text-ink mb-2">Check your inbox!</h2>
+                <p className="text-sm text-ink-muted leading-relaxed mb-5">{checkEmailMsg}</p>
+                <Link to="/login" className="btn-candy" style={{ textDecoration: 'none' }}>
+                  Go to Sign In <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </Link>
+              </div>
+            ) : (
+              <>
+                {/* Heading + avatar preview */}
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <span className="badge-sticker badge-violet text-[9px] mb-2">
+                      <span className="material-symbols-outlined" style={{ fontSize: '11px' }}>rocket_launch</span>
+                      Free account
+                    </span>
+                    <h1 className="font-heading font-extrabold text-xl text-ink tracking-tight leading-tight mt-2 mb-0.5">
+                      Sign Up for QualiFind
+                    </h1>
+                    <p className="text-xs text-ink-muted font-medium">Create your Student Seeker account.</p>
+                  </div>
+                  {/* Live initials avatar */}
+                  <div className="w-12 h-12 rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 ml-4"
+                    style={{ background: 'linear-gradient(135deg,#6366F1,#818CF8)' }}>
+                    <span className="font-heading font-extrabold text-sm text-white tracking-tight">{initials}</span>
                   </div>
                 </div>
-                <div className="space-y-1">
-                  <label htmlFor="reg-last-name" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                    Last Name
-                  </label>
-                  <input
-                    id="reg-last-name"
-                    type="text"
-                    required
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    placeholder="Dela Cruz"
-                    className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-                  />
-                </div>
-              </div>
 
-              <div className="space-y-1">
-                <label htmlFor="reg-email" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                  Institutional Email
-                </label>
-                <div className="relative flex items-center">
-                  <span className="material-symbols-outlined absolute left-3.5 z-10 text-ink-muted text-[18px] pointer-events-none">mail</span>
-                  <input
-                    id="reg-email"
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="e.g. juan.delacruz@student.edu.ph"
-                    className="w-full input-playful py-2.5 pl-10 pr-4 text-xs font-semibold"
-                  />
-                </div>
-              </div>
+                {errorMsg && (
+                  <div className="flex items-start gap-2 p-2.5 rounded-2xl bg-accent-pink/10 border-2 border-accent-pink text-xs font-semibold text-ink mb-3">
+                    <span className="material-symbols-outlined text-accent-pink text-[16px] flex-shrink-0 mt-0.5">error</span>
+                    {errorMsg}
+                  </div>
+                )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label htmlFor="reg-password" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                    Password
-                  </label>
-                  <input
-                    id="reg-password"
-                    type="password"
-                    required
-                    minLength={8}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="At least 8 characters"
-                    className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label htmlFor="reg-confirm-password" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                    Confirm Password
-                  </label>
-                  <input
-                    id="reg-confirm-password"
-                    type="password"
-                    required
-                    minLength={8}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Re-enter password"
-                    className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-                  />
-                </div>
-              </div>
+                <form onSubmit={handleSubmit} className="space-y-2.5">
 
-              <div className="space-y-2.5 pt-1 border-t-2 border-ink/10">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                  {/* Name row */}
+                  <div className="grid grid-cols-2 gap-2.5">
                     <div className="space-y-1">
-                      <label htmlFor="reg-institution" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                        School / Institution
-                      </label>
-                      <input
-                        id="reg-institution"
-                        type="text"
-                        value={institution}
-                        onChange={(e) => setInstitution(e.target.value)}
-                        placeholder="e.g. Cebu Technological University"
-                        className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-                      />
+                      <label htmlFor="reg-first-name" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">First Name</label>
+                      <div className="relative flex items-center">
+                        <span className="material-symbols-outlined absolute left-3 z-10 text-ink-muted text-[16px] pointer-events-none">person</span>
+                        <input id="reg-first-name" type="text" required value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)} placeholder="Juan"
+                          className="w-full input-playful py-2 pl-9 pr-3 text-xs font-semibold" />
+                      </div>
                     </div>
                     <div className="space-y-1">
-                      <label htmlFor="reg-course" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                        Course / Program
-                      </label>
-                      <select
-                        id="reg-course"
-                        value={course}
-                        onChange={(e) => setCourse(e.target.value)}
-                        className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-                      >
-                        {COURSE_OPTIONS.map((opt) => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
+                      <label htmlFor="reg-last-name" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Last Name</label>
+                      <input id="reg-last-name" type="text" required value={lastName}
+                        onChange={(e) => setLastName(e.target.value)} placeholder="Dela Cruz"
+                        className="w-full input-playful py-2 px-3 text-xs font-semibold" />
+                    </div>
+                  </div>
+
+                  {/* Email row — full width so the full address is visible */}
+                  <div className="space-y-1">
+                    <label htmlFor="reg-email" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Email</label>
+                    <div className="relative flex items-center">
+                      <span className="material-symbols-outlined absolute left-3 z-10 text-ink-muted text-[16px] pointer-events-none">mail</span>
+                      <input id="reg-email" type="email" required value={email}
+                        onChange={(e) => setEmail(e.target.value)} placeholder="e.g. juan.delacruz@student.edu.ph"
+                        className="w-full input-playful py-2 pl-9 pr-4 text-xs font-semibold" />
+                    </div>
+                  </div>
+
+                  {/* Password row */}
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <div className="space-y-1">
+                      <label htmlFor="reg-password" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Password</label>
+                      <div className="relative flex items-center">
+                        <span className="material-symbols-outlined absolute left-3 z-10 text-ink-muted text-[16px] pointer-events-none">lock</span>
+                        <input id="reg-password" type="password" required minLength={8} value={password}
+                          onChange={(e) => setPassword(e.target.value)} placeholder="8+ characters"
+                          className="w-full input-playful py-2 pl-9 pr-3 text-xs font-semibold" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label htmlFor="reg-confirm-password" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Confirm</label>
+                      <div className="relative flex items-center">
+                        <span className="material-symbols-outlined absolute left-3 z-10 text-ink-muted text-[16px] pointer-events-none">lock_clock</span>
+                        <input id="reg-confirm-password" type="password" required minLength={8} value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Re-enter"
+                          className="w-full input-playful py-2 pl-9 pr-3 text-xs font-semibold" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="flex items-center gap-2 pt-0.5">
+                    <div className="flex-1 h-px bg-ink/10" />
+                    <span className="text-[10px] font-heading font-bold text-ink-muted uppercase tracking-wider">Academic Profile <span className="normal-case font-medium">(optional)</span></span>
+                    <div className="flex-1 h-px bg-ink/10" />
+                  </div>
+
+                  {/* School + Course */}
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <div className="space-y-1">
+                      <label htmlFor="reg-institution" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">School</label>
+                      <div className="relative flex items-center">
+                        <span className="material-symbols-outlined absolute left-3 z-10 text-ink-muted text-[16px] pointer-events-none">apartment</span>
+                        <input id="reg-institution" type="text" value={institution}
+                          onChange={(e) => setInstitution(e.target.value)} placeholder="e.g. CTU"
+                          className="w-full input-playful py-2 pl-9 pr-3 text-xs font-semibold" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label htmlFor="reg-course" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Course</label>
+                      <select id="reg-course" value={course} onChange={(e) => setCourse(e.target.value)}
+                        className="w-full input-playful py-2 px-3 text-xs font-semibold">
+                        {COURSE_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
                       </select>
                       {course === 'Other' && (
-                        <input
-                          type="text"
-                          value={customCourse}
-                          onChange={(e) => setCustomCourse(e.target.value)}
-                          placeholder="Enter your course/program"
-                          className="w-full input-playful py-2.5 px-4 text-xs font-semibold mt-2"
-                        />
+                        <input type="text" value={customCourse} onChange={(e) => setCustomCourse(e.target.value)}
+                          placeholder="Enter your course" className="w-full input-playful py-2 px-3 text-xs font-semibold mt-1.5" />
                       )}
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                  {/* Year + GWA + Birthdate + Location */}
+                  <div className="grid grid-cols-4 gap-2.5">
                     <div className="space-y-1">
-                      <label htmlFor="reg-year" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                        Year Level
-                      </label>
-                      <select
-                        id="reg-year"
-                        value={yearLevel}
-                        onChange={(e) => setYearLevel(e.target.value)}
-                        className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-                      >
+                      <label htmlFor="reg-year" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Year</label>
+                      <select id="reg-year" value={yearLevel} onChange={(e) => setYearLevel(e.target.value)}
+                        className="w-full input-playful py-2 px-2 text-xs font-semibold">
                         <option>1st Year</option>
                         <option>2nd Year</option>
                         <option>3rd Year</option>
@@ -317,85 +356,64 @@ export default function RegisterPage() {
                       </select>
                     </div>
                     <div className="space-y-1">
-                      <label htmlFor="reg-gwa" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                        Current GWA / GPA (%) <span className="text-ink-muted normal-case font-semibold">— optional</span>
-                      </label>
-                      <input
-                        id="reg-gwa"
-                        type="number"
-                        min="0"
-                        max="100"
-                        step="0.1"
-                        value={gwa}
-                        onChange={(e) => setGwa(e.target.value)}
-                        placeholder="Don't know it yet? Leave blank"
-                        className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-                      />
+                      <label htmlFor="reg-gwa" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">GWA %</label>
+                      <input id="reg-gwa" type="number" min="0" max="100" step="0.1" value={gwa}
+                        onChange={(e) => setGwa(e.target.value)} placeholder="91.5"
+                        className="w-full input-playful py-2 px-3 text-xs font-semibold" />
                     </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label htmlFor="reg-birthdate" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                        Date of Birth <span className="text-ink-muted normal-case font-semibold">— optional</span>
-                      </label>
-                      <input
-                        id="reg-birthdate"
-                        type="date"
-                        value={birthdate}
+                      <label htmlFor="reg-birthdate" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Birthdate</label>
+                      <input id="reg-birthdate" type="date" value={birthdate}
                         onChange={(e) => setBirthdate(e.target.value)}
-                        className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-                      />
+                        className="w-full input-playful py-2 px-2 text-xs font-semibold" />
                     </div>
                     <div className="space-y-1">
-                      <label htmlFor="reg-location" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
-                        Location <span className="text-ink-muted normal-case font-semibold">— optional</span>
-                      </label>
-                      <input
-                        id="reg-location"
-                        type="text"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        placeholder="e.g. Cebu City"
-                        className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
-                      />
+                      <label htmlFor="reg-location" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">City</label>
+                      <div className="relative flex items-center">
+                        <span className="material-symbols-outlined absolute left-2 z-10 text-ink-muted text-[14px] pointer-events-none">location_on</span>
+                        <input id="reg-location" type="text" value={location}
+                          onChange={(e) => setLocation(e.target.value)} placeholder="Cebu"
+                          className="w-full input-playful py-2 pl-7 pr-2 text-xs font-semibold" />
+                      </div>
                     </div>
                   </div>
-                  <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">
-                    <input
-                      type="checkbox"
-                      checked={isFinanciallyDisadvantaged}
-                      onChange={(e) => setIsFinanciallyDisadvantaged(e.target.checked)}
-                      className="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"
-                    />
-                    <span>I qualify as low-income / indigent (unlocks need-based assistance matching)</span>
-                  </label>
-              </div>
 
-              <div className="flex items-center justify-between pt-0.5">
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">
-                  <input
-                    type="checkbox"
-                    checked={termsAccepted}
-                    onChange={(e) => setTermsAccepted(e.target.checked)}
-                    className="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"
-                  />
-                  <span>I agree to the Terms of Service and Privacy Policy</span>
-                </label>
-              </div>
+                  {/* Checkboxes */}
+                  <div className="flex items-center justify-between gap-4 pt-0.5">
+                    <label className={`flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink p-2 rounded-xl border-2 transition-all flex-1 ${isFinanciallyDisadvantaged ? 'bg-accent-amber/10 border-accent-amber/40' : 'bg-card-subtle border-ink/10'}`}>
+                      <input type="checkbox" checked={isFinanciallyDisadvantaged}
+                        onChange={(e) => setIsFinanciallyDisadvantaged(e.target.checked)}
+                        className="w-3.5 h-3.5 flex-shrink-0" style={{ accentColor: '#6366F1' }} />
+                      <span className="leading-tight">Low-income / indigent</span>
+                    </label>
+                    <label className={`flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink p-2 rounded-xl border-2 transition-all flex-1 ${termsAccepted ? 'bg-accent-violet/5 border-accent-violet/30' : 'bg-card-subtle border-ink/10'}`}>
+                      <input type="checkbox" checked={termsAccepted}
+                        onChange={(e) => setTermsAccepted(e.target.checked)}
+                        className="w-3.5 h-3.5 flex-shrink-0" style={{ accentColor: '#6366F1' }} />
+                      <span className="leading-tight">I agree to Terms of Service</span>
+                    </label>
+                  </div>
 
-              <button type="submit" disabled={submitting} className="btn-candy w-full py-2.5 text-sm disabled:opacity-60">
-                <span>{submitting ? 'Creating account…' : 'Create Account'}</span>
-                {!submitting && <span className="material-symbols-outlined text-[18px]">arrow_forward</span>}
-              </button>
-            </form>
-          )}
+                  <button type="submit" disabled={submitting}
+                    className="btn-candy w-full py-2.5 text-sm disabled:opacity-60">
+                    <span>{submitting ? 'Creating account…' : 'Create Account'}</span>
+                    {!submitting && <span className="material-symbols-outlined text-[18px]">arrow_forward</span>}
+                  </button>
+                </form>
 
-          <p className="text-center text-xs font-semibold text-ink-muted mt-3">
-            Already have an account?{' '}
-            <Link to="/login" className="font-extrabold text-accent-violet hover:underline">
-              Sign in
-            </Link>
-          </p>
+                <div className="flex items-center gap-3 my-3">
+                  <div className="flex-1 h-px bg-ink/10" />
+                  <span className="text-xs text-ink-muted font-semibold">or</span>
+                  <div className="flex-1 h-px bg-ink/10" />
+                </div>
+
+                <p className="text-center text-xs font-semibold text-ink-muted">
+                  Already have an account?{' '}
+                  <Link to="/login" className="font-extrabold text-accent-violet hover:underline">Sign in</Link>
+                </p>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
