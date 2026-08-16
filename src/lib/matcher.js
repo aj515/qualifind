@@ -26,6 +26,39 @@ export async function getAIMatches(situationText, programs, profile, eligibility
   });
 }
 
+// Calls the dev-server /api/extract-document endpoint (see vite.config.js +
+// server/aiDocumentExtractor.js) which reads an uploaded document (PDF, image,
+// or .txt) and returns extracted fields plus a ready-to-paste summary paragraph.
+export async function extractDocument(file) {
+  const isText = file.type === 'text/plain' || file.name.toLowerCase().endsWith('.txt');
+
+  const payload = isText
+    ? { fileName: file.name, textContent: await file.text() }
+    : { fileName: file.name, mediaType: file.type, base64Data: await fileToBase64(file) };
+
+  const response = await fetch('/api/extract-document', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new Error(body.error || `Document extraction failed (${response.status})`);
+  }
+
+  return response.json();
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1] ?? '');
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
 // Offline fallback (also the original implementation, ported from the old app.js's
 // calculateMatchForPrompt) — client-side keyword + GWA relevance heuristic, used
 // when the AI call fails (no API key, network issue, rate limit). Not persisted to
