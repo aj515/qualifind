@@ -119,10 +119,10 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-10 px-4">
-      <div className="w-full max-w-4xl card-sticker bg-card shadow-pop-lg p-0 overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+    <div className="h-screen overflow-hidden flex items-center justify-center px-4 bg-paper">
+      <div className="w-full max-w-4xl card-sticker bg-card shadow-pop-lg p-0 overflow-hidden grid grid-cols-1 lg:grid-cols-12" style={{ maxHeight: 'calc(100vh - 2rem)' }}>
         {/* Left Panel: Branding */}
-        <div className="lg:col-span-5 bg-accent-violet p-8 lg:p-10 text-white flex flex-col justify-between relative overflow-hidden border-b-2 lg:border-b-0 lg:border-r-2 border-ink">
+        <div className="lg:col-span-5 bg-accent-violet p-6 lg:p-8 text-white flex flex-col justify-between relative overflow-hidden border-b-2 lg:border-b-0 lg:border-r-2 border-ink">
           <div className="absolute -right-8 -top-8 w-40 h-40 bg-accent-amber rounded-full opacity-30 pointer-events-none"></div>
           <div className="absolute right-8 bottom-8 w-20 h-20 bg-accent-pink rounded-2xl rotate-12 opacity-30 pointer-events-none"></div>
 
@@ -154,9 +154,9 @@ export default function RegisterPage() {
         </div>
 
         {/* Right Panel: Registration Form */}
-        <div className="lg:col-span-7 p-8 lg:p-10 flex flex-col justify-center bg-card">
-          <div className="mb-5">
-            <h2 className="text-2xl font-extrabold font-heading text-ink tracking-tight mb-1">Sign Up for QualiFind</h2>
+        <div className="lg:col-span-7 p-5 lg:p-7 flex flex-col justify-center bg-card overflow-y-auto">
+          <div className="mb-3">
+            <h2 className="text-xl font-extrabold font-heading text-ink tracking-tight mb-0.5">Sign Up for QualiFind</h2>
             <p className="text-xs text-ink-muted font-medium">Create your Student Seeker account.</p>
           </div>
 
@@ -166,14 +166,14 @@ export default function RegisterPage() {
               <span>{checkEmailMsg}</span>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-2.5">
               {errorMsg && (
                 <div className="p-3 rounded-2xl bg-accent-pink/10 border-2 border-accent-pink text-xs font-semibold text-ink">
                   {errorMsg}
                 </div>
               )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label htmlFor="reg-first-name" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
                     First Name
@@ -225,7 +225,7 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label htmlFor="reg-password" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
                     Password
@@ -258,8 +258,8 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              <div className="space-y-4 pt-1 border-t-2 border-ink/10">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3">
+              <div className="space-y-2.5 pt-1 border-t-2 border-ink/10">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                     <div className="space-y-1">
                       <label htmlFor="reg-institution" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
                         School / Institution
@@ -298,7 +298,7 @@ export default function RegisterPage() {
                       )}
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1">
                       <label htmlFor="reg-year" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
                         Year Level
@@ -333,7 +333,7 @@ export default function RegisterPage() {
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1">
                       <label htmlFor="reg-birthdate" className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">
                         Date of Birth <span className="text-ink-muted normal-case font-semibold">— optional</span>
@@ -383,14 +383,14 @@ export default function RegisterPage() {
                 </label>
               </div>
 
-              <button type="submit" disabled={submitting} className="btn-candy w-full py-3 text-sm disabled:opacity-60">
+              <button type="submit" disabled={submitting} className="btn-candy w-full py-2.5 text-sm disabled:opacity-60">
                 <span>{submitting ? 'Creating account…' : 'Create Account'}</span>
                 {!submitting && <span className="material-symbols-outlined text-[18px]">arrow_forward</span>}
               </button>
             </form>
           )}
 
-          <p className="text-center text-xs font-semibold text-ink-muted mt-5">
+          <p className="text-center text-xs font-semibold text-ink-muted mt-3">
             Already have an account?{' '}
             <Link to="/login" className="font-extrabold text-accent-violet hover:underline">
               Sign in
