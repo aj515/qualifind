@@ -17,8 +17,15 @@ export default function SavedApplicationsPage() {
   const { programs, savedIds, toggleSaved, eligibilityByProgramId, savedStatusByProgramId } = useData();
   const navigate = useNavigate();
   const [progressByProgramId, setProgressByProgramId] = useState({});
+  const [confirmTarget, setConfirmTarget] = useState(null); // program object pending removal confirmation
 
   const savedList = programs.filter((p) => savedIds.includes(p.id));
+
+  function confirmRemove() {
+    if (!confirmTarget) return;
+    toggleSaved(confirmTarget.id);
+    setConfirmTarget(null);
+  }
 
   // Step-completion progress per saved program (student_step_progress joined
   // against application_steps) — fetched here rather than globally, since only
@@ -94,11 +101,11 @@ export default function SavedApplicationsPage() {
                   <div className="flex justify-between items-start mb-3">
                     <span className="badge-sticker badge-cyan text-[10px]">{opp.type}</span>
                     <button
-                      onClick={() => toggleSaved(opp.id)}
+                      onClick={() => setConfirmTarget(opp)}
                       title="Remove from saved"
                       className="w-8 h-8 rounded-full bg-paper border-2 border-ink flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-colors shadow-pop-sm"
                     >
-                      <span className="material-symbols-outlined text-[18px] fill">bookmark</span>
+                      <span className="material-symbols-outlined text-[18px]">close</span>
                     </button>
                   </div>
 
@@ -143,6 +150,28 @@ export default function SavedApplicationsPage() {
               </div>
             );
           })}
+        </div>
+      )}
+
+      {confirmTarget && (
+        <div className="fixed inset-0 z-50 bg-ink/50 flex items-center justify-center p-4" onClick={() => setConfirmTarget(null)}>
+          <div className="card-sticker bg-card p-6 max-w-sm w-full text-center" onClick={(e) => e.stopPropagation()}>
+            <div className="w-14 h-14 mx-auto rounded-full bg-accent-pink/10 border-2 border-accent-pink text-accent-pink flex items-center justify-center mb-4">
+              <span className="material-symbols-outlined text-2xl">delete</span>
+            </div>
+            <h3 className="text-lg font-extrabold font-heading text-ink mb-1">Confirm Deletion?</h3>
+            <p className="text-xs text-ink-muted font-medium mb-6">
+              This removes <span className="font-bold text-ink">{confirmTarget.title}</span> from your saved applications. You can always save it again later.
+            </p>
+            <div className="flex gap-2">
+              <button onClick={() => setConfirmTarget(null)} className="btn-candy btn-candy-secondary btn-candy-sm flex-1">
+                Cancel
+              </button>
+              <button onClick={confirmRemove} className="btn-candy btn-candy-sm flex-1 !bg-accent-pink">
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

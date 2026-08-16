@@ -206,7 +206,7 @@ export default function MatcherPage() {
     // Cheap client-side gate — catches trivial junk (empty-ish, single "word",
     // keyboard-mash) before spending an API call on it at all.
     if (!looksLikeRealDescription(prompt)) {
-      setClarificationNeeded("That doesn't look like a real description yet — try mentioning your course, year level, location, or what kind of help you need.");
+      setClarificationNeeded("That doesn't look like a real description yet — try describing your situation and what kind of help you need.");
       return;
     }
 
@@ -222,7 +222,7 @@ export default function MatcherPage() {
     // text said anything real, instead of silently faking plausible-looking
     // relevance scores for gibberish.
     if (matchResult.status === 'fulfilled' && !matchResult.value.inputUnderstood) {
-      setClarificationNeeded(matchResult.value.clarificationMessage || "We couldn't quite understand that — try describing your actual situation (course, year level, location, what kind of help you need).");
+      setClarificationNeeded(matchResult.value.clarificationMessage || "We couldn't quite understand that — try describing your actual situation and what kind of help you need.");
       setIsMatching(false);
       return;
     }
