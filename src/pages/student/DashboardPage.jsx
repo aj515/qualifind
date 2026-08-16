@@ -46,7 +46,7 @@ export default function DashboardPage() {
                 <span className="text-ink-muted text-xs font-bold font-heading">{todayStr}</span>
               </div>
               <h1 className="text-3xl lg:text-4xl font-extrabold font-heading text-ink tracking-tight leading-tight mb-2">
-                Find student assistance that <span className="text-accent-violet underline decoration-accent-pink decoration-wavy">actually fits you</span>
+                Find student assistance that <span className="text-accent-violet">actually fits you</span>
               </h1>
               <p className="text-sm md:text-base text-ink-muted max-w-md font-medium leading-relaxed">
                 AI evaluates your profile across scholarships, educational grants, LGU assistance, campus jobs, and student loans.
