@@ -197,15 +197,15 @@ export default function RegisterPage() {
 
         {/* Logo */}
         <div>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0">
+          <Link to="/" className="flex items-center gap-3 no-underline group w-fit cursor-pointer">
+            <div className="w-12 h-12 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
               <span className="material-symbols-outlined text-white text-[26px]">verified</span>
             </div>
             <div>
-              <h2 className="font-heading font-extrabold text-2xl text-ink leading-none tracking-tight">QualiFind</h2>
+              <h2 className="font-heading font-extrabold text-2xl text-ink leading-none tracking-tight group-hover:text-accent-violet transition-colors">QualiFind</h2>
               <span className="badge-sticker badge-amber mt-1 text-[9px]">PH Student Portal</span>
             </div>
-          </div>
+          </Link>
           <div className="mt-5 bg-card border-2 border-ink shadow-pop-sm rounded-2xl p-4">
             <p className="font-heading font-extrabold text-lg text-ink leading-snug mb-1">
               Join 10,000+ Philippine students finding scholarships faster.
@@ -243,15 +243,15 @@ export default function RegisterPage() {
         <div className="w-full max-w-xl">
 
           {/* Mobile logo */}
-          <div className="lg:hidden flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center">
+          <Link to="/" className="lg:hidden flex items-center gap-3 mb-5 no-underline group w-fit cursor-pointer">
+            <div className="w-10 h-10 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center group-hover:scale-105 transition-transform">
               <span className="material-symbols-outlined text-white text-[22px]">verified</span>
             </div>
             <div>
-              <h2 className="font-heading font-extrabold text-xl text-ink leading-none">QualiFind</h2>
+              <h2 className="font-heading font-extrabold text-xl text-ink leading-none group-hover:text-accent-violet transition-colors">QualiFind</h2>
               <span className="badge-sticker badge-violet text-[9px] mt-0.5">PH Student Portal</span>
             </div>
-          </div>
+          </Link>
 
           {/* Card */}
           <div className="card-sticker bg-card shadow-pop-lg p-7">

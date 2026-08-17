@@ -66,15 +66,15 @@ export default function LandingPage() {
       {/* Header */}
       <header className="border-b-2 border-ink bg-paper/95 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center">
+          <Link to="/" className="flex items-center gap-3 no-underline group cursor-pointer">
+            <div className="w-11 h-11 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center group-hover:scale-105 transition-transform">
               <span className="material-symbols-outlined text-white text-[24px]">verified</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading font-extrabold text-xl text-ink tracking-tight leading-none">QualiFind</span>
+              <span className="font-heading font-extrabold text-xl text-ink tracking-tight leading-none group-hover:text-accent-violet transition-colors">QualiFind</span>
               <span className="text-[9px] font-extrabold font-heading text-accent-violet uppercase tracking-wider mt-0.5">PH Student Portal</span>
             </div>
-          </div>
+          </Link>
 
           <div className="flex items-center gap-3">
             <Link to="/login" className="btn-candy btn-candy-secondary btn-candy-sm">
@@ -225,12 +225,12 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 lg:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="flex flex-col gap-3 sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 bg-accent-violet rounded-xl border-2 border-ink flex items-center justify-center shadow-pop-sm">
+            <Link to="/" className="flex items-center gap-2.5 no-underline group cursor-pointer">
+              <div className="w-9 h-9 bg-accent-violet rounded-xl border-2 border-ink flex items-center justify-center shadow-pop-sm group-hover:scale-105 transition-transform">
                 <span className="material-symbols-outlined text-white text-[18px]">verified</span>
               </div>
-              <span className="font-heading font-extrabold text-base text-ink">QualiFind</span>
-            </div>
+              <span className="font-heading font-extrabold text-base text-ink group-hover:text-accent-violet transition-colors">QualiFind</span>
+            </Link>
             <p className="text-xs text-ink-muted font-medium leading-relaxed max-w-xs">
               AI-matched, eligibility-checked student assistance for the Philippines — scholarships, grants,
               assistantships, loans, and training, in one place.

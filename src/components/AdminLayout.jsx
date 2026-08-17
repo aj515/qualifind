@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
 const NAV_LINKS = [
@@ -30,15 +30,15 @@ export default function AdminLayout() {
     <div className="bg-paper font-sans text-ink antialiased bg-dot-grid min-h-screen">
       <aside className="hidden lg:flex fixed left-0 top-0 h-full w-72 bg-card z-50 flex-col border-r-2 border-ink">
         <div className="h-20 flex items-center px-6 border-b-2 border-ink">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center">
+          <Link to="/admin-dashboard" className="flex items-center gap-3 no-underline group cursor-pointer">
+            <div className="w-11 h-11 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center group-hover:scale-105 transition-transform">
               <span className="material-symbols-outlined text-white text-[24px]">verified</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading font-extrabold text-2xl text-ink tracking-tight leading-none">QualiFind</span>
+              <span className="font-heading font-extrabold text-2xl text-ink tracking-tight leading-none group-hover:text-accent-violet transition-colors">QualiFind</span>
               <span className="text-[10px] font-extrabold font-heading text-accent-violet uppercase tracking-wider mt-1">Admin Console</span>
             </div>
-          </div>
+          </Link>
         </div>
 
         <nav className="flex-1 px-4 flex flex-col gap-2 overflow-y-auto py-4">
