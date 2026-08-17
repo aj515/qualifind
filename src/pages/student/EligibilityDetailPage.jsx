@@ -98,6 +98,9 @@ export default function EligibilityDetailPage() {
                   {style.icon}
                 </span>
                 <span className={`badge-sticker ${style.badgeClass} text-xs`}>Status: {style.label}</span>
+                {opp.slots_total != null && (
+                  <span className="badge-sticker badge-amber text-xs">Slots may be limited</span>
+                )}
               </div>
               <h1 className="text-2xl lg:text-3xl font-extrabold font-heading text-ink mb-2 leading-snug">{opp.title}</h1>
               <p className="text-sm font-bold font-heading text-accent-violet mb-3">{opp.providers?.name}</p>
@@ -236,7 +239,15 @@ export default function EligibilityDetailPage() {
               <p><span className="text-ink-muted">Deadline:</span> {formatted}</p>
               <p><span className="text-ink-muted">Degree Required:</span> {opp.degree_required}</p>
               <p><span className="text-ink-muted">Citizenship:</span> {opp.citizenship}</p>
+              {opp.slots_total != null && (
+                <p><span className="text-ink-muted">Total Slots:</span> {opp.slots_total}</p>
+              )}
             </div>
+            {opp.slots_total != null && (
+              <p className="text-[11px] text-ink-muted font-medium pt-1">
+                Slot count is provided by the program listing and may fill before the deadline — verify current availability with the official source.
+              </p>
+            )}
 
             <div className="pt-3 mt-1 border-t-2 border-ink/10 space-y-2">
               <div className="flex items-center justify-between text-xs">

@@ -3,9 +3,7 @@ import { supabase } from '../lib/supabaseClient.js';
 
 const AuthContext = createContext(null);
 
-// Which table an updateProfile() field belongs to — profiles holds identity/role
-// only; role-specific academic/office fields live in students/admins (see
-// supabase/migrations/0003_normalize_schema.sql).
+
 const PROFILES_FIELDS = new Set(['name', 'avatar']);
 const STUDENTS_FIELDS = new Set([
   'gpa', 'education_level', 'year_level', 'birthdate', 'location', 'course',
@@ -18,9 +16,6 @@ export function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetches profiles + the role-specific extension table and merges them into
-  // one flat object, so every page can keep reading profile.name/gpa/institution/etc.
-  // without knowing which table a field actually lives in.
   const loadProfile = useCallback(async (userId) => {
     if (!userId) {
       setProfile(null);

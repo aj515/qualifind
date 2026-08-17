@@ -39,6 +39,7 @@ const BLANK_FORM = {
   funding: '',
   annual_value: '',
   deadline: '',
+  slots_total: '',
   status: 'Draft',
   min_gpa: '',
   education_req: '',
@@ -114,6 +115,7 @@ export default function AdminProgramFormPage() {
             funding: existing.funding || '',
             annual_value: existing.annual_value ?? '',
             deadline: existing.deadline || '',
+            slots_total: existing.slots_total ?? '',
             status: existing.status || 'Draft',
             min_gpa: existing.min_gpa ?? '',
             education_req: existing.education_req || '',
@@ -354,6 +356,7 @@ export default function AdminProgramFormPage() {
       funding: form.funding.trim() || null,
       annual_value: toNumOrNull(form.annual_value),
       deadline: form.deadline || null,
+      slots_total: toIntOrNull(form.slots_total),
       status: form.status,
       min_gpa: toNumOrNull(form.min_gpa),
       education_req: form.education_req || null,
@@ -582,6 +585,21 @@ export default function AdminProgramFormPage() {
             <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Deadline</label>
             <input type="date" value={form.deadline} onChange={(e) => setField('deadline', e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
           </div>
+        </div>
+
+        <div className="space-y-1 max-w-xs">
+          <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Total Slots (optional)</label>
+          <input
+            type="number"
+            min="0"
+            value={form.slots_total}
+            onChange={(e) => setField('slots_total', e.target.value)}
+            placeholder="Leave blank for no stated cap"
+            className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
+          />
+          <p className="text-[11px] text-ink-muted font-medium">
+            Informational only — shown to students as "slots may be limited." QualiFind doesn't track real acceptances.
+          </p>
         </div>
       </div>
 
