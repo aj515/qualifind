@@ -83,59 +83,59 @@ export default function DashboardPage() {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-        <div className="card-sticker p-5 flex flex-col justify-between">
-          <div className="flex justify-between items-start mb-3">
-            <div className="w-11 h-11 rounded-2xl bg-indigo-100/80 border-2 border-ink flex items-center justify-center text-indigo-800 shadow-pop-sm">
-              <span className="material-symbols-outlined text-[22px]">search</span>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 w-full">
+        <div className="card-sticker p-3.5 sm:p-5 flex flex-col justify-between">
+          <div className="flex justify-between items-start mb-2 sm:mb-3">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-indigo-100/80 border-2 border-ink flex items-center justify-center text-indigo-800 shadow-pop-sm">
+              <span className="material-symbols-outlined text-[18px] sm:text-[22px]">search</span>
             </div>
-            <span className="badge-sticker badge-violet text-[10px]">
-              <span className="material-symbols-outlined text-[13px]">trending_up</span> Open Now
+            <span className="badge-sticker badge-violet text-[9px] sm:text-[10px] py-0.5 px-1.5 sm:px-2">
+              <span className="material-symbols-outlined text-[11px] sm:text-[13px]">trending_up</span> Open Now
             </span>
           </div>
-          <h4 className="text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Available Programs</h4>
-          <span className="text-3xl font-extrabold font-heading text-ink">{active.length}</span>
+          <h4 className="text-[10px] sm:text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Available Programs</h4>
+          <span className="text-2xl sm:text-3xl font-extrabold font-heading text-ink">{active.length}</span>
         </div>
 
-        <div className="card-sticker card-sticker-mint p-5 flex flex-col justify-between">
-          <div className="flex justify-between items-start mb-3">
-            <div className="w-11 h-11 rounded-2xl bg-emerald-100/80 border-2 border-ink flex items-center justify-center text-emerald-800 shadow-pop-sm">
-              <span className="material-symbols-outlined text-[22px]">verified</span>
+        <div className="card-sticker card-sticker-mint p-3.5 sm:p-5 flex flex-col justify-between">
+          <div className="flex justify-between items-start mb-2 sm:mb-3">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-emerald-100/80 border-2 border-ink flex items-center justify-center text-emerald-800 shadow-pop-sm">
+              <span className="material-symbols-outlined text-[18px] sm:text-[22px]">verified</span>
             </div>
-            <span className="badge-sticker badge-mint text-[10px]">
-              <span className="material-symbols-outlined text-[13px]">star</span> Top Match
+            <span className="badge-sticker badge-mint text-[9px] sm:text-[10px] py-0.5 px-1.5 sm:px-2">
+              <span className="material-symbols-outlined text-[11px] sm:text-[13px]">star</span> Top Match
             </span>
           </div>
-          <h4 className="text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Eligible / Strong Fits</h4>
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-3xl font-extrabold font-heading text-ink">{strongCount}</span>
-            <span className="text-xs font-heading font-bold text-ink-muted">/ {active.length} Total</span>
+          <h4 className="text-[10px] sm:text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Eligible / Fits</h4>
+          <div className="flex items-baseline gap-1">
+            <span className="text-2xl sm:text-3xl font-extrabold font-heading text-ink">{strongCount}</span>
+            <span className="text-[10px] sm:text-xs font-heading font-bold text-ink-muted">/ {active.length}</span>
           </div>
         </div>
 
-        <div className="card-sticker card-sticker-amber p-5 flex flex-col justify-between">
-          <div className="flex justify-between items-start mb-3">
-            <div className="w-11 h-11 rounded-2xl bg-amber-100/80 border-2 border-ink flex items-center justify-center text-amber-800 shadow-pop-sm">
-              <span className="material-symbols-outlined text-[22px]">bolt</span>
+        <div className="card-sticker card-sticker-amber p-3.5 sm:p-5 flex flex-col justify-between">
+          <div className="flex justify-between items-start mb-2 sm:mb-3">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-amber-100/80 border-2 border-ink flex items-center justify-center text-amber-800 shadow-pop-sm">
+              <span className="material-symbols-outlined text-[18px] sm:text-[22px]">bolt</span>
             </div>
-            <span className="badge-sticker badge-amber text-[10px]">Need Review</span>
+            <span className="badge-sticker badge-amber text-[9px] sm:text-[10px] py-0.5 px-1.5 sm:px-2">Review</span>
           </div>
-          <h4 className="text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Potentially Eligible</h4>
-          <span className="text-3xl font-extrabold font-heading text-ink">{potentialCount}</span>
+          <h4 className="text-[10px] sm:text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Potential Fits</h4>
+          <span className="text-2xl sm:text-3xl font-extrabold font-heading text-ink">{potentialCount}</span>
         </div>
 
         <div
           onClick={() => navigate('/saved-applications')}
-          className="card-sticker p-5 flex flex-col justify-between cursor-pointer hover:border-accent-violet"
+          className="card-sticker p-3.5 sm:p-5 flex flex-col justify-between cursor-pointer hover:border-accent-violet"
         >
-          <div className="flex justify-between items-start mb-3">
-            <div className="w-11 h-11 rounded-2xl bg-indigo-100/80 border-2 border-ink flex items-center justify-center text-indigo-800 shadow-pop-sm">
-              <span className="material-symbols-outlined text-[22px]">bookmark</span>
+          <div className="flex justify-between items-start mb-2 sm:mb-3">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-indigo-100/80 border-2 border-ink flex items-center justify-center text-indigo-800 shadow-pop-sm">
+              <span className="material-symbols-outlined text-[18px] sm:text-[22px]">bookmark</span>
             </div>
-            <span className="badge-sticker badge-violet text-[10px]">View Saved &rarr;</span>
+            <span className="badge-sticker badge-violet text-[9px] sm:text-[10px] py-0.5 px-1.5 sm:px-2">View Saved &rarr;</span>
           </div>
-          <h4 className="text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Saved Applications</h4>
-          <span className="text-3xl font-extrabold font-heading text-ink">{savedIds.length}</span>
+          <h4 className="text-[10px] sm:text-xs font-heading font-bold text-ink-muted uppercase tracking-wider mb-1">Saved Applications</h4>
+          <span className="text-2xl sm:text-3xl font-extrabold font-heading text-ink">{savedIds.length}</span>
         </div>
       </div>
 
