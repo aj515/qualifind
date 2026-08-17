@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { DataProvider } from './context/DataContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
 import StudentLayout from './components/StudentLayout.jsx';
 import AdminLayout from './components/AdminLayout.jsx';
 import { isSupabaseConfigured } from './lib/supabaseClient.js';
@@ -33,6 +34,7 @@ export default function App() {
   return (
     <AuthProvider>
       <DataProvider>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />

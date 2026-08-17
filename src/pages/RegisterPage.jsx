@@ -127,7 +127,7 @@ export default function RegisterPage() {
   const initials = getInitials(firstName.trim(), lastName.trim());
 
   return (
-    <div className="h-screen overflow-hidden flex bg-paper bg-dot-grid relative">
+    <div className="min-h-screen lg:h-screen lg:overflow-hidden flex bg-paper bg-dot-grid relative">
 
       {/* ── Colorful Geometric Floating Shapes ───────────────────────── */}
       <div className="absolute -left-10 -top-10 w-48 h-48 rounded-full bg-accent-amber/20 border-2 border-accent-amber/40 pointer-events-none" />
@@ -185,8 +185,11 @@ export default function RegisterPage() {
         </span>
       </button>
 
-      {/* ── Logo — top left ──────────────────────────────────────────── */}
-      <div className="fixed top-6 left-6 z-20 max-w-xs">
+      {/* ── Logo — top left. Desktop-only: on mobile the form card is tall
+          enough (vertically centered on a short viewport) to run right under
+          this fixed corner block and overlap it, so it moves into the card
+          itself below instead. ────────────────────────────────────────── */}
+      <div className="hidden lg:block fixed top-6 left-6 z-20 max-w-xs">
         <Link to="/" className="flex items-center gap-3 no-underline group w-fit cursor-pointer">
           <div className="w-12 h-12 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
             <span className="material-symbols-outlined text-white text-[26px]">verified</span>
@@ -202,12 +205,20 @@ export default function RegisterPage() {
       </div>
 
       {/* ── FORM PANEL ────────────────────────────────────────────────── */}
-      <div className="w-full flex flex-col items-center justify-center px-8 relative z-10 overflow-hidden">
+      <div className="w-full flex flex-col items-center justify-center px-8 py-10 relative z-10">
 
         <div className="w-full max-w-xl">
 
           {/* Card */}
           <div className="card-sticker bg-card shadow-pop-lg p-7">
+
+            {/* Logo — mobile-only, replaces the fixed corner block above */}
+            <Link to="/" className="lg:hidden flex items-center gap-2.5 no-underline group w-fit mb-5">
+              <div className="w-10 h-10 bg-accent-violet rounded-xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <span className="material-symbols-outlined text-white text-[20px]">verified</span>
+              </div>
+              <span className="font-heading font-extrabold text-xl text-ink leading-none tracking-tight group-hover:text-accent-violet transition-colors">QualiFind</span>
+            </Link>
 
             {checkEmailMsg ? (
               <div className="text-center py-6">
