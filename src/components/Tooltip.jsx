@@ -49,15 +49,19 @@ export default function Tooltip({ children, text, width = 'w-56' }) {
       onBlur={() => setVisible(false)}
     >
       {children}
+      {/* Fixed slate, not `bg-ink` — `--color-ink` flips to near-white in dark
+          mode (it's the primary text-color token), which would render this as
+          white text on a white bubble. Tooltips should look the same in both
+          themes regardless. */}
       <span
         ref={bubbleRef}
         style={{ transform: `translateX(calc(-50% + ${shift}px))` }}
         className={`pointer-events-none absolute bottom-full left-1/2 mb-2 ${width} transition-all z-20 origin-bottom ${visible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
       >
-        <span className="block bg-ink text-white text-[11px] font-semibold leading-snug rounded-xl px-3 py-2 shadow-pop-sm">
+        <span className="block bg-slate-800 text-white text-[11px] font-semibold leading-snug rounded-xl px-3 py-2 shadow-pop-sm">
           {text}
         </span>
-        <span className="block w-2.5 h-2.5 bg-ink rotate-45 mx-auto -mt-1.5" />
+        <span className="block w-2.5 h-2.5 bg-slate-800 rotate-45 mx-auto -mt-1.5" />
       </span>
     </span>
   );
