@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useData } from '../../context/DataContext.jsx';
 import { supabase } from '../../lib/supabaseClient.js';
 import { getEligibilityStyle, formatDeadline, formatVerifiedDate, withAlternativeSuggestion } from '../../lib/eligibility.js';
+import Tooltip from '../../components/Tooltip.jsx';
 
 export default function EligibilityDetailPage() {
   const { id } = useParams();
@@ -221,8 +222,13 @@ export default function EligibilityDetailPage() {
                       <span className="material-symbols-outlined text-[14px] font-bold">description</span>
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-xs font-extrabold font-heading text-ink">{doc.name}</h4>
-                      {doc.description && <p className="text-[11px] text-ink-muted mt-0.5 font-medium">{doc.description}</p>}
+                      {doc.description ? (
+                        <Tooltip text={doc.description}>
+                          <h4 className="text-xs font-extrabold font-heading text-ink cursor-help border-b border-dashed border-ink-muted/50 w-fit">{doc.name}</h4>
+                        </Tooltip>
+                      ) : (
+                        <h4 className="text-xs font-extrabold font-heading text-ink">{doc.name}</h4>
+                      )}
                     </div>
                   </div>
                 ))}
