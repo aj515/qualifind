@@ -130,31 +130,31 @@ export default function LandingPage() {
 
       {/* Header */}
       <header className="border-b-2 border-ink bg-paper/95 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 no-underline group cursor-pointer">
-            <div className="w-11 h-11 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center group-hover:scale-105 transition-transform">
-              <span className="material-symbols-outlined text-white text-[24px]">verified</span>
+        <div className="max-w-6xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between gap-2">
+          <Link to="/" className="flex items-center gap-2 lg:gap-3 no-underline group cursor-pointer min-w-0">
+            <div className="w-9 h-9 lg:w-11 lg:h-11 bg-accent-violet rounded-xl lg:rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <span className="material-symbols-outlined text-white text-[18px] lg:text-[24px]">verified</span>
             </div>
-            <div className="flex flex-col">
-              <span className="font-heading font-extrabold text-xl text-ink tracking-tight leading-none group-hover:text-accent-violet transition-colors">QualiFind</span>
-              <span className="text-[9px] font-extrabold font-heading text-accent-violet uppercase tracking-wider mt-0.5">PH Student Portal</span>
+            <div className="flex flex-col min-w-0">
+              <span className="font-heading font-extrabold text-base lg:text-xl text-ink tracking-tight leading-none group-hover:text-accent-violet transition-colors truncate">QualiFind</span>
+              <span className="hidden sm:block text-[9px] font-extrabold font-heading text-accent-violet uppercase tracking-wider mt-0.5">PH Student Portal</span>
             </div>
           </Link>
 
-          <div className="flex items-center gap-3">
-            <Link to="/login" className="btn-candy btn-candy-secondary btn-candy-sm">
+          <div className="flex items-center gap-1.5 lg:gap-3 shrink-0">
+            <Link to="/login" className="btn-candy btn-candy-secondary btn-candy-sm px-2.5 py-1 text-[11px] lg:px-3.5 lg:py-1.5 lg:text-[13px]">
               Sign In
             </Link>
-            <Link to="/register" className="btn-candy btn-candy-sm">
+            <Link to="/register" className="btn-candy btn-candy-sm px-2.5 py-1 text-[11px] lg:px-3.5 lg:py-1.5 lg:text-[13px]">
               Get Started
             </Link>
             <button
               onClick={() => setIsDark((d) => !d)}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all cursor-pointer"
+              className="w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all cursor-pointer shrink-0"
               title="Toggle dark mode"
               aria-label="Toggle dark mode"
             >
-              <span className="material-symbols-outlined text-[20px] text-ink">
+              <span className="material-symbols-outlined text-[16px] lg:text-[20px] text-ink">
                 {isDark ? 'light_mode' : 'dark_mode'}
               </span>
             </button>
