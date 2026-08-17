@@ -8,8 +8,8 @@ import { extractProgramFromText } from './server/aiProgramExtractor.js';
 // Dev-only /api/match endpoint, served from inside the Vite dev server process
 // (no separate backend to run) — forwards free-text matcher requests to Claude.
 // NOTE: this middleware only runs under `vite dev`; it is not part of `vite build`
-// output. For a production deploy, port server/aiMatcher.js into a Supabase Edge
-// Function and call that from src/lib/matcher.js instead.
+// output. The production equivalent is api/match.js, a Vercel Serverless
+// Function that wraps the same server/aiMatcher.js logic.
 function aiMatchApiPlugin(env) {
   return {
     name: 'qualifind-ai-match-api',
@@ -42,8 +42,7 @@ function aiMatchApiPlugin(env) {
 
 // Dev-only /api/extract-document endpoint — reads an uploaded document (PDF,
 // image, or .txt) and asks Claude to pull out scholarship-relevant fields plus
-// a ready-to-paste prompt summary. Same "port to a Supabase Edge Function for
-// production" caveat as the matcher endpoint above.
+// a ready-to-paste prompt summary. Production equivalent is api/extract-document.js.
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024; // 10MB, base64-encoded size
 
 function aiExtractApiPlugin(env) {
@@ -87,8 +86,8 @@ function aiExtractApiPlugin(env) {
 
 // Dev-only /api/action-plan endpoint — personalizes the Action Plan page's
 // "recommended next action" callout given the program, eligibility gap,
-// required documents, and step-completion state. Same production caveat as
-// the other two dev-only AI endpoints above.
+// required documents, and step-completion state. Production equivalent is
+// api/action-plan.js.
 function aiActionPlanApiPlugin(env) {
   return {
     name: 'qualifind-ai-action-plan-api',
@@ -122,7 +121,7 @@ function aiActionPlanApiPlugin(env) {
 // Dev-only /api/extract-program endpoint — admin-side bulk import. Reads a
 // pasted scholarship/program announcement and returns draft form fields for
 // the Programs Registry form, so admins don't have to hand-type every
-// program. Same production caveat as the other dev-only AI endpoints above.
+// program. Production equivalent is api/extract-program.js.
 function aiExtractProgramApiPlugin(env) {
   return {
     name: 'qualifind-ai-extract-program-api',
