@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -55,6 +56,20 @@ const STEPS = [
 
 export default function LandingPage() {
   const { session, role, loading } = useAuth();
+  const [isDark, setIsDark] = useState(() => {
+    try {
+      const stored = localStorage.getItem('qualifind_theme');
+      if (stored) return stored === 'dark';
+    } catch (_) {}
+    return document.documentElement.classList.contains('dark');
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDark);
+    try {
+      localStorage.setItem('qualifind_theme', isDark ? 'dark' : 'light');
+    } catch (_) {}
+  }, [isDark]);
 
   // Already signed in — skip the marketing page and go straight to the right dashboard.
   if (!loading && session) {
@@ -77,6 +92,16 @@ export default function LandingPage() {
           </Link>
 
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsDark((d) => !d)}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all cursor-pointer"
+              title="Toggle dark mode"
+              aria-label="Toggle dark mode"
+            >
+              <span className="material-symbols-outlined text-[20px] text-ink">
+                {isDark ? 'light_mode' : 'dark_mode'}
+              </span>
+            </button>
             <Link to="/login" className="btn-candy btn-candy-secondary btn-candy-sm">
               Sign In
             </Link>
