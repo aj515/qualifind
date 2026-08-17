@@ -184,18 +184,18 @@ export default function EligibilityDetailPage() {
                   <div
                     key={alt.id}
                     onClick={() => navigate(`/opportunities/${alt.id}/eligibility`)}
-                    className="p-4 rounded-2xl border-2 border-ink bg-paper flex items-center justify-between hover:bg-card transition-colors cursor-pointer shadow-pop-sm"
+                    className="p-4 rounded-2xl border-2 border-ink bg-paper flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-card transition-colors cursor-pointer shadow-pop-sm"
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="badge-sticker badge-mint text-[9px]">Potential Match</span>
-                      <div>
+                    <div className="flex items-start sm:items-center gap-3 min-w-0">
+                      <span className="badge-sticker badge-mint text-[9px] mt-0.5 sm:mt-0">Potential Match</span>
+                      <div className="min-w-0">
                         <h4 className="text-xs font-extrabold font-heading text-ink">{alt.title}</h4>
                         <p className="text-[11px] text-ink-muted font-medium">
                           {alt.type} &bull; {alt.funding}
                         </p>
                       </div>
                     </div>
-                    <button className="btn-candy btn-candy-sm text-[11px] py-1 px-3">View Alternative &rarr;</button>
+                    <button className="btn-candy btn-candy-sm text-[11px] py-1 px-3 self-start sm:self-auto">View Alternative &rarr;</button>
                   </div>
                 ))}
               </div>
