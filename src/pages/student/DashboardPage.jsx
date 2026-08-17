@@ -180,7 +180,7 @@ export default function DashboardPage() {
               </div>
 
               <div
-                className="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto gap-4 mt-2 lg:mt-0"
+                className="flex flex-col items-start lg:items-end justify-between w-full lg:w-auto gap-3 mt-2 lg:mt-0"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex flex-col items-start lg:items-end">

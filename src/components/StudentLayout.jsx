@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
+import { NavLink, Outlet, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useData } from '../context/DataContext.jsx';
 
@@ -22,9 +22,7 @@ function navLinkClass({ isActive }) {
 export default function StudentLayout() {
   const { profile, signOut } = useAuth();
   const { savedIds } = useData();
-  const navigate = useNavigate();
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
-  const [search, setSearch] = useState('');
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark);
@@ -34,11 +32,6 @@ export default function StudentLayout() {
       /* ignore */
     }
   }, [isDark]);
-
-  function handleSearchSubmit(e) {
-    e.preventDefault();
-    navigate(`/opportunities?q=${encodeURIComponent(search)}`);
-  }
 
   return (
     <div className="bg-paper font-sans text-ink antialiased bg-dot-grid min-h-screen">
@@ -80,18 +73,15 @@ export default function StudentLayout() {
       {/* Main Content */}
       <div className="lg:pl-72 flex flex-col min-h-screen">
         <header className="fixed top-0 left-0 lg:left-72 right-0 h-20 bg-paper/95 backdrop-blur-md z-40 border-b-2 border-ink flex items-center justify-between px-4 lg:px-8">
-          <form onSubmit={handleSearchSubmit} className="flex-1 max-w-xl">
-            <div className="relative flex items-center">
-              <span className="material-symbols-outlined absolute left-4 z-10 text-ink-muted text-[20px] pointer-events-none">search</span>
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full input-playful pl-11 pr-4 py-2.5 shadow-pop-sm"
-                placeholder="Search scholarships, grants, loans, assistantships... (Press Enter)"
-                type="text"
-              />
+          {/* Desktop already shows the logo in the sidebar; this is mobile-only,
+              filling the space the header search bar used to occupy. */}
+          <Link to="/dashboard" className="lg:hidden flex items-center gap-2.5 no-underline group">
+            <div className="w-9 h-9 bg-accent-violet rounded-xl border-2 border-ink shadow-pop-sm flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <span className="material-symbols-outlined text-white text-[18px]">verified</span>
             </div>
-          </form>
+            <span className="font-heading font-extrabold text-lg text-ink tracking-tight leading-none group-hover:text-accent-violet transition-colors">QualiFind</span>
+          </Link>
+          <div className="hidden lg:block flex-1" />
 
           <div className="flex items-center gap-3 ml-4">
             <div className="hidden sm:flex items-center gap-2.5 px-3.5 py-1.5 bg-card rounded-full border-2 border-ink shadow-pop-sm">

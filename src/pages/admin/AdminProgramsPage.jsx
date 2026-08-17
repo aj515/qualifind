@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext.jsx';
 import { supabase } from '../../lib/supabaseClient.js';
 import { formatVerifiedDate } from '../../lib/eligibility.js';
+import Tooltip from '../../components/Tooltip.jsx';
 
 const STATUS_BADGE = {
   Active: 'badge-mint',
@@ -113,7 +114,7 @@ export default function AdminProgramsPage() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-2">
-                          <div className="relative group/verify">
+                          <Tooltip text="Marks this listing as manually re-checked today. Confirm the details are still accurate first — it doesn't verify anything automatically.">
                             <button
                               disabled={busyId === p.id}
                               onClick={() => handleVerifyNow(p.id)}
@@ -121,13 +122,7 @@ export default function AdminProgramsPage() {
                             >
                               <span className="material-symbols-outlined text-[14px]">verified</span> Verify
                             </button>
-                            <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 opacity-0 scale-95 group-hover/verify:opacity-100 group-hover/verify:scale-100 transition-all z-20 origin-bottom">
-                              <div className="bg-ink text-white text-[11px] font-semibold leading-snug rounded-xl px-3 py-2 shadow-pop-sm">
-                                Marks this listing as manually re-checked today. Confirm the details are still accurate first — it doesn't verify anything automatically.
-                              </div>
-                              <div className="w-2.5 h-2.5 bg-ink rotate-45 mx-auto -mt-1.5"></div>
-                            </div>
-                          </div>
+                          </Tooltip>
                           <button
                             onClick={() => navigate(`/admin-dashboard/programs/${p.id}`)}
                             className="btn-candy btn-candy-secondary btn-candy-sm text-[11px] py-1 px-2.5"

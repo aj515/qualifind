@@ -114,7 +114,7 @@ export default function SavedApplicationsPage() {
                   </h3>
                   <p className="text-xs font-semibold text-ink-muted mb-3">{opp.providers?.name}</p>
 
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center flex-wrap gap-2 mb-3">
                     <span className={`badge-sticker ${statusStyle.badgeClass} text-[9px]`}>{statusStyle.label}</span>
                     <EligibilityBadge result={eligibilityByProgramId[opp.id]?.result} />
                   </div>
