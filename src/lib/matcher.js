@@ -208,22 +208,3 @@ export function calculateMatchForPrompt(userPrompt, programs, userGpa) {
   results.sort((a, b) => b.calculatedScore - a.calculatedScore);
   return results;
 }
-
-export const MATCHER_DEMO_PRESETS = [
-  {
-    label: 'Indigent Nursing Student Scholarships (Davao)',
-    prompt: 'Looking for scholarship assistance for a 4th-year Nursing student in Davao City classified as indigent, to cover remaining tuition and board exam review fees.'
-  },
-  {
-    label: 'DOST-SEI ASTHRDP & ERDT Scholarships',
-    prompt: 'Looking for DOST-SEI ASTHRDP or ERDT graduate scholarships with monthly stipends around ₱35,000 in AI, genomics, and computing.'
-  },
-  {
-    label: 'CHED Tulong Dunong & Cebu LGU Grants',
-    prompt: 'Seeking CHED Tulong Dunong or Cebu City LGU college financial grants for undergraduate tuition assistance.'
-  },
-  {
-    label: 'University IT Student Assistantships',
-    prompt: 'Find campus student assistantships and IT technical support work-study programs.'
-  }
-];

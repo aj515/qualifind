@@ -11,8 +11,7 @@ import {
   composeBuilderSentence,
   buildProfileUpdatesFromBuilder,
   looksLikeRealDescription,
-  PROFILE_UPDATE_LABELS,
-  MATCHER_DEMO_PRESETS
+  PROFILE_UPDATE_LABELS
 } from '../../lib/matcher.js';
 
 const ACCEPTED_FILE_TYPES = '.pdf,.txt,.png,.jpg,.jpeg,.webp';
@@ -791,22 +790,6 @@ export default function MatcherPage() {
           {isMatching ? 'Analyzing your profile requirements...' : 'Find Assistance'}
         </button>
       </form>
-
-      <div className="w-full flex flex-col items-center space-y-3 pt-2">
-        <span className="text-xs font-heading font-bold uppercase text-ink-muted tracking-wider">Demo Presets &amp; Starting Stories</span>
-        <div className="flex flex-wrap justify-center gap-2">
-          {MATCHER_DEMO_PRESETS.map((preset) => (
-            <button
-              key={preset.label}
-              type="button"
-              onClick={() => setPrompt(preset.prompt)}
-              className="badge-sticker badge-violet hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3"
-            >
-              {preset.label}
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
