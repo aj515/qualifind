@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useData } from '../../context/DataContext.jsx';
@@ -14,6 +15,85 @@ const ELIGIBILITY_OPTIONS = [
 ];
 const ALL_ELIGIBILITY = ELIGIBILITY_OPTIONS.map((o) => o.value);
 
+const SORT_OPTIONS = [
+  { value: 'match', label: 'Best Match' },
+  { value: 'deadline', label: 'Deadline: Soonest' },
+  { value: 'alpha', label: 'Alphabetical (A-Z)' }
+];
+
+function FilterDropdown({ label, options, selected, onToggle, allValues }) {
+  const [open, setOpen] = useState(false);
+  const [coords, setCoords] = useState(null);
+  const buttonRef = useRef(null);
+  const panelRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function updateCoords() {
+      const rect = buttonRef.current?.getBoundingClientRect();
+      if (rect) setCoords({ top: rect.bottom + window.scrollY + 6, left: rect.left + window.scrollX });
+    }
+    updateCoords();
+
+    function handleClickOutside(e) {
+      if (buttonRef.current?.contains(e.target) || panelRef.current?.contains(e.target)) return;
+      setOpen(false);
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('scroll', updateCoords, true);
+    window.addEventListener('resize', updateCoords);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('scroll', updateCoords, true);
+      window.removeEventListener('resize', updateCoords);
+    };
+  }, [open]);
+
+  const isFiltered = selected.length !== allValues.length;
+
+  return (
+    <div className="relative">
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className={`input-playful py-1.5 px-3 text-xs font-semibold flex items-center gap-1.5 ${isFiltered ? 'border-accent-violet text-accent-violet' : 'text-ink'}`}
+      >
+        {label}
+        {isFiltered && (
+          <span className="badge-sticker badge-cyan text-[9px] px-1.5 py-0 leading-4">{selected.length}</span>
+        )}
+        <span className="material-symbols-outlined text-[16px]">{open ? 'expand_less' : 'expand_more'}</span>
+      </button>
+
+      {open && coords && createPortal(
+        <div
+          ref={panelRef}
+          style={{ position: 'absolute', top: coords.top, left: coords.left }}
+          className="z-[100] w-56 card-sticker p-3 bg-card flex flex-col gap-1.5 shadow-pop-sm"
+        >
+          {options.map((option) => (
+            <label key={option.value} className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink px-1.5 py-1 rounded-lg hover:bg-paper">
+              <input
+                type="checkbox"
+                checked={selected.includes(option.value)}
+                onChange={() => onToggle(option.value)}
+                className="w-4 h-4 rounded border-2 border-ink text-accent-violet"
+              />
+              <span className="flex items-center gap-1.5">
+                {option.dot && <span className={`w-2.5 h-2.5 rounded-full border border-ink ${option.dot}`}></span>}
+                {option.label}
+              </span>
+            </label>
+          ))}
+        </div>,
+        document.body
+      )}
+    </div>
+  );
+}
+
 export default function OpportunitiesPage() {
   const { profile } = useAuth();
   const { programs, savedIds, toggleSaved, matcherScores, matcherReasons, matcherQuery, profileUpdateNote, eligibilityByProgramId, applyMatcherScores } = useData();
@@ -25,6 +105,7 @@ export default function OpportunitiesPage() {
   const [activeTypes, setActiveTypes] = useState(ALL_TYPES);
   const [activeEligibility, setActiveEligibility] = useState(ALL_ELIGIBILITY);
   const [savedOnly, setSavedOnly] = useState(false);
+  const [sortBy, setSortBy] = useState('deadline');
   const [matcherInput, setMatcherInput] = useState(matcherQuery || '');
   const [isReSearching, setIsReSearching] = useState(false);
   const [reSearchClarification, setReSearchClarification] = useState('');
@@ -39,6 +120,10 @@ export default function OpportunitiesPage() {
   }, [matcherQuery]);
 
   const hasMatcherScores = Object.keys(matcherScores).length > 0;
+
+  useEffect(() => {
+    if (hasMatcherScores) setSortBy('match');
+  }, [matcherQuery]);
 
   async function handleReSearch(e) {
     e.preventDefault();
@@ -80,9 +165,6 @@ export default function OpportunitiesPage() {
   const filtered = useMemo(() => {
     const results = programs.filter((p) => {
       if (savedOnly && !savedIds.includes(p.id)) return false;
-      // No "empty means show all" special-casing — a checkbox list should mean
-      // what it visually shows, so zero boxes checked correctly means zero
-      // results (the empty state below points the student at Reset Filters).
       if (!activeTypes.includes(p.type)) return false;
       if (!activeEligibility.includes(eligibilityByProgramId[p.id]?.result)) return false;
       if (query) {
@@ -97,23 +179,26 @@ export default function OpportunitiesPage() {
       return true;
     });
 
-    if (hasMatcherScores) {
-      // Only demote programs you genuinely can't apply to (not_eligible) below
-      // everything else — a program that's merely "potentially eligible" (some
-      // profile field just hasn't been filled in yet) isn't actually worse than
-      // a fully "eligible" one, so it shouldn't be artificially outranked by it.
-      // Within that not-excluded set, sort purely by relevance to what was
-      // actually asked for, so a highly relevant program isn't buried under an
-      // unrelated one that just happens to sit in a "higher" eligibility tier.
-      results.sort((a, b) => {
-        const aExcluded = eligibilityByProgramId[a.id]?.result === 'not_eligible';
-        const bExcluded = eligibilityByProgramId[b.id]?.result === 'not_eligible';
-        if (aExcluded !== bExcluded) return aExcluded ? 1 : -1;
+    results.sort((a, b) => {
+      const aExcluded = eligibilityByProgramId[a.id]?.result === 'not_eligible';
+      const bExcluded = eligibilityByProgramId[b.id]?.result === 'not_eligible';
+      if (aExcluded !== bExcluded) return aExcluded ? 1 : -1;
+
+      if (sortBy === 'match' && hasMatcherScores) {
         return (matcherScores[b.id] ?? 0) - (matcherScores[a.id] ?? 0);
-      });
-    }
+      }
+      if (sortBy === 'alpha') {
+        return a.title.localeCompare(b.title);
+      }
+      // 'deadline' (default), and fallback when 'match' has no scores yet
+      const aDays = formatDeadline(a.deadline).daysLeft;
+      const bDays = formatDeadline(b.deadline).daysLeft;
+      if (aDays == null) return 1;
+      if (bDays == null) return -1;
+      return aDays - bDays;
+    });
     return results;
-  }, [programs, savedOnly, activeTypes, activeEligibility, query, savedIds, matcherScores, hasMatcherScores, eligibilityByProgramId]);
+  }, [programs, savedOnly, activeTypes, activeEligibility, query, savedIds, matcherScores, hasMatcherScores, sortBy, eligibilityByProgramId]);
 
   function toggleType(type) {
     setActiveTypes((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]));
@@ -130,6 +215,17 @@ export default function OpportunitiesPage() {
     setQuery('');
     setSearchParams({});
   }
+
+  const activeFilterChips = [
+    ...ALL_TYPES.filter((t) => !activeTypes.includes(t)).map((t) => ({ key: `type:${t}`, label: `Excludes: ${t}`, onRemove: () => toggleType(t) })),
+    ...ELIGIBILITY_OPTIONS.filter((o) => !activeEligibility.includes(o.value)).map((o) => ({
+      key: `elig:${o.value}`,
+      label: `Excludes: ${o.label}`,
+      onRemove: () => toggleEligibility(o.value)
+    })),
+    ...(savedOnly ? [{ key: 'saved', label: 'Saved Only', onRemove: () => setSavedOnly(false) }] : []),
+    ...(query ? [{ key: 'query', label: `"${query}"`, onRemove: () => setQuery('') }] : [])
+  ];
 
   return (
     <div className="flex flex-col w-full gap-6">
@@ -183,66 +279,47 @@ export default function OpportunitiesPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-        {/* Filters */}
-        <div className="card-sticker p-5 bg-card flex flex-col gap-6 lg:sticky lg:top-28">
-          <div>
-            <h4 className="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2.5">Category</h4>
-            <div className="flex flex-col gap-2">
-              {ALL_TYPES.map((type) => (
-                <label key={type} className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
-                  <input
-                    type="checkbox"
-                    checked={activeTypes.includes(type)}
-                    onChange={() => toggleType(type)}
-                    className="w-4 h-4 rounded border-2 border-ink text-accent-violet"
-                  />
-                  <span>{type}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+      <span className="text-sm font-heading font-bold text-ink px-1">
+        <span className="text-accent-violet font-extrabold">{filtered.length}</span> opportunities in the Philippines
+      </span>
 
-          <div>
-            <h4 className="text-xs font-heading font-extrabold text-ink uppercase tracking-wider mb-2.5">Eligibility</h4>
-            <div className="flex flex-col gap-2">
-              {ELIGIBILITY_OPTIONS.map((option) => (
-                <label key={option.value} className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
-                  <input
-                    type="checkbox"
-                    checked={activeEligibility.includes(option.value)}
-                    onChange={() => toggleEligibility(option.value)}
-                    className="w-4 h-4 rounded border-2 border-ink text-accent-violet"
-                  />
-                  <span className="flex items-center gap-1.5">
-                    <span className={`w-2.5 h-2.5 rounded-full border border-ink ${option.dot}`}></span> {option.label}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
+      <div className="card-sticker p-4 bg-card flex flex-col gap-3">
+        <div className="flex items-center gap-2 flex-wrap">
+          <FilterDropdown
+            label="Category"
+            options={ALL_TYPES.map((t) => ({ value: t, label: t }))}
+            selected={activeTypes}
+            onToggle={toggleType}
+            allValues={ALL_TYPES}
+          />
+          <FilterDropdown
+            label="Eligibility"
+            options={ELIGIBILITY_OPTIONS}
+            selected={activeEligibility}
+            onToggle={toggleEligibility}
+            allValues={ALL_ELIGIBILITY}
+          />
 
-          <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-ink">
-            <input
-              type="checkbox"
-              checked={savedOnly}
-              onChange={(e) => setSavedOnly(e.target.checked)}
-              className="w-4 h-4 rounded border-2 border-ink text-accent-violet"
-            />
-            <span>Saved Applications Only</span>
-          </label>
-
-          <button onClick={resetFilters} className="btn-candy btn-candy-secondary btn-candy-sm">
-            Reset Filters
+          <button
+            type="button"
+            onClick={() => setSavedOnly((v) => !v)}
+            className={`input-playful py-1.5 px-3 text-xs font-semibold flex items-center gap-1.5 ${savedOnly ? 'border-accent-violet text-accent-violet' : 'text-ink'}`}
+          >
+            <span className={`material-symbols-outlined text-[16px] ${savedOnly ? 'fill' : ''}`}>bookmark</span>
+            Saved Only
           </button>
-        </div>
 
-        {/* Results */}
-        <div className="lg:col-span-3 flex flex-col gap-5">
-          <div className="card-sticker p-4 flex items-center justify-between bg-card">
-            <span className="text-sm font-heading font-bold text-ink">
-              <span className="text-accent-violet font-extrabold">{filtered.length}</span> opportunities in the Philippines
-            </span>
+          <div className="flex items-center gap-2 ml-auto">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="input-playful py-1.5 px-2.5 text-xs font-semibold"
+              aria-label="Sort by"
+            >
+              {SORT_OPTIONS.filter((o) => o.value !== 'match' || hasMatcherScores).map((o) => (
+                <option key={o.value} value={o.value}>Sort: {o.label}</option>
+              ))}
+            </select>
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -250,8 +327,28 @@ export default function OpportunitiesPage() {
               className="input-playful py-1.5 px-3 text-xs w-48"
             />
           </div>
+        </div>
 
-          {filtered.length === 0 ? (
+        {activeFilterChips.length > 0 && (
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {activeFilterChips.map((chip) => (
+                <button
+                  key={chip.key}
+                  onClick={chip.onRemove}
+                  className="badge-sticker badge-cyan text-[10px] flex items-center gap-1 hover:opacity-80"
+                >
+                  {chip.label}
+                  <span className="material-symbols-outlined text-[12px]">close</span>
+                </button>
+              ))}
+              <button onClick={resetFilters} className="text-[10px] font-bold text-accent-violet underline underline-offset-2">
+                Clear all
+              </button>
+            </div>
+          )}
+        </div>
+
+        {filtered.length === 0 ? (
             <div className="card-sticker p-12 text-center flex flex-col items-center justify-center">
               <span className="material-symbols-outlined text-6xl text-ink-muted mb-4">search_off</span>
               <h3 className="text-xl font-bold font-heading text-ink mb-1">No programs match your filters</h3>
@@ -314,8 +411,7 @@ export default function OpportunitiesPage() {
               })}
             </div>
           )}
-        </div>
       </div>
-    </div>
   );
 }
+
