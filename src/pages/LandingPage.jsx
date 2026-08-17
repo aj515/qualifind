@@ -120,7 +120,7 @@ export default function LandingPage() {
               <span className="material-symbols-outlined text-[15px]">waving_hand</span> Mabuhay, future scholar!
             </span>
             <h1 className="text-4xl lg:text-5xl font-extrabold font-heading text-ink tracking-tight leading-tight">
-              Find student assistance that <span className="text-accent-violet underline decoration-accent-pink decoration-wavy">actually fits you</span>
+              Find student assistance that <span className="text-accent-violet">actually fits you</span>
             </h1>
             <p className="text-base text-ink-muted max-w-xl font-medium leading-relaxed">
               QualiFind matches Philippine students to scholarships, educational grants, LGU assistance, campus
