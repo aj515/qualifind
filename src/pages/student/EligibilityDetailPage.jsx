@@ -245,6 +245,9 @@ export default function EligibilityDetailPage() {
               <p><span className="text-ink-muted">Deadline:</span> {formatted}</p>
               <p><span className="text-ink-muted">Degree Required:</span> {opp.degree_required}</p>
               <p><span className="text-ink-muted">Citizenship:</span> {opp.citizenship}</p>
+              {opp.lead_prof && (
+                <p><span className="text-ink-muted">Contact:</span> {opp.lead_prof}</p>
+              )}
               {opp.slots_total != null && (
                 <p><span className="text-ink-muted">Total Slots:</span> {opp.slots_total}</p>
               )}

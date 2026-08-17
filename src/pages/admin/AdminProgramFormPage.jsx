@@ -52,6 +52,7 @@ const BLANK_FORM = {
   location: '',
   degree_required: '',
   citizenship: '',
+  lead_prof: '',
   source_url: '',
   last_verified_at: new Date().toISOString().slice(0, 10),
   why_strong_match: '',
@@ -128,6 +129,7 @@ export default function AdminProgramFormPage() {
             location: existing.location || '',
             degree_required: existing.degree_required || '',
             citizenship: existing.citizenship || '',
+            lead_prof: existing.lead_prof || '',
             source_url: existing.source_url || '',
             last_verified_at: existing.last_verified_at || new Date().toISOString().slice(0, 10),
             why_strong_match: arrayToLines(existing.why_strong_match),
@@ -369,6 +371,7 @@ export default function AdminProgramFormPage() {
       location: form.location.trim() || null,
       degree_required: form.degree_required.trim() || null,
       citizenship: form.citizenship.trim() || null,
+      lead_prof: form.lead_prof.trim() || null,
       source_url: form.source_url.trim() || null,
       last_verified_at: form.last_verified_at || null,
       why_strong_match: linesToArray(form.why_strong_match),
@@ -680,6 +683,17 @@ export default function AdminProgramFormPage() {
             <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Citizenship (display)</label>
             <input value={form.citizenship} onChange={(e) => setField('citizenship', e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
           </div>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Contact Person / Office</label>
+          <input
+            value={form.lead_prof}
+            onChange={(e) => setField('lead_prof', e.target.value)}
+            placeholder="e.g. Prof. Alan Turing / Head of IT Lab"
+            className="w-full input-playful py-2.5 px-4 text-xs font-semibold"
+          />
+          <p className="text-[11px] text-ink-muted font-medium">Shown to students on the program detail page as who to reach out to.</p>
         </div>
 
         <div className="space-y-1">
