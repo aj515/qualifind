@@ -92,6 +92,12 @@ export default function LandingPage() {
           </Link>
 
           <div className="flex items-center gap-3">
+            <Link to="/login" className="btn-candy btn-candy-secondary btn-candy-sm">
+              Sign In
+            </Link>
+            <Link to="/register" className="btn-candy btn-candy-sm">
+              Get Started
+            </Link>
             <button
               onClick={() => setIsDark((d) => !d)}
               className="w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop-sm hover:bg-accent-amber transition-all cursor-pointer"
@@ -102,12 +108,6 @@ export default function LandingPage() {
                 {isDark ? 'light_mode' : 'dark_mode'}
               </span>
             </button>
-            <Link to="/login" className="btn-candy btn-candy-secondary btn-candy-sm">
-              Sign In
-            </Link>
-            <Link to="/register" className="btn-candy btn-candy-sm">
-              Get Started
-            </Link>
           </div>
         </div>
       </header>
