@@ -72,6 +72,8 @@ export default function AdminProgramFormPage() {
   const [documentsCatalog, setDocumentsCatalog] = useState([]);
   const [selectedDocIds, setSelectedDocIds] = useState(new Set());
   const [newDoc, setNewDoc] = useState({ name: '', description: '' });
+  const [editingDocId, setEditingDocId] = useState(null);
+  const [editDocDraft, setEditDocDraft] = useState({ name: '', description: '' });
 
   const [steps, setSteps] = useState([]);
 
@@ -259,6 +261,47 @@ export default function AdminProgramFormPage() {
     setDocumentsCatalog((prev) => [...prev, data].sort((a, b) => a.name.localeCompare(b.name)));
     setSelectedDocIds((prev) => new Set(prev).add(data.id));
     setNewDoc({ name: '', description: '' });
+  }
+
+  function startEditDoc(doc) {
+    setEditingDocId(doc.id);
+    setEditDocDraft({ name: doc.name, description: doc.description || '' });
+  }
+  function cancelEditDoc() {
+    setEditingDocId(null);
+  }
+  async function saveEditDoc() {
+    if (!editDocDraft.name.trim()) return;
+    const { data, error } = await supabase
+      .from('documents')
+      .update({ name: editDocDraft.name.trim(), description: editDocDraft.description.trim() || null })
+      .eq('id', editingDocId)
+      .select()
+      .single();
+    if (error) {
+      setErrorMsg(`Failed to update document: ${error.message}`);
+      return;
+    }
+    setDocumentsCatalog((prev) => prev.map((d) => (d.id === editingDocId ? data : d)).sort((a, b) => a.name.localeCompare(b.name)));
+    setEditingDocId(null);
+  }
+
+  // Documents are a shared catalog — deleting one removes it (via cascade)
+  // from every program's checklist, not just the one currently being edited.
+  async function handleDeleteDoc(doc) {
+    if (!window.confirm(`Remove "${doc.name}" from the document catalog? This also removes it from every program's checklist that currently requires it, not just this one.`)) return;
+    const { error } = await supabase.from('documents').delete().eq('id', doc.id);
+    if (error) {
+      setErrorMsg(`Failed to remove document: ${error.message}`);
+      return;
+    }
+    setDocumentsCatalog((prev) => prev.filter((d) => d.id !== doc.id));
+    setSelectedDocIds((prev) => {
+      const next = new Set(prev);
+      next.delete(doc.id);
+      return next;
+    });
+    if (editingDocId === doc.id) setEditingDocId(null);
   }
 
   function addStep() {
@@ -643,21 +686,56 @@ export default function AdminProgramFormPage() {
       {/* Document checklist */}
       <div className="card-sticker p-6 bg-card flex flex-col gap-4">
         <h2 className="text-sm font-heading font-extrabold uppercase tracking-wider text-ink-muted">Required Documents</h2>
+        <p className="text-[11px] text-ink-muted -mt-2 font-medium">
+          This is a shared catalog — editing or removing a document changes it everywhere it's used, not just here.
+        </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {documentsCatalog.map((doc) => (
-            <label key={doc.id} className="flex items-start gap-2 cursor-pointer text-xs font-semibold text-ink p-2 rounded-xl hover:bg-card-subtle">
-              <input
-                type="checkbox"
-                checked={selectedDocIds.has(doc.id)}
-                onChange={() => toggleDoc(doc.id)}
-                className="w-4 h-4 mt-0.5 rounded border-2 border-ink text-accent-violet focus:ring-0 shrink-0"
-              />
-              <span>
-                {doc.name}
-                {doc.description && <span className="block text-[11px] text-ink-muted font-medium">{doc.description}</span>}
-              </span>
-            </label>
-          ))}
+          {documentsCatalog.map((doc) =>
+            editingDocId === doc.id ? (
+              <div key={doc.id} className="flex flex-col gap-2 p-2 rounded-xl bg-paper border-2 border-ink/20">
+                <input
+                  value={editDocDraft.name}
+                  onChange={(e) => setEditDocDraft((d) => ({ ...d, name: e.target.value }))}
+                  placeholder="Document name"
+                  className="w-full input-playful py-1.5 px-2.5 text-xs font-semibold"
+                  autoFocus
+                />
+                <input
+                  value={editDocDraft.description}
+                  onChange={(e) => setEditDocDraft((d) => ({ ...d, description: e.target.value }))}
+                  placeholder="Description (optional)"
+                  className="w-full input-playful py-1.5 px-2.5 text-xs font-semibold"
+                />
+                <div className="flex gap-2">
+                  <button type="button" onClick={saveEditDoc} className="btn-candy btn-candy-sm text-[11px] py-1 px-2.5">Save</button>
+                  <button type="button" onClick={cancelEditDoc} className="btn-candy btn-candy-secondary btn-candy-sm text-[11px] py-1 px-2.5">Cancel</button>
+                </div>
+              </div>
+            ) : (
+              <div key={doc.id} className="flex items-start gap-2 text-xs font-semibold text-ink p-2 rounded-xl hover:bg-card-subtle group/doc">
+                <label className="flex items-start gap-2 cursor-pointer flex-1 min-w-0">
+                  <input
+                    type="checkbox"
+                    checked={selectedDocIds.has(doc.id)}
+                    onChange={() => toggleDoc(doc.id)}
+                    className="w-4 h-4 mt-0.5 rounded border-2 border-ink text-accent-violet focus:ring-0 shrink-0"
+                  />
+                  <span className="min-w-0">
+                    {doc.name}
+                    {doc.description && <span className="block text-[11px] text-ink-muted font-medium">{doc.description}</span>}
+                  </span>
+                </label>
+                <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover/doc:opacity-100 transition-opacity">
+                  <button type="button" onClick={() => startEditDoc(doc)} className="w-6 h-6 flex items-center justify-center rounded-lg text-ink-muted hover:text-accent-violet hover:bg-accent-violet/10">
+                    <span className="material-symbols-outlined text-[15px]">edit</span>
+                  </button>
+                  <button type="button" onClick={() => handleDeleteDoc(doc)} className="w-6 h-6 flex items-center justify-center rounded-lg text-ink-muted hover:text-accent-pink hover:bg-accent-pink/10">
+                    <span className="material-symbols-outlined text-[15px]">delete</span>
+                  </button>
+                </div>
+              </div>
+            )
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 pt-2 border-t-2 border-ink/10">
