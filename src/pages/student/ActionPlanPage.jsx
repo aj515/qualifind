@@ -314,16 +314,12 @@ export default function ActionPlanPage() {
               <span className="font-heading font-bold text-ink-muted">Deadline:</span>
               <span className="badge-sticker badge-pink text-[10px]">{formatted}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="font-heading font-bold text-ink-muted">Last Verified:</span>
-              <span className="font-extrabold text-ink">{formatVerifiedDate(opp.last_verified_at) || 'Not yet verified'}</span>
-            </div>
           </div>
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
-        <h3 className="text-lg font-extrabold font-heading text-ink">Step-by-Step Application Flow</h3>
+        <h3 className="text-lg font-extrabold font-heading text-ink">Application Check List</h3>
         <p className="text-xs text-ink-muted font-medium -mt-2">Check off each step as you complete it to track your progress.</p>
         <div className="space-y-3">
           {loadingExtras && <p className="text-sm text-ink-muted font-medium">Loading…</p>}
