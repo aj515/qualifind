@@ -2,36 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
-const FEATURES = [
-  {
-    icon: 'auto_awesome',
-    bg: 'rgba(251,191,36,0.18)',
-    color: '#FBBF24',
-    title: 'AI-Powered Matching',
-    desc: 'Claude AI ranks every PH scholarship by your personal profile — not just keywords.',
-  },
-  {
-    icon: 'school',
-    bg: 'rgba(52,211,153,0.18)',
-    color: '#34D399',
-    title: '200+ PH Programs',
-    desc: 'CHED, DOST-SEI, LGU grants, private foundations, and student loans in one place.',
-  },
-  {
-    icon: 'task_alt',
-    bg: 'rgba(56,189,248,0.18)',
-    color: '#38BDF8',
-    title: 'Step-by-Step Plans',
-    desc: 'Know exactly what to do next — from document prep to application deadlines.',
-  },
-];
-
-const STATS = [
-  { value: '200+', label: 'Programs' },
-  { value: '10k+', label: 'Students' },
-  { value: '98%',  label: 'Accuracy' },
-];
-
 export default function LoginPage() {
   const { session, role, loading, signIn } = useAuth();
   const navigate = useNavigate();
@@ -121,68 +91,27 @@ export default function LoginPage() {
         </span>
       </button>
 
-      {/* ── LEFT BRANDING PANEL ───────────────────────────────────────── */}
-      <div className="hidden lg:flex w-[42%] flex-shrink-0 flex-col justify-between p-10 relative z-10 overflow-hidden">
-
-        {/* Logo */}
-        <div>
-          <Link to="/" className="flex items-center gap-3 no-underline group w-fit cursor-pointer">
-            <div className="w-12 h-12 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-              <span className="material-symbols-outlined text-white text-[26px]">verified</span>
-            </div>
-            <div>
-              <h2 className="font-heading font-extrabold text-2xl text-ink leading-none tracking-tight group-hover:text-accent-violet transition-colors">QualiFind</h2>
-              <span className="badge-sticker badge-amber mt-1 text-[9px]">PH Student Portal</span>
-            </div>
-          </Link>
-          <p className="mt-5 text-sm text-ink-muted leading-relaxed font-medium max-w-xs">
-            Your AI-powered gateway to scholarships, grants, and assistantships for Philippine students.
-          </p>
-        </div>
-
-        {/* Feature cards */}
-        <div className="flex flex-col gap-3">
-          {FEATURES.map((f) => (
-            <div key={f.title} className="flex items-start gap-3 bg-card border-2 border-ink rounded-2xl p-3.5 shadow-pop-sm">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
-                style={{ background: f.bg, border: `1.5px solid ${f.color}50` }}>
-                <span className="material-symbols-outlined fill" style={{ color: f.color, fontSize: '18px' }}>{f.icon}</span>
-              </div>
-              <div>
-                <p className="text-ink font-heading font-bold text-xs leading-none mb-1">{f.title}</p>
-                <p className="text-ink-muted text-xs leading-snug font-medium">{f.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-3 bg-card border-2 border-ink rounded-2xl overflow-hidden shadow-pop-sm">
-          {STATS.map((s, i) => (
-            <div key={s.label} className={`text-center py-3 ${i < 2 ? 'border-r-2 border-ink' : ''}`}>
-              <p className="font-heading font-extrabold text-accent-violet text-xl leading-none">{s.value}</p>
-              <p className="text-ink-muted text-[11px] font-semibold mt-0.5">{s.label}</p>
-            </div>
-          ))}
-        </div>
+      {/* ── Logo — top left ──────────────────────────────────────────── */}
+      <div className="fixed top-6 left-6 z-20 max-w-xs">
+        <Link to="/" className="flex items-center gap-3 no-underline group w-fit cursor-pointer">
+          <div className="w-12 h-12 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+            <span className="material-symbols-outlined text-white text-[26px]">verified</span>
+          </div>
+          <div>
+            <h2 className="font-heading font-extrabold text-2xl text-ink leading-none tracking-tight group-hover:text-accent-violet transition-colors">QualiFind</h2>
+            <span className="badge-sticker badge-violet mt-1 text-[9px]">PH Student Portal</span>
+          </div>
+        </Link>
+        <p className="mt-3 text-sm text-ink-muted leading-relaxed font-medium">
+          Your AI-powered gateway to scholarships, grants, and assistantships for Philippine students.
+        </p>
       </div>
 
-      {/* ── RIGHT FORM PANEL ──────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8 relative z-10 overflow-hidden">
+      {/* ── FORM PANEL ────────────────────────────────────────────────── */}
+      <div className="w-full flex flex-col items-center justify-center px-8 relative z-10 overflow-hidden">
 
         {/* Form card */}
         <div className="w-full max-w-md">
-
-          {/* Mobile logo (shown only when left panel is hidden) */}
-          <Link to="/" className="lg:hidden flex items-center gap-3 mb-6 no-underline group w-fit cursor-pointer">
-            <div className="w-10 h-10 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center group-hover:scale-105 transition-transform">
-              <span className="material-symbols-outlined text-white text-[22px]">verified</span>
-            </div>
-            <div>
-              <h2 className="font-heading font-extrabold text-xl text-ink leading-none group-hover:text-accent-violet transition-colors">QualiFind</h2>
-              <span className="badge-sticker badge-violet text-[9px] mt-0.5">PH Student Portal</span>
-            </div>
-          </Link>
 
           <div className="card-sticker bg-card p-8 shadow-pop-lg">
 

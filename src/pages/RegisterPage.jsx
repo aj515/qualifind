@@ -14,13 +14,6 @@ const COURSE_OPTIONS = [
   'Other'
 ];
 
-const PERKS = [
-  { icon: 'auto_awesome', color: '#FBBF24', bg: 'rgba(251,191,36,0.18)', text: 'AI ranks every PH scholarship by your personal fit' },
-  { icon: 'task_alt',     color: '#34D399', bg: 'rgba(52,211,153,0.18)',  text: 'Step-by-step action plans per application' },
-  { icon: 'folder_open',  color: '#38BDF8', bg: 'rgba(56,189,248,0.18)',  text: 'Track documents and deadlines in one place' },
-  { icon: 'volunteer_activism', color: '#F472B6', bg: 'rgba(244,114,182,0.18)', text: 'Need-based & merit-based — always free' },
-];
-
 // Public registration is student-only. Admin accounts are never self-service —
 // anyone could otherwise grant themselves write access to the programs database
 // via RLS. Promote an account to admin manually (see README) after verifying who
@@ -192,66 +185,26 @@ export default function RegisterPage() {
         </span>
       </button>
 
-      {/* ── LEFT BRANDING PANEL ───────────────────────────────────────── */}
-      <div className="hidden lg:flex w-[42%] flex-shrink-0 flex-col justify-between p-10 relative z-10 overflow-hidden">
-
-        {/* Logo */}
-        <div>
-          <Link to="/" className="flex items-center gap-3 no-underline group w-fit cursor-pointer">
-            <div className="w-12 h-12 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-              <span className="material-symbols-outlined text-white text-[26px]">verified</span>
-            </div>
-            <div>
-              <h2 className="font-heading font-extrabold text-2xl text-ink leading-none tracking-tight group-hover:text-accent-violet transition-colors">QualiFind</h2>
-              <span className="badge-sticker badge-amber mt-1 text-[9px]">PH Student Portal</span>
-            </div>
-          </Link>
-          <div className="mt-5 bg-card border-2 border-ink shadow-pop-sm rounded-2xl p-4">
-            <p className="font-heading font-extrabold text-lg text-ink leading-snug mb-1">
-              Join 10,000+ Philippine students finding scholarships faster.
-            </p>
-            <p className="text-xs text-ink-muted leading-relaxed font-medium">
-              Set up your free profile in under 2 minutes and let our AI do the matching.
-            </p>
+      {/* ── Logo — top left ──────────────────────────────────────────── */}
+      <div className="fixed top-6 left-6 z-20 max-w-xs">
+        <Link to="/" className="flex items-center gap-3 no-underline group w-fit cursor-pointer">
+          <div className="w-12 h-12 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+            <span className="material-symbols-outlined text-white text-[26px]">verified</span>
           </div>
-        </div>
-
-        {/* Perks */}
-        <div className="flex flex-col gap-2.5">
-          <p className="font-heading font-bold text-[10px] uppercase tracking-widest text-ink-muted mb-0.5">What you unlock</p>
-          {PERKS.map((p) => (
-            <div key={p.text} className="flex items-center gap-3 bg-card border-2 border-ink shadow-pop-sm rounded-2xl px-3.5 py-2.5">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background: p.bg, border: `1.5px solid ${p.color}50` }}>
-                <span className="material-symbols-outlined fill" style={{ color: p.color, fontSize: '16px' }}>{p.icon}</span>
-              </div>
-              <p className="text-xs text-ink font-medium leading-snug m-0">{p.text}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t-2 border-ink/10 pt-4">
-          <span className="font-heading font-bold text-xs text-ink-muted">DOST-SEI &amp; CHED Aligned</span>
-          <span className="text-xs font-semibold text-ink-muted">v2.0.0</span>
-        </div>
+          <div>
+            <h2 className="font-heading font-extrabold text-2xl text-ink leading-none tracking-tight group-hover:text-accent-violet transition-colors">QualiFind</h2>
+            <span className="badge-sticker badge-violet mt-1 text-[9px]">PH Student Portal</span>
+          </div>
+        </Link>
+        <p className="mt-3 text-sm text-ink-muted leading-relaxed font-medium">
+          Your AI-powered gateway to scholarships, grants, and assistantships for Philippine students.
+        </p>
       </div>
 
-      {/* ── RIGHT FORM PANEL ──────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8 relative z-10 overflow-hidden">
+      {/* ── FORM PANEL ────────────────────────────────────────────────── */}
+      <div className="w-full flex flex-col items-center justify-center px-8 relative z-10 overflow-hidden">
 
         <div className="w-full max-w-xl">
-
-          {/* Mobile logo */}
-          <Link to="/" className="lg:hidden flex items-center gap-3 mb-5 no-underline group w-fit cursor-pointer">
-            <div className="w-10 h-10 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center group-hover:scale-105 transition-transform">
-              <span className="material-symbols-outlined text-white text-[22px]">verified</span>
-            </div>
-            <div>
-              <h2 className="font-heading font-extrabold text-xl text-ink leading-none group-hover:text-accent-violet transition-colors">QualiFind</h2>
-              <span className="badge-sticker badge-violet text-[9px] mt-0.5">PH Student Portal</span>
-            </div>
-          </Link>
 
           {/* Card */}
           <div className="card-sticker bg-card shadow-pop-lg p-7">
