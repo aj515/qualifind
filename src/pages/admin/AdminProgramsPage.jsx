@@ -113,14 +113,21 @@ export default function AdminProgramsPage() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-2">
-                          <button
-                            disabled={busyId === p.id}
-                            onClick={() => handleVerifyNow(p.id)}
-                            className="btn-candy btn-candy-secondary btn-candy-sm text-[11px] py-1 px-2.5 disabled:opacity-50"
-                            title="Set Last Verified to today"
-                          >
-                            <span className="material-symbols-outlined text-[14px]">verified</span> Verify
-                          </button>
+                          <div className="relative group/verify">
+                            <button
+                              disabled={busyId === p.id}
+                              onClick={() => handleVerifyNow(p.id)}
+                              className="btn-candy btn-candy-secondary btn-candy-sm text-[11px] py-1 px-2.5 disabled:opacity-50"
+                            >
+                              <span className="material-symbols-outlined text-[14px]">verified</span> Verify
+                            </button>
+                            <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 opacity-0 scale-95 group-hover/verify:opacity-100 group-hover/verify:scale-100 transition-all z-20 origin-bottom">
+                              <div className="bg-ink text-white text-[11px] font-semibold leading-snug rounded-xl px-3 py-2 shadow-pop-sm">
+                                Marks this listing as manually re-checked today. Confirm the details are still accurate first — it doesn't verify anything automatically.
+                              </div>
+                              <div className="w-2.5 h-2.5 bg-ink rotate-45 mx-auto -mt-1.5"></div>
+                            </div>
+                          </div>
                           <button
                             onClick={() => navigate(`/admin-dashboard/programs/${p.id}`)}
                             className="btn-candy btn-candy-secondary btn-candy-sm text-[11px] py-1 px-2.5"

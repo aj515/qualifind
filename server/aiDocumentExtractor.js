@@ -13,6 +13,17 @@ const EXTRACT_SCHEMA = {
         "False if the document/text contains no meaningful information about a student's education, finances, or scholarship eligibility " +
         "(e.g. blank, gibberish, keyboard-mash, or entirely unrelated content). True only if there is at least one real, usable detail."
     },
+    isRelevant: {
+      type: "boolean",
+      description:
+        "True if this document is directly relevant to scholarship / financial aid / academic matching (e.g. Certificate of Registration, Transcript of Records, Certificate of Indigency, Report Card, ID, Enrollment form). " +
+        "False if this document is general school coursework, an assignment, homework, essay, syllabus, or unrelated file that lacks financial aid/eligibility data."
+    },
+    warning: {
+      type: ["string", "null"],
+      description:
+        "If isRelevant is false or if the file is inappropriate/unrelated for financial aid or scholarship search (e.g. literature homework, random coursework), provide a concise warning explaining why this file may not be suitable for scholarship matching and suggesting what document to upload instead. Null if fully relevant."
+    },
     summary: {
       type: "string",
       description:
@@ -38,11 +49,15 @@ const EXTRACT_SCHEMA = {
       additionalProperties: false
     }
   },
-  required: ["hasContent", "summary", "fields"],
+  required: ["hasContent", "isRelevant", "warning", "summary", "fields"],
   additionalProperties: false
 };
 
-const SYSTEM_PROMPT = `You extract information from text Philippine students provide when looking for financial-assistance / scholarship programs — either an uploaded document (certificate of registration, transcript of records, certificate of indigency, barangay certificate) or a free-text description of their own situation.
+const SYSTEM_PROMPT = `You extract information from documents Philippine students upload when searching for financial assistance / scholarship programs — such as a Certificate of Registration (COR), Transcript of Records (TOR), Certificate of Indigency, Barangay Certificate, Report Card, Student ID, or Scholarship Application.
+
+Relevance Rules:
+- isRelevant: Set to true ONLY if the document is an official academic record or financial aid document that directly helps determine scholarship/aid eligibility. Set to false if the document is a general class assignment, coursework, homework, literature review, syllabus, lecture notes, essay, receipt, or unrelated file.
+- warning: If isRelevant is false or if the file lacks financial/academic eligibility information, provide a friendly explanation in 'warning' stating why this file is not suitable for scholarship matching and suggesting they upload a Certificate of Registration (COR), Transcript (TOR), or Certificate of Indigency instead.
 
 Only report facts actually stated in the text. Use null for anything not mentioned — never guess or invent values. Keep the summary grounded strictly in the given text.`;
 

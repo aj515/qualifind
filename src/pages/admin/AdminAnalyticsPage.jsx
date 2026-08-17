@@ -22,26 +22,35 @@ const RESULT_ORDER = ['eligible', 'potentially_eligible', 'not_eligible'];
 const SUSPECT_MIN_CHECKS = 3;
 const SUSPECT_MAX_ELIGIBLE_RATE = 0.05;
 
+// Throwaway accounts created for dev/QA testing all use this domain — never a
+// real student signup. Excluding them keeps these numbers reflecting genuine
+// usage instead of our own verification runs.
+const TEST_EMAIL_PATTERN = /@example\.com$/i;
+
 export default function AdminAnalyticsPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [programs, setPrograms] = useState([]);
   const [rows, setRows] = useState([]);
+  const [testStudentIds, setTestStudentIds] = useState(new Set());
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const [programsRes, eligRes] = await Promise.all([
+      const [programsRes, eligRes, profilesRes] = await Promise.all([
         supabase.from('programs').select('id, title, status'),
-        supabase.from('eligibility_results').select('program_id, student_id, result')
+        supabase.from('eligibility_results').select('program_id, student_id, result'),
+        supabase.from('profiles').select('user_id, email').eq('role', 'student')
       ]);
       if (cancelled) return;
       if (programsRes.error) setErrorMsg(`Failed to load programs: ${programsRes.error.message}`);
       else setPrograms(programsRes.data);
       if (eligRes.error) setErrorMsg((prev) => prev || `Failed to load eligibility results: ${eligRes.error.message}`);
       else setRows(eligRes.data);
+      if (profilesRes.error) setErrorMsg((prev) => prev || `Failed to load profiles: ${profilesRes.error.message}`);
+      else setTestStudentIds(new Set(profilesRes.data.filter((p) => TEST_EMAIL_PATTERN.test(p.email || '')).map((p) => p.user_id)));
       setLoading(false);
     })();
     return () => { cancelled = true; };
@@ -57,11 +66,14 @@ export default function AdminAnalyticsPage() {
 
   const programTitleById = Object.fromEntries(programs.map((p) => [p.id, p.title]));
 
+  const realRows = rows.filter((row) => !testStudentIds.has(row.student_id));
+  const excludedCount = rows.length - realRows.length;
+
   const byProgram = {};
   const uniqueStudents = new Set();
   const overall = { eligible: 0, potentially_eligible: 0, not_eligible: 0, total: 0 };
 
-  rows.forEach((row) => {
+  realRows.forEach((row) => {
     uniqueStudents.add(row.student_id);
     if (!row.result || !RESULT_META[row.result]) return;
     if (!byProgram[row.program_id]) byProgram[row.program_id] = { eligible: 0, potentially_eligible: 0, not_eligible: 0, total: 0 };
@@ -95,6 +107,12 @@ export default function AdminAnalyticsPage() {
       </div>
 
       {errorMsg && <div className="p-3 rounded-2xl bg-accent-pink/10 border-2 border-accent-pink text-xs font-semibold text-ink">{errorMsg}</div>}
+
+      {excludedCount > 0 && (
+        <p className="text-[11px] text-ink-muted font-medium -mt-2">
+          {excludedCount} check{excludedCount > 1 ? 's' : ''} from internal test accounts excluded from the numbers below.
+        </p>
+      )}
 
       {/* Stat tiles */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
