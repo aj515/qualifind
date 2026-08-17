@@ -77,7 +77,57 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="bg-paper font-sans text-ink antialiased bg-dot-grid min-h-screen">
+    <div className="bg-paper font-sans text-ink antialiased bg-dot-grid min-h-screen relative overflow-x-hidden">
+      {/* ── Geometric playful shapes across whole screen ─────────────── */}
+      <div className="absolute left-6 top-32 w-16 h-16 rounded-2xl rotate-45 bg-accent-cyan/20 border-2 border-accent-cyan/40 pointer-events-none" />
+      <div className="absolute left-[6%] top-[45%] w-24 h-24 rounded-3xl rotate-12 bg-accent-pink/20 border-2 border-accent-pink/40 pointer-events-none" />
+      <div className="absolute right-10 top-24 w-32 h-32 rounded-full bg-accent-violet/20 border-2 border-accent-violet/35 pointer-events-none" />
+      <div className="absolute right-[5%] top-[52%] w-44 h-44 rounded-3xl -rotate-12 bg-accent-mint/20 border-2 border-accent-mint/40 pointer-events-none" />
+      <div className="absolute left-8 bottom-60 w-28 h-28 rounded-3xl rotate-45 bg-accent-amber/20 border-2 border-accent-amber/35 pointer-events-none" />
+      <div className="absolute -right-6 bottom-40 w-52 h-52 rounded-3xl rotate-12 bg-accent-violet/15 border-2 border-accent-violet/30 pointer-events-none" />
+
+      {/* ── Decorative SVG background across entire screen ──────────── */}
+      <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+        {/* Ghost circles */}
+        <circle cx="6%" cy="18%" r="90" fill="none" stroke="rgba(99,102,241,0.14)" strokeWidth="1.5"/>
+        <circle cx="6%" cy="18%" r="55" fill="none" stroke="rgba(99,102,241,0.1)" strokeWidth="1"/>
+        <circle cx="92%" cy="22%" r="100" fill="none" stroke="rgba(99,102,241,0.14)" strokeWidth="1.5"/>
+        <circle cx="92%" cy="22%" r="60" fill="none" stroke="rgba(99,102,241,0.08)" strokeWidth="1"/>
+        <circle cx="88%" cy="10%" r="60" fill="none" stroke="rgba(251,191,36,0.22)" strokeWidth="1.5"/>
+        <circle cx="10%" cy="60%" r="70" fill="none" stroke="rgba(52,211,153,0.2)" strokeWidth="1.5"/>
+        <circle cx="90%" cy="70%" r="85" fill="none" stroke="rgba(244,114,182,0.18)" strokeWidth="1.5"/>
+
+        {/* Connecting lines */}
+        <line x1="6%" y1="18%" x2="88%" y2="10%" stroke="rgba(99,102,241,0.09)" strokeWidth="1" strokeDasharray="6 5"/>
+        <line x1="6%" y1="18%" x2="10%" y2="60%" stroke="rgba(99,102,241,0.08)" strokeWidth="1" strokeDasharray="4 6"/>
+        <line x1="88%" y1="10%" x2="92%" y2="22%" stroke="rgba(99,102,241,0.09)" strokeWidth="1" strokeDasharray="6 5"/>
+        <line x1="10%" y1="60%" x2="90%" y2="70%" stroke="rgba(52,211,153,0.1)" strokeWidth="1" strokeDasharray="5 6"/>
+
+        {/* Accent dots */}
+        <circle cx="6%" cy="18%" r="5" fill="rgba(99,102,241,0.25)"/>
+        <circle cx="88%" cy="10%" r="4" fill="rgba(251,191,36,0.35)"/>
+        <circle cx="92%" cy="22%" r="5" fill="rgba(99,102,241,0.22)"/>
+        <circle cx="10%" cy="60%" r="4" fill="rgba(52,211,153,0.3)"/>
+        <circle cx="90%" cy="70%" r="5" fill="rgba(244,114,182,0.3)"/>
+
+        {/* Dot clusters */}
+        {[0,1,2,3,4].map(col => [0,1,2,3].map(row => (
+          <circle key={`tr-${col}-${row}`} cx={`${84 + col * 1.8}%`} cy={`${12 + row * 1.8}%`} r="1.8" fill="rgba(99,102,241,0.22)"/>
+        )))}
+        {[0,1,2,3,4].map(col => [0,1,2,3].map(row => (
+          <circle key={`bl-${col}-${row}`} cx={`${3 + col * 1.8}%`} cy={`${50 + row * 1.8}%`} r="1.8" fill="rgba(52,211,153,0.25)"/>
+        )))}
+        {[0,1,2,3,4].map(col => [0,1,2,3].map(row => (
+          <circle key={`br-${col}-${row}`} cx={`${85 + col * 1.8}%`} cy={`${75 + row * 1.8}%`} r="1.8" fill="rgba(244,114,182,0.22)"/>
+        )))}
+
+        {/* Cross accents */}
+        <line x1="93%" y1="37%" x2="93%" y2="43%" stroke="rgba(99,102,241,0.25)" strokeWidth="1.5"/>
+        <line x1="90.5%" y1="40%" x2="95.5%" y2="40%" stroke="rgba(99,102,241,0.25)" strokeWidth="1.5"/>
+        <line x1="5%" y1="42%" x2="5%" y2="48%" stroke="rgba(244,114,182,0.25)" strokeWidth="1.5"/>
+        <line x1="2.5%" y1="45%" x2="7.5%" y2="45%" stroke="rgba(244,114,182,0.25)" strokeWidth="1.5"/>
+      </svg>
+
       {/* Header */}
       <header className="border-b-2 border-ink bg-paper/95 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
@@ -112,7 +162,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 lg:px-8">
+      <main className="relative z-10 max-w-6xl mx-auto px-4 lg:px-8">
         {/* Hero */}
         <section className="pt-16 lg:pt-24 pb-16 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-7 flex flex-col gap-6">
@@ -246,7 +296,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t-2 border-ink bg-card-subtle">
+      <footer className="relative z-10 border-t-2 border-ink bg-card-subtle">
         <div className="max-w-6xl mx-auto px-4 lg:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="flex flex-col gap-3 sm:col-span-2 lg:col-span-1">
