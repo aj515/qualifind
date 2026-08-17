@@ -14,6 +14,51 @@ const COURSE_OPTIONS = [
   'Other'
 ];
 
+const SCHOOL_OPTIONS = [
+  'Cebu Technological University (CTU)',
+  'University of San Carlos (USC)',
+  'University of San Jose-Recoletos (USJ-R)',
+  'University of Cebu (UC)',
+  'University of the Philippines (UP)',
+  'Cebu Normal University (CNU)',
+  'Southwestern University PHINMA',
+  'University of Santo Tomas (UST)',
+  'Ateneo de Manila University',
+  'De La Salle University (DLSU)',
+  'Polytechnic University of the Philippines (PUP)',
+  'Mindanao State University (MSU)',
+  'Other'
+];
+
+// Approximate scale <-> percentage table (Philippine 1.0-5.0 GWA scale isn't
+// standardized across schools, so this is illustrative, not authoritative).
+// Interpolated linearly between points. Mirrors ProfilePage.jsx's table so
+// signup and later profile edits convert GWA the same way.
+const GWA_SCALE_TABLE = [
+  [1.0, 99], [1.25, 96], [1.5, 93], [1.75, 90], [2.0, 87], [2.25, 84],
+  [2.5, 81], [2.75, 78], [3.0, 75], [3.5, 69], [4.0, 63], [5.0, 50]
+];
+
+function interpolate(table, x) {
+  if (x <= table[0][0]) return table[0][1];
+  if (x >= table[table.length - 1][0]) return table[table.length - 1][1];
+  for (let i = 0; i < table.length - 1; i++) {
+    const [x1, y1] = table[i];
+    const [x2, y2] = table[i + 1];
+    if (x >= x1 && x <= x2) return y1 + ((x - x1) / (x2 - x1)) * (y2 - y1);
+  }
+  return table[table.length - 1][1];
+}
+
+function scaleToPercentage(scale) {
+  return interpolate(GWA_SCALE_TABLE, scale);
+}
+
+function percentageToScale(pct) {
+  const reversed = [...GWA_SCALE_TABLE].map(([s, p]) => [p, s]).sort((a, b) => a[0] - b[0]);
+  return interpolate(reversed, pct);
+}
+
 // Public registration is student-only. Admin accounts are never self-service —
 // anyone could otherwise grant themselves write access to the programs database
 // via RLS. Promote an account to admin manually (see README) after verifying who
@@ -29,10 +74,12 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  const [institution, setInstitution] = useState('');
+  const [institution, setInstitution] = useState(SCHOOL_OPTIONS[0]);
+  const [customInstitution, setCustomInstitution] = useState('');
   const [course, setCourse] = useState(COURSE_OPTIONS[0]);
   const [customCourse, setCustomCourse] = useState('');
   const [yearLevel, setYearLevel] = useState('2nd Year');
+  const [gwaScale, setGwaScale] = useState('percentage'); // 'percentage' | '1.0-5.0'
   const [gwa, setGwa] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [location, setLocation] = useState('');
@@ -58,6 +105,18 @@ export default function RegisterPage() {
     return (first[0] + last[0]).toUpperCase();
   }
 
+  // Switching scale converts whatever's currently typed so the number stays
+  // meaningful instead of just clearing the field (same behavior as ProfilePage).
+  function handleScaleChange(nextScale) {
+    if (nextScale === gwaScale) return;
+    const current = parseFloat(gwa);
+    if (!Number.isNaN(current)) {
+      const converted = nextScale === '1.0-5.0' ? percentageToScale(current) : scaleToPercentage(current);
+      setGwa(converted.toFixed(2).replace(/\.?0+$/, ''));
+    }
+    setGwaScale(nextScale);
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setErrorMsg('');
@@ -65,6 +124,12 @@ export default function RegisterPage() {
 
     const name = `${firstName.trim()} ${lastName.trim()}`.trim();
     const resolvedCourse = course === 'Other' ? customCourse.trim() : course;
+    const resolvedInstitution = institution === 'Other' ? customInstitution.trim() : institution;
+    // Students table always stores gpa as a percentage — convert from the
+    // 1.0-5.0 scale if that's what was selected, same as ProfilePage's save.
+    const rawGwa = gwa === '' ? '' : parseFloat(gwa);
+    const gwaPercentage =
+      rawGwa === '' || Number.isNaN(rawGwa) ? '' : gwaScale === '1.0-5.0' ? Math.round(scaleToPercentage(rawGwa) * 10) / 10 : rawGwa;
 
     if (!firstName.trim() || !lastName.trim() || !email.trim()) {
       setErrorMsg('Please fill in your first name, last name, and email.');
@@ -93,7 +158,7 @@ export default function RegisterPage() {
       role: 'student',
       name,
       avatar: getInitials(firstName.trim(), lastName.trim()),
-      institution: institution.trim(),
+      institution: resolvedInstitution,
       course: resolvedCourse,
       education_level: isGraduate ? 'Graduate' : 'College',
       year_level: isGraduate ? '' : parseInt(yearLevel, 10),
@@ -101,7 +166,7 @@ export default function RegisterPage() {
       // grades yet, or may not want to share these immediately. Left blank, they stay
       // null and just mean "needs verification" rather than an eligibility failure
       // (see computeEligibility in src/lib/eligibility.js). Fillable later from Profile.
-      gpa: gwa ? parseFloat(gwa) : '',
+      gpa: gwaPercentage,
       birthdate,
       location: location.trim(),
       is_financially_disadvantaged: isFinanciallyDisadvantaged
@@ -324,12 +389,14 @@ export default function RegisterPage() {
                   <div className="grid grid-cols-2 gap-2.5">
                     <div className="space-y-1">
                       <label htmlFor="reg-institution" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">School</label>
-                      <div className="relative flex items-center">
-                        <span className="material-symbols-outlined absolute left-3 z-10 text-ink-muted text-[16px] pointer-events-none">apartment</span>
-                        <input id="reg-institution" type="text" value={institution}
-                          onChange={(e) => setInstitution(e.target.value)} placeholder="e.g. CTU"
-                          className="w-full input-playful py-2 pl-9 pr-3 text-xs font-semibold" />
-                      </div>
+                      <select id="reg-institution" value={institution} onChange={(e) => setInstitution(e.target.value)}
+                        className="w-full input-playful py-2 px-3 text-xs font-semibold">
+                        {SCHOOL_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                      </select>
+                      {institution === 'Other' && (
+                        <input type="text" value={customInstitution} onChange={(e) => setCustomInstitution(e.target.value)}
+                          placeholder="Enter your school" className="w-full input-playful py-2 px-3 text-xs font-semibold mt-1.5" />
+                      )}
                     </div>
                     <div className="space-y-1">
                       <label htmlFor="reg-course" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Course</label>
@@ -344,8 +411,8 @@ export default function RegisterPage() {
                     </div>
                   </div>
 
-                  {/* Year + GWA + Birthdate + Location */}
-                  <div className="grid grid-cols-4 gap-2.5">
+                  {/* Year + Birthdate + Location */}
+                  <div className="grid grid-cols-3 gap-2.5">
                     <div className="space-y-1">
                       <label htmlFor="reg-year" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Year</label>
                       <select id="reg-year" value={yearLevel} onChange={(e) => setYearLevel(e.target.value)}
@@ -356,12 +423,6 @@ export default function RegisterPage() {
                         <option>4th Year</option>
                         <option>Graduate</option>
                       </select>
-                    </div>
-                    <div className="space-y-1">
-                      <label htmlFor="reg-gwa" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">GWA %</label>
-                      <input id="reg-gwa" type="number" min="0" max="100" step="0.1" value={gwa}
-                        onChange={(e) => setGwa(e.target.value)} placeholder="91.5"
-                        className="w-full input-playful py-2 px-3 text-xs font-semibold" />
                     </div>
                     <div className="space-y-1">
                       <label htmlFor="reg-birthdate" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Birthdate</label>
@@ -378,6 +439,34 @@ export default function RegisterPage() {
                           className="w-full input-playful py-2 pl-7 pr-2 text-xs font-semibold" />
                       </div>
                     </div>
+                  </div>
+
+                  {/* GWA — same percentage / 1.0-5.0 scale toggle as the Profile page */}
+                  <div className="space-y-1">
+                    <label htmlFor="reg-gwa" className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink block">Current GWA / GPA</label>
+                    <div className="flex gap-2">
+                      <div className="flex rounded-full border-2 border-ink overflow-hidden shrink-0">
+                        <button type="button" onClick={() => handleScaleChange('percentage')}
+                          className={`px-2.5 py-2 text-[10px] font-heading font-extrabold ${gwaScale === 'percentage' ? 'bg-accent-violet text-white' : 'bg-card text-ink'}`}>
+                          Percent (%)
+                        </button>
+                        <button type="button" onClick={() => handleScaleChange('1.0-5.0')}
+                          className={`px-2.5 py-2 text-[10px] font-heading font-extrabold border-l-2 border-ink ${gwaScale === '1.0-5.0' ? 'bg-accent-violet text-white' : 'bg-card text-ink'}`}>
+                          1.0–5.0
+                        </button>
+                      </div>
+                      <input id="reg-gwa" type="number"
+                        min={gwaScale === 'percentage' ? 0 : 1} max={gwaScale === 'percentage' ? 100 : 5}
+                        step={gwaScale === 'percentage' ? 0.1 : 0.01} value={gwa}
+                        onChange={(e) => setGwa(e.target.value)}
+                        placeholder={gwaScale === 'percentage' ? 'e.g. 91.5' : 'e.g. 1.40'}
+                        className="w-full input-playful py-2 px-3 text-xs font-semibold" />
+                    </div>
+                    {gwaScale === '1.0-5.0' && gwa !== '' && !Number.isNaN(parseFloat(gwa)) && (
+                      <p className="text-[10px] text-ink-muted font-medium">
+                        ≈ {scaleToPercentage(parseFloat(gwa)).toFixed(0)}% equivalent — approximate, exact conversion varies by school.
+                      </p>
+                    )}
                   </div>
 
                   {/* Checkboxes */}
