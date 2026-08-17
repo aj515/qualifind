@@ -285,7 +285,38 @@ export default function OpportunitiesPage() {
 
       <div className="card-sticker p-4 bg-card flex flex-col gap-3">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5">
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 w-full md:w-auto flex-1 md:flex-initial min-w-0">
+            <div className="relative flex-1 md:w-48 min-w-0">
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Filter by keyword..."
+                className="input-playful py-1.5 pl-3 pr-7 text-xs w-full min-w-0"
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery('')}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink flex items-center justify-center"
+                  aria-label="Clear keyword filter"
+                >
+                  <span className="material-symbols-outlined text-[14px]">close</span>
+                </button>
+              )}
+            </div>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="input-playful py-1.5 px-2.5 text-xs font-semibold shrink-0"
+              aria-label="Sort by"
+            >
+              {SORT_OPTIONS.filter((o) => o.value !== 'match' || hasMatcherScores).map((o) => (
+                <option key={o.value} value={o.value}>Sort: {o.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap md:ml-auto">
             <FilterDropdown
               label="Category"
               options={ALL_TYPES.map((t) => ({ value: t, label: t }))}
@@ -309,37 +340,6 @@ export default function OpportunitiesPage() {
               <span className={`material-symbols-outlined text-[16px] ${savedOnly ? 'fill' : ''}`}>bookmark</span>
               Saved Only
             </button>
-          </div>
-
-          <div className="flex items-center gap-2 w-full md:w-auto flex-1 md:flex-initial md:ml-auto min-w-0">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="input-playful py-1.5 px-2.5 text-xs font-semibold shrink-0"
-              aria-label="Sort by"
-            >
-              {SORT_OPTIONS.filter((o) => o.value !== 'match' || hasMatcherScores).map((o) => (
-                <option key={o.value} value={o.value}>Sort: {o.label}</option>
-              ))}
-            </select>
-            <div className="relative flex-1 md:w-48 min-w-0">
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Filter by keyword..."
-                className="input-playful py-1.5 pl-3 pr-7 text-xs w-full min-w-0"
-              />
-              {query && (
-                <button
-                  type="button"
-                  onClick={() => setQuery('')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink flex items-center justify-center"
-                  aria-label="Clear keyword filter"
-                >
-                  <span className="material-symbols-outlined text-[14px]">close</span>
-                </button>
-              )}
-            </div>
           </div>
         </div>
 
