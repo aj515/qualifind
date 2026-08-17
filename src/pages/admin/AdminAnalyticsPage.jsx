@@ -49,7 +49,10 @@ export default function AdminAnalyticsPage() {
       else setPrograms(programsRes.data);
       if (eligRes.error) setErrorMsg((prev) => prev || `Failed to load eligibility results: ${eligRes.error.message}`);
       else setRows(eligRes.data);
-      if (profilesRes.error) setErrorMsg((prev) => prev || `Failed to load profiles: ${profilesRes.error.message}`);
+      // Non-fatal: only affects test-account filtering below, which just no-ops
+      // if this fails (e.g. the profiles.email migration hasn't been run yet) —
+      // not worth alarming the admin over when the rest of the page still works.
+      if (profilesRes.error) console.warn('Failed to load profiles for test-account filtering:', profilesRes.error.message);
       else setTestStudentIds(new Set(profilesRes.data.filter((p) => TEST_EMAIL_PATTERN.test(p.email || '')).map((p) => p.user_id)));
       setLoading(false);
     })();
