@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import Tooltip from '../../components/Tooltip.jsx';
+import { SCHOOL_OPTIONS, COURSE_OPTIONS } from '../../lib/constants.js';
+import { scaleToPercentage, percentageToScale } from '../../lib/gwa.js';
 
 // Fields that make a student profile actually useful for eligibility matching.
 // Completeness is derived live from these instead of a stored counter, so it
@@ -11,34 +13,6 @@ function computeProfileCompleteness(profile) {
   if (!profile) return 0;
   const filled = COMPLETENESS_FIELDS.filter((key) => profile[key] !== null && profile[key] !== undefined && profile[key] !== '').length;
   return Math.round((filled / COMPLETENESS_FIELDS.length) * 100);
-}
-
-// Approximate scale <-> percentage table (Philippine 1.0-5.0 GWA scale isn't
-// standardized across schools, so this is illustrative, not authoritative —
-// the UI says so). Interpolated linearly between points.
-const GWA_SCALE_TABLE = [
-  [1.0, 99], [1.25, 96], [1.5, 93], [1.75, 90], [2.0, 87], [2.25, 84],
-  [2.5, 81], [2.75, 78], [3.0, 75], [3.5, 69], [4.0, 63], [5.0, 50]
-];
-
-function interpolate(table, x) {
-  if (x <= table[0][0]) return table[0][1];
-  if (x >= table[table.length - 1][0]) return table[table.length - 1][1];
-  for (let i = 0; i < table.length - 1; i++) {
-    const [x1, y1] = table[i];
-    const [x2, y2] = table[i + 1];
-    if (x >= x1 && x <= x2) return y1 + ((x - x1) / (x2 - x1)) * (y2 - y1);
-  }
-  return table[table.length - 1][1];
-}
-
-function scaleToPercentage(scale) {
-  return interpolate(GWA_SCALE_TABLE, scale);
-}
-
-function percentageToScale(pct) {
-  const reversed = [...GWA_SCALE_TABLE].map(([s, p]) => [p, s]).sort((a, b) => a[0] - b[0]);
-  return interpolate(reversed, pct);
 }
 
 export default function ProfilePage() {
@@ -59,6 +33,10 @@ export default function ProfilePage() {
     if (!profile) return;
     setGwaScale('percentage');
     setGwaInput(profile.gpa != null ? String(profile.gpa) : '');
+    // Keep whatever's actually saved, even if it doesn't exactly match a fixed
+    // dropdown option (e.g. typed in before these became dropdowns) — the select
+    // below adds it as an extra option rather than silently resetting to blank,
+    // which would otherwise null the field out on the next unrelated save.
     setInstitution(profile.institution || '');
     setCourse(profile.course || '');
     setBirthdate(profile.birthdate || '');
@@ -89,8 +67,8 @@ export default function ProfilePage() {
       gpa: gpaNum,
       gpa_formatted:
         gpaNum === null ? null : gwaScale === '1.0-5.0' ? `${rawGwa.toFixed(2)} (~${gpaNum.toFixed(0)}%)` : `${gpaNum.toFixed(1)}% GWA`,
-      institution: institution.trim() || null,
-      course: course.trim() || null,
+      institution: institution || null,
+      course: course || null,
       birthdate: birthdate || null,
       location: location.trim() || null,
       is_financially_disadvantaged: isFinanciallyDisadvantaged
@@ -167,11 +145,19 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Institution</label>
-                <input value={institution} onChange={(e) => setInstitution(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
+                <select value={institution} onChange={(e) => setInstitution(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold">
+                  <option value="">Select your school</option>
+                  {institution && !SCHOOL_OPTIONS.includes(institution) && <option value={institution}>{institution}</option>}
+                  {SCHOOL_OPTIONS.filter((opt) => opt !== 'Other').map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Course / Program</label>
-                <input value={course} onChange={(e) => setCourse(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold" />
+                <select value={course} onChange={(e) => setCourse(e.target.value)} className="w-full input-playful py-2.5 px-4 text-xs font-semibold">
+                  <option value="">Select your course</option>
+                  {course && !COURSE_OPTIONS.includes(course) && <option value={course}>{course}</option>}
+                  {COURSE_OPTIONS.filter((opt) => opt !== 'Other').map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-heading font-extrabold uppercase tracking-wider text-ink block">Date of Birth</label>
