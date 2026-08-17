@@ -280,7 +280,7 @@ export default function OpportunitiesPage() {
       )}
 
       <span className="text-sm font-heading font-bold text-ink px-1">
-        <span className="text-accent-violet font-extrabold">{filtered.length}</span> opportunities in the Philippines
+        <span className="text-accent-violet font-extrabold">{filtered.length}</span> opportunities found.
       </span>
 
       <div className="card-sticker p-4 bg-card flex flex-col gap-3">
