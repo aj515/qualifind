@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -41,6 +41,12 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting]     = useState(false);
   const [errorMsg, setErrorMsg]         = useState('');
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDark);
+    try { localStorage.setItem('qualifind_theme', isDark ? 'dark' : 'light'); } catch (_) {}
+  }, [isDark]);
 
   if (!loading && session) {
     return <Navigate to={role === 'admin' ? '/admin-dashboard' : '/dashboard'} replace />;
@@ -57,87 +63,115 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="h-screen overflow-hidden flex bg-paper">
+    <div className="h-screen overflow-hidden flex bg-paper bg-dot-grid relative">
+
+      {/* ── Colorful Geometric Floating Shapes ───────────────────────── */}
+      <div className="absolute -left-10 -top-10 w-48 h-48 rounded-full bg-accent-amber/20 border-2 border-accent-amber/40 pointer-events-none" />
+      <div className="absolute left-8 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl rotate-45 bg-accent-cyan/20 border-2 border-accent-cyan/40 pointer-events-none" />
+      <div className="absolute left-[30%] bottom-8 w-24 h-24 rounded-3xl rotate-12 bg-accent-pink/20 border-2 border-accent-pink/40 pointer-events-none" />
+      <div className="absolute right-12 top-12 w-32 h-32 rounded-full bg-accent-violet/20 border-2 border-accent-violet/35 pointer-events-none" />
+      <div className="absolute -right-8 -bottom-8 w-52 h-52 rounded-3xl -rotate-12 bg-accent-mint/20 border-2 border-accent-mint/40 pointer-events-none" />
+
+      {/* ── Decorative SVG background across entire screen ──────────── */}
+      <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+        {/* Ghost circles */}
+        <circle cx="6%" cy="18%" r="90" fill="none" stroke="rgba(99,102,241,0.14)" strokeWidth="1.5"/>
+        <circle cx="6%" cy="18%" r="55" fill="none" stroke="rgba(99,102,241,0.1)" strokeWidth="1"/>
+        <circle cx="92%" cy="82%" r="100" fill="none" stroke="rgba(99,102,241,0.14)" strokeWidth="1.5"/>
+        <circle cx="92%" cy="82%" r="60" fill="none" stroke="rgba(99,102,241,0.08)" strokeWidth="1"/>
+        <circle cx="90%" cy="12%" r="60" fill="none" stroke="rgba(251,191,36,0.22)" strokeWidth="1.5"/>
+        <circle cx="10%" cy="85%" r="70" fill="none" stroke="rgba(52,211,153,0.2)" strokeWidth="1.5"/>
+
+        {/* Connecting lines */}
+        <line x1="6%" y1="18%" x2="90%" y2="12%" stroke="rgba(99,102,241,0.09)" strokeWidth="1" strokeDasharray="6 5"/>
+        <line x1="6%" y1="18%" x2="10%" y2="85%" stroke="rgba(99,102,241,0.08)" strokeWidth="1" strokeDasharray="4 6"/>
+        <line x1="90%" y1="12%" x2="92%" y2="82%" stroke="rgba(99,102,241,0.09)" strokeWidth="1" strokeDasharray="6 5"/>
+        <line x1="10%" y1="85%" x2="92%" y2="82%" stroke="rgba(52,211,153,0.1)" strokeWidth="1" strokeDasharray="5 6"/>
+
+        {/* Accent dots */}
+        <circle cx="6%" cy="18%" r="5" fill="rgba(99,102,241,0.25)"/>
+        <circle cx="90%" cy="12%" r="4" fill="rgba(251,191,36,0.35)"/>
+        <circle cx="92%" cy="82%" r="5" fill="rgba(99,102,241,0.22)"/>
+        <circle cx="10%" cy="85%" r="4" fill="rgba(52,211,153,0.3)"/>
+
+        {/* Dot clusters */}
+        {[0,1,2,3,4].map(col => [0,1,2,3].map(row => (
+          <circle key={`tr-${col}-${row}`} cx={`${86 + col * 1.8}%`} cy={`${20 + row * 1.8}%`} r="1.8" fill="rgba(99,102,241,0.22)"/>
+        )))}
+        {[0,1,2,3,4].map(col => [0,1,2,3].map(row => (
+          <circle key={`bl-${col}-${row}`} cx={`${3 + col * 1.8}%`} cy={`${70 + row * 1.8}%`} r="1.8" fill="rgba(52,211,153,0.25)"/>
+        )))}
+
+        {/* Cross accents */}
+        <line x1="93%" y1="37%" x2="93%" y2="43%" stroke="rgba(99,102,241,0.25)" strokeWidth="1.5"/>
+        <line x1="90.5%" y1="40%" x2="95.5%" y2="40%" stroke="rgba(99,102,241,0.25)" strokeWidth="1.5"/>
+        <line x1="5%" y1="52%" x2="5%" y2="58%" stroke="rgba(244,114,182,0.25)" strokeWidth="1.5"/>
+        <line x1="2.5%" y1="55%" x2="7.5%" y2="55%" stroke="rgba(244,114,182,0.25)" strokeWidth="1.5"/>
+      </svg>
+
+      {/* ── Dark mode toggle — top right ─────────────────────────────── */}
+      <button
+        id="login-dark-toggle"
+        onClick={() => setIsDark((d) => !d)}
+        title="Toggle dark mode"
+        className="fixed top-4 right-4 z-50 w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop hover:scale-105 transition-transform"
+      >
+        <span className="material-symbols-outlined text-[20px] text-ink">
+          {isDark ? 'light_mode' : 'dark_mode'}
+        </span>
+      </button>
 
       {/* ── LEFT BRANDING PANEL ───────────────────────────────────────── */}
-      <div className="hidden lg:flex w-[42%] flex-shrink-0 bg-accent-violet flex-col justify-between p-10 relative overflow-hidden border-r-2 border-ink">
-
-        {/* Decorative blobs */}
-        <div className="absolute -right-12 -top-12 w-52 h-52 rounded-full bg-white/10 border-2 border-white/20 pointer-events-none" />
-        <div className="absolute -left-8 bottom-16 w-36 h-36 rounded-full bg-accent-amber/20 border-2 border-accent-amber/30 pointer-events-none" />
-        <div className="absolute right-10 bottom-10 w-20 h-20 rounded-2xl rotate-12 bg-white/10 border-2 border-white/20 pointer-events-none" />
-        {/* Dot grid */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.15) 1.5px,transparent 1.5px)', backgroundSize: '24px 24px' }} />
+      <div className="hidden lg:flex w-[42%] flex-shrink-0 flex-col justify-between p-10 relative z-10 overflow-hidden">
 
         {/* Logo */}
-        <div className="relative z-10">
+        <div>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-card rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0">
-              <span className="material-symbols-outlined text-accent-violet text-[26px]">verified</span>
+            <div className="w-12 h-12 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0">
+              <span className="material-symbols-outlined text-white text-[26px]">verified</span>
             </div>
             <div>
-              <h2 className="font-heading font-extrabold text-2xl text-white leading-none tracking-tight">QualiFind</h2>
+              <h2 className="font-heading font-extrabold text-2xl text-ink leading-none tracking-tight">QualiFind</h2>
               <span className="badge-sticker badge-amber mt-1 text-[9px]">PH Student Portal</span>
             </div>
           </div>
-          <p className="mt-5 text-sm text-white/85 leading-relaxed font-medium max-w-xs">
+          <p className="mt-5 text-sm text-ink-muted leading-relaxed font-medium max-w-xs">
             Your AI-powered gateway to scholarships, grants, and assistantships for Philippine students.
           </p>
         </div>
 
         {/* Feature cards */}
-        <div className="relative z-10 flex flex-col gap-3">
+        <div className="flex flex-col gap-3">
           {FEATURES.map((f) => (
-            <div key={f.title} className="flex items-start gap-3 bg-white/10 border border-white/20 rounded-2xl px-4 py-3">
+            <div key={f.title} className="flex items-start gap-3 bg-card border-2 border-ink rounded-2xl p-3.5 shadow-pop-sm">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
-                style={{ background: f.bg, border: `1.5px solid ${f.color}40` }}>
+                style={{ background: f.bg, border: `1.5px solid ${f.color}50` }}>
                 <span className="material-symbols-outlined fill" style={{ color: f.color, fontSize: '18px' }}>{f.icon}</span>
               </div>
               <div>
-                <p className="text-white font-heading font-bold text-xs leading-none mb-1">{f.title}</p>
-                <p className="text-white/72 text-xs leading-snug font-medium">{f.desc}</p>
+                <p className="text-ink font-heading font-bold text-xs leading-none mb-1">{f.title}</p>
+                <p className="text-ink-muted text-xs leading-snug font-medium">{f.desc}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* Stats */}
-        <div className="relative z-10 grid grid-cols-3 bg-white/10 border border-white/20 rounded-2xl overflow-hidden">
+        <div className="grid grid-cols-3 bg-card border-2 border-ink rounded-2xl overflow-hidden shadow-pop-sm">
           {STATS.map((s, i) => (
-            <div key={s.label} className={`text-center py-3 ${i < 2 ? 'border-r border-white/20' : ''}`}>
-              <p className="font-heading font-extrabold text-accent-amber text-xl leading-none">{s.value}</p>
-              <p className="text-white/70 text-[11px] font-semibold mt-0.5">{s.label}</p>
+            <div key={s.label} className={`text-center py-3 ${i < 2 ? 'border-r-2 border-ink' : ''}`}>
+              <p className="font-heading font-extrabold text-accent-violet text-xl leading-none">{s.value}</p>
+              <p className="text-ink-muted text-[11px] font-semibold mt-0.5">{s.label}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* ── RIGHT FORM PANEL ──────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8 relative overflow-hidden">
-
-        {/* Subtle dot grid on the right too */}
-        <div className="absolute inset-0 bg-dot-grid pointer-events-none opacity-60" />
-
-        {/* Decorative SVG circles behind the form */}
-        <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-          <circle cx="90%" cy="10%" r="80" fill="none" stroke="rgba(99,102,241,0.1)" strokeWidth="1.5"/>
-          <circle cx="90%" cy="10%" r="50" fill="none" stroke="rgba(99,102,241,0.07)" strokeWidth="1"/>
-          <circle cx="10%" cy="90%" r="70" fill="none" stroke="rgba(99,102,241,0.08)" strokeWidth="1.5"/>
-          <circle cx="85%" cy="85%" r="35" fill="none" stroke="rgba(251,191,36,0.15)" strokeWidth="1.5"/>
-          {/* Dot cluster top-right */}
-          {[0,1,2,3].map(c => [0,1,2].map(r => (
-            <circle key={`d-${c}-${r}`} cx={`${82+c*2}%`} cy={`${20+r*2}%`} r="1.8" fill="rgba(99,102,241,0.18)" />
-          )))}
-          {/* Cross accent */}
-          <line x1="15%" y1="22%" x2="15%" y2="28%" stroke="rgba(244,114,182,0.2)" strokeWidth="1.5"/>
-          <line x1="12%" y1="25%" x2="18%" y2="25%" stroke="rgba(244,114,182,0.2)" strokeWidth="1.5"/>
-          <line x1="88%" y1="70%" x2="88%" y2="76%" stroke="rgba(99,102,241,0.18)" strokeWidth="1.5"/>
-          <line x1="85%" y1="73%" x2="91%" y2="73%" stroke="rgba(99,102,241,0.18)" strokeWidth="1.5"/>
-        </svg>
+      <div className="flex-1 flex flex-col items-center justify-center px-8 relative z-10 overflow-hidden">
 
         {/* Form card */}
-        <div className="relative z-10 w-full max-w-md">
+        <div className="w-full max-w-md">
 
           {/* Mobile logo (shown only when left panel is hidden) */}
           <div className="lg:hidden flex items-center gap-3 mb-6">

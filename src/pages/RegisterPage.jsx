@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -48,6 +48,12 @@ export default function RegisterPage() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [checkEmailMsg, setCheckEmailMsg] = useState('');
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDark);
+    try { localStorage.setItem('qualifind_theme', isDark ? 'dark' : 'light'); } catch (_) {}
+  }, [isDark]);
 
   if (!loading && session) {
     return <Navigate to={currentRole === 'admin' ? '/admin-dashboard' : '/dashboard'} replace />;
@@ -128,81 +134,113 @@ export default function RegisterPage() {
   const initials = getInitials(firstName.trim(), lastName.trim());
 
   return (
-    <div className="h-screen overflow-hidden flex bg-paper">
+    <div className="h-screen overflow-hidden flex bg-paper bg-dot-grid relative">
+
+      {/* ── Colorful Geometric Floating Shapes ───────────────────────── */}
+      <div className="absolute -left-10 -top-10 w-48 h-48 rounded-full bg-accent-amber/20 border-2 border-accent-amber/40 pointer-events-none" />
+      <div className="absolute left-8 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl rotate-45 bg-accent-cyan/20 border-2 border-accent-cyan/40 pointer-events-none" />
+      <div className="absolute left-[30%] bottom-8 w-24 h-24 rounded-3xl rotate-12 bg-accent-pink/20 border-2 border-accent-pink/40 pointer-events-none" />
+      <div className="absolute right-12 top-12 w-32 h-32 rounded-full bg-accent-violet/20 border-2 border-accent-violet/35 pointer-events-none" />
+      <div className="absolute -right-8 -bottom-8 w-52 h-52 rounded-3xl -rotate-12 bg-accent-mint/20 border-2 border-accent-mint/40 pointer-events-none" />
+
+      {/* ── Decorative SVG background across entire screen ──────────── */}
+      <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+        {/* Ghost circles */}
+        <circle cx="6%" cy="18%" r="90" fill="none" stroke="rgba(99,102,241,0.14)" strokeWidth="1.5"/>
+        <circle cx="6%" cy="18%" r="55" fill="none" stroke="rgba(99,102,241,0.1)" strokeWidth="1"/>
+        <circle cx="92%" cy="82%" r="100" fill="none" stroke="rgba(99,102,241,0.14)" strokeWidth="1.5"/>
+        <circle cx="92%" cy="82%" r="60" fill="none" stroke="rgba(99,102,241,0.08)" strokeWidth="1"/>
+        <circle cx="90%" cy="12%" r="60" fill="none" stroke="rgba(251,191,36,0.22)" strokeWidth="1.5"/>
+        <circle cx="10%" cy="85%" r="70" fill="none" stroke="rgba(52,211,153,0.2)" strokeWidth="1.5"/>
+
+        {/* Connecting lines */}
+        <line x1="6%" y1="18%" x2="90%" y2="12%" stroke="rgba(99,102,241,0.09)" strokeWidth="1" strokeDasharray="6 5"/>
+        <line x1="6%" y1="18%" x2="10%" y2="85%" stroke="rgba(99,102,241,0.08)" strokeWidth="1" strokeDasharray="4 6"/>
+        <line x1="90%" y1="12%" x2="92%" y2="82%" stroke="rgba(99,102,241,0.09)" strokeWidth="1" strokeDasharray="6 5"/>
+        <line x1="10%" y1="85%" x2="92%" y2="82%" stroke="rgba(52,211,153,0.1)" strokeWidth="1" strokeDasharray="5 6"/>
+
+        {/* Accent dots */}
+        <circle cx="6%" cy="18%" r="5" fill="rgba(99,102,241,0.25)"/>
+        <circle cx="90%" cy="12%" r="4" fill="rgba(251,191,36,0.35)"/>
+        <circle cx="92%" cy="82%" r="5" fill="rgba(99,102,241,0.22)"/>
+        <circle cx="10%" cy="85%" r="4" fill="rgba(52,211,153,0.3)"/>
+
+        {/* Dot clusters */}
+        {[0,1,2,3,4].map(col => [0,1,2,3].map(row => (
+          <circle key={`tr-${col}-${row}`} cx={`${86 + col * 1.8}%`} cy={`${20 + row * 1.8}%`} r="1.8" fill="rgba(99,102,241,0.22)"/>
+        )))}
+        {[0,1,2,3,4].map(col => [0,1,2,3].map(row => (
+          <circle key={`bl-${col}-${row}`} cx={`${3 + col * 1.8}%`} cy={`${70 + row * 1.8}%`} r="1.8" fill="rgba(52,211,153,0.25)"/>
+        )))}
+
+        {/* Cross accents */}
+        <line x1="93%" y1="37%" x2="93%" y2="43%" stroke="rgba(99,102,241,0.25)" strokeWidth="1.5"/>
+        <line x1="90.5%" y1="40%" x2="95.5%" y2="40%" stroke="rgba(99,102,241,0.25)" strokeWidth="1.5"/>
+        <line x1="5%" y1="52%" x2="5%" y2="58%" stroke="rgba(244,114,182,0.25)" strokeWidth="1.5"/>
+        <line x1="2.5%" y1="55%" x2="7.5%" y2="55%" stroke="rgba(244,114,182,0.25)" strokeWidth="1.5"/>
+      </svg>
+
+      {/* ── Dark mode toggle — top right ─────────────────────────────── */}
+      <button
+        id="register-dark-toggle"
+        onClick={() => setIsDark((d) => !d)}
+        title="Toggle dark mode"
+        className="fixed top-4 right-4 z-50 w-10 h-10 flex items-center justify-center rounded-full bg-card border-2 border-ink shadow-pop hover:scale-105 transition-transform"
+      >
+        <span className="material-symbols-outlined text-[20px] text-ink">
+          {isDark ? 'light_mode' : 'dark_mode'}
+        </span>
+      </button>
 
       {/* ── LEFT BRANDING PANEL ───────────────────────────────────────── */}
-      <div className="hidden lg:flex w-[42%] flex-shrink-0 bg-accent-violet flex-col justify-between p-10 relative overflow-hidden border-r-2 border-ink">
-
-        {/* Decorative blobs */}
-        <div className="absolute -right-12 -top-12 w-52 h-52 rounded-full bg-white/10 border-2 border-white/20 pointer-events-none" />
-        <div className="absolute -left-8 bottom-16 w-36 h-36 rounded-full bg-accent-amber/20 border-2 border-accent-amber/30 pointer-events-none" />
-        <div className="absolute right-10 bottom-10 w-20 h-20 rounded-2xl rotate-12 bg-white/10 border-2 border-white/20 pointer-events-none" />
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.15) 1.5px,transparent 1.5px)', backgroundSize: '24px 24px' }} />
+      <div className="hidden lg:flex w-[42%] flex-shrink-0 flex-col justify-between p-10 relative z-10 overflow-hidden">
 
         {/* Logo */}
-        <div className="relative z-10">
+        <div>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-card rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0">
-              <span className="material-symbols-outlined text-accent-violet text-[26px]">verified</span>
+            <div className="w-12 h-12 bg-accent-violet rounded-2xl border-2 border-ink shadow-pop-sm flex items-center justify-center flex-shrink-0">
+              <span className="material-symbols-outlined text-white text-[26px]">verified</span>
             </div>
             <div>
-              <h2 className="font-heading font-extrabold text-2xl text-white leading-none tracking-tight">QualiFind</h2>
+              <h2 className="font-heading font-extrabold text-2xl text-ink leading-none tracking-tight">QualiFind</h2>
               <span className="badge-sticker badge-amber mt-1 text-[9px]">PH Student Portal</span>
             </div>
           </div>
-          <div className="mt-5 bg-white/10 border border-white/20 rounded-2xl p-4">
-            <p className="font-heading font-extrabold text-lg text-white leading-snug mb-1">
+          <div className="mt-5 bg-card border-2 border-ink shadow-pop-sm rounded-2xl p-4">
+            <p className="font-heading font-extrabold text-lg text-ink leading-snug mb-1">
               Join 10,000+ Philippine students finding scholarships faster.
             </p>
-            <p className="text-xs text-white/80 leading-relaxed font-medium">
+            <p className="text-xs text-ink-muted leading-relaxed font-medium">
               Set up your free profile in under 2 minutes and let our AI do the matching.
             </p>
           </div>
         </div>
 
         {/* Perks */}
-        <div className="relative z-10 flex flex-col gap-2.5">
-          <p className="font-heading font-bold text-[10px] uppercase tracking-widest text-white/55 mb-0.5">What you unlock</p>
+        <div className="flex flex-col gap-2.5">
+          <p className="font-heading font-bold text-[10px] uppercase tracking-widest text-ink-muted mb-0.5">What you unlock</p>
           {PERKS.map((p) => (
-            <div key={p.text} className="flex items-center gap-3 bg-white/10 border border-white/20 rounded-2xl px-3.5 py-2.5">
+            <div key={p.text} className="flex items-center gap-3 bg-card border-2 border-ink shadow-pop-sm rounded-2xl px-3.5 py-2.5">
               <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: p.bg, border: `1.5px solid ${p.color}50` }}>
                 <span className="material-symbols-outlined fill" style={{ color: p.color, fontSize: '16px' }}>{p.icon}</span>
               </div>
-              <p className="text-xs text-white/85 font-medium leading-snug m-0">{p.text}</p>
+              <p className="text-xs text-ink font-medium leading-snug m-0">{p.text}</p>
             </div>
           ))}
         </div>
 
         {/* Footer */}
-        <div className="relative z-10 flex items-center justify-between border-t border-white/20 pt-4">
-          <span className="font-heading font-bold text-xs text-white/60">DOST-SEI &amp; CHED Aligned</span>
-          <span className="text-xs font-semibold text-white/45">v2.0.0</span>
+        <div className="flex items-center justify-between border-t-2 border-ink/10 pt-4">
+          <span className="font-heading font-bold text-xs text-ink-muted">DOST-SEI &amp; CHED Aligned</span>
+          <span className="text-xs font-semibold text-ink-muted">v2.0.0</span>
         </div>
       </div>
 
       {/* ── RIGHT FORM PANEL ──────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8 relative overflow-hidden">
+      <div className="flex-1 flex flex-col items-center justify-center px-8 relative z-10 overflow-hidden">
 
-        <div className="absolute inset-0 bg-dot-grid pointer-events-none opacity-60" />
-
-        {/* Decorative SVG */}
-        <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-          <circle cx="88%" cy="8%"  r="70" fill="none" stroke="rgba(99,102,241,0.1)"  strokeWidth="1.5"/>
-          <circle cx="88%" cy="8%"  r="42" fill="none" stroke="rgba(99,102,241,0.07)" strokeWidth="1"/>
-          <circle cx="12%" cy="92%" r="60" fill="none" stroke="rgba(99,102,241,0.08)" strokeWidth="1.5"/>
-          <circle cx="82%" cy="88%" r="30" fill="none" stroke="rgba(251,191,36,0.15)"  strokeWidth="1.5"/>
-          {[0,1,2,3].map(c => [0,1,2].map(r => (
-            <circle key={`d-${c}-${r}`} cx={`${80+c*2}%`} cy={`${18+r*2}%`} r="1.8" fill="rgba(99,102,241,0.18)" />
-          )))}
-          <line x1="14%" y1="20%" x2="14%" y2="26%" stroke="rgba(244,114,182,0.2)" strokeWidth="1.5"/>
-          <line x1="11%" y1="23%" x2="17%" y2="23%" stroke="rgba(244,114,182,0.2)" strokeWidth="1.5"/>
-          <line x1="87%" y1="72%" x2="87%" y2="78%" stroke="rgba(99,102,241,0.18)" strokeWidth="1.5"/>
-          <line x1="84%" y1="75%" x2="90%" y2="75%" stroke="rgba(99,102,241,0.18)" strokeWidth="1.5"/>
-        </svg>
-
-        <div className="relative z-10 w-full max-w-xl">
+        <div className="w-full max-w-xl">
 
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-3 mb-5">
