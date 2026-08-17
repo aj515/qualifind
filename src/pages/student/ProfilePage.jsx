@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext.jsx';
+import Tooltip from '../../components/Tooltip.jsx';
 
 // Fields that make a student profile actually useful for eligibility matching.
 // Completeness is derived live from these instead of a stored counter, so it
@@ -135,7 +136,9 @@ export default function ProfilePage() {
           )}
           <div className="w-full pt-3 mt-1 border-t-2 border-ink/10 text-left space-y-1">
             <div className="flex items-center justify-between text-xs font-heading font-extrabold text-ink">
-              <span>Profile Completeness</span>
+              <Tooltip text="Based on 5 fields: Institution, Course, GWA, Birthdate, and Location. Filling all of them in gives the AI Matcher and eligibility checks the most accurate picture.">
+                <span className="cursor-help border-b border-dashed border-ink-muted/50">Profile Completeness</span>
+              </Tooltip>
               <span>{computeProfileCompleteness(profile)}%</span>
             </div>
             <div className="w-full h-2 rounded-full bg-ink/10 overflow-hidden">
@@ -233,7 +236,9 @@ export default function ProfilePage() {
                 onChange={(e) => setIsFinanciallyDisadvantaged(e.target.checked)}
                 className="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0"
               />
-              <span>I qualify as low-income / indigent (unlocks need-based assistance matching)</span>
+              <Tooltip text="Checking this makes you eligible for programs that require proof of financial need (e.g. Barangay Indigency Certificate) — leave it unchecked if you can't document low household income.">
+                <span className="cursor-help border-b border-dashed border-ink-muted/50">I qualify as low-income / indigent (unlocks need-based assistance matching)</span>
+              </Tooltip>
             </label>
           </div>
 

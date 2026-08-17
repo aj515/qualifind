@@ -129,6 +129,8 @@ html.dark .bg-dot-grid {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    white-space: nowrap;
     gap: 0.5rem;
     background-color: rgb(var(--color-accent-violet));
     color: #FFFFFF;
@@ -251,6 +253,8 @@ html.dark .bg-dot-grid {
   .badge-sticker {
     display: inline-flex;
     align-items: center;
+    flex-shrink: 0;
+    white-space: nowrap;
     gap: 0.375rem;
     padding: 0.25rem 0.75rem;
     border-radius: 9999px;
