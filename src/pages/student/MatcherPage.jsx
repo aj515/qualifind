@@ -26,7 +26,20 @@ const FIELD_LABELS = {
   gpa: 'GWA/GPA',
   location: 'Location',
   householdIncome: 'Household income',
+  assistanceNeeds: 'Assistance needed',
   otherNotes: 'Notes'
+};
+
+const FIELD_META = {
+  fullName: { label: 'Full Name', icon: 'person', color: '#6366F1' },
+  educationLevel: { label: 'Education Level', icon: 'school', color: '#0284C7' },
+  course: { label: 'Course', icon: 'menu_book', color: '#7C3AED' },
+  yearLevel: { label: 'Year Level', icon: 'calendar_month', color: '#D97706' },
+  institution: { label: 'Institution', icon: 'account_balance', color: '#059669' },
+  gpa: { label: 'GWA / GPA', icon: 'grade', color: '#DB2777' },
+  location: { label: 'Location', icon: 'location_on', color: '#DC2626' },
+  householdIncome: { label: 'Income Status', icon: 'payments', color: '#0D9488' },
+  assistanceNeeds: { label: 'Needs', icon: 'volunteer_activism', color: '#E11D48' }
 };
 
 // Maps extracted-document fields onto the saved-profile fields that eligibility
@@ -93,6 +106,31 @@ function buildProfileUpdates(fields) {
   return updates;
 }
 
+// Checks if the uploaded document was flagged as unrelated or missing financial/scholarship details
+function getRelevanceWarning(draft) {
+  if (!draft) return null;
+  if (draft.warning) return draft.warning;
+  if (draft.isRelevant === false) {
+    return "This document appears to be coursework or general academic material rather than an official financial aid record, Certificate of Registration (COR), or Transcript (TOR).";
+  }
+  const text = `${draft.summary || ''} ${draft.fields?.otherNotes || ''}`.toLowerCase();
+  if (
+    text.includes('does not contain information about') ||
+    text.includes('not contain information about my financial') ||
+    text.includes('not relevant to scholarship') ||
+    text.includes('not contain information relevant to scholarship') ||
+    text.includes('coursework assignment') ||
+    text.includes('literature assignment') ||
+    text.includes('academic assignment') ||
+    text.includes('homework assignment') ||
+    text.includes('syllabus') ||
+    text.includes('definitions and concepts rather than')
+  ) {
+    return "This document appears to be a class assignment or coursework rather than an official document for scholarship matching (such as a Certificate of Registration, Transcript, or Certificate of Indigency). You can still edit the extracted description below or upload an official record for more accurate matching.";
+  }
+  return null;
+}
+
 export default function MatcherPage() {
   const { profile, updateProfile } = useAuth();
   const { programs, eligibilityByProgramId, applyMatcherScores, matcherQuery } = useData();
@@ -102,8 +140,10 @@ export default function MatcherPage() {
   const [isMatching, setIsMatching] = useState(false);
   const [clarificationNeeded, setClarificationNeeded] = useState('');
   const [isExtracting, setIsExtracting] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState(null);
   const [uploadError, setUploadError] = useState('');
-  const [draft, setDraft] = useState(null); // { summary, fields } pending user review
+  const [unrelatedWarning, setUnrelatedWarning] = useState(null); // { fileName, size, type, message } for non-scholarship files
+  const [draft, setDraft] = useState(null); // { summary, fields, isRelevant, warning } pending user review
   const [addToDescription, setAddToDescription] = useState(true);
   const [saveToProfile, setSaveToProfile] = useState(true);
   const [isApplyingDraft, setIsApplyingDraft] = useState(false);
@@ -140,7 +180,9 @@ export default function MatcherPage() {
     if (!file) return;
 
     setIsExtracting(true);
+    setUploadedFile({ name: file.name, size: file.size, type: file.type });
     setUploadError('');
+    setUnrelatedWarning(null);
     setDraft(null);
     setDraftDone(false);
     setDraftMsg('');
@@ -148,15 +190,30 @@ export default function MatcherPage() {
     setSaveToProfile(true);
 
     try {
-      const { hasContent, summary, fields } = await extractDocument(file);
+      const { hasContent, isRelevant, warning, summary, fields } = await extractDocument(file);
       if (!hasContent) {
         setUploadError(summary || "That document doesn't seem to contain any relevant information. Try a different file, or describe your situation manually.");
+        setUploadedFile(null);
         return;
       }
-      setDraft({ summary, fields });
+
+      const checkWarning = getRelevanceWarning({ summary, fields, isRelevant, warning });
+      if (isRelevant === false || checkWarning) {
+        setUnrelatedWarning({
+          fileName: file.name,
+          size: file.size,
+          type: file.type,
+          message: checkWarning || warning || "This file appears to be coursework or unrelated material and does not contain scholarship or financial aid information."
+        });
+        setDraft(null);
+        return;
+      }
+
+      setDraft({ hasContent, isRelevant, warning, summary, fields });
     } catch (err) {
       console.warn('Document extraction failed:', err);
       setUploadError(err.message || 'Could not read that document. Try a different file, or describe your situation manually.');
+      setUploadedFile(null);
     } finally {
       setIsExtracting(false);
     }
@@ -193,6 +250,8 @@ export default function MatcherPage() {
 
   function dismissDraft() {
     setDraft(null);
+    setUploadedFile(null);
+    setUnrelatedWarning(null);
     setDraftDone(false);
     setDraftMsg('');
   }
@@ -357,77 +416,329 @@ export default function MatcherPage() {
           </div>
         )}
 
-        {uploadError && <span className="text-xs text-red-600 font-medium max-w-md self-center">{uploadError}</span>}
+        {uploadError && (
+          <div className="w-full p-3.5 rounded-2xl bg-accent-pink/15 border-2 border-accent-pink flex items-start gap-2.5 shadow-pop-sm text-left">
+            <span className="material-symbols-outlined text-accent-pink text-[20px] shrink-0 mt-0.5">error</span>
+            <div className="flex-1">
+              <p className="text-xs font-heading font-bold text-ink leading-snug">{uploadError}</p>
+              <p className="text-[11px] text-ink-muted font-medium mt-0.5">Try a clearer PDF, photo, or describe your situation manually above.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setUploadError('')}
+              className="text-ink-muted hover:text-ink transition-colors"
+              aria-label="Dismiss error"
+            >
+              <span className="material-symbols-outlined text-[16px]">close</span>
+            </button>
+          </div>
+        )}
 
-        {draft && (
-          <div className="w-full rounded-2xl border-2 border-accent-violet/40 bg-accent-violet/5 p-4 text-left flex flex-col gap-3">
-            <div>
-              <p className="text-xs font-heading font-extrabold uppercase text-ink tracking-wider mb-1 flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[16px] text-accent-violet">fact_check</span>
-                Here's what we found — check it over
-              </p>
-              <p className="text-[11px] text-ink-muted font-medium mb-2">AI can misread documents. Edit anything that's wrong, or remove a detail below, before using it.</p>
-              <textarea
-                value={draft.summary}
-                onChange={(e) => setDraft((prev) => ({ ...prev, summary: e.target.value }))}
-                rows={3}
-                disabled={draftDone}
-                className="w-full input-playful py-2 px-3 text-xs resize-none disabled:opacity-70"
-              />
+        {isExtracting && (
+          <div className="w-full rounded-2xl border-2 border-accent-violet/40 bg-accent-violet/5 p-4 text-left flex flex-col gap-3 shadow-pop-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-accent-violet text-white border-2 border-ink shadow-pop-sm flex items-center justify-center shrink-0 animate-spin">
+                <span className="material-symbols-outlined text-[20px]">progress_activity</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <h4 className="font-heading font-extrabold text-sm text-ink truncate">Reading {uploadedFile?.name || 'Document'}…</h4>
+                  <span className="badge-sticker badge-violet text-[9px] py-0 px-1.5 shrink-0">Claude AI</span>
+                </div>
+                <p className="text-xs text-ink-muted font-medium mt-0.5">Extracting academic background, course, year level, and assistance needs.</p>
+              </div>
+            </div>
+            <div className="w-full bg-card rounded-full h-2 overflow-hidden border border-ink/15">
+              <div className="bg-accent-violet h-full w-3/4 rounded-full animate-pulse" />
+            </div>
+          </div>
+        )}
+
+        {unrelatedWarning && (
+          <div className="w-full rounded-2xl border-2 border-amber-500 bg-card p-5 text-left flex flex-col gap-4 shadow-pop-md">
+            {/* Header */}
+            <div className="flex items-center justify-between gap-3 border-b-2 border-ink/10 pb-3.5">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border-2 border-ink shadow-pop-sm flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-ink text-[22px]">warning</span>
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-heading font-extrabold text-sm sm:text-base text-ink truncate">
+                      {unrelatedWarning.fileName}
+                    </h3>
+                    <span className="badge-sticker badge-amber text-[9px] py-0.5 px-2">
+                      <span className="material-symbols-outlined text-[12px] mr-1">block</span>
+                      Unrelated Document
+                    </span>
+                  </div>
+                  <p className="text-xs text-ink-muted font-medium mt-0.5">
+                    {unrelatedWarning.size ? `${(unrelatedWarning.size / 1024).toFixed(0)} KB • ` : ''}
+                    Not suitable for scholarship matching
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setUnrelatedWarning(null)}
+                className="w-8 h-8 rounded-full flex items-center justify-center text-ink-muted hover:text-ink hover:bg-card-subtle transition-colors shrink-0"
+                title="Dismiss"
+                aria-label="Dismiss warning"
+              >
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </button>
             </div>
 
-            {Object.entries(draft.fields || {}).some(([, v]) => v !== null && v !== '') && (
-              <div className="flex flex-wrap gap-1.5">
-                {Object.entries(draft.fields)
-                  .filter(([, v]) => v !== null && v !== '')
-                  .map(([key, value]) => (
-                    <span key={key} className="text-[11px] font-semibold pl-2 pr-1 py-1 rounded-full bg-accent-violet/10 text-accent-violet flex items-center gap-1" title={FIELD_LABELS[key] || key}>
-                      {String(value)}
-                      {!draftDone && (
-                        <button type="button" onClick={() => removeDraftField(key)} className="material-symbols-outlined text-[13px] hover:text-accent-pink" aria-label={`Remove ${FIELD_LABELS[key] || key}`}>
-                          close
-                        </button>
-                      )}
+            {/* Warning Message */}
+            <div className="rounded-2xl border-2 border-amber-500/40 bg-amber-500/10 p-4 flex items-start gap-3 shadow-pop-sm">
+              <div className="flex-1 text-xs">
+                <span className="font-heading font-extrabold text-ink block mb-1 text-sm">
+                  Please upload a document relevant to scholarships or student aid
+                </span>
+                <p className="text-ink-muted leading-relaxed font-medium m-0">
+                  {unrelatedWarning.message}
+                </p>
+              </div>
+            </div>
+
+            {/* Accepted & Recommended Documents */}
+            <div className="flex flex-col gap-2.5 bg-card-subtle border-2 border-ink/10 rounded-2xl p-4">
+              <span className="text-[11px] font-heading font-extrabold uppercase tracking-wider text-ink">
+                Accepted &amp; Recommended Documents:
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div className="flex items-center gap-2 text-ink font-semibold">
+                  <span className="material-symbols-outlined text-accent-violet text-[18px]">description</span>
+                  Certificate of Registration (COR)
+                </div>
+                <div className="flex items-center gap-2 text-ink font-semibold">
+                  <span className="material-symbols-outlined text-accent-mint text-[18px]">grade</span>
+                  Transcript of Records (TOR) / Grades
+                </div>
+                <div className="flex items-center gap-2 text-ink font-semibold">
+                  <span className="material-symbols-outlined text-accent-amber text-[18px]">account_balance</span>
+                  Certificate of Indigency
+                </div>
+                <div className="flex items-center gap-2 text-ink font-semibold">
+                  <span className="material-symbols-outlined text-accent-pink text-[18px]">badge</span>
+                  Student ID / Scholarship Form
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-2.5 justify-end border-t-2 border-ink/10 pt-3">
+              <button
+                type="button"
+                onClick={() => setUnrelatedWarning(null)}
+                className="btn-candy btn-candy-secondary btn-candy-sm py-2 px-4 text-xs cursor-pointer"
+              >
+                Dismiss
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setUnrelatedWarning(null);
+                  fileInputRef.current?.click();
+                }}
+                className="btn-candy btn-candy-sm py-2 px-5 text-xs cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px]">upload_file</span>
+                Upload a Different Document
+              </button>
+            </div>
+          </div>
+        )}
+
+        {draft && (
+          <div className="w-full rounded-2xl border-2 border-ink bg-card p-5 text-left flex flex-col gap-4 shadow-pop-md">
+            
+            {/* Header: Document info & badge */}
+            <div className="flex items-center justify-between gap-3 border-b-2 border-ink/10 pb-3.5">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-2xl bg-accent-violet/15 border-2 border-ink shadow-pop-sm flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-accent-violet text-[22px]">
+                    {uploadedFile?.name?.endsWith('.pdf') ? 'picture_as_pdf' : uploadedFile?.type?.startsWith('image/') ? 'image' : 'description'}
+                  </span>
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-heading font-extrabold text-sm sm:text-base text-ink truncate">
+                      {uploadedFile?.name || "Here's what we found"}
+                    </h3>
+                    <span className="badge-sticker badge-mint text-[9px] py-0.5 px-2">
+                      <span className="material-symbols-outlined text-[12px] mr-1">check_circle</span>
+                      AI Extracted
                     </span>
-                  ))}
+                  </div>
+                  <p className="text-xs text-ink-muted font-medium mt-0.5">
+                    {uploadedFile?.size ? `${(uploadedFile.size / 1024).toFixed(0)} KB • ` : ''}
+                    Review extracted facts below and edit before using.
+                  </p>
+                </div>
+              </div>
+
+              {!draftDone && (
+                <button
+                  type="button"
+                  onClick={dismissDraft}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-ink-muted hover:text-ink hover:bg-card-subtle transition-colors shrink-0"
+                  title="Discard"
+                  aria-label="Discard document extraction"
+                >
+                  <span className="material-symbols-outlined text-[18px]">close</span>
+                </button>
+              )}
+            </div>
+
+            {/* Extracted Structured Field Chips */}
+            {Object.entries(draft.fields || {}).some(([k, v]) => k !== 'otherNotes' && k !== 'financialNeedMentioned' && v !== null && v !== '') && (
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-heading font-extrabold uppercase tracking-wider text-ink-muted">
+                    Detected Profile Information
+                  </span>
+                  {!draftDone && (
+                    <span className="text-[10px] text-ink-muted font-medium">Click × to remove any detail</span>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(draft.fields)
+                    .filter(([k, v]) => k !== 'otherNotes' && k !== 'financialNeedMentioned' && v !== null && v !== '')
+                    .map(([key, value]) => {
+                      const meta = FIELD_META[key] || { label: FIELD_LABELS[key] || key, icon: 'label', color: '#6366F1' };
+                      return (
+                        <div
+                          key={key}
+                          className="inline-flex items-center gap-1.5 bg-card-subtle border-2 border-ink shadow-pop-sm rounded-xl px-2.5 py-1 text-xs text-ink transition-transform hover:scale-[1.02]"
+                          title={meta.label}
+                        >
+                          <span className="material-symbols-outlined text-[15px]" style={{ color: meta.color }}>
+                            {meta.icon}
+                          </span>
+                          <span className="text-ink-muted font-bold text-[11px]">{meta.label}:</span>
+                          <span className="font-extrabold text-ink">{String(value)}</span>
+                          {!draftDone && (
+                            <button
+                              type="button"
+                              onClick={() => removeDraftField(key)}
+                              className="w-4 h-4 ml-0.5 rounded-full flex items-center justify-center text-ink-muted hover:text-accent-pink hover:bg-paper transition-colors"
+                              aria-label={`Remove ${meta.label}`}
+                            >
+                              <span className="material-symbols-outlined text-[13px]">close</span>
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
               </div>
             )}
 
+            {/* Generated Matcher Summary Textarea */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-heading font-extrabold uppercase tracking-wider text-ink flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[16px] text-accent-violet">edit_note</span>
+                  AI-Generated Matcher Description
+                </label>
+                <span className="text-[10px] text-ink-muted font-medium">Editable summary</span>
+              </div>
+              <textarea
+                value={draft.summary}
+                onChange={(e) => setDraft((prev) => ({ ...prev, summary: e.target.value }))}
+                rows={5}
+                disabled={draftDone}
+                placeholder="Extracted summary description..."
+                className="w-full input-playful py-3 px-4 text-xs sm:text-sm leading-relaxed resize-y min-h-[130px] disabled:opacity-70"
+              />
+            </div>
+
+            {/* Options and Action Buttons */}
             {!draftDone ? (
-              <>
-                <div className="flex flex-col gap-1.5 border-t-2 border-ink/10 pt-3">
-                  <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">
-                    <input type="checkbox" checked={addToDescription} onChange={(e) => setAddToDescription(e.target.checked)} className="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0" />
-                    Add to my description above (for this search)
+              <div className="flex flex-col gap-3 border-t-2 border-ink/10 pt-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <label
+                    className={`flex items-start gap-2.5 p-3 rounded-2xl border-2 cursor-pointer transition-all ${
+                      addToDescription
+                        ? 'bg-accent-violet/10 border-accent-violet shadow-pop-sm'
+                        : 'bg-card border-ink/20 opacity-75 hover:opacity-100'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={addToDescription}
+                      onChange={(e) => setAddToDescription(e.target.checked)}
+                      className="w-4 h-4 mt-0.5 rounded border-2 border-ink text-accent-violet focus:ring-0 cursor-pointer"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-xs font-heading font-bold text-ink leading-snug">
+                        Add to Matcher Description
+                      </span>
+                      <span className="text-[10px] text-ink-muted font-medium leading-tight mt-0.5">
+                        Pastes summary into search prompt above
+                      </span>
+                    </div>
                   </label>
+
                   {profileFieldsAvailable && (
-                    <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-ink">
-                      <input type="checkbox" checked={saveToProfile} onChange={(e) => setSaveToProfile(e.target.checked)} className="w-4 h-4 rounded border-2 border-ink text-accent-violet focus:ring-0" />
-                      Save these details to my profile (used for eligibility everywhere)
+                    <label
+                      className={`flex items-start gap-2.5 p-3 rounded-2xl border-2 cursor-pointer transition-all ${
+                        saveToProfile
+                          ? 'bg-accent-mint/15 border-accent-mint shadow-pop-sm'
+                          : 'bg-card border-ink/20 opacity-75 hover:opacity-100'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={saveToProfile}
+                        onChange={(e) => setSaveToProfile(e.target.checked)}
+                        className="w-4 h-4 mt-0.5 rounded border-2 border-ink text-accent-mint focus:ring-0 cursor-pointer"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-heading font-bold text-ink leading-snug">
+                          Save to Student Profile
+                        </span>
+                        <span className="text-[10px] text-ink-muted font-medium leading-tight mt-0.5">
+                          Updates your course, year, GPA &amp; location for eligibility
+                        </span>
+                      </div>
                     </label>
                   )}
                 </div>
-                <div className="flex gap-2 justify-center">
+
+                <div className="flex flex-wrap gap-2.5 justify-end pt-1">
+                  <button
+                    type="button"
+                    onClick={dismissDraft}
+                    className="btn-candy btn-candy-secondary btn-candy-sm py-2 px-4 text-xs cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[15px]">delete</span> Discard
+                  </button>
                   <button
                     type="button"
                     onClick={useExtractedInfo}
                     disabled={isApplyingDraft || (!addToDescription && !saveToProfile)}
-                    className="badge-sticker badge-violet hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3 disabled:opacity-50"
+                    className="btn-candy btn-candy-sm py-2 px-5 text-xs cursor-pointer disabled:opacity-50"
                   >
-                    <span className="material-symbols-outlined text-[14px]">check</span> {isApplyingDraft ? 'Working…' : 'Use this info'}
-                  </button>
-                  <button type="button" onClick={dismissDraft} className="badge-sticker bg-card text-ink border-2 border-ink hover:scale-105 transition-transform cursor-pointer text-xs py-1.5 px-3">
-                    <span className="material-symbols-outlined text-[14px]">delete</span> Discard
+                    <span className="material-symbols-outlined text-[16px]">
+                      {isApplyingDraft ? 'progress_activity' : 'auto_fix_high'}
+                    </span>
+                    {isApplyingDraft ? 'Applying…' : 'Use Extracted Details'}
                   </button>
                 </div>
-              </>
+              </div>
             ) : (
-              <div className="flex items-center justify-center gap-3">
-                <span className="text-xs font-semibold text-ink flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-accent-mint">check_circle</span>
-                  {draftMsg}
-                </span>
-                <button type="button" onClick={dismissDraft} className="badge-sticker bg-card text-ink border-2 border-ink hover:scale-105 transition-transform cursor-pointer text-xs py-1 px-2.5">
+              <div className="rounded-2xl bg-accent-mint/15 border-2 border-accent-mint p-3.5 flex items-center justify-between gap-3 shadow-pop-sm">
+                <div className="flex items-center gap-2.5">
+                  <span className="material-symbols-outlined text-accent-mint text-[22px]">check_circle</span>
+                  <span className="text-xs font-heading font-bold text-ink">{draftMsg}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={dismissDraft}
+                  className="btn-candy btn-candy-secondary btn-candy-sm py-1 px-3 text-xs cursor-pointer"
+                >
                   Close
                 </button>
               </div>
