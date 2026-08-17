@@ -105,15 +105,31 @@ export default function EligibilityDetailPage() {
             </div>
 
             <div className="relative z-10 mt-6 pt-6 border-t-2 border-ink flex flex-wrap gap-3">
-              <button onClick={() => navigate(`/opportunities/${opp.id}/action-plan`)} className="btn-candy btn-candy-sm">
-                <span className="material-symbols-outlined text-[18px]">checklist</span> Generate Action Plan
-              </button>
+              {result !== 'not_eligible' && (
+                <button onClick={() => navigate(`/opportunities/${opp.id}/action-plan`)} className="btn-candy btn-candy-sm">
+                  <span className="material-symbols-outlined text-[18px]">checklist</span> Generate Action Plan
+                </button>
+              )}
               <button onClick={() => toggleSaved(opp.id)} className="btn-candy btn-candy-secondary btn-candy-sm">
                 <span className={`material-symbols-outlined text-[18px] ${isSaved ? 'fill text-accent-pink' : ''}`}>bookmark</span>
                 {isSaved ? 'Saved in Drafts' : 'Save for Later'}
               </button>
             </div>
           </div>
+
+          {result === 'not_eligible' && eligibility && (
+            <div className="card-sticker p-5 bg-accent-pink/5 border-accent-pink flex items-start gap-3">
+              <div className="w-9 h-9 rounded-full bg-accent-pink text-white border-2 border-ink flex items-center justify-center shrink-0 shadow-pop-sm">
+                <span className="material-symbols-outlined text-[18px]">warning</span>
+              </div>
+              <div>
+                <h3 className="text-xs font-heading font-extrabold uppercase tracking-wider text-accent-pink mb-1">Recommendation</h3>
+                <p className="text-sm text-ink leading-relaxed font-medium">
+                  An action plan isn't available yet — you don't currently meet this program's requirements. {withAlternativeSuggestion(eligibility.explanation, alternativeTypes)}
+                </p>
+              </div>
+            </div>
+          )}
 
           <div className="p-4 rounded-2xl bg-accent-amber/20 border-2 border-ink flex items-start gap-3 shadow-pop-sm">
             <span className="material-symbols-outlined text-ink text-[22px] shrink-0 mt-0.5">info</span>

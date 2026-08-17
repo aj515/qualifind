@@ -71,9 +71,12 @@ export default function ActionPlanPage() {
   // loaded. Fires once per program visit, not on every checkbox click — re-running
   // it per click would add latency/cost without much benefit. Silently falls back
   // to the generic eligibility-based text on failure (see the render below).
+  // Never runs for a not_eligible program — there's nothing to personalize an
+  // action plan around when the student doesn't qualify yet.
   useEffect(() => {
     setAiRecommendedAction('');
     if (loadingExtras || !id) return;
+    if (eligibilityByProgramId[id]?.result === 'not_eligible') return;
     const programObj = programs.find((p) => p.id === id);
     if (!programObj) return;
 
@@ -135,6 +138,44 @@ export default function ActionPlanPage() {
   const currentStatus = savedStatusByProgramId[opp.id];
   const completedCount = steps.filter((s) => completedStepIds.has(s.id)).length;
   const progressPct = steps.length > 0 ? Math.round((completedCount / steps.length) * 100) : 0;
+
+  // Not-eligible students don't get a generated action plan — there's nothing to
+  // plan toward until the underlying gap (GPA, education level, etc.) is resolved.
+  // Show the recommendation instead of documents/steps/AI narration.
+  if (eligibility?.result === 'not_eligible') {
+    return (
+      <div className="flex flex-col w-full max-w-4xl mx-auto gap-6">
+        <div
+          onClick={() => navigate(`/opportunities/${opp.id}/eligibility`)}
+          className="flex items-center gap-2 text-sm font-heading font-bold text-ink cursor-pointer hover:text-accent-violet transition-colors w-fit"
+        >
+          <span className="material-symbols-outlined text-[18px]">arrow_back</span> Back to Program Details
+        </div>
+
+        <div className="card-sticker card-sticker-amber p-6 bg-card relative overflow-hidden">
+          <div className="relative z-10 flex flex-col gap-2">
+            <span className="badge-sticker badge-pink w-fit">
+              <span className="material-symbols-outlined text-[15px]">flag</span> RECOMMENDED NEXT ACTION
+            </span>
+            <h3 className="text-lg font-extrabold font-heading text-ink mt-1">Not Eligible Yet</h3>
+            <p className="text-sm text-ink-muted leading-relaxed font-medium">
+              An action plan isn't available for <strong className="text-ink">{opp.title}</strong> because you don't currently meet its requirements.
+              {' '}{eligibility.explanation}
+            </p>
+          </div>
+        </div>
+
+        <div className="pt-2 flex justify-end gap-3">
+          <button onClick={() => navigate(`/opportunities/${opp.id}/eligibility`)} className="btn-candy btn-candy-secondary btn-candy-sm">
+            View Full Eligibility Breakdown
+          </button>
+          <button onClick={() => navigate('/opportunities')} className="btn-candy btn-candy-sm">
+            Browse More Programs
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col w-full max-w-4xl mx-auto gap-6">
